@@ -1,5 +1,6 @@
 let img1, img2, img3, img4;
 let txt1, txt2;
+let link1;
 
 function preload(){
 img1 = createImg('assets/1.png', 'webflow');//origin url and alt text
@@ -8,11 +9,13 @@ img3 = createImg('assets/win8.jpeg', 'window image');
 img4 = createImg('assets/win10.jpeg', 'window image');
 txt1 = createP('things from the future are furry');
 txt2 = createP('Some other inflamatory things');
+link1 = createA('next.html', 'Link to another page');
 }
 
 function setup() {
   createCanvas(1920, 1080);
-  img1.position(700, 300);
+
+  img1.parent('left');
   img1.size(300, 500);
 
   img2.position(200, 200);
@@ -30,6 +33,8 @@ function setup() {
 
   txt2.position(575, 375);
   txt2.class('big');
+
+  link1.parent('right');
 }
 
 function draw() {

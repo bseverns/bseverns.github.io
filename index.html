@@ -6,19 +6,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ART 215 EXAMPLE SITE</title>
 
-  <script src="scripts/p5.js"></script>
-  <script src="scripts/sketch.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.js"></script>
+  <script src="sketch.js"></script>
 
   <style>
+
+body{
+  display: flex;
+  flex-direction: row;
+
+}
+
+#left {
+  height:100%;
+  display: flex;
+  font-size: 45px;
+  padding: 10px;
+  width:25%;
+}
+
+#left img{
+  max-width:75%
+}
+
+#main {
+  font-size: 45px;
+  padding: 10px;
+  width:50%;
+}
 
 p {
 background-color: red;
 }
 
-.big {
+#right {
   font-size: 45px;
   padding: 10px;
+  width:25%
 }
+
 
   </style>
 
@@ -26,6 +52,12 @@ background-color: red;
 </head>
 
 <body>
+<div id="left"></div>
+<div id="main"></div>
+<div id"right"></div>
+
 </body>
+
+
 
 </html>
