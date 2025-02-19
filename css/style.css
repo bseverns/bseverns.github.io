@@ -366,7 +366,7 @@ CONTENT
 
 .content .text-intro h1{
   font-size:45px;
-  width:50%;
+  width:65%;
   text-transform:uppercase;
   color:#000000;
   font-weight:800;
@@ -386,8 +386,8 @@ CONTENT
   font-size:13px;
   color:#8d8d8d;
   margin-top:15px;
-  font-weight:350;
-  line-height:24px;
+  font-weight:275;
+  line-height:20px;
   letter-spacing:1px;
   width:50%;
 }

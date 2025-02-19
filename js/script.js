@@ -168,7 +168,7 @@ $(document).ready(function(){
 		if($("#site-type").length) {
 
         $(".typewrite span").typed({
-            strings: ["","Accomplishments","Catalog","Failures","Griefs","Portfolio","Pranks","Provocations","Protests","Works",""],
+            strings: ["","A catalog of my:","Accomplishments","Failures","Courses","Griefs","Portfolio","Pranks","Sketches", "Research",""],
             typeSpeed: 25,
             backDelay: 800,
             loop: false,
