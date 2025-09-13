@@ -131,19 +131,6 @@
     max-width:600px;
   }
 
-  .home-sidebar{
-    display:none;
-  }
-
-  ul.header-nav{
-    width:50%;
-
-  }
-
-  header li > a{
-    padding-right: 15px;
-    padding-left: 15px;
-  }
 
 
 
@@ -203,19 +190,6 @@
     max-width:400px;
   }
 
-  .home-sidebar{
-    display:none;
-  }
-
-  ul.header-nav{
-    width:50%;
-
-  }
-
-  header li > a{
-    padding-right: 15px;
-    padding-left: 15px;
-  }
 
   .one-column, .two-column{
     width:100%;
@@ -298,10 +272,6 @@
 
   .prev-next{
     max-width:280px;
-  }
-
-  .home-sidebar{
-    display:none;
   }
 
   .one-column, .two-column{
