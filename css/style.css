@@ -158,52 +158,6 @@ ul.menu-fullscreen li > a:hover{
 
 /*
 **************************
-HEADER
-**************************
-*/
-header.boxed{
-  position:fixed;
-  width:100%;
-  margin:0 auto;
-  height:80px;
-  z-index:9999;
-  display:none;
-  background:none;
-  top:0;
-  -webkit-transition: background 0.2s ease-in;
-	-moz-transition: background 0.2s ease-in;
-	-ms-transition: background 0.2s ease-in;
-	-o-transition: background 0.2s ease-in;
-	transition: background 0.2s ease-in;
-}
-
-header.boxed .header-margin{
-  width:1140px;
-  margin:0 auto;
-}
-
-header.boxed .header-margin-mini{
-  width:90%;
-  margin:0 auto;
-}
-
-
-ul.social-icon{
-  float:right;
-}
-
-ul.social-icon a{
-  float:right;
-  font-size:15px;
-  border-bottom:0;
-  color:black;
-  padding-right:0px !important;
-}
-
-ul.social-icon a:hover{
-  color:#c3c3c3;
-}
-
 .menu-index{
   position: fixed;
   right: 5%;
@@ -224,86 +178,6 @@ ul.social-icon a:hover{
 
 .menu-index i:hover{
   color:#c3c3c3;
-}
-
-ul.menu-icon{
-  float:right;
-}
-
-ul.menu-icon a{
-  float:right;
-  font-size:19px;
-  color:white;
-  padding-right:0px !important;
-}
-
-ul.menu-icon i{
-  padding:20px;
-  background:black;
-}
-
-ul.menu-icon a:hover{
-  color:#c3c3c3;
-}
-
-header a{
-  color:#000000;
-}
-
-ul.header-nav{
-  width:60%;
-  float:left;
-}
-
-header .logo > a{
-  font-size:23px;
-  font-weight:800;
-  float:left;
-  line-height:80px;
-  padding-right:40px;
-  border-bottom: 1px solid #f1f1f1;
-}
-
-header .logo > a:hover{
-  color:#c3c3c3;
-}
-
-header li{
-  text-transform:uppercase;
-  list-style-type: none; margin: 0 auto; float: left;
-}
-
-header li > a{
-  font-size:13px;
-  color:#c3c3c3;
-  padding-right:25px;
-  padding-left:25px;
-  font-weight:800;
-  line-height:80px;
-  display:inline-block;
-  border-bottom:0;
-}
-
-header li > a:hover{
-  color:#000000;
-}
-
-header li > a #active{
-  color:#000000;
-}
-
-header li ul{
-  overflow: hidden; display: none; background: #f9f9f9; z-index:20;
-}
-
-header li ul li a{
-  line-height:50px;
-  padding-left:30px;
-  width:260px;
-}
-
-header li:hover ul{
-  position: absolute; padding: 0; display: block; width: 260px;
 }
 
 
@@ -426,32 +300,6 @@ CONTENT
             50% { opacity:0; }
             100% { opacity:1; }
         }
-
-/*
-**************************
-HOME SIDEBAR
-**************************
-*/
-
-.home-sidebar{
-  top:0;
-  position:absolute;
-  width:33.3333%;
-  right:0;
-  height:100%;
-  background:#f4f4f4;
-  z-index:9;
-  overflow:hidden;
-  background-size:100%;
-}
-
-.parallax{
-  position:absolute;
-}
-
-.parallax-option{
-  position:absolute; width:100%; height:100%;
-}
 
 /*
 **************************
