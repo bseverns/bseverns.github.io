@@ -16,3 +16,6 @@ No build pipeline here. Spin up a bare-bones server with `python3 -m http.server
 Key images now carry `alt` text to make the site friendlier to screen readers. Keep that vibe if you add more work.
 
 PRs, issues, or weird ideas welcome. Keep it noisy and accessible.
+
+## Speed hacks
+The art gallery page now loads like it's had three espressos. Images lazy-load so your browser isn't choking on megabytes it hasn't even looked at yet, and the preloader ducks out after half a second instead of staring back at you forever.
