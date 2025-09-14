@@ -14,6 +14,8 @@ No build pipeline here. Spin up a bare-bones server with `python3 -m http.server
 
 ## HTTPS or bust
 Every external asset now rides over HTTPS. Drop in a new CDN or font? Make sure it speaks HTTPS or the browser will scream about mixed content.
+We even ditched the sneaky CSS `@import` for Google Fonts and slapped a proper <link> tag on every page so browsers stop throwing mixed-content tantrums.
+
 
 ## Why so many images?
 Key images now carry `alt` text to make the site friendlier to screen readers. Keep that vibe if you add more work.
