@@ -12,6 +12,9 @@ A scrappy showcase of Ben Severns's art, teaching artifacts, and other noise.
 ## Hacking locally
 No build pipeline here. Spin up a bare-bones server with `python3 -m http.server` and open a browser to `http://localhost:8000`.
 
+## HTTPS or bust
+Every external asset now rides over HTTPS. Drop in a new CDN or font? Make sure it speaks HTTPS or the browser will scream about mixed content.
+
 ## Why so many images?
 Key images now carry `alt` text to make the site friendlier to screen readers. Keep that vibe if you add more work.
 
