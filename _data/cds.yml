@@ -60,7 +60,7 @@ cards:
 
   - id: glitch-geometry
     title: Glitch Geometry — Audio→Form Instrument
-    img_src: /assets/images/cds/glitch-geometry-still.svg
+    img_src: /assets/images/cds/glitch-geometry-still.png
     img_alt: Generative geometry frame driven by live audio features
     abstract: Live translation of signal features into geometry; pipeline choices (feature extraction, modulation, rendering) are made legible as aesthetic and ethical decisions. The system is tunable and documented for both teaching and critique.
     abstract_locked: true
