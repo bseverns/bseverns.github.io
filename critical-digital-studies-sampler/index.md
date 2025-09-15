@@ -103,18 +103,3 @@ I pair critical inquiry with hands-on digital practice — *playful rigor*: **bu
 </div>
 
 <hr>
-
-<p><a href="/assets/docs/Severns_CriticalDigitalStudies_Sampler.pdf">Download PDF sampler</a> (placeholder) • This page is <em>unlisted</em> and marked <code>noindex</code>. Updated: {{ page.updated }}.</p>
-
-<style>
-.cards { display:grid; gap:1.25rem; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); }
-.card { border:1px solid #ddd; padding:1rem; border-radius:12px; background:#fff; }
-.card img { max-width:100%; height:auto; border-radius:8px; }
-.card h3 { margin:.6rem 0 .35rem; }
-.card h4 { margin:.5rem 0 .35rem; font-size:1rem; }
-.card ul { margin:.25rem 0 .5rem 1.2rem; }
-@media print {
-  header.site-head, footer.site-footer, nav { display:none !important; }
-  .card { break-inside: avoid; border:0; padding:0; }
-}
-</style>
