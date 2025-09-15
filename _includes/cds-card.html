@@ -1,45 +1,44 @@
 <article id="{{ include.id }}" class="card" role="region" aria-labelledby="{{ include.id }}-title">
-  <div class="ribbon">
-    {% for tag in include.aligns %}
-    <span class="tag">{{ tag }}</span>
-    {% endfor %}
+  {% if include.aligns and include.aligns.size > 0 %}
+  <div class="ribbon" aria-label="Alignment tags">
+    {% for tag in include.aligns %}<span class="tag">{{ tag }}</span>{% endfor %}
   </div>
+  {% endif %}
+
   {% if include.img_src %}
   <figure>
-    <img src="{{ include.img_src }}" alt="{{ include.img_alt }}">
+    <img src="{{ include.img_src }}" alt="{{ include.img_alt | default: include.title | escape }}">
     {% if include.figcaption %}<figcaption>{{ include.figcaption }}</figcaption>{% endif %}
   </figure>
   {% endif %}
+
   <h3 id="{{ include.id }}-title">{{ include.title }}</h3>
   <p>{{ include.abstract }}</p>
+
+  {% if include.methods and include.methods.size > 0 %}
   <h4>Methods &amp; Ethics</h4>
-  <ul>
-    {% for m in include.methods %}
-    <li>{{ m }}</li>
-    {% endfor %}
-  </ul>
-  {% if include.outcomes %}
-  <h4>Outcomes</h4>
-  <ul>
-    {% for o in include.outcomes %}
-    <li>{{ o }}</li>
-    {% endfor %}
-  </ul>
+  <ul>{% for m in include.methods %}<li>{{ m }}</li>{% endfor %}</ul>
   {% endif %}
+
+  {% if include.outcomes and include.outcomes.size > 0 %}
+  <h4>Outcomes</h4>
+  <ul>{% for o in include.outcomes %}<li>{{ o }}</li>{% endfor %}</ul>
+  {% endif %}
+
+  {% if include.teach %}
   <h4>Teach with this</h4>
   <ul>
-    <li><strong>Goal:</strong> {{ include.teach.goal }}</li>
-    <li><strong>60-min lab:</strong> {{ include.teach.lab60 }}</li>
-    <li><strong>Assess:</strong> {{ include.teach.assess }}</li>
+    {% if include.teach.goal %}<li><strong>Goal:</strong> {{ include.teach.goal }}</li>{% endif %}
+    {% if include.teach.lab60 %}<li><strong>60-min lab:</strong> {{ include.teach.lab60 }}</li>{% endif %}
+    {% if include.teach.assess %}<li><strong>Assess:</strong> {{ include.teach.assess }}</li>{% endif %}
   </ul>
-  {% if include.links %}
+  {% endif %}
+
+  {% if include.links and include.links.size > 0 %}
   <p class="links">
     {% for l in include.links %}
-      {% if l.disabled %}
-      <a href="{{ l.url }}" aria-disabled="true">{{ l.label }}</a>{% if forloop.last == false %} • {% endif %}
-      {% else %}
-      <a href="{{ l.url }}" rel="nofollow noopener">{{ l.label }}</a>{% if forloop.last == false %} • {% endif %}
-      {% endif %}
+      <a href="{{ l.url | default:'#' }}"
+         {% if l.disabled %}aria-disabled="true"{% else %}rel="nofollow noopener"{% endif %}>{{ l.label }}</a>{% unless forloop.last %} • {% endunless %}
     {% endfor %}
   </p>
   {% endif %}
