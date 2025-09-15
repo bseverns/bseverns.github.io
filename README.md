@@ -11,20 +11,11 @@ A scrappy showcase of Ben Severns's art, teaching artifacts, and other noise.
 * `contact.html` – drop a line.
 
 ## Hacking locally
-No build pipeline here. Spin up a bare-bones server with `python3 -m http.server` and open a browser to `http://localhost:8000`.
+No build pipeline here. Spin up a bare-bones server with `python3 -m http.server` and open a browser to `http://localhost:8000` if you're feeling spicy.
 
-## HTTPS or bust
-Every external asset now rides over HTTPS. Drop in a new CDN or font? Make sure it speaks HTTPS or the browser will scream about mixed content.
-We even ditched the sneaky CSS `@import` for Google Fonts and slapped a proper <link> tag on every page so browsers stop throwing mixed-content tantrums.
-
-
-## Why so many images?
-Key images now carry `alt` text to make the site friendlier to screen readers. Keep that vibe if you add more work.
-
-PRs, issues, or weird ideas welcome. Keep it noisy and accessible.
-
-## Speed hacks
+##Some notes:
+### Speed hacks
 The art gallery page now loads like it's had three espressos. Images lazy-load so your browser isn't choking on megabytes it hasn't even looked at yet, and the preloader ducks out after half a second instead of staring back at you forever.
 
-## UI tweaks
+### UI tweaks
 The nav toggle now squats unapologetically in the upper-right corner on every page, so you don't have to play hide-and-seek to find your way around.
