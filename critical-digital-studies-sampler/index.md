@@ -37,3 +37,9 @@ updated: "2025-09-14"
 
 <hr>
 <p>This page is <em>unlisted</em> and marked <code>noindex</code>. Updated: {{ page.updated }}.</p>
+
+<small>
+  Sampler commit:
+  {% if site.github and site.github.build_revision %}{{ site.github.build_revision | slice:0,7 }}{% else %}local{% endif %}
+  • Updated {{ page.updated }}
+</small>

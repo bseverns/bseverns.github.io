@@ -22,6 +22,12 @@ cards:
     links:
       - label: Repo
         url: https://github.com/bseverns/faceTimes
+      - label: ETHICS
+        url: https://github.com/bseverns/faceTimes/blob/main/ETHICS.md
+      - label: PRIVACY
+        url: https://github.com/bseverns/faceTimes/blob/main/PRIVACY.md
+      - label: Data-flow diagram
+        url: https://github.com/bseverns/faceTimes/blob/main/diagrams.md
       - label: Vimeo clip (add link)
         url: "#"
         disabled: true
@@ -57,6 +63,14 @@ cards:
       - label: Demo video (optional)
         url: "#"
         disabled: true
+      - label: Release (latest)
+        url: https://github.com/bseverns/MOARkNOBS-42/releases/latest
+      - label: Testing gauntlet
+        url: https://github.com/bseverns/MOARkNOBS-42/blob/main/docs/TESTING.md
+      - label: Pin map
+        url: https://github.com/bseverns/MOARkNOBS-42/blob/main/docs/PinMap.md
+      - label: Hardware docs
+        url: https://github.com/bseverns/MOARkNOBS-42/tree/main/hardware
 
   - id: glitch-geometry
     title: Glitch Geometry — Audio→Form Instrument
@@ -77,6 +91,10 @@ cards:
       lab60: Implement 2 features; compare visual behaviors
       assess: Process log + short critique memo
     links:
+      - label: Repo (GlitchListener)
+        url: https://github.com/bseverns/GlitchListener
+      - label: README quickstart
+        url: https://github.com/bseverns/GlitchListener#readme
       - label: Vimeo excerpt (add link)
         url: "#"
         disabled: true
@@ -102,6 +120,8 @@ cards:
     links:
       - label: Vimeo profile
         url: https://vimeo.com/user2746012
+      - label: Related tool: VidObjectifier
+        url: https://github.com/bseverns/VidObjectifier
 
   - id: skyway-derive-media-fast
     title: Skyway Derivé / Media Fast — Critical Pedagogy Interventions
@@ -129,9 +149,13 @@ cards:
       - label: Brief (TBD)
         url: "#"
         disabled: true
+      - label: Briefs (Syllabus)
+        url: https://github.com/bseverns/Syllabus/tree/main/future-course-briefs
       - label: Reflection template (TBD)
         url: "#"
         disabled: true
+      - label: Policies / templates (Syllabus/shared)
+        url: https://github.com/bseverns/Syllabus/tree/main/shared
 
   - id: mcad-media-2
     title: MCAD Media 2 — MTN Public Access Broadcast
@@ -158,3 +182,7 @@ cards:
       - label: Production calendar (TBD)
         url: "#"
         disabled: true
+      - label: Course materials
+        url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2
+      - label: p5 code explainers
+        url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2/MEDIA2-codeEXPLAINERS
