@@ -1,0 +1,10 @@
+<article class="card">
+  <a href="{{ item.url | relative_url }}">
+    {% if item.hero %}
+      <img src="{{ item.hero | relative_url }}" alt="{{ item.hero_alt | default: 'Project image' }}">
+    {% endif %}
+    <h3>{{ item.title }}</h3>
+    <p class="eyebrow">{{ item.year }}{% if item.context %} • {{ item.context }}{% endif %}</p>
+    <p>{{ item.summary | truncate: 140 }}</p>
+  </a>
+</article>

@@ -1,0 +1,29 @@
+---
+layout: default
+---
+<article class="project">
+  <h1>{{ page.title }}</h1>
+  <p class="meta">{{ page.year }}{% if page.media %} • {{ page.media }}{% endif %}{% if page.duration %} • {{ page.duration }}{% endif %}</p>
+  {% if page.hero %}<img class="hero" src="{{ page.hero | relative_url }}" alt="{{ page.hero_alt | default: 'Project image' }}">{% endif %}
+  <h2>Summary</h2>
+  <p>{{ page.summary }}</p>
+  <h2>Methods</h2>
+  <ul>
+    <li>Systems/Tools: {{ page.tools | default: 'TODO: list tools (code, hardware, fabrication)' }}</li>
+    <li>Ethics/Consent: {{ page.ethics | default: 'TODO: note consent/safety steps if interactive' }}</li>
+  </ul>
+  {% if page.gallery %}
+    <h2>Gallery</h2>
+    {% for img in page.gallery %}
+      <img src="{{ img.src | relative_url }}" alt="{{ img.alt | default: 'Documentation image' }}">
+    {% endfor %}
+  {% endif %}
+  {% if page.links %}
+    <h2>Links</h2>
+    <ul>
+    {% for k in page.links %}
+      <li><a href="{{ k.url }}">{{ k.label }}</a></li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+</article>

@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head>{% include head.html %}</head>
+<body>
+<header class="site-head">
+  <nav>
+    {% for link in site.data.navigation %}
+      <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
+    {% endfor %}
+  </nav>
+</header>
+<main id="content">{{ content }}</main>
+{% include footer.html %}
+</body></html>

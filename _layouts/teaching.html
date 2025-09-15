@@ -1,0 +1,25 @@
+---
+layout: default
+---
+<article class="teaching">
+  <h1>{{ page.title }}</h1>
+  <p class="meta">{{ page.level | default: 'Level: mixed' }}{% if page.delivery %} • {{ page.delivery }}{% endif %}</p>
+  <h2>Why</h2>
+  <p>{{ page.why | default: 'TODO: 2–3 sentences' }}</p>
+  <h2>Outcomes</h2>
+  <ul>
+    {% for o in page.outcomes %}<li>{{ o }}</li>{% endfor %}
+  </ul>
+  <h2>Starter Arc (2 weeks)</h2>
+  <ul>
+    {% for w in page.starter_arc %}<li>{{ w }}</li>{% endfor %}
+  </ul>
+  <h2>Assessment</h2>
+  <p>{{ page.assessment | default: 'Rubric + process logs + reflection' }}</p>
+  <h2>Access / UDL</h2>
+  <p>{{ page.access | default: 'Choice of media, predictable structures, bilingual scaffolds as needed' }}</p>
+  {% if page.artifacts %}
+    <h2>Artifacts</h2>
+    <ul>{% for a in page.artifacts %}<li>{{ a }}</li>{% endfor %}</ul>
+  {% endif %}
+</article>

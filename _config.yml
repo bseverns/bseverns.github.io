@@ -1,0 +1,15 @@
+title: "Ben Severns"
+description: "Portfolio — studio + teaching"
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+  teaching:
+    output: true
+    permalink: /teaching/:name/
+defaults:
+  - scope: {path: "", type: "projects"}
+    values: {layout: project, author: "Ben Severns"}
+  - scope: {path: "", type: "teaching"}
+    values: {layout: teaching, author: "Ben Severns"}
+markdown: kramdown
