@@ -1,4 +1,9 @@
-<!doctype html><html lang="en"><head>{% include head.html %}</head>
+<!doctype html>
+<html lang="en">
+<head>
+  {% include head.html %}
+  {% if page.noindex %}<meta name="robots" content="noindex,nofollow">{% endif %}
+</head>
 <body>
 <header class="site-head">
   <nav>
@@ -9,4 +14,5 @@
 </header>
 <main id="content">{{ content }}</main>
 {% include footer.html %}
-</body></html>
+</body>
+</html>

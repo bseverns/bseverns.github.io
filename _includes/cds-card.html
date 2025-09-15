@@ -7,38 +7,49 @@
 
   {% if include.img_src %}
   <figure>
-    <img src="{{ include.img_src }}" alt="{{ include.img_alt | default: include.title | escape }}">
+    <img
+      src="{{ include.img_src }}"
+      alt="{{ include.img_alt | default: include.title | escape }}"
+      loading="lazy" decoding="async"
+      {% if include.img_w %}width="{{ include.img_w }}"{% else %}width="1200"{% endif %}
+      {% if include.img_h %}height="{{ include.img_h }}"{% else %}height="675"{% endif %}>
     {% if include.figcaption %}<figcaption>{{ include.figcaption }}</figcaption>{% endif %}
   </figure>
   {% endif %}
 
-  <h3 id="{{ include.id }}-title">{{ include.title }}</h3>
-  <p>{{ include.abstract }}</p>
+  <h2 id="{{ include.id }}-title">{{ include.title }}</h2>
+  {% if include.abstract %}<p>{{ include.abstract }}</p>{% endif %}
 
   {% if include.methods and include.methods.size > 0 %}
-  <h4>Methods &amp; Ethics</h4>
+  <h3>Methods &amp; Ethics</h3>
   <ul>{% for m in include.methods %}<li>{{ m }}</li>{% endfor %}</ul>
   {% endif %}
 
   {% if include.outcomes and include.outcomes.size > 0 %}
-  <h4>Outcomes</h4>
+  <h3>Outcomes</h3>
   <ul>{% for o in include.outcomes %}<li>{{ o }}</li>{% endfor %}</ul>
   {% endif %}
 
   {% if include.teach %}
-  <h4>Teach with this</h4>
+  {% assign t = include.teach %}
+  {% if t.goal or t.lab60 or t.assess %}
+  <h3>Teach with this</h3>
   <ul>
-    {% if include.teach.goal %}<li><strong>Goal:</strong> {{ include.teach.goal }}</li>{% endif %}
-    {% if include.teach.lab60 %}<li><strong>60-min lab:</strong> {{ include.teach.lab60 }}</li>{% endif %}
-    {% if include.teach.assess %}<li><strong>Assess:</strong> {{ include.teach.assess }}</li>{% endif %}
+    {% if t.goal %}<li><strong>Goal:</strong> {{ t.goal }}</li>{% endif %}
+    {% if t.lab60 %}<li><strong>60-min lab:</strong> {{ t.lab60 }}</li>{% endif %}
+    {% if t.assess %}<li><strong>Assess:</strong> {{ t.assess }}</li>{% endif %}
   </ul>
+  {% endif %}
   {% endif %}
 
   {% if include.links and include.links.size > 0 %}
   <p class="links">
     {% for l in include.links %}
+      {% assign is_ext = l.url | downcase | slice: 0, 4 %}
       <a href="{{ l.url | default:'#' }}"
-         {% if l.disabled %}aria-disabled="true"{% else %}rel="nofollow noopener"{% endif %}>{{ l.label }}</a>{% unless forloop.last %} • {% endunless %}
+         {% if l.disabled %}aria-disabled="true"{% elsif is_ext == 'http' %}rel="nofollow noopener"{% endif %}>
+        {{ l.label }}
+      </a>{% unless forloop.last %} • {% endunless %}
     {% endfor %}
   </p>
   {% endif %}

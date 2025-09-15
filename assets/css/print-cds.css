@@ -1,63 +1,21 @@
-.skip-link {
-  position: absolute;
-  left: -9999px;
-}
-.skip-link:focus {
-  left: 0;
-  top: 0;
-  background: #000;
-  color: #fff;
-  padding: 0.5rem;
-  z-index: 1000;
-}
+/* Focus & skip */
+.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
+.skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem 1rem;background:#fff;border:2px solid #000;z-index:1000;}
+:focus{outline:3px solid;outline-offset:2px}
 
-a:focus,
-button:focus {
-  outline: 2px solid #000;
-  outline-offset: 2px;
-}
+/* Cards & ribbons */
+.card{border:1px solid #e2e2e2;border-radius:14px;padding:1rem;margin:1rem 0}
+.card .tag{display:inline-block;border:1px solid #999;border-radius:999px;padding:.1rem .5rem;margin-right:.25rem;font-size:.8rem}
+.links a[aria-disabled="true"]{pointer-events:none;opacity:.55;text-decoration:none}
+.ribbon{position:absolute;top:.75rem;right:.75rem;display:flex;flex-wrap:wrap;gap:.25rem;justify-content:flex-end}
 
-.card {
-  position: relative;
-  border: 1px solid #ccc;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin: 1rem 0;
-}
-
-.ribbon {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-}
-
-.tag {
-  display: inline-block;
-  background: #eee;
-  border-radius: 0.25rem;
-  padding: 0 0.25rem;
-  font-size: 0.75rem;
-  margin-left: 0.25rem;
-}
-
-@media print {
-  nav,
-  .toc,
-  .print-btn,
-  .skip-link {
-    display: none !important;
-  }
-  a[href]:after {
-    content: " (" attr(href) ")";
-    font-size: 0.8em;
-  }
-  .card {
-    page-break-inside: avoid;
-  }
-  img {
-    max-width: 100%;
-  }
-  body {
-    font-size: 11pt;
-  }
+/* Print polish */
+@page{margin:0.6in}
+@media print{
+  nav,.print-btn,.skip-link{display:none!important}
+  a[href]:after{content:" (" attr(href) ")";font-size:80%}
+  .card{break-inside:avoid}
+  h1,h2,h3{page-break-after:avoid}
+  img{max-width:100%;height:auto}
+  body{font-size:11pt;line-height:1.35}
 }
