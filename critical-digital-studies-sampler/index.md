@@ -72,11 +72,10 @@ I pair critical inquiry with hands-on digital practice — *playful rigor*: **bu
   <p><a href="https://vimeo.com/user2746012">Vimeo profile</a> (clip timecodes TBD)</p>
 </article>
 
-<!-- OPTIONAL SLOTS (uncomment and fill as you add) -->
-<!--
+<!--CARD 5-->
 <article class="card">
   <img src="/assets/images/cds/spectacle-mediafast.svg" alt="Prompt card and public intervention still for Spectacle / Media Fast">
-  <h3>Spectacle / Media Fast — Critical Pedagogy Interventions</h3>
+  <h3>Skyway Derivé / Media Fast — Critical Pedagogy Interventions</h3>
   <p>Paired interventions that make media power felt: a “Spectacle” action-lecture moves critique into public space; a structured “Media Fast” maps sensory shifts and agency before reflective media making. Designed as public method; prompts and reflections are the artifacts.</p>
   <h4>Methods & Ethics</h4>
   <ul>
@@ -87,6 +86,7 @@ I pair critical inquiry with hands-on digital practice — *playful rigor*: **bu
   <p><a href="#" aria-disabled="true">Brief</a> • <a href="#" aria-disabled="true">Reflection template</a></p>
 </article>
 
+<!--CARD 6 - cut best sample from final Media 2 episodes-->
 <article class="card">
   <img src="/assets/images/cds/mcad-media2-mtn.svg" alt="MCAD Media 2: public access broadcast production still">
   <h3>MCAD Media 2 — MTN Public Access Broadcast</h3>
@@ -99,7 +99,6 @@ I pair critical inquiry with hands-on digital practice — *playful rigor*: **bu
   </ul>
   <p><a href="#" aria-disabled="true">Episode link</a> • <a href="#" aria-disabled="true">Production calendar</a></p>
 </article>
--->
 
 </div>
 
