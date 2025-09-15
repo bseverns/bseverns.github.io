@@ -13,7 +13,7 @@ A scrappy showcase of Ben Severns's art, teaching artifacts, and other noise.
 ## Hacking locally
 No build pipeline here. Spin up a bare-bones server with `python3 -m http.server` and open a browser to `http://localhost:8000` if you're feeling spicy.
 
-##Some notes:
+## Some notes:
 ### Speed hacks
 The art gallery page now loads like it's had three espressos. Images lazy-load so your browser isn't choking on megabytes it hasn't even looked at yet, and the preloader ducks out after half a second instead of staring back at you forever.
 
