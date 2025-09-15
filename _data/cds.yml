@@ -1,0 +1,156 @@
+cards:
+  - id: facetimes
+    title: faceTimes — Consent-Forward Vision Station
+    img_src: /assets/images/cds/faceTimes-consent.svg
+    img_alt: faceTimes consent screen showing detection-only, opt-in language and a visible delete-now action
+    abstract: On-device, detection-only pipeline with explicit opt-in and delete-now controls. No identification, no network calls, and no storage without consent. Interface copy foregrounds agency before computation; documentation (README, PRIVACY/ETHICS, assumption ledger) is treated as research output.
+    abstract_locked: true
+    aligns: ["digital literacy","justice/representation","civic engagement"]
+    methods:
+      - Classroom demo & public kiosk contexts
+      - Detection overlay with visible status + erase
+      - System: webcam → local detector → ephemeral buffer → user action
+    outcomes:
+      - Deployed in 1 kiosk (TBD)
+      - Used by ~24 students (TBD)
+      - 3 critique sessions (TBD)
+      - 1 iteration logged (TBD)
+    teach:
+      goal: Practice consent-forward capture as digital literacy
+      lab60: Implement detection-only pipeline; test erase-now; reflect on affordances
+      assess: Process log + assumption ledger + 2-min demo
+    links:
+      - label: Repo
+        url: https://github.com/bseverns/faceTimes
+      - label: Vimeo clip (add link)
+        url: "#"
+        disabled: true
+      - label: PRIVACY/ETHICS (TBD)
+        url: "#"
+        disabled: true
+      - label: Assumption ledger (TBD)
+        url: "#"
+        disabled: true
+
+  - id: moarknobs-42
+    title: MOARkNOBS-42 — open-source microcontroller MIDI controller
+    img_src: /assets/images/cds/mn42-panel.svg
+    img_alt: MOARkNOBS-42 panel top-down with labeled controls
+    abstract: Reproducible hardware + firmware used as both instrument and teaching platform. Parameter mapping functions as an inquiry into authorship and control; latency is characterized and documented so performance claims are auditable and extendable.
+    abstract_locked: true
+    aligns: ["digital literacy","civic engagement"]
+    methods:
+      - Teensy-based instrument + teaching rig
+      - Complete docs: BOM, wiring, parameter map
+      - Measurement folded into practice (latency notes)
+    outcomes:
+      - v0.x performances (TBD)
+      - Latency characterization published (TBD)
+      - Student replicates (TBD)
+    teach:
+      goal: Interface as authorship; documentation as scholarship
+      lab60: Map controls → parameters; measure + log latency
+      assess: Short demo + latency note + reproducibility checklist
+    links:
+      - label: Repo
+        url: https://github.com/bseverns/MOARkNOBS-42
+      - label: Demo video (optional)
+        url: "#"
+        disabled: true
+
+  - id: glitch-geometry
+    title: Glitch Geometry — Audio→Form Instrument
+    img_src: /assets/images/cds/glitch-geometry-still.svg
+    img_alt: Generative geometry frame driven by live audio features
+    abstract: Live translation of signal features into geometry; pipeline choices (feature extraction, modulation, rendering) are made legible as aesthetic and ethical decisions. The system is tunable and documented for both teaching and critique.
+    abstract_locked: true
+    aligns: ["digital literacy","justice/representation"]
+    methods:
+      - Signal in → features → geometry modulation → render
+      - Transparent, documented pipeline for reproducibility
+      - Designed for classroom demos and public performance
+    outcomes:
+      - 1–2 live demos (TBD)
+      - Student mini-studies (TBD)
+    teach:
+      goal: Link form to claim via signal features
+      lab60: Implement 2 features; compare visual behaviors
+      assess: Process log + short critique memo
+    links:
+      - label: Vimeo excerpt (add link)
+        url: "#"
+        disabled: true
+
+  - id: dead-sky
+    title: DEAD SKY — Vision & Motion Grammar Studies
+    img_src: /assets/images/cds/ds200412-still.svg
+    img_alt: Dead Sky rural pursuit still, a lone figure on a November road
+    abstract: Two short studies—rural pursuit (DS200412) and wheel-mounted POV (DS200801)—probing surveillance logics, attention, and embodied capture toward a larger film project. Tests “pursuit grammar” and mechanical vision’s entrainment.
+    abstract_locked: true
+    aligns: ["digital literacy","justice/representation"]
+    methods:
+      - November light, long-lens compression (pursuit grammar)
+      - Wheel POV: cyclic motion & peripheral smear
+      - Consent & site plans for actors/bystanders
+    outcomes:
+      - 2 studies complete; cuts TBD
+      - Screening/critique (TBD)
+    teach:
+      goal: Make camera grammar legible and accountable
+      lab60: Long-lens pursuit vs. wheel-POV; reflect on ethics
+      assess: Shot log + ethics note + 60s cut
+    links:
+      - label: Vimeo profile
+        url: https://vimeo.com/user2746012
+
+  - id: skyway-derive-media-fast
+    title: Skyway Derivé / Media Fast — Critical Pedagogy Interventions
+    img_src: /assets/images/cds/spectacle-mediafast.svg
+    img_alt: Prompt card and public intervention still for Spectacle / Media Fast
+    abstract: Paired interventions that make media power felt: a “Spectacle” action-lecture moves critique into public space; a structured “Media Fast” maps sensory shifts and agency before reflective media making. Designed as public method; prompts and reflections are the artifacts.
+    abstract_locked: true
+    aligns: ["justice/representation","civic engagement"]
+    methods:
+      - Transparent prompts; bystander consent & respect
+      - Reflection before publication; no IDs without release
+      - Documentation pack (brief, roles, reflection prompts)
+    outcomes:
+      - 1 public intervention (TBD)
+      - 1 compiled reflections doc (TBD)
+    teach:
+      goal: Embody critique; document before publish
+      lab60: Skyway dérive with consent checkpoints
+      assess: Reflection + consent notes + debrief
+    links:
+      - label: Brief (TBD)
+        url: "#"
+        disabled: true
+      - label: Reflection template (TBD)
+        url: "#"
+        disabled: true
+
+  - id: mcad-media-2
+    title: MCAD Media 2 — MTN Public Access Broadcast
+    img_src: /assets/images/cds/mcad-media2-mtn.svg
+    img_alt: MCAD Media 2: public access broadcast production still
+    abstract: Studio-seminar culminating in a 28.5-minute MTN broadcast planned, produced, and edited by students. The artifact is civic-facing media formed by calendars, critique gates, and documentation standards for longevity.
+    abstract_locked: true
+    aligns: ["civic engagement","digital literacy"]
+    methods:
+      - Roles & calendars; consent and authorship checkpoints
+      - Deliverables: broadcast master + process docs
+      - Public exhibition as peer review
+    outcomes:
+      - 28.5-minute episode delivered (TBD)
+      - Airtime / reach (TBD)
+    teach:
+      goal: Practice public-facing media with accountability
+      lab60: Segment planning → critique gate → deliver
+      assess: Checklists + credits + release archive
+    links:
+      - label: Episode link (TBD)
+        url: "#"
+        disabled: true
+      - label: Production calendar (TBD)
+        url: "#"
+        disabled: true
