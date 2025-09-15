@@ -107,7 +107,11 @@ cards:
     title: Skyway Derivé / Media Fast — Critical Pedagogy Interventions
     img_src: /assets/images/cds/spectacle-mediafast.svg
     img_alt: Prompt card and public intervention still for Spectacle / Media Fast
-    abstract: Paired interventions that make media power felt: a “Spectacle” action-lecture moves critique into public space; a structured “Media Fast” maps sensory shifts and agency before reflective media making. Designed as public method; prompts and reflections are the artifacts.
+    abstract: >-
+      Paired interventions that make media power felt: a “Spectacle” action-lecture moves
+      critique into public space; a structured “Media Fast” maps sensory shifts and agency
+      before reflective media making. Designed as public method; prompts and reflections are
+      the artifacts.
     abstract_locked: true
     aligns: ["justice/representation","civic engagement"]
     methods:
