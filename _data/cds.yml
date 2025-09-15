@@ -120,7 +120,7 @@ cards:
     links:
       - label: Vimeo profile
         url: https://vimeo.com/user2746012
-      - label: Related tool: VidObjectifier
+      - label: "Related tool: VidObjectifier"
         url: https://github.com/bseverns/VidObjectifier
 
   - id: skyway-derive-media-fast
@@ -160,7 +160,7 @@ cards:
   - id: mcad-media-2
     title: MCAD Media 2 — MTN Public Access Broadcast
     img_src: /assets/images/cds/mcad-media2-mtn.svg
-    img_alt: MCAD Media 2: public access broadcast production still
+    img_alt: "MCAD Media 2: public access broadcast production still"
     abstract: Studio-seminar culminating in a 28.5-minute MTN broadcast planned, produced, and edited by students. The artifact is civic-facing media formed by calendars, critique gates, and documentation standards for longevity.
     abstract_locked: true
     aligns: ["civic engagement","digital literacy"]
