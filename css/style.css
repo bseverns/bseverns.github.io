@@ -159,8 +159,8 @@ ul.menu-fullscreen li > a:hover{
 **************************
 .menu-index{
   position: fixed;
-  right: 5%;
-  top: 30px;
+  right: 10px;
+  top: 10px;
   z-index: 99999;
   padding:20px;
   background:black;
