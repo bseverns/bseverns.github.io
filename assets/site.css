@@ -1,8 +1,15 @@
 body {font-family: sans-serif; line-height:1.6; margin:0; padding:0;}
 .site-head nav {display:flex; gap:1rem; padding:1rem;}
 .site-head nav a {text-decoration:none;}
-.cards {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem;}
-.card {border:1px solid #ccc; padding:0.5rem;}
-.card img {width:100%; height:auto; display:block;}
+.cards { display:grid; gap:1.25rem; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); }
+.card { border:1px solid #ddd; padding:1rem; border-radius:12px; background:#fff; }
+.card img { max-width:100%; height:auto; border-radius:8px; }
+.card h3 { margin:.6rem 0 .35rem; }
+.card h4 { margin:.5rem 0 .35rem; font-size:1rem; }
+.card ul { margin:.25rem 0 .5rem 1.2rem; }
 a:focus {outline:2px dashed #000; outline-offset:2px;}
 .site-footer {text-align:center; padding:2rem 0; font-size:0.9rem; border-top:1px solid #ddd;}
+@media print {
+  header.site-head, footer.site-footer, nav { display:none !important; }
+  .card { break-inside: avoid; border:0; padding:0; }
+}
