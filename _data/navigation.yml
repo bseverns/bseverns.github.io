@@ -1,0 +1,12 @@
+- title: Home
+  url: /
+- title: Studio Portfolio
+  url: /studio/
+- title: Academic Portfolio
+  url: /teaching/
+- title: Research Notebook
+  url: /research/
+- title: About / CV
+  url: /about/
+- title: Contact
+  url: /contact/

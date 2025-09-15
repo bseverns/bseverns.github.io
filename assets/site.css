@@ -1,0 +1,8 @@
+body {font-family: sans-serif; line-height:1.6; margin:0; padding:0;}
+.site-head nav {display:flex; gap:1rem; padding:1rem;}
+.site-head nav a {text-decoration:none;}
+.cards {display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1rem;}
+.card {border:1px solid #ccc; padding:0.5rem;}
+.card img {width:100%; height:auto; display:block;}
+a:focus {outline:2px dashed #000; outline-offset:2px;}
+.site-footer {text-align:center; padding:2rem 0; font-size:0.9rem; border-top:1px solid #ddd;}
