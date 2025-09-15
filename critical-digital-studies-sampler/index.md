@@ -103,3 +103,6 @@ I pair critical inquiry with hands-on digital practice — *playful rigor*: **bu
 </div>
 
 <hr>
+
+<p><a href="/assets/docs/Severns_CriticalDigitalStudies_Sampler.pdf">Download PDF sampler</a> (placeholder) • This page is <em>unlisted</em> and marked <code>noindex</code>. Updated: {{ page.updated }}.</p>
+
