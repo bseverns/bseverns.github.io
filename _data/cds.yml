@@ -22,10 +22,6 @@ cards:
     links:
       - label: Repo
         url: https://github.com/bseverns/faceTimes
-      - label: ETHICS
-        url: https://github.com/bseverns/faceTimes/blob/main/ETHICS.md
-      - label: PRIVACY
-        url: https://github.com/bseverns/faceTimes/blob/main/PRIVACY.md
       - label: diagrams.md
         url: https://github.com/bseverns/faceTimes/blob/main/diagrams.md
       - label: Related sketch — videoProcessing lab
