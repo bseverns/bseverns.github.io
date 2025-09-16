@@ -20,7 +20,7 @@ updated: "2025-09-14"
       </div>
       <p class="lede">I pair critical inquiry with hands-on digital practice—playful rigor: {% include flow-chain.html text="build → perform (play) → document → iterate" class="flow-chain--lede" %}.</p>
       <p>Working systems-first, I make technical and ethical layers legible so students can audit and extend them. This sampler foregrounds digital literacy within questions of justice, representation, and civic engagement, preparing makers to treat media as civic instruments.</p>
-       <p class="privacy-note">Every project here rides inside our <a href="{{ '/PRIVACY_ETHICS.md' | relative_url }}">Privacy &amp; Ethics Statement (v0.1)</a>—dignity over data, consent as interface, local-first processing, and the right to erase. Each project adds its own assumption ledger to tighten those guardrails, never loosen them.</p>
+       <p class="privacy-note">Every project here rides inside our <a href="{{ 'https://github.com/bseverns/bseverns.github.io/blob/main/PRIVACY_ETHICS.md' | relative_url }}">Privacy &amp; Ethics Statement (v0.1)</a>—dignity over data, consent as interface, local-first processing, and the right to erase. Each project adds its own assumption ledger to tighten those guardrails, never loosen them.</p>
     </div>
     <aside class="service">
       <h2>Service &amp; Stewardship</h2>
