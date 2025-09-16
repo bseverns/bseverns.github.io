@@ -35,7 +35,7 @@ cards:
       - label: Vimeo clip (add link)
         url: "#"
         disabled: true
-      - label: PRIVACY/ETHICS
+      - label: https://github.com/bseverns/PRIVACY/ETHICS
         url: /PRIVACY_ETHICS.md
         disabled: true
       - label: Assumption ledger (TBD)
