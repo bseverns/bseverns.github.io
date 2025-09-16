@@ -125,6 +125,12 @@
     border: 1px solid #475569;
     color: #111827;
     background: none;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .cds-card .tag::before {
+    display: none;
   }
 
   .cds-card .links {
