@@ -193,7 +193,7 @@ cards:
       assess: Checklists + credits + release archive
     links:
       - label: Network link
-        url: "https://mtn.org"
+        url: https://mtn.org
         disabled: true
       - label: Production calendar (TBD)
         url: "#"
