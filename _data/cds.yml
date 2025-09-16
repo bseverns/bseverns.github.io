@@ -161,14 +161,12 @@ cards:
       lab60: Skyway dérive with consent checkpoints
       assess: Reflection + consent notes + debrief
     links:
-      - label: Brief (TBD)
-        url: "#"
-        disabled: true
-      - label: Briefs (Syllabus)
-        url: https://github.com/bseverns/Syllabus/tree/main/future-course-briefs
-      - label: Reflection template (TBD)
-        url: "#"
-        disabled: true
+      - label: Skyway dérive walking score (Media 1/2)
+        url: https://github.com/bseverns/Syllabus/blob/main/MCADMedia2/Walking%20in%20the%20Skyway.docx
+      - label: Media Fast assignment brief (Media 2)
+        url: https://github.com/bseverns/Syllabus/blob/main/MCADMedia2/Media%202%20SP21%20PROJECT%202_%20Media%20Fast.docx
+      - label: Media Fast reflection pack (Media 2 folder)
+        url: https://github.com/bseverns/Syllabus/blob/main/MCADMedia2/Media%20Fast%20Exercise%20FOLDER/Assignment%20Instructions%20-%20MEDIA%20FAST.docx
       - label: Policies / templates (Syllabus/shared)
         url: https://github.com/bseverns/Syllabus/tree/main/shared
 
