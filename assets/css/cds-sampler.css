@@ -327,13 +327,15 @@ nav.toc a:focus-visible {
   grid-template-columns: minmax(0, 1fr);
 }
 
-@media (min-width: 820px) {
+@media (min-width: 1024px) {
+  /* Two-up layout reserved for bona fide desktop widths. */
   #sampler-content {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1700px) {
+  /* Three-up cards only show up for the mega-wide cinema displays. */
   #sampler-content {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
