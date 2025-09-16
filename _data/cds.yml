@@ -37,7 +37,6 @@ cards:
         disabled: true
       - label: Privacy and Ethics in my practice
         url: https://bseverns.github.io/PRIVACY_ETHICS.md
-        disabled: true
       - label: Assumption ledger (TBD)
         url: "#"
         disabled: true
@@ -64,7 +63,7 @@ cards:
     links:
       - label: Repo
         url: https://github.com/bseverns/MOARkNOBS-42
-      - label: Demo video (optional)
+      - label: Demo video
         url: "#"
         disabled: true
       - label: Release (latest)
@@ -194,7 +193,6 @@ cards:
     links:
       - label: Network link
         url: https://mtn.org
-        disabled: true
       - label: Production calendar (TBD)
         url: "#"
         disabled: true
