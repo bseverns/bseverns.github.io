@@ -16,7 +16,7 @@ updated: "2025-09-14"
     <div class="hero-main">
       <div class="hero-heading">
         <h1 id="sampler-title">Critical Digital Studies — Sampler (Unlisted)</h1>
-        <button class="print-btn" type="button" onclick="window.print()">Download PDF</button>
+        <a class="print-btn" href="{{ '/assets/docs/Severns_CriticalDigitalStudies_Sampler.pdf' | relative_url }}" target="_blank" rel="noopener">Download PDF</a>
       </div>
       <p class="lede">I pair critical inquiry with hands-on digital practice—playful rigor: {% include flow-chain.html text="build → perform (play) → document → iterate" class="flow-chain--lede" %}.</p>
       <p>Working systems-first, I make technical and ethical layers legible so students can audit and extend them. This sampler foregrounds digital literacy within questions of justice, representation, and civic engagement, preparing makers to treat media as civic instruments.</p>
