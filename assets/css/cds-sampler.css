@@ -102,6 +102,67 @@ main#content {
   color: #334155;
 }
 
+.flow-chain {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.65rem;
+  vertical-align: baseline;
+}
+
+.flow-chain .flow-node {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.flow-chain .flow-arrow {
+  font-weight: 650;
+  color: #1d4ed8;
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.9em;
+}
+
+.flow-chain .flow-label {
+  display: inline;
+  white-space: normal;
+}
+
+.flow-chain--lede {
+  font-weight: 650;
+  gap: 0.4rem 0.8rem;
+  letter-spacing: 0.01em;
+}
+
+.flow-chain--lede .flow-arrow {
+  font-size: 1em;
+  color: #1e3a8a;
+}
+
+.flow-chain--paragraph {
+  gap: 0.35rem 0.7rem;
+  line-height: 1.6;
+}
+
+.flow-chain--list {
+  gap: 0.25rem 0.55rem;
+}
+
+.flow-chain--list .flow-arrow {
+  font-size: 0.85em;
+  color: #2563eb;
+}
+
+.flow-chain--inline {
+  gap: 0.3rem 0.5rem;
+}
+
+.flow-chain--inline .flow-arrow {
+  font-size: 0.85em;
+}
+
 .print-btn {
   border: 0;
   border-radius: 999px;

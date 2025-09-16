@@ -18,16 +18,44 @@
   {% endif %}
 
   <h2 id="{{ include.id }}-title">{{ include.title }}</h2>
-  {% if include.abstract %}<p>{{ include.abstract }}</p>{% endif %}
+  {% if include.abstract %}
+  <p>
+    {% if include.abstract contains ' → ' %}
+      {% include flow-chain.html text=include.abstract class="flow-chain--paragraph" %}
+    {% else %}
+      {{ include.abstract }}
+    {% endif %}
+  </p>
+  {% endif %}
 
   {% if include.methods and include.methods.size > 0 %}
   <h3>Methods &amp; Ethics</h3>
-  <ul>{% for m in include.methods %}<li>{{ m }}</li>{% endfor %}</ul>
+  <ul>
+  {% for m in include.methods %}
+    <li>
+      {% if m contains ' → ' %}
+        {% include flow-chain.html text=m class="flow-chain--list" %}
+      {% else %}
+        {{ m }}
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
   {% endif %}
 
   {% if include.outcomes and include.outcomes.size > 0 %}
   <h3>Outcomes</h3>
-  <ul>{% for o in include.outcomes %}<li>{{ o }}</li>{% endfor %}</ul>
+  <ul>
+  {% for o in include.outcomes %}
+    <li>
+      {% if o contains ' → ' %}
+        {% include flow-chain.html text=o class="flow-chain--list" %}
+      {% else %}
+        {{ o }}
+      {% endif %}
+    </li>
+  {% endfor %}
+  </ul>
   {% endif %}
 
   {% if include.teach %}
@@ -35,9 +63,36 @@
   {% if t.goal or t.lab60 or t.assess %}
   <h3>Teach with this</h3>
   <ul>
-    {% if t.goal %}<li><strong>Goal:</strong> {{ t.goal }}</li>{% endif %}
-    {% if t.lab60 %}<li><strong>60-min lab:</strong> {{ t.lab60 }}</li>{% endif %}
-    {% if t.assess %}<li><strong>Assess:</strong> {{ t.assess }}</li>{% endif %}
+    {% if t.goal %}
+    <li>
+      <strong>Goal:</strong>
+      {% if t.goal contains ' → ' %}
+        {% include flow-chain.html text=t.goal class="flow-chain--inline" %}
+      {% else %}
+        {{ t.goal }}
+      {% endif %}
+    </li>
+    {% endif %}
+    {% if t.lab60 %}
+    <li>
+      <strong>60-min lab:</strong>
+      {% if t.lab60 contains ' → ' %}
+        {% include flow-chain.html text=t.lab60 class="flow-chain--inline" %}
+      {% else %}
+        {{ t.lab60 }}
+      {% endif %}
+    </li>
+    {% endif %}
+    {% if t.assess %}
+    <li>
+      <strong>Assess:</strong>
+      {% if t.assess contains ' → ' %}
+        {% include flow-chain.html text=t.assess class="flow-chain--inline" %}
+      {% else %}
+        {{ t.assess }}
+      {% endif %}
+    </li>
+    {% endif %}
   </ul>
   {% endif %}
   {% endif %}
