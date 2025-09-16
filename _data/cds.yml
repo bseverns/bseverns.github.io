@@ -36,7 +36,7 @@ cards:
         url: "#"
         disabled: true
       - label: PRIVACY/ETHICS (TBD)
-        url: "#"
+        url: "https://githubc.com/bseverns/bseverns.github.io/PRIVACY_ETHICS.md"
         disabled: true
       - label: Assumption ledger (TBD)
         url: "#"
