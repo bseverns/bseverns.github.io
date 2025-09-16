@@ -1,12 +1,12 @@
 - title: Home
-  url: /
+  url: /index.html
 - title: Studio Portfolio
-  url: /studio/
+  url: /studio.html
 - title: Academic Portfolio
-  url: /teaching/
+  url: /teaching.html
 - title: Research Notebook
-  url: /research/
+  url: /research.html
 - title: About / CV
-  url: /about/
+  url: /about.html
 - title: Contact
-  url: /contact/
+  url: /contact.html
