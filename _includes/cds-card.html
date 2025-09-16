@@ -1,113 +1,118 @@
 <article id="{{ include.id }}" class="card cds-card" role="region" aria-labelledby="{{ include.id }}-title">
-  {% if include.aligns and include.aligns.size > 0 %}
-  <div class="ribbon" aria-label="Alignment tags">
-    {% for tag in include.aligns %}<span class="tag">{{ tag }}</span>{% endfor %}
-  </div>
-  {% endif %}
-
-  {% if include.img_src %}
-  <figure>
-    <img
-      src="{{ include.img_src }}"
-      alt="{{ include.img_alt | default: include.title | escape }}"
-      loading="lazy" decoding="async"
-      {% if include.img_w %}width="{{ include.img_w }}"{% else %}width="1200"{% endif %}
-      {% if include.img_h %}height="{{ include.img_h }}"{% else %}height="675"{% endif %}>
-    {% if include.figcaption %}<figcaption>{{ include.figcaption }}</figcaption>{% endif %}
-  </figure>
-  {% endif %}
-
-  <h2 id="{{ include.id }}-title">{{ include.title }}</h2>
-  {% if include.abstract %}
-  <p>
-    {% if include.abstract contains ' → ' %}
-      {% include flow-chain.html text=include.abstract class="flow-chain--paragraph" %}
-    {% else %}
-      {{ include.abstract }}
+  <div class="card-main">
+    {% if include.aligns and include.aligns.size > 0 %}
+    <div class="ribbon" aria-label="Alignment tags">
+      {% for tag in include.aligns %}<span class="tag">{{ tag }}</span>{% endfor %}
+    </div>
     {% endif %}
-  </p>
-  {% endif %}
 
-  {% if include.methods and include.methods.size > 0 %}
-  <h3>Methods &amp; Ethics</h3>
-  <ul>
-  {% for m in include.methods %}
-    <li>
-      {% if m contains ' → ' %}
-        {% include flow-chain.html text=m class="flow-chain--list" %}
-      {% else %}
-        {{ m }}
-      {% endif %}
-    </li>
-  {% endfor %}
-  </ul>
-  {% endif %}
-
-  {% if include.outcomes and include.outcomes.size > 0 %}
-  <h3>Outcomes</h3>
-  <ul>
-  {% for o in include.outcomes %}
-    <li>
-      {% if o contains ' → ' %}
-        {% include flow-chain.html text=o class="flow-chain--list" %}
-      {% else %}
-        {{ o }}
-      {% endif %}
-    </li>
-  {% endfor %}
-  </ul>
-  {% endif %}
-
-  {% if include.teach %}
-  {% assign t = include.teach %}
-  {% if t.goal or t.lab60 or t.assess %}
-  <h3>Teach with this</h3>
-  <ul>
-    {% if t.goal %}
-    <li>
-      <strong>Goal:</strong>
-      {% if t.goal contains ' → ' %}
-        {% include flow-chain.html text=t.goal class="flow-chain--inline" %}
-      {% else %}
-        {{ t.goal }}
-      {% endif %}
-    </li>
+    {% if include.img_src %}
+    <figure>
+      <img
+        src="{{ include.img_src }}"
+        alt="{{ include.img_alt | default: include.title | escape }}"
+        loading="lazy" decoding="async"
+        {% if include.img_w %}width="{{ include.img_w }}"{% else %}width="1200"{% endif %}
+        {% if include.img_h %}height="{{ include.img_h }}"{% else %}height="675"{% endif %}>
+      {% if include.figcaption %}<figcaption>{{ include.figcaption }}</figcaption>{% endif %}
+    </figure>
     {% endif %}
-    {% if t.lab60 %}
-    <li>
-      <strong>60-min lab:</strong>
-      {% if t.lab60 contains ' → ' %}
-        {% include flow-chain.html text=t.lab60 class="flow-chain--inline" %}
-      {% else %}
-        {{ t.lab60 }}
-      {% endif %}
-    </li>
-    {% endif %}
-    {% if t.assess %}
-    <li>
-      <strong>Assess:</strong>
-      {% if t.assess contains ' → ' %}
-        {% include flow-chain.html text=t.assess class="flow-chain--inline" %}
-      {% else %}
-        {{ t.assess }}
-      {% endif %}
-    </li>
-    {% endif %}
-  </ul>
-  {% endif %}
-  {% endif %}
 
-  {% if include.links and include.links.size > 0 %}
-  <ul class="links">
-    {% for l in include.links %}
-      {% assign is_ext = l.url | downcase | slice: 0, 4 %}
+    <h2 id="{{ include.id }}-title">{{ include.title }}</h2>
+    {% if include.abstract %}
+    <p>
+      {% if include.abstract contains ' → ' %}
+        {% include flow-chain.html text=include.abstract class="flow-chain--paragraph" %}
+      {% else %}
+        {{ include.abstract }}
+      {% endif %}
+    </p>
+    {% endif %}
+
+    {% if include.methods and include.methods.size > 0 %}
+    <h3>Methods &amp; Ethics</h3>
+    <ul>
+    {% for m in include.methods %}
       <li>
-        <a href="{{ l.url | default:'#' }}"
-           {% if l.disabled %}aria-disabled="true"{% elsif is_ext == 'http' %}rel="nofollow noopener"{% endif %}>
-          {{ l.label }}
-        </a>
+        {% if m contains ' → ' %}
+          {% include flow-chain.html text=m class="flow-chain--list" %}
+        {% else %}
+          {{ m }}
+        {% endif %}
       </li>
     {% endfor %}
-  </ul>
+    </ul>
+    {% endif %}
+
+    {% if include.outcomes and include.outcomes.size > 0 %}
+    <h3>Outcomes</h3>
+    <ul>
+    {% for o in include.outcomes %}
+      <li>
+        {% if o contains ' → ' %}
+          {% include flow-chain.html text=o class="flow-chain--list" %}
+        {% else %}
+          {{ o }}
+        {% endif %}
+      </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+
+    {% if include.teach %}
+    {% assign t = include.teach %}
+    {% if t.goal or t.lab60 or t.assess %}
+    <h3>Teach with this</h3>
+    <ul>
+      {% if t.goal %}
+      <li>
+        <strong>Goal:</strong>
+        {% if t.goal contains ' → ' %}
+          {% include flow-chain.html text=t.goal class="flow-chain--inline" %}
+        {% else %}
+          {{ t.goal }}
+        {% endif %}
+      </li>
+      {% endif %}
+      {% if t.lab60 %}
+      <li>
+        <strong>60-min lab:</strong>
+        {% if t.lab60 contains ' → ' %}
+          {% include flow-chain.html text=t.lab60 class="flow-chain--inline" %}
+        {% else %}
+          {{ t.lab60 }}
+        {% endif %}
+      </li>
+      {% endif %}
+      {% if t.assess %}
+      <li>
+        <strong>Assess:</strong>
+        {% if t.assess contains ' → ' %}
+          {% include flow-chain.html text=t.assess class="flow-chain--inline" %}
+        {% else %}
+          {{ t.assess }}
+        {% endif %}
+      </li>
+      {% endif %}
+    </ul>
+    {% endif %}
+    {% endif %}
+  </div>
+
+  {% if include.links and include.links.size > 0 %}
+  <aside class="card-links" aria-labelledby="{{ include.id }}-links-title">
+    <h3 id="{{ include.id }}-links-title" class="card-links-title">Reference &amp; Archive Links</h3>
+    <ul class="links">
+      {% for l in include.links %}
+        {% assign is_ext = l.url | downcase | slice: 0, 4 %}
+        <li>
+          <a href="{{ l.url | default:'#' }}"
+             {% if l.disabled %}aria-disabled="true"{% elsif is_ext == 'http' %}rel="nofollow noopener"{% endif %}>
+            {{ l.label }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  </aside>
   {% endif %}
 </article>
