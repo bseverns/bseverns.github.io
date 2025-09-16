@@ -1,4 +1,4 @@
-<article id="{{ include.id }}" class="card" role="region" aria-labelledby="{{ include.id }}-title">
+<article id="{{ include.id }}" class="card cds-card" role="region" aria-labelledby="{{ include.id }}-title">
   {% if include.aligns and include.aligns.size > 0 %}
   <div class="ribbon" aria-label="Alignment tags">
     {% for tag in include.aligns %}<span class="tag">{{ tag }}</span>{% endfor %}
@@ -43,14 +43,16 @@
   {% endif %}
 
   {% if include.links and include.links.size > 0 %}
-  <p class="links">
+  <ul class="links">
     {% for l in include.links %}
       {% assign is_ext = l.url | downcase | slice: 0, 4 %}
-      <a href="{{ l.url | default:'#' }}"
-         {% if l.disabled %}aria-disabled="true"{% elsif is_ext == 'http' %}rel="nofollow noopener"{% endif %}>
-        {{ l.label }}
-      </a>{% unless forloop.last %} • {% endunless %}
+      <li>
+        <a href="{{ l.url | default:'#' }}"
+           {% if l.disabled %}aria-disabled="true"{% elsif is_ext == 'http' %}rel="nofollow noopener"{% endif %}>
+          {{ l.label }}
+        </a>
+      </li>
     {% endfor %}
-  </p>
+  </ul>
   {% endif %}
 </article>

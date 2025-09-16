@@ -1,21 +1,149 @@
 /* Focus & skip */
-.skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;}
-.skip-link:focus{left:1rem;top:1rem;width:auto;height:auto;padding:.5rem 1rem;background:#fff;border:2px solid #000;z-index:1000;}
-:focus{outline:3px solid;outline-offset:2px}
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 
-/* Cards & ribbons */
-.card{border:1px solid #e2e2e2;border-radius:14px;padding:1rem;margin:1rem 0}
-.card .tag{display:inline-block;border:1px solid #999;border-radius:999px;padding:.1rem .5rem;margin-right:.25rem;font-size:.8rem}
-.links a[aria-disabled="true"]{pointer-events:none;opacity:.55;text-decoration:none}
-.ribbon{position:absolute;top:.75rem;right:.75rem;display:flex;flex-wrap:wrap;gap:.25rem;justify-content:flex-end}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  width: auto;
+  height: auto;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  border: 2px solid #000;
+  z-index: 1000;
+}
 
-/* Print polish */
-@page{margin:0.6in}
-@media print{
-  nav,.print-btn,.skip-link{display:none!important}
-  a[href]:after{content:" (" attr(href) ")";font-size:80%}
-  .card{break-inside:avoid}
-  h1,h2,h3{page-break-after:avoid}
-  img{max-width:100%;height:auto}
-  body{font-size:11pt;line-height:1.35}
+:focus {
+  outline: 3px solid;
+  outline-offset: 2px;
+}
+
+.links a[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: 0.55;
+  text-decoration: none;
+}
+
+@page {
+  margin: 0.6in;
+}
+
+@media print {
+  header.site-head,
+  footer.site-footer,
+  nav,
+  .print-btn,
+  .skip-link {
+    display: none !important;
+  }
+
+  body {
+    font-size: 11pt;
+    line-height: 1.35;
+    background: #fff;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 80%;
+  }
+
+  .cds-sampler {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .sampler-hero {
+    display: block;
+  }
+
+  .hero-heading {
+    display: block !important;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-main {
+    margin-bottom: 1.5rem;
+  }
+
+  aside.service {
+    position: static;
+    top: auto;
+    margin-top: 1.25rem;
+    background: #f8fafc;
+    color: #111827;
+    border: 1px solid #cbd5e1;
+    box-shadow: none;
+  }
+
+  aside.service::before {
+    display: none;
+  }
+
+  .sampler-main {
+    display: block;
+  }
+
+  nav.toc {
+    display: none !important;
+  }
+
+  #sampler-content {
+    display: block;
+  }
+
+  .cds-card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #cbd5e1;
+    background: #fff;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .cds-card figure {
+    margin: 0 0 1rem;
+    border-radius: 0;
+  }
+
+  .cds-card .ribbon {
+    position: static;
+    justify-content: flex-start;
+    margin-bottom: 0.5rem;
+  }
+
+  .cds-card .tag {
+    border: 1px solid #475569;
+    color: #111827;
+    background: none;
+  }
+
+  .cds-card .links {
+    padding-left: 1.1rem;
+    margin-top: 0.75rem;
+  }
+
+  .cds-card .links li {
+    margin-bottom: 0.25rem;
+  }
+
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
 }
