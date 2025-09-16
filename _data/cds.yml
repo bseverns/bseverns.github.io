@@ -11,31 +11,30 @@ cards:
       - Detection overlay with visible status + erase
       - System: webcam → local detector → ephemeral buffer → user action
     outcomes:
-      - Deployed in 1 kiosk (TBD)
-      - Used by ~24 students (TBD)
-      - 3 critique sessions (TBD)
-      - 1 iteration logged (TBD)
+      - v2.1 release adds the ConsentDetect teaching sketch + auto-purge (CHANGELOG)
+      - v2 shipped consent-toggle long press, session review, and double-press save (CHANGELOG)
+      - Published assumption ledger covering detector defaults and purge schedule
+      - Documented 2023→2025 development lineage for critique context
     teach:
       goal: Practice consent-forward capture as digital literacy
       lab60: Implement detection-only pipeline; test erase-now; reflect on affordances
       assess: Process log + assumption ledger + 2-min demo
     links:
-      - label: Repo
+      - label: Repository
         url: https://github.com/bseverns/faceTimes
-      - label: diagrams.md
+      - label: Assumption ledger
+        url: https://github.com/bseverns/faceTimes/blob/main/docs/assumption-ledger.md
+      - label: Logic Diagrams
         url: https://github.com/bseverns/faceTimes/blob/main/diagrams.md
-      - label: Related sketch — videoProcessing lab
+      - label: Lineage
+        url: https://github.com/bseverns/faceTimes/blob/main/docs/lineage.md
+      - label: Related sketches — videoProcessing laboratory notes
         url: https://github.com/bseverns/videoProcessing
-      - label: Related sketch — VidObjectifier
-        url: https://github.com/bseverns/VidObjectifier
       - label: Vimeo clip (add link)
         url: "#"
         disabled: true
       - label: Privacy and Ethics in my practice
         url: https://bseverns.github.io/PRIVACY_ETHICS.md
-      - label: Assumption ledger (TBD)
-        url: "#"
-        disabled: true
 
   - id: moarknobs-42
     title: MOARkNOBS-42 — open-source microcontroller MIDI controller
@@ -57,7 +56,7 @@ cards:
       lab60: Map controls → parameters; measure + log latency
       assess: Short demo + latency note + reproducibility checklist
     links:
-      - label: Repo
+      - label: Repository
         url: https://github.com/bseverns/MOARkNOBS-42
       - label: Demo video
         url: "#"
@@ -94,7 +93,7 @@ cards:
       lab60: Implement 2 features; compare visual behaviors
       assess: Process log + short critique memo
     links:
-      - label: Repo (GlitchListener)
+      - label: Repository
         url: https://github.com/bseverns/GlitchListener
       - label: README quickstart
         url: https://github.com/bseverns/GlitchListener#readme
