@@ -31,7 +31,7 @@
 }
 
 @page {
-  margin: 0.6in;
+  margin: 0.5in;
 }
 
 @media print {
@@ -44,9 +44,27 @@
   }
 
   body {
-    font-size: 11pt;
-    line-height: 1.35;
+    font-size: 10.5pt;
+    line-height: 1.32;
     background: #fff;
+    color: #0f172a;
+  }
+
+  p {
+    margin: 0 0 0.45rem;
+  }
+
+  ul {
+    margin: 0 0 0.55rem;
+    padding-left: 1rem;
+  }
+
+  li {
+    margin-bottom: 0.2rem;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
   }
 
   a[href]:after {
@@ -64,6 +82,8 @@
 
   .sampler-hero {
     display: block;
+    page-break-after: always;
+    margin-bottom: 0;
   }
 
   .hero-heading {
@@ -72,17 +92,22 @@
   }
 
   .hero-main {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .sampler-hero p {
+    margin: 0 0 0.45rem;
   }
 
   aside.service {
     position: static;
     top: auto;
-    margin-top: 1.25rem;
+    margin-top: 1rem;
     background: #f8fafc;
     color: #111827;
     border: 1px solid #cbd5e1;
     box-shadow: none;
+    padding: 0.75rem 1rem;
   }
 
   aside.service::before {
@@ -103,22 +128,31 @@
 
   .cds-card {
     break-inside: avoid;
+    break-after: page;
     box-shadow: none;
     border: 1px solid #cbd5e1;
     background: #fff;
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
+    padding: 1.25rem 1.35rem;
+    margin: 0;
+  }
+
+  .cds-card:last-of-type {
+    break-after: auto;
   }
 
   .cds-card figure {
-    margin: 0 0 1rem;
+    margin: 0 0 0.65rem;
     border-radius: 0;
   }
 
+  .cds-card figure img {
+    width: 100%;
+    max-height: 3.6in;
+    object-fit: cover;
+  }
+
   .cds-card .ribbon {
-    position: static;
-    justify-content: flex-start;
-    margin-bottom: 0.5rem;
+    display: none !important;
   }
 
   .cds-card .tag {
@@ -128,18 +162,57 @@
   }
 
   .cds-card .links {
-    padding-left: 1.1rem;
-    margin-top: 0.75rem;
-  }
-
-  .cds-card .links li {
-    margin-bottom: 0.25rem;
+    display: none !important;
   }
 
   h1,
   h2,
   h3 {
     page-break-after: avoid;
+    page-break-inside: avoid;
+    break-after: avoid;
+    break-inside: avoid;
+    margin-top: 0;
+    margin-bottom: 0.4rem;
+  }
+
+  .cds-card h2 {
+    font-size: 1.25rem;
+    line-height: 1.15;
+    margin-bottom: 0.45rem;
+  }
+
+  .cds-card h3 {
+    font-size: 1.05rem;
+    letter-spacing: 0.01em;
+    margin-top: 0.6rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .cds-card h3 + ul {
+    margin-top: 0.1rem;
+  }
+
+  .cds-card ul {
+    page-break-inside: avoid;
+  }
+
+  .cds-card ul li {
+    break-inside: avoid;
+  }
+
+  .cds-card p:first-of-type {
+    break-inside: avoid;
+  }
+
+  .cds-card p:first-of-type::before {
+    content: "Abstract";
+    display: block;
+    font-weight: 650;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-size: 0.9rem;
+    margin-bottom: 0.2rem;
   }
 
   img {
@@ -153,5 +226,9 @@
 
   .flow-chain .flow-arrow {
     color: #111827;
+  }
+
+  .sampler-meta {
+    display: none;
   }
 }
