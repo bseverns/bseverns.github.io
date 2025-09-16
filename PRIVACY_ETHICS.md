@@ -155,8 +155,8 @@ Each project includes a `PRIVACY-ADDENDUM.md` with:
 ---
 
 ## 13. Contact
-- **Primary:** <add email or project contact>  
-- **Security/Erasure Requests:** <add dedicated address or issue template link>
+- **Primary:** severns3@gmail.com  
+- **Security/Erasure Requests:** same for the time being
 
 ---
 
