@@ -9,7 +9,7 @@ cards:
     methods:
       - Classroom demo & public kiosk contexts
       - Detection overlay with visible status + erase
-      - System: webcam → local detector → ephemeral buffer → user action
+      - "System: webcam → local detector → ephemeral buffer → user action"
     outcomes:
       - v2.1 release adds the ConsentDetect teaching sketch + auto-purge (CHANGELOG)
       - v2 shipped consent-toggle long press, session review, and double-press save (CHANGELOG)
@@ -45,7 +45,7 @@ cards:
     aligns: ["digital literacy","civic engagement","DIY"]
     methods:
       - Teensy-based instrument + teaching rig
-      - Complete docs: BOM, wiring, parameter map
+      - "Complete docs: BOM, wiring, parameter map"
       - Measurement folded into practice (latency notes)
     outcomes:
       - v0.x performances (TBD)
@@ -114,7 +114,7 @@ cards:
     aligns: ["digital literacy","justice/representation"]
     methods:
       - November light, long-lens compression (pursuit grammar)
-      - Wheel POV: cyclic motion & peripheral smear
+      - "Wheel POV: cyclic motion & peripheral smear"
       - Consent & site plans for actors/bystanders
     outcomes:
       - 2 studies complete; cuts TBD
@@ -174,7 +174,7 @@ cards:
     aligns: ["civic engagement","digital literacy"]
     methods:
       - Roles & calendars; consent and authorship checkpoints
-      - Deliverables: broadcast master + process docs
+      - "Deliverables: broadcast master + process docs"
       - Public exhibition as peer review
     outcomes:
       - 28.5-minute episode delivered (TBD)
