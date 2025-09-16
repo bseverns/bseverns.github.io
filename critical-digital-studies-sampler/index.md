@@ -18,12 +18,12 @@ updated: "2025-09-14"
         <h1 id="sampler-title">Critical Digital Studies — Sampler (Unlisted)</h1>
         <button class="print-btn" type="button" onclick="window.print()">Download PDF</button>
       </div>
-      <p class="lede">I pair critical inquiry with hands-on digital practice—playful rigor: build → perform → document → iterate.</p>
+      <p class="lede">I pair critical inquiry with hands-on digital practice—playful rigor: build → perform [play] → document → iterate.</p>
       <p>Working systems-first, I make technical and ethical layers legible so students can audit and extend them. This sampler foregrounds digital literacy within questions of justice, representation, and civic engagement, preparing makers to treat media as civic instruments.</p>
     </div>
     <aside class="service">
       <h2>Service &amp; Stewardship</h2>
-      <p>Lab stewardship and equitable access are part of the pedagogy: labeled, calibrated, reproducible. I served 2.5 years on MCAD’s Faculty Senate, collaborating across faculty and administration on curriculum and student support; I bring the same steady, equity-minded approach to committee work.</p>
+      <p>Lab stewardship and equitable access are part of the pedagogy: labeled, calibrated, reproducible. I served 2.5 years on MCAD’s Faculty Senate, collaborating across faculty and administration on curriculum and student support; I bring the same steady, equity-minded approach that is central to my teaching practice to committee work and non-teaching obligations.</p>
     </aside>
   </header>
 
