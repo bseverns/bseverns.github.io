@@ -5,7 +5,7 @@ cards:
     img_alt: faceTimes consent screen showing detection-only, opt-in language and a visible delete-now action
     abstract: On-device, detection-only pipeline with explicit opt-in and delete-now controls. No identification, no network calls, and no storage without consent. Interface copy foregrounds agency before computation; documentation (README, PRIVACY/ETHICS, assumption ledger) is treated as research output.
     abstract_locked: true
-    aligns: ["digital literacy","justice/representation","civic engagement"]
+    aligns: ["digital literacy","justice/representation","civic engagement","DIY"]
     methods:
       - Classroom demo & public kiosk contexts
       - Detection overlay with visible status + erase
@@ -28,6 +28,10 @@ cards:
         url: https://github.com/bseverns/faceTimes/blob/main/PRIVACY.md
       - label: diagrams.md
         url: https://github.com/bseverns/faceTimes/blob/main/diagrams.md
+      - label: Related sketch — videoProcessing lab
+        url: https://github.com/bseverns/videoProcessing
+      - label: Related sketch — VidObjectifier
+        url: https://github.com/bseverns/VidObjectifier
       - label: Vimeo clip (add link)
         url: "#"
         disabled: true
@@ -44,7 +48,7 @@ cards:
     img_alt: MOARkNOBS-42 panel top-down with labeled controls
     abstract: Reproducible hardware + firmware used as both instrument and teaching platform. Parameter mapping functions as an inquiry into authorship and control; latency is characterized and documented so performance claims are auditable and extendable.
     abstract_locked: true
-    aligns: ["digital literacy","civic engagement"]
+    aligns: ["digital literacy","civic engagement","DIY"]
     methods:
       - Teensy-based instrument + teaching rig
       - Complete docs: BOM, wiring, parameter map
@@ -71,6 +75,10 @@ cards:
         url: https://github.com/bseverns/MOARkNOBS-42/blob/main/docs/PinMap.md
       - label: hardware/
         url: https://github.com/bseverns/MOARkNOBS-42/tree/main/hardware
+      - label: Related sketch — benzknob
+        url: https://github.com/bseverns/benzknob
+      - label: Related sketch — MotorLightSound lab
+        url: https://github.com/bseverns/MotorLightSound
 
   - id: glitch-geometry
     title: Glitch Geometry — Audio→Form Instrument
@@ -78,7 +86,7 @@ cards:
     img_alt: Generative geometry frame driven by live audio features
     abstract: Live translation of signal features into geometry; pipeline choices (feature extraction, modulation, rendering) are made legible as aesthetic and ethical decisions. The system is tunable and documented for both teaching and critique.
     abstract_locked: true
-    aligns: ["digital literacy","justice/representation"]
+    aligns: ["digital literacy","justice/representation","DIY"]
     methods:
       - Signal in → features → geometry modulation → render
       - Transparent, documented pipeline for reproducibility
@@ -95,6 +103,10 @@ cards:
         url: https://github.com/bseverns/GlitchListener
       - label: README quickstart
         url: https://github.com/bseverns/GlitchListener#readme
+      - label: Related sketch — glitchProcessing
+        url: https://github.com/bseverns/glitchProcessing
+      - label: Related sketch — SonicSketches
+        url: https://github.com/bseverns/SonicSketches
       - label: Vimeo excerpt (add link)
         url: "#"
         disabled: true
