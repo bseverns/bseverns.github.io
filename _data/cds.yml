@@ -57,9 +57,6 @@ cards:
     links:
       - label: Repository
         url: https://github.com/bseverns/MOARkNOBS-42
-      - label: Demo video
-        url: "#"
-        disabled: true
       - label: Release (latest)
         url: https://github.com/bseverns/MOARkNOBS-42/releases/latest
       - label: TESTING.md
@@ -185,7 +182,7 @@ cards:
     links:
       - label: Network link
         url: https://mtn.org
-      - label: Production calendar (TBD)
+      - label: Archived Episode
         url: "#"
         disabled: true
       - label: Syllabus / MCADMedia2
