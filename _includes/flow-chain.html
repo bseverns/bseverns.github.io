@@ -1,0 +1,21 @@
+{% assign root_tag = include.tag | default: 'span' %}
+{% assign extra_class = '' %}
+{% if include.class %}
+  {% assign extra_class = ' ' | append: include.class %}
+{% endif %}
+<{{ root_tag }} class="flow-chain{{ extra_class }}">
+  {% assign segments = include.text | split: '→' %}
+  {% for segment in segments %}
+    {% assign trimmed = segment | strip %}
+    {% if trimmed != '' %}
+    <span class="flow-node">
+      {% if forloop.first %}
+      <span class="flow-label">{{ trimmed | escape_once }}</span>
+      {% else %}
+      <span class="flow-arrow">→</span>
+      <span class="flow-label">{{ trimmed | escape_once }}</span>
+      {% endif %}
+    </span>
+    {% endif %}
+  {% endfor %}
+</{{ root_tag }}>

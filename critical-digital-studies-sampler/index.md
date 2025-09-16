@@ -18,7 +18,7 @@ updated: "2025-09-14"
         <h1 id="sampler-title">Critical Digital Studies — Sampler (Unlisted)</h1>
         <button class="print-btn" type="button" onclick="window.print()">Download PDF</button>
       </div>
-      <p class="lede">I pair critical inquiry with hands-on digital practice—playful rigor: build → perform (play) → document → iterate.</p>
+      <p class="lede">I pair critical inquiry with hands-on digital practice—playful rigor: {% include flow-chain.html text="build → perform (play) → document → iterate" class="flow-chain--lede" %}.</p>
       <p>Working systems-first, I make technical and ethical layers legible so students can audit and extend them. This sampler foregrounds digital literacy within questions of justice, representation, and civic engagement, preparing makers to treat media as civic instruments.</p>
     </div>
     <aside class="service">

@@ -146,4 +146,12 @@
     max-width: 100%;
     height: auto;
   }
+
+  .flow-chain {
+    gap: 0.2rem 0.45rem;
+  }
+
+  .flow-chain .flow-arrow {
+    color: #111827;
+  }
 }
