@@ -26,7 +26,7 @@ cards:
         url: https://github.com/bseverns/faceTimes/blob/main/ETHICS.md
       - label: PRIVACY
         url: https://github.com/bseverns/faceTimes/blob/main/PRIVACY.md
-      - label: Data-flow diagram
+      - label: diagrams.md
         url: https://github.com/bseverns/faceTimes/blob/main/diagrams.md
       - label: Vimeo clip (add link)
         url: "#"
@@ -65,11 +65,11 @@ cards:
         disabled: true
       - label: Release (latest)
         url: https://github.com/bseverns/MOARkNOBS-42/releases/latest
-      - label: Testing gauntlet
+      - label: TESTING.md
         url: https://github.com/bseverns/MOARkNOBS-42/blob/main/docs/TESTING.md
-      - label: Pin map
+      - label: PinMap.md
         url: https://github.com/bseverns/MOARkNOBS-42/blob/main/docs/PinMap.md
-      - label: Hardware docs
+      - label: hardware/
         url: https://github.com/bseverns/MOARkNOBS-42/tree/main/hardware
 
   - id: glitch-geometry
@@ -182,7 +182,7 @@ cards:
       - label: Production calendar (TBD)
         url: "#"
         disabled: true
-      - label: Course materials
+      - label: Syllabus / MCADMedia2
         url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2
-      - label: p5 code explainers
+      - label: MEDIA2-codeEXPLAINERS
         url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2/MEDIA2-codeEXPLAINERS

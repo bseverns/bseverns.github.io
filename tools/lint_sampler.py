@@ -5,7 +5,11 @@ Checks front matter flags, card structure, nav leaks, and placeholder assets.
 If anything's off, we bail loud so the page never ships half-baked.
 """
 
-import os, re, sys
+import os
+import re
+import sys
+
+import yaml
 
 # Repo root relative to this script; we stay portable when run from anywhere.
 ROOT = os.path.dirname(os.path.abspath(__file__)) + "/.."
@@ -44,23 +48,45 @@ else:
     if not has("updated"):
         issues.append("Front matter missing: updated (YYYY-MM-DD)")
 
-# Check minimum 4 cards and required subparts.
-cards = re.findall(r"<article class=\"card\">(.*?)</article>", txt, re.S)
-if len(cards) < 4:
-    issues.append(f"Expected ≥4 cards, found {len(cards)}.")
+# Check that the page actually loops over the include.
+if "{% include cds-card.html" not in txt:
+    issues.append("Sampler page should include cds-card.html for rendering cards.")
+if "site.data.cds.cards" not in txt:
+    issues.append("Sampler page should reference site.data.cds.cards.")
 
-# Each card needs an image, alt text, title, ethics list – no exceptions.
-for i, c in enumerate(cards, 1):
-    if "<img " not in c:
-        issues.append(f"Card {i}: missing <img>.")
-    if "alt=" not in c:
-        issues.append(f"Card {i}: image missing alt text.")
-    if "<h3>" not in c:
-        issues.append(f"Card {i}: missing <h3> title.")
-    if "<h4>Methods & Ethics</h4>" not in c:
-        issues.append(f"Card {i}: missing Methods & Ethics section.")
-    if "<ul>" not in c:
-        issues.append(f"Card {i}: missing bullet list.")
+# Load card data from YAML so we can lint the actual source of truth.
+data_path = os.path.join(ROOT, "_data", "cds.yml")
+if not os.path.exists(data_path):
+    issues.append("Missing _data/cds.yml for sampler data.")
+else:
+    data = yaml.safe_load(open(data_path, "r", encoding="utf-8").read()) or {}
+    cards = data.get("cards", [])
+    if len(cards) < 4:
+        issues.append(f"Expected ≥4 cards in data, found {len(cards)}.")
+    for i, card in enumerate(cards, 1):
+        if not card.get("title"):
+            issues.append(f"Card {i}: missing title in data.")
+        if not card.get("img_src"):
+            issues.append(f"Card {i}: missing img_src in data.")
+        if not card.get("img_alt"):
+            issues.append(f"Card {i}: missing img_alt in data.")
+        methods = card.get("methods") or []
+        if len(methods) == 0:
+            issues.append(f"Card {i}: methods list is empty.")
+        outcomes = card.get("outcomes") or []
+        if len(outcomes) == 0:
+            issues.append(f"Card {i}: outcomes list is empty.")
+        teach = card.get("teach") or {}
+        for key in ("goal", "lab60", "assess"):
+            if not teach.get(key):
+                issues.append(f"Card {i}: teach.{key} missing.")
+        links = card.get("links") or []
+        for link in links:
+            if link.get("disabled"):
+                continue
+            if not link.get("url") or link.get("url", "").strip() == "#":
+                issues.append(f"Card {i}: link '{link.get('label', 'unknown')}' missing URL.")
+
 
 # Ensure it's not in nav (if navigation data exists).
 nav = os.path.join(ROOT, "_data", "navigation.yml")
