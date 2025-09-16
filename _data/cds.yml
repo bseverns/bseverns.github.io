@@ -20,30 +20,16 @@ cards:
       lab60: Implement detection-only pipeline; test erase-now; reflect on affordances
       assess: Process log + assumption ledger + 2-min demo
     links:
-      - label: Repo
+      - label: Repository
         url: https://github.com/bseverns/faceTimes
-      - label: README quick start
-        url: https://github.com/bseverns/faceTimes#quick-start
-      - label: INSTALLATION.md
-        url: https://github.com/bseverns/faceTimes/blob/main/INSTALLATION.md
-      - label: CHANGELOG
-        url: https://github.com/bseverns/faceTimes/blob/main/CHANGELOG.md
-      - label: ETHICS
-        url: https://github.com/bseverns/faceTimes/blob/main/ETHICS.md
-      - label: PRIVACY
-        url: https://github.com/bseverns/faceTimes/blob/main/PRIVACY.md
       - label: Assumption ledger
         url: https://github.com/bseverns/faceTimes/blob/main/docs/assumption-ledger.md
-      - label: diagrams.md
+      - label: Logic Diagrams
         url: https://github.com/bseverns/faceTimes/blob/main/diagrams.md
       - label: Lineage
         url: https://github.com/bseverns/faceTimes/blob/main/docs/lineage.md
-      - label: Sketchbook index
-        url: https://github.com/bseverns/faceTimes/blob/main/docs/sketchbook/index.md
-      - label: Related sketch — videoProcessing lab
+      - label: Related sketches — videoProcessing laboratory notes
         url: https://github.com/bseverns/videoProcessing
-      - label: Related sketch — VidObjectifier
-        url: https://github.com/bseverns/VidObjectifier
       - label: Vimeo clip (add link)
         url: "#"
         disabled: true
@@ -70,7 +56,7 @@ cards:
       lab60: Map controls → parameters; measure + log latency
       assess: Short demo + latency note + reproducibility checklist
     links:
-      - label: Repo
+      - label: Repository
         url: https://github.com/bseverns/MOARkNOBS-42
       - label: Demo video
         url: "#"
@@ -107,7 +93,7 @@ cards:
       lab60: Implement 2 features; compare visual behaviors
       assess: Process log + short critique memo
     links:
-      - label: Repo (GlitchListener)
+      - label: Repository
         url: https://github.com/bseverns/GlitchListener
       - label: README quickstart
         url: https://github.com/bseverns/GlitchListener#readme
