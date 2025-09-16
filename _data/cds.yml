@@ -11,10 +11,10 @@ cards:
       - Detection overlay with visible status + erase
       - System: webcam → local detector → ephemeral buffer → user action
     outcomes:
-      - Deployed in 1 kiosk (TBD)
-      - Used by ~24 students (TBD)
-      - 3 critique sessions (TBD)
-      - 1 iteration logged (TBD)
+      - v2.1 release adds the ConsentDetect teaching sketch + auto-purge (CHANGELOG)
+      - v2 shipped consent-toggle long press, session review, and double-press save (CHANGELOG)
+      - Published assumption ledger covering detector defaults and purge schedule
+      - Documented 2023→2025 development lineage for critique context
     teach:
       goal: Practice consent-forward capture as digital literacy
       lab60: Implement detection-only pipeline; test erase-now; reflect on affordances
@@ -22,12 +22,24 @@ cards:
     links:
       - label: Repo
         url: https://github.com/bseverns/faceTimes
+      - label: README quick start
+        url: https://github.com/bseverns/faceTimes#quick-start
+      - label: INSTALLATION.md
+        url: https://github.com/bseverns/faceTimes/blob/main/INSTALLATION.md
+      - label: CHANGELOG
+        url: https://github.com/bseverns/faceTimes/blob/main/CHANGELOG.md
       - label: ETHICS
         url: https://github.com/bseverns/faceTimes/blob/main/ETHICS.md
       - label: PRIVACY
         url: https://github.com/bseverns/faceTimes/blob/main/PRIVACY.md
+      - label: Assumption ledger
+        url: https://github.com/bseverns/faceTimes/blob/main/docs/assumption-ledger.md
       - label: diagrams.md
         url: https://github.com/bseverns/faceTimes/blob/main/diagrams.md
+      - label: Lineage
+        url: https://github.com/bseverns/faceTimes/blob/main/docs/lineage.md
+      - label: Sketchbook index
+        url: https://github.com/bseverns/faceTimes/blob/main/docs/sketchbook/index.md
       - label: Related sketch — videoProcessing lab
         url: https://github.com/bseverns/videoProcessing
       - label: Related sketch — VidObjectifier
@@ -37,9 +49,6 @@ cards:
         disabled: true
       - label: Privacy and Ethics in my practice
         url: https://bseverns.github.io/PRIVACY_ETHICS.md
-      - label: Assumption ledger (TBD)
-        url: "#"
-        disabled: true
 
   - id: moarknobs-42
     title: MOARkNOBS-42 — open-source microcontroller MIDI controller
