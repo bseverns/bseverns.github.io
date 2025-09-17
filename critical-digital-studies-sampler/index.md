@@ -51,5 +51,6 @@ updated: "2025-09-14"
       <span class="label">Sampler commit:</span>
       <code>{% if site.github and site.github.build_revision %}{{ site.github.build_revision | slice:0,7 }}{% else %}local{% endif %}</code>
     </p>
+    <p class="methods-note"><em><strong>Methods live in <a href="/research/">Research</a>.</strong></em></p>
   </footer>
 </div>
