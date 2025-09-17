@@ -18,7 +18,7 @@ updated: "2025-09-14"
         <h1 id="sampler-title">Critical Digital Studies — Sampler (Unlisted)</h1>
         <a class="print-btn" href="{{ '/assets/docs/Severns_CriticalDigitalStudies.pdf' | relative_url }}" target="_blank" rel="noopener">Download PDF</a>
       </div>
-      <p class="lede">I pair critical inquiry with hands-on digital practice—playful rigor: {% include flow-chain.html text="build → perform (play) → document → iterate" class="flow-chain--lede" %}.</p>
+      <p class="lede">I pair critical inquiry with hands-on digital practice—(playful rigor): {% include flow-chain.html text="build → perform (play, test, break) → document → iterate" class="flow-chain--lede" %}.</p>
       <p>Working systems-first, I make technical and ethical layers legible so students can audit and extend them. This sampler foregrounds digital literacy within questions of justice, representation, and civic engagement, preparing makers to treat media as civic instruments.</p>
        <p class="privacy-note">Every project here rides inside my <a href="{{ 'https://github.com/bseverns/bseverns.github.io/blob/main/PRIVACY_ETHICS.md' | relative_url }}">Privacy &amp; Ethics Statement (v0.1)</a>—dignity over data, consent as interface, local-first processing, and the right to erase. Each project adds its own assumption ledger to tighten those guardrails, never loosen them.</p>
     </div>
