@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-labelledby="title desc">
+  <title id="title">Research portal placeholder graphic</title>
+  <desc id="desc">Abstract gradient background with bold text that reads Research Notes.</desc>
+  <defs>
+    <linearGradient id="punkGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#101010" />
+      <stop offset="50%" stop-color="#2b8a9a" />
+      <stop offset="100%" stop-color="#f12f6b" />
+    </linearGradient>
+    <linearGradient id="grid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+    <pattern id="mesh" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M0 0h40v40H0z" fill="none" stroke="#ffffff" stroke-opacity="0.08" stroke-width="2" />
+    </pattern>
+  </defs>
+  <rect width="800" height="600" fill="url(#punkGradient)" />
+  <rect width="800" height="600" fill="url(#mesh)" />
+  <rect y="320" width="800" height="120" fill="url(#grid)" />
+  <text x="50%" y="45%" font-family="'Raleway', 'Helvetica Neue', Arial, sans-serif" font-size="80" text-anchor="middle" fill="#ffffff" font-weight="800" letter-spacing="12">RESEARCH</text>
+  <text x="50%" y="60%" font-family="'Raleway', 'Helvetica Neue', Arial, sans-serif" font-size="32" text-anchor="middle" fill="#fefefe" font-weight="500" letter-spacing="8">FIELD NOTES</text>
+</svg>
