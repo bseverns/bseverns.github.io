@@ -12,8 +12,8 @@
         src="{{ include.img_src }}"
         alt="{{ include.img_alt | default: include.title | escape }}"
         loading="lazy" decoding="async"
-        {% if include.img_w %}width="{{ include.img_w }}"{% else %}width="1200"{% endif %}
-        {% if include.img_h %}height="{{ include.img_h }}"{% else %}height="675"{% endif %}>
+        {% if include.img_w %}width="{{ include.img_w }}"{% else %}width="2500"{% endif %}
+        {% if include.img_h %}height="{{ include.img_h }}"{% else %}height="1407"{% endif %}>
       {% if include.figcaption %}<figcaption>{{ include.figcaption }}</figcaption>{% endif %}
     </figure>
     {% endif %}

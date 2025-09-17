@@ -26,7 +26,7 @@ main#content {
 }
 
 .cds-sampler {
-  max-width: min(1320px, 96vw);
+  max-width: min(2500px, 96vw);
   margin: clamp(1.5rem, 4vw, 3rem) auto clamp(3rem, 8vw, 5rem);
   padding: clamp(2.5rem, 4vw, 3.75rem);
   background: rgba(255, 255, 255, 0.94);
@@ -250,7 +250,7 @@ aside.service p {
 
 @media (min-width: 900px) {
   .sampler-main {
-    grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+    grid-template-columns: minmax(220px, 320px) minmax(0, 1fr);
     align-items: start;
   }
 }
@@ -334,13 +334,12 @@ nav.toc a:focus-visible {
 }
 
 @media (min-width: 1200px) {
-  /* Three column layout: Projects list + two-up grid */
   .sampler-main {
-    grid-template-columns: minmax(220px, 260px) repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(260px, 360px) minmax(0, 1fr);
   }
 
   #sampler-content {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
