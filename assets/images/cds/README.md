@@ -12,4 +12,4 @@ Drop in your own visuals—stick to the same filenames so the card markup doesn'
 2. Overwrite the matching `.svg` file here with your asset (keep the name).
 3. Commit, run `python tools/lint_sampler.py`, and roll on.
 
-Yes, it's a little bare-bones, but that's the point—we're shipping scaffolding, not secrets.
+Yes, it's a little bare-bones, but that's the point—I’m shipping scaffolding, not secrets.

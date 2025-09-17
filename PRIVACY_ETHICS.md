@@ -9,17 +9,17 @@
 ---
 
 ## 0. Plain‑Language Summary (TL;DR)
-- **Dignity over data.** We only collect what we need to make a thing work, and only *with explicit, informed consent*.
+- **Dignity over data.** I only collect what’s needed to make a thing work, and only *with explicit, informed consent*.
 - **Local first, deletion by default.** Process on‑device when possible. Store as little as possible. “Delete now” is always one click away.
 - **Open by design, not exploitative.** Code and documentation prefer free/libre licenses. Sharing knowledge is not a license to extract people.
 - **Care for minors and communities.** Extra protections for youth. Harm prevention beats novelty.
-- **Transparent practice.** We publish an assumption ledger, data‑flows, known risks, and change logs.
+- **Transparent practice.** I publish an assumption ledger, data‑flows, known risks, and change logs.
 - **Accountable and reversible.** Consent can be revoked, data can be erased, decisions can be appealed.
 
 ---
 
 ## 1. North Star
-We build tools, scenes, and learning environments where **other people create**. Our ethics follow that purpose: **reduce harm, increase agency, share knowledge,** and design systems that **support equitable participation**. We align with the **free software movement**—*free as in freedom to study, modify, share, and use*—and we operate in the spirit of **Kent’s 10 rules** as a craft ethos of clarity, humility, and responsibility in making. 
+I build tools, scenes, and learning environments where **other people create**. My ethics follow that purpose: **reduce harm, increase agency, share knowledge,** and design systems that **support equitable participation**. I align with the **free software movement**—*free as in freedom to study, modify, share, and use*—and I operate in the spirit of **Kent’s 10 rules** as a craft ethos of clarity, humility, and responsibility in making.
 
 ---
 
@@ -34,14 +34,14 @@ This statement covers:
 
 ## 3. Principles
 1. **Human dignity is inviolable.** People are not datasets. No biometric identification or surveillance by default. Detection‑only when possible.  
-2. **Equity is a system requirement.** We design for the margins first and audit for disparate impacts.  
+2. **Equity is a system requirement.** I design for the margins first and audit for disparate impacts.
 3. **Consent is an interface.** Opt‑in, affirmative, revocable, time‑bounded, and contextual. Consent UX is plain‑language and visible.  
-4. **Data minimization.** If we don’t need it, we don’t collect it. If we must collect it, we keep it briefly and securely.  
+4. **Data minimization.** If I don’t need it, I don’t collect it. If I must collect it, I keep it short-lived and secure.
 5. **Local first.** Prefer on‑device processing with no network calls.  
 6. **Transparency and legibility.** Publish assumption ledgers, data‑flow diagrams, and change logs.  
 7. **Right to inspect, correct, and erase.** Participants can see what exists about them, fix it, or remove it—fast.  
-8. **Open knowledge, not open people.** We release *code, methods, and documentation* under free/libre licenses while *protecting personal data*.  
-9. **Accountability.** Clear roles, audit trails, and incident response. When harm happens, we repair where possible and learn in public.  
+8. **Open knowledge, not open people.** I release *code, methods, and documentation* under free/libre licenses while *protecting personal data*.
+9. **Accountability.** Clear roles, audit trails, and incident response. When harm happens, I repair where possible and learn in public.
 10. **Proportionality & necessity.** Fancy isn’t a justification. Risk must be proportionate to purpose.
 
 ---
@@ -56,12 +56,12 @@ This statement covers:
 ---
 
 ## 5. Data Practice
-### 5.1 What we avoid
+### 5.1 What I avoid
 - Facial **identification** or **recognition**; emotion inference; demographic inference.  
 - Passive, undisclosed logging (no shadow telemetry).  
 - Cross‑context tracking; ad tech; data broker sharing.
 
-### 5.2 What we may collect (case‑by‑case)
+### 5.2 What I may collect (case‑by‑case)
 - **Ephemeral sensor data** required for live functionality (e.g., audio levels, detection bounding boxes) retained **in RAM** only.  
 - **Operational logs** necessary for stability and safety—anonymized, minimized, and **rotated quickly**.  
 - **Explicit submissions** from participants (e.g., saved images, consent forms) stored only with clear time limits.
@@ -107,7 +107,7 @@ This statement covers:
 - **Documentation & Curriculum:** Prefer **CC BY‑SA 4.0**.  
 - **Media Assets:** Prefer **CC BY‑NC** (or more permissive if participants agree).  
 - **Contributor Terms:** Contributions are accepted under the same licenses; contributors affirm they have rights to contribute; no CLA surprise grabs.  
-- **Ethical Use Rider:** Licenses are free/libre; we additionally publish norms discouraging use in surveillance, discrimination, or state/corporate harm—even when license text permits. We name those harms plainly.
+- **Ethical Use Rider:** Licenses are free/libre; I additionally publish norms discouraging use in surveillance, discrimination, or state/corporate harm—even when license text permits. I name those harms plainly.
 
 ---
 
@@ -121,7 +121,7 @@ This statement covers:
   - Notify affected participants when relevant.
   - Publish a post‑mortem with fixes and timelines.
 
-- **Appeals & Remedies:** Participants can request review of decisions (e.g., takedowns, denials). We prioritize repairing harm over defending reputation.
+- **Appeals & Remedies:** Participants can request review of decisions (e.g., takedowns, denials). I prioritize repairing harm over defending reputation.
 
 ---
 
@@ -148,9 +148,9 @@ Each project includes a `PRIVACY-ADDENDUM.md` with:
 ---
 
 ## 12. Known Limits & Commitments
-- We cannot guarantee absolute security, but we commit to **minimization, encryption, and rapid response**.  
-- We will sometimes choose **less capable** technology to reduce risk.  
-- When constraints force compromise, we will **name the trade‑offs** and **invite critique**.
+- I cannot guarantee absolute security, but I commit to **minimization, encryption, and rapid response**.
+- I will sometimes choose **less capable** technology to reduce risk.
+- When constraints force compromise, I will **name the trade‑offs** and **invite critique**.
 
 ---
 

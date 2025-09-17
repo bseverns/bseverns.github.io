@@ -7,7 +7,7 @@ tags: ["methods","assumption-ledger","facetimes","teaching"]
 
 # faceTimes — Assumption Ledger
 
-What we’re assuming, why it matters, how we mitigate.
+What I’m assuming, why it matters, how I mitigate.
 
 > **Canonical source:** `TODO: add GitHub URL to ASSUMPTIONS.md`  
 > **Last synced:** `TODO: YYYY-MM-DD`
