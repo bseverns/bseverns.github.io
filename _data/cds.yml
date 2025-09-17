@@ -55,7 +55,7 @@ cards:
       - "Complete docs: BOM, wiring, parameter map"
       - Measurement folded into practice (latency notes)
     outcomes:
-      - "[Latency characterization lab (draft) published](/research/mn42-latency-lab/)""
+      - "[Latency characterization lab (draft) published](/research/mn42-latency-lab/)"
       - Replication course module planned Spring 2026.
     teach:
       goal: Interface as authorship; documentation as scholarship
