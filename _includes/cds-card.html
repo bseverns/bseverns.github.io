@@ -52,7 +52,7 @@
         {% if o contains ' → ' %}
           {% include flow-chain.html text=o class="flow-chain--list" %}
         {% else %}
-          {{ o }}
+          {{ o | markdownify | replace: '<p>', '' | replace: '</p>', '' }}
         {% endif %}
       </li>
     {% endfor %}
