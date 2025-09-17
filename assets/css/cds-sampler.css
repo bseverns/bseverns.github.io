@@ -380,28 +380,20 @@ nav.toc a:focus-visible {
 
 @media (min-width: 1280px) {
   .cds-card {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(240px, 0.9fr);
-    align-items: start;
-    gap: clamp(1.5rem, 2.6vw, 2.5rem);
-  }
-
-  .cds-card .card-main {
-    grid-column: 1 / span 2;
+    gap: clamp(1.5rem, 2.6vw, 2.9rem);
   }
 
   .cds-card .card-links {
-    margin: 0;
-    padding: 0 0 0 clamp(1.25rem, 1.4vw, 1.85rem);
-    border-top: 0;
-    border-left: 1px solid rgba(148, 163, 184, 0.28);
-    align-self: stretch;
-    gap: 1rem;
+    margin: clamp(1.5rem, 2vw, 2.5rem) 0 0;
+    padding: clamp(1.35rem, 1.85vw, 2.1rem) 0 0;
+    border-top: 1px solid rgba(148, 163, 184, 0.35);
+    border-left: 0;
+    gap: clamp(0.85rem, 1vw, 1.15rem);
   }
 
   .cds-card .links {
     flex-direction: column;
-    gap: 0.6rem;
+    gap: clamp(0.6rem, 0.85vw, 0.9rem);
   }
 
   .cds-card .links li {
