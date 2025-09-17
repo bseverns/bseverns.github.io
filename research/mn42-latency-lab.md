@@ -7,7 +7,7 @@ tags: ["methods","mn42","measurement","latency"]
 
 # MN42 — Latency Characterization Lab
 
-Latency is a feeling before it is a number; we measure so students can reason about mappings, not mythologize them.
+Latency is a feeling before it is a number; I measure so students can reason about mappings, not mythologize them.
 
 ## Method (replicable)
 - Loopback rig: `TODO: describe interface + cabling`

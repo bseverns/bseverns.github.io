@@ -7,7 +7,7 @@ tags: ["methods","ethics","privacy","teaching"]
 
 # Privacy & Ethics
 
-We treat sensing as an **agreement**, not a default. This page mirrors the canonical document in the code repositories and is kept in sync at review milestones.
+I treat sensing as an **agreement**, not a default. This page mirrors the canonical document in the code repositories and is kept in sync at review milestones.
 
 > **Canonical source:** `TODO: add GitHub URL to PRIVACY_ETHICS.md`  
 > **Last synced:** `TODO: YYYY-MM-DD`
