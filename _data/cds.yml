@@ -48,8 +48,8 @@ cards:
       - "Complete docs: BOM, wiring, parameter map"
       - Measurement folded into practice (latency notes)
     outcomes:
-      - Latency characterization published (TBD)
-      - Student replicates (course TBD)
+      - Preliminary latency characterization draft live; review notes + evolving plots at [/research/mn42-latency-lab/](/research/mn42-latency-lab/)
+      - Replication course module planned Spring 2026.
     teach:
       goal: Interface as authorship; documentation as scholarship
       lab60: Map controls → parameters; measure + log latency
@@ -113,7 +113,7 @@ cards:
       - "Wheel POV: cyclic motion & peripheral smear"
       - Consent & site plans for actors/bystanders
     outcomes:
-      - Multiple studies complete; further development of script required
+      - Multiple studies completed; Script draft in progress, collaborators identified, schedules tbd.
       - Shoots scheduled for late November 2025
     teach:
       goal: Make camera grammar legible and accountable
