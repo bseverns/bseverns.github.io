@@ -3,7 +3,11 @@ cards:
     title: faceTimes — Consent-Forward Vision Station
     img_src: /assets/images/cds/faceTimes-consent.svg
     img_alt: faceTimes consent screen showing detection-only, opt-in language and a visible delete-now action
-    abstract: On-device, detection-only pipeline with explicit opt-in and delete-now controls. No identification, no network calls, and no storage without consent. Interface copy foregrounds agency before computation; documentation (README, PRIVACY/ETHICS, assumption ledger) is treated as research output.
+    abstract: >-
+      On-device, detection-only pipeline with explicit opt-in and delete-now controls.
+      No identification, no network calls, and no storage without consent. Interface copy
+      foregrounds agency before computation; documentation (README, PRIVACY/ETHICS,
+      assumption ledger) is treated as research output.
     abstract_locked: true
     aligns: ["digital literacy","justice/representation","civic engagement","DIY"]
     methods:
@@ -40,7 +44,10 @@ cards:
     title: MOARkNOBS-42 — open-source microcontroller MIDI controller
     img_src: /assets/images/cds/mn42-panel.png
     img_alt: MOARkNOBS-42 panel top-down with labeled controls
-    abstract: Reproducible hardware + firmware used as both instrument and teaching platform. Parameter mapping functions as an inquiry into authorship and control; latency is characterized and documented so performance claims are auditable and extendable.
+    abstract: >-
+      Reproducible hardware + firmware used as both instrument and teaching platform.
+      Parameter mapping functions as an inquiry into authorship and control; latency is
+      characterized and documented so performance claims are auditable and extendable.
     abstract_locked: true
     aligns: ["digital literacy","civic engagement","DIY"]
     methods:
@@ -74,7 +81,10 @@ cards:
     title: Glitch Geometry — Audio→Form Instrument
     img_src: /assets/images/cds/glitch-geometry-still.png
     img_alt: Generative geometry frame driven by live audio features
-    abstract: Live translation of signal features into geometry; pipeline choices (feature extraction, modulation, rendering) are made legible as aesthetic and ethical decisions. The system is tunable and documented for both teaching and critique.
+    abstract: >-
+      Live translation of signal features into geometry; pipeline choices (feature extraction,
+      modulation, rendering) are made legible as aesthetic and ethical decisions. The system is
+      tunable and documented for both teaching and critique.
     abstract_locked: true
     aligns: ["digital literacy","justice/representation","DIY"]
     methods:
@@ -105,7 +115,10 @@ cards:
     title: DEAD SKY — Vision & Motion Grammar Studies
     img_src: /assets/images/cds/ds200801-still.png
     img_alt: Dead Sky rural pursuit still, a lone figure on a November road
-    abstract: Two short studies—rural pursuit (DS200412) and wheel-mounted POV (DS200801)—probing surveillance logics, attention, and embodied capture toward a larger film project. Tests “pursuit grammar” and mechanical vision’s entrainment.
+    abstract: >-
+      Two short studies—rural pursuit (DS200412) and wheel-mounted POV (DS200801)—probing
+      surveillance logics, attention, and embodied capture toward a larger film project. Tests
+      “pursuit grammar” and mechanical vision’s entrainment.
     abstract_locked: true
     aligns: ["digital literacy","justice/representation"]
     methods:
@@ -165,7 +178,10 @@ cards:
     title: MCAD Media 2 — MTN Public Access Broadcast
     img_src: /assets/images/cds/mcad-media2-mtn.png
     img_alt: "MCAD Media 2: public access broadcast production still"
-    abstract: Studio-seminar culminating in a 28.5-minute MTN broadcast planned, produced, and edited by students. The artifact is civic-facing media formed by calendars, critique gates, and documentation standards for longevity.
+    abstract: >-
+      Studio-seminar culminating in a 28.5-minute MTN broadcast planned, produced, and edited by
+      students. The artifact is civic-facing media formed by calendars, critique gates, and
+      documentation standards for longevity.
     abstract_locked: true
     aligns: ["civic engagement","digital literacy"]
     methods:
