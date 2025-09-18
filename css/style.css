@@ -518,3 +518,64 @@ textarea{
 }
 
 textarea:focus{background:#f4f4f4; height:250px;}
+
+/*
+**************************
+DISCOGRAPHY
+**************************
+*/
+
+.discography-list,
+.discography-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  justify-content:center;
+  margin:12px 0 0;
+  padding:0;
+}
+
+.discography-list{
+  list-style:none;
+}
+
+.discography-list li{
+  list-style:none;
+}
+
+.discography-tags{
+  margin-top:16px;
+}
+
+.album-link{
+  display:inline-block;
+  padding:8px 16px;
+  border-radius:999px;
+  background:#111;
+  color:#ffffff;
+  font-weight:600;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  font-size:12px;
+  border-bottom:none;
+}
+
+.album-link:hover,
+.album-link:focus{
+  background:#e32c14;
+  color:#ffffff;
+}
+
+.tag{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  background:#f8f7f7;
+  border:1px solid #dedede;
+  font-size:12px;
+  font-weight:600;
+  letter-spacing:0.03em;
+  text-transform:uppercase;
+  color:#444444;
+  white-space:nowrap;
+}
