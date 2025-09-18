@@ -16,9 +16,6 @@ Latency is a feeling long before it is a number; I measure so users/students can
 - **Scripts + assets:** Measurements crunch through [`tools/rtl_latency_report.py`](https://github.com/bseverns/MOARkNOBS-42/blob/main/tools/rtl_latency_report.py). Raw WAV captures and JSON summaries will live beside the method notes in [`docs/bench/latency/`](https://github.com/bseverns/MOARkNOBS-42/tree/main/docs/bench/latency/) so the plots here can build straight from versioned data.
 
 ## Results (snapshot)
-![Round-trip latency plots — baseline vs tuned](/assets/images/mn42-latency-baseline.png "Round-trip latency plots — baseline vs tuned")
-*Alt:* Round-trip latency plots showing baseline and tuned configurations.
-
 **Draft in progress:** the analyzer is already spitting out per-run CSV/JSON, but the production plot + annotated table need a pass before I lock them in. If you need numbers today, clone the repo and run the command in the method doc—it will print the same stats that will show up here.
 
 ### Interpretation
