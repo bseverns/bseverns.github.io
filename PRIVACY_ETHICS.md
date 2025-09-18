@@ -25,7 +25,7 @@ I build tools, scenes, and learning environments where **other people create**. 
 
 ## 2. Scope
 This statement covers:
-- Software, hardware, installations, workshops, and documentation published under this umbrella (e.g., *faceTimes — Consent‑Forward Vision Station*, *MOARkNOBS‑42*, curricula, demos, exhibitions).  
+- Software, hardware, installations, workshops, and documentation published under this umbrella (e.g., *Human-Buffer — Consent-Forward Vision Station* (formerly *faceTimes*), *MOARkNOBS-42*, curricula, demos, exhibitions).  
 - All interactions with participants, students, collaborators, and audiences in these contexts.
 
 > **Note:** Specific projects carry addenda with precise data‑flows, risks, and micro‑copy. Project ethics **never weaken** any principle here; they may **strengthen** them.

@@ -1,8 +1,8 @@
 cards:
   - id: facetimes
-    title: faceTimes — Consent-Forward Vision Station
+    title: Human-Buffer — Consent-Forward Vision Station (formerly faceTimes)
     img_src: /assets/images/cds/faceTimes-consent.svg
-    img_alt: faceTimes consent screen showing detection-only, opt-in language and a visible delete-now action
+    img_alt: Human-Buffer consent screen showing detection-only, opt-in language and a visible delete-now action
     abstract: >-
       On-device, detection-only pipeline with explicit opt-in and delete-now controls.
       No identification, no network calls, and no storage without consent. Interface copy
@@ -25,13 +25,13 @@ cards:
       assess: Process log + assumption ledger + 2-min demo
     links:
       - label: Repository
-        url: https://github.com/bseverns/faceTimes
+        url: https://github.com/bseverns/Human-Buffer
       - label: Assumption ledger
-        url: https://github.com/bseverns/faceTimes/blob/main/docs/assumption-ledger.md
+        url: https://github.com/bseverns/Human-Buffer/blob/main/docs/assumption-ledger.md
       - label: Logic Diagrams
-        url: https://github.com/bseverns/faceTimes/blob/main/diagrams.md
+        url: https://github.com/bseverns/Human-Buffer/blob/main/diagrams.md
       - label: Lineage
-        url: https://github.com/bseverns/faceTimes/blob/main/docs/lineage.md
+        url: https://github.com/bseverns/Human-Buffer/blob/main/docs/lineage.md
       - label: Related sketches — videoProcessing laboratory notes
         url: https://github.com/bseverns/videoProcessing
       - label: Vimeo clip (add link)
