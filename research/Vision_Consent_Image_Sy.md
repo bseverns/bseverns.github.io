@@ -3,7 +3,7 @@
 
 _Last updated: 2025-09-16 (America/Chicago)_
 
-### 2.1 faceTimes — Consent-Forward Vision Station
+### 2.1 Human-Buffer — Consent-Forward Vision Station (formerly faceTimes)
 Detection-only, explicit opt-in; visible data-flow; “no headshot → avatar instead.”
 - **Artifacts to (re)gather**
   - [ ] README, `PRIVACY/ETHICS.md`, Assumption Ledger

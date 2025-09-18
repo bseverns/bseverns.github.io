@@ -1,15 +1,15 @@
 ---
-title: "faceTimes — Assumption Ledger"
+title: "Human-Buffer — Assumption Ledger (formerly faceTimes)"
 layout: default
 permalink: /research/facetimes-assumptions/
-tags: ["methods","assumption-ledger","facetimes","teaching"]
+tags: ["methods","assumption-ledger","human-buffer","teaching"]
 ---
 
-# faceTimes — Assumption Ledger
+# Human-Buffer — Assumption Ledger (formerly faceTimes)
 
 What I’m assuming, why it matters, how I mitigate.
 
-> **Canonical source:** `TODO: add GitHub URL to ASSUMPTIONS.md`  
+> **Canonical source:** `TODO: add GitHub URL to Human-Buffer/ASSUMPTIONS.md`
 > **Last synced:** `TODO: YYYY-MM-DD`
 
 ## Ledger (excerpt)
