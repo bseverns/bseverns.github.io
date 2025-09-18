@@ -10,7 +10,7 @@ tags: ["methods","mn42","measurement","latency"]
 Latency is a feeling long before it is a number; I measure so users/students can reason about mappings, not mythologize them.
 
 ## Method (replicable)
-- **Loopback rig:** Teensy 4.1 MN42 board → USB MIDI trigger → MOTU M4 audio interface running 48 kHz, wired direct out→in with 1 ft TRS patch cables. The full wiring + DAW routing flow is spelled out in the [oblique RTL notebook](https://github.com/bseverns/MOARkNOBS-42/blob/main/docs/bench/latency/oblique_rtl.md).
+- **Loopback rig:** Teensy 4.0 MN42 board → USB MIDI trigger → audio interface running 48 kHz, wired direct out→in with 1 ft TRS patch cables. The full wiring + DAW routing flow is spelled out in the [oblique RTL notebook](https://github.com/bseverns/MOARkNOBS-42/blob/main/docs/bench/latency/oblique_rtl.md).
 - **Buffer sizes & sample rates:** Baseline captures printed at 48 kHz with 256-sample I/O buffers; tuned captures drop to 64-sample buffers after driver cleanup. DAW mix buffers are fixed at 512 samples so we can compare total buffer multiples.
 - **Trial counts & stats:** Minimum five runs per configuration; the analyzer reports per-take latency, mean/median/p95, and the implied buffer multiples. More runs are always welcome when we take the rig on tour.
 - **Scripts + assets:** Measurements crunch through [`tools/rtl_latency_report.py`](https://github.com/bseverns/MOARkNOBS-42/blob/main/tools/rtl_latency_report.py). Raw WAV captures and JSON summaries will live beside the method notes in [`docs/bench/latency/`](https://github.com/bseverns/MOARkNOBS-42/tree/main/docs/bench/latency/) so the plots here can build straight from versioned data.
