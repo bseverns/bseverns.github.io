@@ -1,6 +1,6 @@
 cards:
   - id: facetimes
-    title: Human-Buffer — Consent-Forward Vision Station (formerly faceTimes)
+    title: Human-Buffer — Consent-Forward Vision Station
     img_src: /assets/images/cds/faceTimes-consent.svg
     img_alt: Human-Buffer consent screen showing detection-only, opt-in language and a visible delete-now action
     abstract: >-
