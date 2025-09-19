@@ -517,6 +517,7 @@ textarea{
 	transition: all 0.2s ease-in;
 }
 
+
 textarea:focus{background:#f4f4f4; height:250px;}
 
 /*
@@ -529,9 +530,9 @@ DISCOGRAPHY
 .discography-tags{
   display:flex;
   flex-wrap:wrap;
-  gap:12px;
+  gap:10px;
   justify-content:center;
-  margin:12px 0 0;
+  margin:10px 0 0;
   padding:0;
 }
 
@@ -544,12 +545,12 @@ DISCOGRAPHY
 }
 
 .discography-tags{
-  margin-top:16px;
+  margin-top:8px;
 }
 
 .album-link{
   display:inline-block;
-  padding:8px 16px;
+  padding:8px 12px;
   border-radius:999px;
   background:#111;
   color:#ffffff;
@@ -568,11 +569,11 @@ DISCOGRAPHY
 
 .tag{
   display:inline-block;
-  padding:6px 12px;
+  padding:6px 8px;
   border-radius:999px;
   background:#f8f7f7;
   border:1px solid #dedede;
-  font-size:12px;
+  font-size:10px;
   font-weight:600;
   letter-spacing:0.03em;
   text-transform:uppercase;
