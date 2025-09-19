@@ -199,8 +199,7 @@ cards:
       - label: Network link
         url: https://mtn.org
       - label: Archived Episode
-        url: "#"
-        disabled: true
+        url: https://youtu.be/CXDFptRdhJ8
       - label: Syllabus / MCADMedia2
         url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2
       - label: MEDIA2-codeEXPLAINERS
