@@ -34,8 +34,8 @@ cards:
         url: https://github.com/bseverns/Human-Buffer/blob/main/docs/lineage.md
       - label: Related sketches — videoProcessing laboratory notes
         url: https://github.com/bseverns/videoProcessing
-      - label: Vimeo clip (add link)
-        url: "#"
+      - label: Vimeo clip
+        url: https://vimeo.com/1120504220?share=copy
         disabled: true
       - label: Privacy and Ethics in my practice
         url: https://bseverns.github.io/PRIVACY_ETHICS.md
@@ -107,9 +107,8 @@ cards:
         url: https://github.com/bseverns/glitchProcessing
       - label: Related sketch — SonicSketches
         url: https://github.com/bseverns/SonicSketches
-      - label: Vimeo excerpt (add link)
-        url: "#"
-        disabled: true
+      - label: Vimeo excerpt
+        url: https://vimeo.com/1120504006
 
   - id: dead-sky
     title: DEAD SKY — Vision & Motion Grammar Studies
