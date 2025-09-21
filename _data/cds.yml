@@ -204,37 +204,37 @@ cards:
         url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2/MEDIA2-codeEXPLAINERS
 
   - id: genFab
-      title: "Generative Fabrication Techniques"
-      img_src: "bseverns.github.io/img/portfolio/3D/genF1.jpg"  
-      img_alt: "genF1: PETG print of a ribboned isosurface with cellular cavities (three-quarter view)"
-      abstract: >-
-        Code→form pipeline exploring SDF fields, isosurface extraction, and remeshing.
-        <strong>genF1</strong> anchors the series as a physical proof: a PETG print that ran
-        <strong>39.5 hours</strong> end-to-end.
-      abstract_locked: true
-      aligns: ["digital literacy", "DIY"]
-      methods:
-       - Layered-noise SDF → isosurface (marching cubes)
-       - Relax / quad-remesh for printable topology
-       - Slice with oriented supports; PETG profile noted; alt-texted documentation
-      outcomes:
-       - genF1: physical PETG print (39.5 h), photographed and documented
-       - genF2–genF3: print-ready meshes with parameter notes and topology comparisons
-       - Gallery page with stills; optional 20–40 s turntable clip
-      teach:
-        goal: >-
-          Make the code→form→fabrication chain legible; compare how field frequency and remeshing
-          choices alter topology, readability, and print time.
-       lab60: >-
-          Vary SDF frequency, export a mesh, apply a simple material/shader test, orient for print, and
-          record slicer notes; submit 1 annotated still + settings.
-        assess: >-
-          60% method clarity & reproducibility; 25% form legibility (printability, supports, orientation);
-          15% documentation quality (captions, alt text).
-      links:
-       - label: "View genF gallery"
-         url: "/3d/genfab.html"
-       - label: "Generative Software"
-         url: https://structuresynth.sourceforge.net
-       - label: "Slicer profile (PETG)"
-          url: "/text/genF1-petg.curaprofile"
+    title: "Generative Fabrication Techniques"
+    img_src: "/img/portfolio/3D/genF1.jpg"
+    img_alt: "genF1: PETG print of a ribboned isosurface with cellular cavities (three-quarter view)"
+    abstract: >-
+      Code→form pipeline exploring SDF fields, isosurface extraction, and remeshing.
+      <strong>genF1</strong> anchors the series as a physical proof: a PETG print that ran
+      <strong>39.5 hours</strong> end-to-end.
+    abstract_locked: true
+    aligns: ["digital literacy", "DIY"]
+    methods:
+      - Layered-noise SDF → isosurface (marching cubes)
+      - Relax / quad-remesh for printable topology
+      - Slice with oriented supports; PETG profile noted; alt-texted documentation
+    outcomes:
+      - genF1: physical PETG print (39.5 h), photographed and documented
+      - genF2–genF3: print-ready meshes with parameter notes and topology comparisons
+      - Gallery page with stills; optional 20–40 s turntable clip
+    teach:
+      goal: >-
+        Make the code→form→fabrication chain legible; compare how field frequency and remeshing
+        choices alter topology, readability, and print time.
+      lab60: >-
+        Vary SDF frequency, export a mesh, apply a simple material/shader test, orient for print, and
+        record slicer notes; submit 1 annotated still + settings.
+      assess: >-
+        60% method clarity & reproducibility; 25% form legibility (printability, supports, orientation);
+        15% documentation quality (captions, alt text).
+    links:
+      - label: "View genF gallery"
+        url: "/3d/genfab.html"
+      - label: "Generative Software"
+        url: https://structuresynth.sourceforge.net
+      - label: "Slicer profile (PETG)"
+        url: "/text/genF1-petg.curaprofile"
