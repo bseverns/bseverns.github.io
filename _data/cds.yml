@@ -15,8 +15,8 @@ cards:
       - Detection overlay with visible status + erase
       - "System: webcam → local detector → ephemeral buffer → user action"
     outcomes:
-      - v2.1 release adds the ConsentDetect teaching sketch + auto-purge (CHANGELOG)
-      - v2 shipped consent-toggle long press, session review, and double-press save (CHANGELOG)
+      - v2.1 release adds the ConsentDetect teaching sketch + auto-purge
+      - v2 shipped consent-toggle long press, session review, and double-press save
       - Published assumption ledger covering detector defaults and purge schedule
       - Documented 2023→2025 development lineage for critique context
     teach:
@@ -56,6 +56,7 @@ cards:
     outcomes:
       - "[Latency characterization lab (draft) published](/research/mn42-latency-lab/)"
       - Replication course module planned Spring 2026.
+      - Hardware draft 2 in production 10/18/2025
     teach:
       goal: Interface as authorship; documentation as scholarship
       lab60: Map controls → parameters; measure + log latency
@@ -92,7 +93,7 @@ cards:
       - Designed for classroom demos and public performance
     outcomes:
       - Live demos (link)
-      - Student mini-studies (labs scheduled in October)
+      - Student mini-studies (labs scheduled in October/November with CTMN)
     teach:
       goal: Link form to claim via signal features
       lab60: Implement 2 features; compare visual behaviors
@@ -128,7 +129,7 @@ cards:
       - Shoots scheduled for late November 2025
     teach:
       goal: Make camera grammar legible and accountable
-      lab60: Long-lens pursuit vs. wheel-POV; reflect on ethics
+      lab60: Long-lens pursuit vs. wheel-POV; reflect on ethics of spectatorship
       assess: Shot log + ethics note + 60s cut
     links:
       - label: "Vimeo — Study DS200412"
