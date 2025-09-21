@@ -35,7 +35,7 @@ cards:
       - label: Related sketches — videoProcessing laboratory notes
         url: https://github.com/bseverns/videoProcessing
       - label: Vimeo clip
-        url: https://vimeo.com/1120504220?share=copy
+        url: https://vimeo.com/1120504220
         disabled: true
       - label: Privacy and Ethics in my practice
         url: https://bseverns.github.io/PRIVACY_ETHICS.md
@@ -238,4 +238,4 @@ cards:
        - label: "Generative Software"
          url: https://structuresynth.sourceforge.net
        - label: "Slicer profile (PETG)"
-          url: "/files/genF1-petg.curaprofile"
+          url: "/text/genF1-petg.curaprofile"
