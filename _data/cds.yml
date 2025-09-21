@@ -54,9 +54,9 @@ cards:
       - "Complete docs: BOM, wiring, parameter map"
       - Measurement folded into practice (latency notes)
     outcomes:
-      - "[Latency characterization lab (draft) published](/research/mn42-latency-lab/)"
-      - Replication course module planned Spring 2026.
-      - Hardware draft 2 in production 10/18/2025
+      - "[Latency characterization: in progress (methods posted; results publish Oct 2025).](/research/mn42-latency-lab/)"
+      - Student replicates - pilot course planned Spring 2026.
+      - Hardware draft 2 scheduled to begin production 10/18/2025.
     teach:
       goal: Interface as authorship; documentation as scholarship
       lab60: Map controls → parameters; measure + log latency
@@ -142,7 +142,7 @@ cards:
         url: https://github.com/bseverns/VidObjectifier
 
   - id: skyway-derive-media-fast
-    title: Skyway Derivé / Media Fast — Critical Pedagogy Interventions
+    title: Skyway Dérive / Media Fast — Critical Pedagogy Interventions
     img_src: /assets/images/cds/spectacle-mediafast.png
     img_alt: Prompt card and public intervention still for Spectacle / Media Fast
     abstract: >-
@@ -189,7 +189,7 @@ cards:
       - Public exhibition as peer review
     outcomes:
       - 28.5-minute episode delivered
-      - Airtime / reach - MTN regularly scheduled programming runs videos 4 times per submission
+      - Airtime / reach - MTN typically airs accepted episodes ~4× per submission.
     teach:
       goal: Practice public-facing media with accountability
       lab60: Segment planning → critique gate → deliver
@@ -215,20 +215,22 @@ cards:
     abstract_locked: true
     aligns: ["digital literacy", "DIY"]
     methods:
-      - Layered-noise SDF → isosurface (marching cubes)
-      - Relax / quad-remesh for printable topology
-      - Slice with oriented supports; PETG profile noted; alt-texted documentation
+      - Layered-noise SDF → isosurface (like marching cubes)
+      - Relax / quad-remesh and edit for printable topology
+      - Slice with oriented supports; PETG profile noted, PLA/ABS profiles incoming; alt-texted 
+      documentation
     outcomes:
       - genF1: physical PETG print (39.5 h), photographed and documented
       - genF2–genF3: print-ready meshes with parameter notes and topology comparisons
-      - Gallery page with stills; optional 20–40 s turntable clip
+      - Gallery page with stills; more iterations on deck
     teach:
       goal: >-
         Make the code→form→fabrication chain legible; compare how field frequency and remeshing
         choices alter topology, readability, and print time.
       lab60: >-
-        Vary SDF frequency, export a mesh, apply a simple material/shader test, orient for print, and
-        record slicer notes; submit 1 annotated still + settings.
+        Explore StructureSynth, vary SDF frequency, export a mesh, apply a simple material/shader test, 
+        optional: edit in MeshMixer orient for print, and record slicer notes; submit 1 annotated still
+        + settings.
       assess: >-
         60% method clarity & reproducibility; 25% form legibility (printability, supports, orientation);
         15% documentation quality (captions, alt text).
