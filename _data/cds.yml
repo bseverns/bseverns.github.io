@@ -203,3 +203,25 @@ cards:
         url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2
       - label: MEDIA2-codeEXPLAINERS
         url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2/MEDIA2-codeEXPLAINERS
+
+  - id: genFab
+    title: Generative Fabrication Techniques
+    img_src: img/porfolio/3D/genF1.jpg
+    img_alt: "Recursively generated 3D form"
+    abstract: >-
+      Code as form exercises that test fabrication and resolution limits of FDM digital
+      fabricators. Code execution was committed with Structure Synth and print times ranged from
+      one to 39 hours.
+    abstract_locked: true
+    alighns: ["digital literacy","DIY"]
+    methods:
+      -
+    outcomes:
+      -
+    teach:
+      goal:
+      lab60:
+      assess:
+    links:
+      -label:
+       url:
