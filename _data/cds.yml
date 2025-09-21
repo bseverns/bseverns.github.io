@@ -205,7 +205,7 @@ cards:
         url: https://github.com/bseverns/Syllabus/tree/main/MCADMedia2/MEDIA2-codeEXPLAINERS
 
   - id: genFab
-      title: "Generative Fabrication Techniques (genF1–genF3)"
+      title: "Generative Fabrication Techniques"
       img_src: "img/portfolio/3D/genF1.jpg"   # or .webp if you have it
       img_alt: "genF1: PETG print of a ribboned isosurface with cellular cavities (three-quarter view)"
       abstract: >-
