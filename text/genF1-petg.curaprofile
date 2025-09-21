@@ -1,0 +1,63 @@
+{
+  "version": 4,
+  "name": "genF1 PETG - LulzBot Mini 2",
+  "inherits": "fdmprinter",
+  "metadata": {
+    "type": "quality_changes",
+    "quality_type": "fine",
+    "intent_category": "default",
+    "material": "generic_petg",
+    "machine": "lulzbot_mini_2",
+    "description": "Profile tuned for genF1 PETG print: 0.1 mm layers, 215 °C tool, 90 °C bed."
+  },
+  "overrides": {
+    "layer_height": {
+      "value": 0.1
+    },
+    "layer_height_0": {
+      "value": 0.1
+    },
+    "material_print_temperature": {
+      "value": 215
+    },
+    "material_initial_print_temperature": {
+      "value": 215
+    },
+    "material_final_print_temperature": {
+      "value": 215
+    },
+    "material_bed_temperature": {
+      "value": 90
+    },
+    "material_bed_temperature_layer_0": {
+      "value": 90
+    },
+    "material_flow": {
+      "value": 100
+    },
+    "speed_print": {
+      "value": 35
+    },
+    "speed_layer_0": {
+      "value": 20
+    },
+    "cool_fan_speed": {
+      "value": 60
+    },
+    "retraction_amount": {
+      "value": 1.0
+    },
+    "retraction_speed": {
+      "value": 25
+    },
+    "wall_thickness": {
+      "value": 1.2
+    },
+    "infill_sparse_density": {
+      "value": 20
+    },
+    "adhesion_type": {
+      "value": "brim"
+    }
+  }
+}
