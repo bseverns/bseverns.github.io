@@ -205,7 +205,7 @@ cards:
 
   - id: genFab
       title: "Generative Fabrication Techniques"
-      img_src: /assets/images/genF1.png  
+      img_src: /assets/images/cds/genF1.png  
       img_alt: "genF1: PETG print of a ribboned isosurface with cellular cavities (three-quarter view)"
       abstract: >-
         Code→form pipeline exploring SDF fields, isosurface extraction, and remeshing.
