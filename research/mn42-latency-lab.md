@@ -19,7 +19,7 @@ Latency is a feeling long before it is a number; I measure so users/students can
 **Draft in progress:** the analyzer is already spitting out per-run CSV/JSON, but the production plot + annotated table need a pass before I lock them in. If you need numbers today, clone the repo and run the command in the method doc—it will print the same stats that will show up here.
 
 ### Interpretation
-- **Coming soon:** expect callouts on how the tuned buffer should drop round-trip from the mid-teens (ms) into single digits, plus a glance at return amplitude so we can talk about gain staging. Until then, the method notebook includes interpretive notes for reviewers who want to peek behind the curtain once the board in manufactured and in hand.
+- **Coming soon:** expect callouts on how the tuned buffer should drop round-trip from the mid-teens (ms) into single digits, plus a glance at return amplitude so we can talk about gain staging. Until then, the method notebook includes interpretive notes for reviewers who want to peek behind the curtain once the board is manufactured/delivered and on the bench with physical QA checks completed.
 
 ## Notes for class
 - **Prompts:** Map a control to a synth parameter, record the felt latency, then verify the number via the script so we can argue about perception vs. measurement over email.
