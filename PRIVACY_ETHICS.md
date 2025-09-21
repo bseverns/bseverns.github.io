@@ -11,24 +11,24 @@
 ## 0. Plain‑Language Summary (TL;DR)
 - **Dignity over data.** I only collect what’s needed to make a thing work, and only *with explicit, informed consent*.
 - **Local first, deletion by default.** Process on‑device when possible. Store as little as possible. “Delete now” is always one click away.
-- **Open by design, not exploitative.** Code and documentation prefer free/libre licenses. Sharing knowledge is not a license to extract people.
-- **Care for minors and communities.** Extra protections for youth. Harm prevention beats novelty.
+- **Open by design, not exploitative.** Code and documentation prefer free/libre licenses. Sharing knowledge is not a license to extract from people.
+- **Care for minors and communities.** Extra protections for youth. Harm prevention beats novelty and helps the future.
 - **Transparent practice.** I publish an assumption ledger, data‑flows, known risks, and change logs.
 - **Accountable and reversible.** Consent can be revoked, data can be erased, decisions can be appealed.
 
 ---
 
 ## 1. North Star
-I build tools, scenes, and learning environments where **other people create**. My ethics follow that purpose: **reduce harm, increase agency, share knowledge,** and design systems that **support equitable participation**. I align with the **free software movement**—*free as in freedom to study, modify, share, and use*—and I operate in the spirit of **Kent’s 10 rules** as a craft ethos of clarity, humility, and responsibility in making.
+I build tools, scenes, and learning environments where **other people finish the creation**. My ethics follow that purpose: **reduce harm, increase agency, share knowledge,** and design systems that **support equitable participation**. I align with the **free software movement**—*free as in freedom to study, modify, share, and use*—and I operate in the spirit of **Kent’s 10 rules** as a craft ethos of clarity, humility, and responsibility in making.
 
 ---
 
 ## 2. Scope
 This statement covers:
-- Software, hardware, installations, workshops, and documentation published under this umbrella (e.g., *Human-Buffer — Consent-Forward Vision Station* (formerly *faceTimes*), *MOARkNOBS-42*, curricula, demos, exhibitions).  
+- Software, hardware, installations, workshops, shennanigans, and documentation published under this umbrella (e.g., *Human-Buffer — Consent-Forward Vision Station* (formerly *faceTimes*), *MOARkNOBS-42*, curricula, demos, exhibitions).  
 - All interactions with participants, students, collaborators, and audiences in these contexts.
 
-> **Note:** Specific projects carry addenda with precise data‑flows, risks, and micro‑copy. Project ethics **never weaken** any principle here; they may **strengthen** them.
+> **Note:** Specific projects carry addenda with precise data‑flows, risks, and micro‑copy. Project ethics **never weaken** any principle here; they may **strengthen** them as circumstances require.
 
 ---
 
@@ -37,8 +37,8 @@ This statement covers:
 2. **Equity is a system requirement.** I design for the margins first and audit for disparate impacts.
 3. **Consent is an interface.** Opt‑in, affirmative, revocable, time‑bounded, and contextual. Consent UX is plain‑language and visible.  
 4. **Data minimization.** If I don’t need it, I don’t collect it. If I must collect it, I keep it short-lived and secure.
-5. **Local first.** Prefer on‑device processing with no network calls.  
-6. **Transparency and legibility.** Publish assumption ledgers, data‑flow diagrams, and change logs.  
+5. **Local first.** Prefer on‑device processing with minimal (no) network calls.  
+6. **Transparency and legibility.** Publish assumption ledgers, data‑flow diagrams, change logs, and share widely/freely.  
 7. **Right to inspect, correct, and erase.** Participants can see what exists about them, fix it, or remove it—fast.  
 8. **Open knowledge, not open people.** I release *code, methods, and documentation* under free/libre licenses while *protecting personal data*.
 9. **Accountability.** Clear roles, audit trails, and incident response. When harm happens, I repair where possible and learn in public.
@@ -59,11 +59,11 @@ This statement covers:
 ### 5.1 What I avoid
 - Facial **identification** or **recognition**; emotion inference; demographic inference.  
 - Passive, undisclosed logging (no shadow telemetry).  
-- Cross‑context tracking; ad tech; data broker sharing.
+- Cross‑context tracking; ad tech; data broker sharing; the things where someone is making money from your effort/attention.
 
 ### 5.2 What I may collect (case‑by‑case)
-- **Ephemeral sensor data** required for live functionality (e.g., audio levels, detection bounding boxes) retained **in RAM** only.  
-- **Operational logs** necessary for stability and safety—anonymized, minimized, and **rotated quickly**.  
+- **Ephemeral sensor data** required for live functionality (e.g., audio levels, distance from sensor, detection bounding boxes) retained **in RAM** only.  
+- **Operational logs** necessary for stability and safety—anonymized, minimized, and **rotated quickly** to offline storage for analysis/disposal.  
 - **Explicit submissions** from participants (e.g., saved images, consent forms) stored only with clear time limits.
 
 ### 5.3 Data lifecycle (default)
@@ -161,7 +161,7 @@ Each project includes a `PRIVACY-ADDENDUM.md` with:
 ---
 
 ## 14. Change Log (excerpt)
-- **v0.1 (2025-09-16):** Initial draft establishing core principles, consent architecture, and per‑project addendum template.
+- **v0.1 (2025-09-16):** Initial draft establishing core principles, consent architecture, and per‑project addendum template (finally) published.
 
 ---
 
