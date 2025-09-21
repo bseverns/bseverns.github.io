@@ -234,8 +234,8 @@ cards:
           15% documentation quality (captions, alt text).
       links:
        - label: "View genF gallery"
-         url: "/"
+         url: "/3d/genfab.html"
        - label: "Generative Software"
          url: https://structuresynth.sourceforge.net
        - label: "Slicer profile (PETG)"
-          url: "/files/genF1-petg.curaprofile"
+          url: "/text/genF1-petg.curaprofile"
