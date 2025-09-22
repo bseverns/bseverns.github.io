@@ -129,7 +129,9 @@
 
   .cds-card {
     break-inside: avoid;
-    break-after: page;
+    page-break-inside: avoid;
+    break-after: auto;
+    page-break-after: auto;
     box-shadow: none;
     border: 1px solid #cbd5e1;
     background: #fff;
@@ -137,8 +139,14 @@
     margin: 0;
   }
 
-  .cds-card:last-of-type {
-    break-after: auto;
+  .cds-card:not(:last-of-type) {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  .sampler-meta {
+    break-before: avoid;
+    page-break-before: auto;
   }
 
   .cds-card figure {
