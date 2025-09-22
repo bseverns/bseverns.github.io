@@ -147,6 +147,8 @@
 
   .cds-card:last-of-type {
     margin-bottom: 0;
+    break-before: auto;
+    page-break-before: auto;
   }
 
   .sampler-meta {
@@ -163,6 +165,26 @@
     width: 100%;
     max-height: 3.3in;
     object-fit: cover;
+  }
+
+  .cds-card--print-compact {
+    padding: 0.85rem 1rem;
+  }
+
+  .cds-card--print-compact figure {
+    margin: 0 0 0.35rem;
+  }
+
+  .cds-card--print-compact figure img {
+    max-height: 2.8in;
+  }
+
+  .cds-card--print-compact ul {
+    margin: 0 0 0.35rem;
+  }
+
+  .cds-card--print-compact li {
+    margin-bottom: 0.1rem;
   }
 
   .cds-card .ribbon {

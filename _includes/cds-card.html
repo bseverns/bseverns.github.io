@@ -1,4 +1,8 @@
-<article id="{{ include.id }}" class="card cds-card" role="region" aria-labelledby="{{ include.id }}-title">
+{% assign card_classes = "card cds-card" %}
+{% if include.print_compact %}
+  {% assign card_classes = card_classes | append: " cds-card--print-compact" %}
+{% endif %}
+<article id="{{ include.id }}" class="{{ card_classes }}" role="region" aria-labelledby="{{ include.id }}-title">
   <div class="card-main">
     {% if include.aligns and include.aligns.size > 0 %}
     <div class="ribbon" aria-label="Alignment tags">

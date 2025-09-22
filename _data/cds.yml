@@ -208,6 +208,7 @@ cards:
     title: "Generative Fabrication Techniques"
     img_src: /assets/images/cds/genF1.webp
     img_alt: "genF1: PETG print of a ribboned isosurface with cellular cavities (three-quarter view)"
+    print_compact: true
     abstract: >-
       Code→form pipeline exploring SDF fields, isosurface extraction, and remeshing.
       <strong>genF1</strong> anchors the series as a physical proof: a PETG print that ran
