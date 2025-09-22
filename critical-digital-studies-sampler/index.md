@@ -40,7 +40,7 @@ updated: "2025-09-14"
 
     <div id="sampler-content" class="sampler-grid">
     {% for c in site.data.cds.cards %}
-    {% include cds-card.html id=c.id title=c.title img_src=c.img_src img_alt=c.img_alt figcaption=c.figcaption abstract=c.abstract aligns=c.aligns methods=c.methods outcomes=c.outcomes teach=c.teach links=c.links %}
+    {% include cds-card.html id=c.id title=c.title img_src=c.img_src img_alt=c.img_alt figcaption=c.figcaption abstract=c.abstract aligns=c.aligns methods=c.methods outcomes=c.outcomes teach=c.teach links=c.links print_compact=c.print_compact %}
     {% endfor %}
     </div>
   </div>
