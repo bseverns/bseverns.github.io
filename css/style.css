@@ -283,6 +283,32 @@ CONTENT
 
 /*
 **************************
+FULL BLEED MEDIA GALLERIES
+**************************
+*/
+.text-intro--full-bleed{
+  width:100%;
+  max-width:none;
+  justify-items:center;
+  text-align:center;
+}
+
+.text-intro--full-bleed > :not(img){
+  width:100%;
+  max-width:min(100%, 68ch);
+  margin-inline:auto;
+}
+
+.text-intro--full-bleed img{
+  display:block;
+  width:min(100%, 100vw);
+  max-width:none;
+  margin-left:calc(50% - 50vw);
+  margin-right:calc(50% - 50vw);
+}
+
+/*
+**************************
 ABOUT PAGE LAYOUT BOOST
 **************************
 */
