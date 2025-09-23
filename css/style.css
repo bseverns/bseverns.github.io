@@ -281,6 +281,72 @@ CONTENT
   max-width:60ch;
 }
 
+/*
+**************************
+ABOUT PAGE LAYOUT BOOST
+**************************
+*/
+body.about-page .content .text-intro{
+  width:min(100%, 80rem);
+  text-align:left;
+  gap:clamp(1.75rem, 4vw, 3rem);
+}
+
+body.about-page .content .text-intro > h1{
+  grid-column:1 / -1;
+  text-align:left;
+}
+
+body.about-page .one-column,
+body.about-page .two-column{
+  width:100%;
+  float:none;
+}
+
+body.about-page .one-column{
+  display:grid;
+  gap:clamp(1rem, 2.5vw, 1.75rem);
+  align-content:start;
+}
+
+body.about-page .one-column p{
+  width:100% !important;
+  margin:0;
+}
+
+body.about-page .one-column img{
+  width:min(100%, 18rem);
+  justify-self:start;
+  border-radius:12px;
+  box-shadow:0 18px 40px rgba(15, 23, 42, 0.22);
+}
+
+body.about-page .two-column{
+  display:grid;
+  gap:clamp(1.25rem, 3vw, 1.75rem);
+}
+
+body.about-page .content .text-intro p{
+  margin:0;
+  max-width:none;
+}
+
+@media (min-width: 900px){
+  body.about-page .content .text-intro{
+    grid-template-columns:minmax(220px, 0.35fr) minmax(560px, 1fr);
+    align-items:start;
+  }
+
+  body.about-page .content .text-intro > h1{
+    font-size:clamp(2.6rem, 1.8rem + 2.6vw, 4rem);
+  }
+
+  body.about-page .two-column{
+    margin-left:auto;
+    width:100%;
+  }
+}
+
         .typed-cursor{
             opacity: 1;
             font-weight: 700;
