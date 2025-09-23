@@ -113,6 +113,18 @@ Masonry Check Script
 function Masonry() {
        var $container = $('.portfolio-grid');
 
+       if(!$container.length){
+         return;
+       }
+
+       var containerEl = $container.get(0);
+       if(containerEl){
+         var displayMode = window.getComputedStyle(containerEl).display;
+         if(displayMode && displayMode.indexOf('grid') === 0){
+           return;
+         }
+       }
+
        $container.imagesLoaded( function(){
          $container.masonry({
            itemSelector : 'li'
