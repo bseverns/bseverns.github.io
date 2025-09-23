@@ -12,9 +12,15 @@ Ben Severns is an interdisciplinary artist whose studio work is centered around 
 
 Shifting media as it suits the project, his work has been exhibited throughout the United States, including at Boston University, the Institute of Contemporary Art at the Maine College of Art, the Science Museum of Minnesota, the Minneapolis Institute of Art, Public Functionary Gallery, the Walker Art Center, and others.
 
-His work in community development and social justice organizations has seen him act as a project manager, organizer, and educator. His work is held in private collections in the United States and Brazil.
+His work in community development and social justice organizations has seen him act as a project manager, organizer, and educator. His work is held in private collections in Australia, Austria, Brazil, and the United States.
 
 ## CV
+
+### Appointments
+- Education Equipment & Services Lead — createMPLS (Minneapolis, MN) — Present
+- Adjunct Faculty — Minneapolis College of Art & Design (Minneapolis, MN) — 2013–2023
+- Adjunct Faculty — Augsburg University (Minneapolis, MN) — 2015–2022
+- Media Arts Instructor (9–12) — PiM Arts High School (Eden Prairie, MN) — 2018–2020
 
 ### Education
 - Maine College of Art, Portland, ME — **Master of Fine Arts:** Studio Art
@@ -49,6 +55,31 @@ His work in community development and social justice organizations has seen him 
 - 2013 Young Family Scholarship, Maine College of Art, Portland, ME
 - 2012 Presidential Graduate Grant, Maine College of Art, Portland, ME
 - 2011 Presidential Graduate Grant, Maine College of Art, Portland, ME
+
+### Selected Projects (Tools for Others)
+- MOARkNOBS-42 — Open-hardware MIDI controller and teaching platform (Teensy 4.x, custom PCBs, firmware/PlatformIO); course backbone for maker studios
+- FaceTimes — Privacy-first, opt-in face-detection capture with on-screen data-flow map, save/erase controls, and an avatar-generation path
+- Jetson Soundscape — Multi-timbral AV pipeline (video → character/timbre features → 20-voice industrial texture), Syphon-friendly for live mixes
+- Print-Farm Modernization — Marlin/BLTouch setups, SKR Mini swaps, Stratasys Mojo/UPrint conversions, shop SOPs for youth labs
+- AE Modular Utilities — Custom bus/power and hand-made cabling for resilient student rigs
+- Teensy DSP Unit — Low-pass, delay/feedback, controllable "dirt," stereoization, seeded randomness, and LED chaos meter for performance pedagogy
+
+### Selected Discography (as B_S_)
+- [Better Days Ahead](https://bbss.bandcamp.com/album/better-days-ahead)
+- [Slow Down](https://bbss.bandcamp.com/album/slow-down)
+- [SDEP](https://bbss.bandcamp.com/album/sdep)
+- [SS-LW](https://bbss.bandcamp.com/album/ss-lw)
+- [NDMA2](https://bbss.bandcamp.com/album/ndma2)
+- [No More Noise Today](https://bbss.bandcamp.com/album/no-more-noise-today)
+
+_Noise practice tags: Industrial/Noise · Long-form collages · Tape hiss · Circuit-bent · Digital signal chains_
+
+### Technical Skills
+- **Code:** Processing/Java, p5.js/JS, Python, C/C++ (Arduino/Teensy), PlatformIO, Git
+- **Audio:** DSP fundamentals (filters, delay, feedback), Reaper/BandLab workflows, MIDI
+- **Fabrication:** 3D printing (Cura, Marlin tuning), laser/CNC, MIG, electronics, soldering
+- **Platforms:** Teensy, Arduino, Raspberry Pi, NVIDIA Jetson, TouchDesigner, GitHub
+- **Pedagogy:** K–12 to college; inclusive, project-based learning; curriculum build-outs; shop safety; documentation as a creative act
 
 ## Documents
 - <a href="/assets/docs/BenSeverns_CV.pdf">CV (PDF)</a>
