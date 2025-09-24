@@ -28,6 +28,34 @@
   .portfolio-grid{
     grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
   }
+
+  .opacity-nav{
+    padding:clamp(3rem, 12vh, 6rem) clamp(1.5rem, 6vw, 2.5rem);
+    overflow:auto;
+  }
+
+  ul.menu-fullscreen{
+    position:static;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(1.5rem, 6vh, 2.75rem);
+    width:100%;
+    height:auto;
+    margin:auto;
+  }
+
+  ul.menu-fullscreen li{
+    font-size:clamp(1.6rem, 1.3rem + 2vw, 2.4rem);
+    line-height:1.35;
+  }
+
+  ul.menu-fullscreen li > a{
+    display:block;
+    width:100%;
+    padding:clamp(0.85rem, 3vh, 1.4rem);
+  }
 }
 
 @media (max-width: 540px) {
