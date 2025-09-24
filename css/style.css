@@ -299,12 +299,29 @@ FULL BLEED MEDIA GALLERIES
   margin-inline:auto;
 }
 
-.text-intro--full-bleed img{
+.text-intro--full-bleed img,
+.text-intro--full-bleed iframe,
+.text-intro--full-bleed video{
   display:block;
   width:min(100%, 100vw);
   max-width:none;
   margin-left:calc(50% - 50vw);
   margin-right:calc(50% - 50vw);
+}
+
+@media (min-width: 960px){
+  .text-intro--full-bleed img,
+  .text-intro--full-bleed iframe,
+  .text-intro--full-bleed video{
+    width:min(100vw, 1800px);
+    margin-left:calc(50% - min(50vw, 900px));
+    margin-right:calc(50% - min(50vw, 900px));
+  }
+
+  .text-intro--full-bleed iframe,
+  .text-intro--full-bleed video{
+    min-height:clamp(520px, 60vh, 1040px);
+  }
 }
 
 /*
