@@ -8,4 +8,6 @@ hero: /assets/images/placeholder.jpg
 hero_alt: "Generic project placeholder"
 summary: "An oddball data sculpture built overnight at a hackathon. Placeholder text."
 featured: true
+tools: "TouchDesigner for live visuals, Python data wrangling scripts, Arduino sensor array, LED sculpture fabrication"
+ethics: "Only used anonymized environmental data; workshop participants opted into interaction and were briefed on data use"
 ---

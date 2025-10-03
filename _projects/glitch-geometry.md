@@ -10,4 +10,6 @@ summary: "Procedural glitches that sculpt space into weird machines. TODO: docum
 links:
   - {label: "Notes", url: "#"}
 featured: true
+tools: "Rhino + Grasshopper parametric modeling, custom Python noise operators, Unreal Engine real-time lighting"
+ethics: "Research only uses self-authored datasets; open walk-throughs include accessibility brief and photo consent opt-out"
 ---

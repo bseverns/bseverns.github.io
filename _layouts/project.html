@@ -9,8 +9,12 @@ layout: default
   <p>{{ page.summary }}</p>
   <h2>Methods</h2>
   <ul>
-    <li>Systems/Tools: {{ page.tools | default: 'TODO: list tools (code, hardware, fabrication)' }}</li>
-    <li>Ethics/Consent: {{ page.ethics | default: 'TODO: note consent/safety steps if interactive' }}</li>
+    {% if page.tools and page.tools != '' %}
+    <li>Systems/Tools: {{ page.tools }}</li>
+    {% endif %}
+    {% if page.ethics and page.ethics != '' %}
+    <li>Ethics/Consent: {{ page.ethics }}</li>
+    {% endif %}
   </ul>
   {% if page.gallery %}
     <h2>Gallery</h2>
