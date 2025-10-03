@@ -1,3 +1,9 @@
+---
+title: "Generative A/V & Performance Tools"
+layout: default
+permalink: /research/Generative_AV_Performan/
+---
+
 <!-- Filename: 3_Generative_AV_Performance_Tools.md -->
 # 3) Generative A/V & Performance Tools
 

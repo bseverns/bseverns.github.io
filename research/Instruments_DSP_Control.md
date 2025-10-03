@@ -1,3 +1,9 @@
+---
+title: "Instruments, DSP & Control"
+layout: default
+permalink: /research/Instruments_DSP_Control/
+---
+
 <!-- Filename: 1_Instruments_DSP_Control.md -->
 # 1) Instruments, DSP & Control
 
