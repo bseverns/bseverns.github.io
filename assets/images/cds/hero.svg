@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Temporary hero art placeholder</title>
+  <desc id="desc">Grid-based typographic poster reminding us to swap in the real studio documentation.</desc>
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#d0d0d0" stroke-width="1" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="675" fill="#f8f8f8" />
+  <rect width="1200" height="675" fill="url(#grid)" opacity="0.55" />
+  <g font-family="'IBM Plex Mono', 'Courier New', monospace" fill="#1a1a1a">
+    <text x="50%" y="30%" text-anchor="middle" font-size="72" letter-spacing="4">DIY HERO</text>
+    <text x="50%" y="44%" text-anchor="middle" font-size="28" letter-spacing="6">DROP REAL ART HERE</text>
+    <text x="50%" y="57%" text-anchor="middle" font-size="20" fill="#444444">keep it 1200×675, keep it weird</text>
+  </g>
+  <rect x="380" y="400" width="440" height="140" fill="#111111" rx="8" />
+  <text x="600" y="470" fill="#f5f5f5" font-family="'Archivo Black', 'Arial Black', sans-serif" font-size="40" text-anchor="middle">PLACEHOLDER</text>
+  <text x="600" y="515" fill="#f5f5f5" font-family="'IBM Plex Mono', 'Courier New', monospace" font-size="18" text-anchor="middle" letter-spacing="3">document the work → swap the file</text>
+</svg>

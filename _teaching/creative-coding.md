@@ -2,9 +2,9 @@
 title: "Creative Coding 101"
 level: "Undergrad"
 delivery: "Lab"
-# TODO: add hero image at assets/images/placeholder.jpg (≤1600px wide)
-hero: /assets/images/placeholder.jpg
-hero_alt: "Placeholder teaching image"
+# TODO: swap in studio shots once we document
+hero: /assets/images/cds/spectacle-mediafast.svg
+hero_alt: "Creative Coding 101 placeholder still from CDS sampler"
 summary: "First steps into generative sketching."
 why: "Start from zero to sketch systems with code."
 outcomes:
