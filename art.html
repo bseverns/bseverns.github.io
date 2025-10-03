@@ -1,89 +1,39 @@
 ---
-layout: null
+layout: default
 title: "Studio Portfolio"
 seo_description: "Selected studio projects by Ben Severns"
----
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page.title }} · {{ site.title }}</title>
-  <meta name="description" content="{{ page.seo_description | default: site.description }}">
-  <link rel="canonical" href="{{ page.url | absolute_url }}">
-  <link rel="stylesheet" href="/css/site.css">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ page.title }} · {{ site.title }}">
-  <meta property="og:description" content="{{ page.seo_description | default: site.description }}">
-  <meta property="og:url" content="{{ page.url | absolute_url }}">
-  <meta property="og:image" content="/img/social/og-banner.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ page.title }} · {{ site.title }}">
-  <meta name="twitter:description" content="{{ page.seo_description | default: site.description }}">
-  <meta name="twitter:image" content="/img/social/og-banner.jpg">
-  <script defer src="/js/site.js"></script>
+wrap_content: false
+extra_head: |
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://bseverns.github.io/"},
-      {"@type":"ListItem","position":2,"name":"Studio","item":"https://bseverns.github.io{{ page.url }}"}
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://bseverns.github.io/"},
+      {"@type": "ListItem", "position": 2, "name": "Studio", "item": "https://bseverns.github.io{{ page.url }}"}
     ]
   }
   </script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to main content</a>
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="/" class="brand-link" aria-label="Ben Severns home">Ben Severns</a>
-      </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          <li><a href="/art.html" aria-current="page">Studio</a></li>
-          <li><a href="/courses.html">Teaching</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
+main_class: "site-main studio-main"
+body_class: "page-studio"
+---
+<section class="page-intro">
+  <div class="container">
+    <p class="eyebrow">Scenes, installations, instruments</p>
+    <h1>{{ page.title }}</h1>
+    <p>Hover or tap a card to get the gist; click through for the full noise.</p>
+    <div class="cta">
+      <a class="btn secondary" href="/#archive-note-title">Dig through the archive stacks ↗</a>
     </div>
-  </header>
-  <main id="main" class="site-main" tabindex="-1">
-    <section class="page-intro">
-      <div class="container">
-        <p class="eyebrow">Scenes, installations, instruments</p>
-        <h1>{{ page.title }}</h1>
-        <p>Hover or tap a card to get the gist; click through for the full noise.</p>
-        <div class="cta">
-          <a class="btn secondary" href="/#archive-note-title">Dig through the archive stacks ↗</a>
-        </div>
-      </div>
-    </section>
-    <section class="portfolio-list" aria-label="Studio projects">
-      <div class="container">
-        <div class="card-grid">
-          {% assign items = site.projects | sort: "year" | reverse %}
-          {% for item in items %}
-            {% include card.html item=item %}
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-  </main>
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-      <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
+  </div>
+</section>
+<section class="portfolio-list" aria-label="Studio projects">
+  <div class="container">
+    <div class="card-grid">
+      {% assign items = site.projects | sort: "year" | reverse %}
+      {% for item in items %}
+      {% include card.html item=item %}
+      {% endfor %}
     </div>
-  </footer>
-</body>
-</html>
+  </div>
+</section>

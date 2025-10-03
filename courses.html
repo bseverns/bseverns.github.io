@@ -1,90 +1,47 @@
 ---
-layout: null
-title: "Academic Portfolio"
-seo_description: "Teaching portfolio and course briefs"
----
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page.title }} · {{ site.title }}</title>
-  <meta name="description" content="{{ page.seo_description | default: site.description }}">
-  <link rel="canonical" href="{{ page.url | absolute_url }}">
-  <link rel="stylesheet" href="/css/site.css">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ page.title }} · {{ site.title }}">
-  <meta property="og:description" content="{{ page.seo_description | default: site.description }}">
-  <meta property="og:url" content="{{ page.url | absolute_url }}">
-  <meta property="og:image" content="/img/social/og-banner.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ page.title }} · {{ site.title }}">
-  <meta name="twitter:description" content="{{ page.seo_description | default: site.description }}">
-  <meta name="twitter:image" content="/img/social/og-banner.jpg">
-  <script defer src="/js/site.js"></script>
+layout: default
+title: "Teaching"
+seo_description: "Courses, workshops, and residencies led by Ben Severns"
+wrap_content: false
+extra_head: |
   <script type="application/ld+json">
   {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://bseverns.github.io/"},
-      {"@type":"ListItem","position":2,"name":"Teaching","item":"https://bseverns.github.io{{ page.url }}"}
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://bseverns.github.io/"},
+      {"@type": "ListItem", "position": 2, "name": "Teaching", "item": "https://bseverns.github.io{{ page.url }}"}
     ]
   }
   </script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to main content</a>
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="/" class="brand-link" aria-label="Ben Severns home">Ben Severns</a>
-      </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          <li><a href="/art.html">Studio</a></li>
-          <li><a href="/courses.html" aria-current="page">Teaching</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
+main_class: "site-main teaching-main"
+body_class: "page-teaching"
+---
+<section class="page-intro">
+  <div class="container">
+    <p class="eyebrow">Courses, workshops, residencies</p>
+    <h1>{{ page.title }}</h1>
+    <p>I teach digital performance, creative coding, and community-first tech. Every syllabus lives in the open.</p>
+    <div class="cta">
+      <a class="btn" href="/press-kit.html#teaching">Grab the full teaching dossier ↗</a>
+      <a class="btn secondary" href="/contact.html">Bring me to your program ↗</a>
     </div>
-  </header>
-  <main id="main" class="site-main" tabindex="-1">
-    <section class="page-intro">
-      <div class="container">
-        <p class="eyebrow">Courses, syllabi, classroom tools</p>
-        <h1>{{ page.title }}</h1>
-        <p>Syllabi and assorted classroom experiments are simmering here. Check back while the dust settles.</p>
-        <p>Sample syllabi, briefs, and outcomes. Full materials live at <a href="https://github.com/bseverns/Syllabus">github.com/bseverns/Syllabus</a>.</p>
-        <div class="cta">
-          <a class="btn secondary" href="https://github.com/bseverns/Syllabus">Raid the full syllabus repo ↗</a>
-        </div>
-      </div>
-    </section>
-    <section class="portfolio-list" aria-label="Teaching projects">
-      <div class="container">
-        <div class="card-grid">
-          {% assign items = site.teaching | sort: "updated" | reverse %}
-          {% for item in items %}
-            {% include card.html item=item %}
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-  </main>
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-      <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
+  </div>
+</section>
+<section class="teaching-list" aria-label="Teaching projects">
+  <div class="container">
+    <div class="card-grid">
+      {% assign items = site.teaching | sort: "updated" | reverse %}
+      {% for item in items %}
+      {% include card.html item=item %}
+      {% endfor %}
     </div>
-  </footer>
-</body>
-</html>
+  </div>
+</section>
+<section class="teaching-note">
+  <div class="container">
+    <h2>How I run my classrooms</h2>
+    <p>Build-first. Document everything. Critique with generosity and rigor. Students leave with shippable tools, not vapor.</p>
+    <p>Need a custom workshop, staff training, or research residency? <a href="/contact.html">Hit me up</a> and let's plot it.</p>
+  </div>
+</section>

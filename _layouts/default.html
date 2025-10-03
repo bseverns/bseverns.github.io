@@ -20,11 +20,16 @@
   <meta name="twitter:description" content="{{ page.seo_description | default: site.description }}">
   <meta name="twitter:image" content="{{ og_image | absolute_url }}">
   <script defer src="/js/site.js"></script>
+  {% if page.extra_head %}
+  {{ page.extra_head }}
+  {% endif %}
+  {{ content_for_head }}
   {% if page.noindex %}
   <meta name="robots" content="noindex,noarchive,noimageindex,nofollow">
   {% endif %}
 </head>
-<body>
+{% assign body_class = page.body_class | default: '' %}
+<body{% if body_class != '' %} class="{{ body_class }}"{% endif %}>
   <a class="skip-link" href="#main">Skip to main content</a>
   <header class="site-header" role="banner">
     <div class="container header-inner">
@@ -47,12 +52,17 @@
       </nav>
     </div>
   </header>
-  <main id="main" class="site-main" tabindex="-1">
+  {% assign main_class = page.main_class | default: 'site-main' %}
+  <main id="main" class="{{ main_class }}" tabindex="-1">
+    {% if page.wrap_content != false %}
     <div class="container">
       <div class="content-area">
         {{ content }}
       </div>
     </div>
+    {% else %}
+    {{ content }}
+    {% endif %}
   </main>
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
