@@ -1,0 +1,23 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% assign base_title = page.seo_title | default: page.title | default: site.title %}
+{% if base_title == site.title %}
+<title>{{ base_title }}</title>
+{% else %}
+<title>{{ base_title }} · {{ site.title }}</title>
+{% endif %}
+<meta name="description" content="{{ page.seo_description | default: site.description }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<link rel="stylesheet" href="/css/site.css">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ base_title }}">
+<meta property="og:description" content="{{ page.seo_description | default: site.description }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:image" content="{{ page.og_image | default: '/img/social/og-banner.jpg' | absolute_url }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ base_title }}">
+<meta name="twitter:description" content="{{ page.seo_description | default: site.description }}">
+<meta name="twitter:image" content="{{ page.og_image | default: '/img/social/og-banner.jpg' | absolute_url }}">
+{% if page.noindex %}
+<meta name="robots" content="noindex,noarchive,noimageindex,nofollow">
+{% endif %}

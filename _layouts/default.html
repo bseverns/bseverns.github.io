@@ -1,31 +1,10 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  {% assign base_title = page.seo_title | default: page.title | default: site.title %}
-  {% assign og_image = page.og_image | default: '/img/social/og-banner.jpg' %}
-  <title>{{ base_title }} · {{ site.title }}</title>
-  <meta name="description" content="{{ page.seo_description | default: site.description }}">
-  <link rel="canonical" href="{{ page.url | absolute_url }}">
-  <link rel="stylesheet" href="/css/site.css">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="{{ base_title }} · {{ site.title }}">
-  <meta property="og:description" content="{{ page.seo_description | default: site.description }}">
-  <meta property="og:url" content="{{ page.url | absolute_url }}">
-  <meta property="og:image" content="{{ og_image | absolute_url }}">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ base_title }} · {{ site.title }}">
-  <meta name="twitter:description" content="{{ page.seo_description | default: site.description }}">
-  <meta name="twitter:image" content="{{ og_image | absolute_url }}">
-  <script defer src="/js/site.js"></script>
+  {% include head.html %}
+  {{ content_for_head }}
   {% if page.extra_head %}
   {{ page.extra_head }}
-  {% endif %}
-  {{ content_for_head }}
-  {% if page.noindex %}
-  <meta name="robots" content="noindex,noarchive,noimageindex,nofollow">
   {% endif %}
 </head>
 {% assign body_class = page.body_class | default: '' %}
@@ -34,7 +13,7 @@
   <header class="site-header" role="banner">
     <div class="container header-inner">
       <div class="brand">
-        <a href="/" class="brand-link" aria-label="Ben Severns home">Ben Severns</a>
+        <a href="/" class="brand-link" aria-label="{{ site.title }} home">{{ site.title }}</a>
       </div>
       <nav aria-label="Primary" class="primary-nav">
         <ul>
@@ -54,19 +33,19 @@
   </header>
   {% assign main_class = page.main_class | default: 'site-main' %}
   <main id="main" class="{{ main_class }}" tabindex="-1">
-    {% if page.wrap_content != false %}
+    {% if page.wrap_content == false %}
+    {{ content }}
+    {% else %}
     <div class="container">
       <div class="content-area">
         {{ content }}
       </div>
     </div>
-    {% else %}
-    {{ content }}
     {% endif %}
   </main>
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
-      <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
+      <div>© <span id="yr"></span> {{ site.title }} — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
       <nav aria-label="Footer">
         <ul>
           <li><a href="/press-kit.html">Press kit</a></li>
@@ -76,5 +55,6 @@
       </nav>
     </div>
   </footer>
+  <script defer src="/js/site.js"></script>
 </body>
 </html>
