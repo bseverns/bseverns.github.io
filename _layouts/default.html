@@ -1,18 +1,39 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   {% include head.html %}
-  {% if page.noindex %}<meta name="robots" content="noindex,nofollow">{% endif %}
 </head>
 <body>
-<header class="site-head">
-  <nav>
-    {% for link in site.data.navigation %}
-      <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
-    {% endfor %}
-  </nav>
-</header>
-<main id="content">{{ content }}</main>
-{% include footer.html %}
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="/" class="brand-link" aria-label="{{ site.title }} home">{{ site.title }}</a>
+      </div>
+      <nav aria-label="Primary" class="primary-nav">
+        <ul>
+          <li><a href="/art.html">Studio</a></li>
+          <li><a href="/courses.html">Teaching</a></li>
+          <li><a href="/press-kit.html">Press kit</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="site-main" tabindex="-1">
+    {{ content }}
+  </main>
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>© <span id="yr"></span> {{ site.title }} — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="/press-kit.html">Press kit</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/sitemap.xml">Sitemap</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
 </body>
 </html>
