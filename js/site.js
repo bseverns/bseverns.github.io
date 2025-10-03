@@ -3,10 +3,11 @@
   const FALLBACK_IMAGE = '/img/front/context.jpg';
 
   function setCurrentYear() {
-    const node = document.querySelector('[data-current-year]');
-    if (node) {
-      node.textContent = String(new Date().getFullYear());
-    }
+    const year = String(new Date().getFullYear());
+    const nodes = document.querySelectorAll('[data-current-year], #yr');
+    nodes.forEach(function (node) {
+      node.textContent = year;
+    });
   }
 
   function bindSkipLinkFocus() {
@@ -157,12 +158,165 @@
     });
   }
 
+  function activateHeroBanner() {
+    const hero = document.querySelector('.hero');
+    if (!hero) {
+      return;
+    }
+
+    const mode = hero.getAttribute('data-banner') || 'css';
+    if (mode !== 'canvas') {
+      return;
+    }
+
+    const mount = hero.querySelector('.hero-visual');
+    if (!mount || mount.querySelector('canvas')) {
+      return;
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.id = 'flow';
+    canvas.setAttribute('aria-hidden', 'true');
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.display = 'block';
+    canvas.style.borderRadius = 'inherit';
+    mount.appendChild(canvas);
+    flowField(canvas);
+  }
+
+  function flowField(canvas) {
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      return;
+    }
+
+    const DPR = Math.max(1, window.devicePixelRatio || 1);
+    const rootStyles = window.getComputedStyle ? getComputedStyle(document.documentElement) : null;
+    const brandColor = rootStyles ? (rootStyles.getPropertyValue('--brand') || '#2563eb').trim() : '#2563eb';
+    const accentColor = rootStyles ? (rootStyles.getPropertyValue('--accent') || '#1e66f5').trim() : '#1e66f5';
+    const surfaceColor = rootStyles ? (rootStyles.getPropertyValue('--surface') || '#0f172a').trim() : '#0f172a';
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let width = 0;
+    let height = 0;
+    let frame = 0;
+    let time = 0;
+
+    function resize() {
+      width = canvas.clientWidth || (canvas.parentElement ? canvas.parentElement.clientWidth : 0) || 0;
+      height = canvas.clientHeight || (canvas.parentElement ? canvas.parentElement.clientHeight : 0) || 0;
+      canvas.width = Math.max(1, Math.floor(width * DPR));
+      canvas.height = Math.max(1, Math.floor(height * DPR));
+      width = width || canvas.width / DPR;
+      height = height || canvas.height / DPR;
+      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      paintBackground();
+    }
+
+    function paintBackground() {
+      ctx.fillStyle = surfaceColor || '#0f172a';
+      ctx.fillRect(0, 0, width, height);
+      const gradient = ctx.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, accentColor || '#0ea5e9');
+      gradient.addColorStop(0.45, brandColor || '#6366f1');
+      gradient.addColorStop(1, '#ec4899');
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, width, height);
+      ctx.globalAlpha = 1;
+    }
+
+    function noise(value) {
+      return Math.sin(value * 0.0008) + Math.sin(value * 0.0013) * 0.5;
+    }
+
+    function draw() {
+      time += 1;
+      ctx.fillStyle = 'rgba(12, 16, 32, 0.08)';
+      ctx.fillRect(0, 0, width, height);
+      for (let i = 0; i < 400; i += 1) {
+        const px = (i * 19 + time * 2) % width;
+        const py = (i * 37 + noise(time * 23 + i * 301) * 60 + height / 2) % height;
+        const angle = noise(i * 999 + time * 40) * Math.PI;
+        const length = 16 + noise(i * 13 + time * 9) * 10;
+        ctx.strokeStyle = 'hsla(' + ((i * 2 + time) % 360) + ',60%,60%,0.35)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.lineTo(px + Math.cos(angle) * length, py + Math.sin(angle) * length);
+        ctx.stroke();
+      }
+      frame = requestAnimationFrame(draw);
+    }
+
+    function start() {
+      cancelAnimationFrame(frame);
+      if (!width || !height) {
+        resize();
+      }
+      if (motionQuery.matches) {
+        paintBackground();
+        return;
+      }
+      paintBackground();
+      frame = requestAnimationFrame(draw);
+    }
+
+    resize();
+    start();
+
+    const handleResize = function () {
+      resize();
+      start();
+    };
+
+    window.addEventListener('resize', handleResize, { passive: true });
+    if (typeof motionQuery.addEventListener === 'function') {
+      motionQuery.addEventListener('change', start);
+    } else if (typeof motionQuery.addListener === 'function') {
+      motionQuery.addListener(start);
+    }
+  }
+
+  function attachPlayable() {
+    const button = document.getElementById('ping');
+    if (!button) {
+      return;
+    }
+
+    button.addEventListener('click', function () {
+      const AudioContextConstructor = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextConstructor) {
+        button.disabled = true;
+        button.textContent = 'sound unavailable';
+        return;
+      }
+
+      const context = new AudioContextConstructor();
+      const oscillator = context.createOscillator();
+      const gain = context.createGain();
+      oscillator.type = 'triangle';
+      oscillator.frequency.value = 392;
+      gain.gain.value = 0.0001;
+      oscillator.connect(gain).connect(context.destination);
+      oscillator.start();
+      gain.gain.exponentialRampToValueAtTime(0.18, context.currentTime + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.4);
+      setTimeout(function () {
+        oscillator.stop();
+        context.close();
+      }, 420);
+    });
+  }
+
   function init() {
     setCurrentYear();
     bindSkipLinkFocus();
+    activateHeroBanner();
     mountHeroImage();
     mountOtherImages();
     hydrateAssetStatuses();
+    attachPlayable();
   }
 
   window.conditionallyRenderImage = conditionallyRenderImage;

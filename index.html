@@ -4,18 +4,18 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ben Severns · Tools, scenes, and learning environments</title>
-  <meta name="description" content="Artist–educator Ben Severns builds tools, scenes, and learning environments with documentation-first systems.">
+  <title>Ben Severns — Artist · Educator · Systems</title>
+  <meta name="description" content="Open instruments, consent-forward sensing, and practical curricula — documented so others can build.">
   <link rel="canonical" href="https://bseverns.github.io/">
   <link rel="stylesheet" href="/css/site.css">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Ben Severns · Tools, scenes, and learning environments">
-  <meta property="og:description" content="Artist–educator Ben Severns builds tools, scenes, and learning environments with documentation-first systems.">
+  <meta property="og:title" content="Ben Severns — Artist · Educator · Systems">
+  <meta property="og:description" content="Tools, scenes, and learning environments.">
   <meta property="og:url" content="https://bseverns.github.io/">
   <meta property="og:image" content="/img/social/og-banner.jpg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Ben Severns · Tools, scenes, and learning environments">
-  <meta name="twitter:description" content="Artist–educator Ben Severns builds tools, scenes, and learning environments with documentation-first systems.">
+  <meta name="twitter:title" content="Ben Severns — Artist · Educator · Systems">
+  <meta name="twitter:description" content="Tools, scenes, and learning environments.">
   <meta name="twitter:image" content="/img/social/og-banner.jpg">
   <script defer src="/js/site.js"></script>
   <script type="application/ld+json">
@@ -48,24 +48,50 @@
     </div>
   </header>
   <main id="main" class="site-main" tabindex="-1">
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="container hero-inner">
+    <section class="hero" data-banner="image" aria-labelledby="hero-title">
+      <div class="container hero-grid">
         <div class="hero-copy">
           <p class="eyebrow">Artist–educator in Minneapolis, MN</p>
-          <h1 id="hero-title">Tools, scenes, and learning environments.</h1>
-          <p class="hero-subhead">Systems-first practice with documentation you can audit, adapt, and teach from.</p>
-          <div class="hero-ctas">
-            <a class="button" href="/art.html">Explore Studio</a>
-            <a class="button secondary" href="/courses.html">Explore Teaching</a>
+          <h1 id="hero-title">Tools, scenes, and learning environments</h1>
+          <p class="tagline">Systems-level practice: open instruments, consent-forward sensing, and practical curricula.</p>
+          <div class="cta">
+            <a class="btn" href="/art.html">Explore Studio</a>
+            <a class="btn secondary" href="/courses.html">Explore Teaching</a>
           </div>
         </div>
         <div class="hero-visual" data-hero="true" data-src="/img/front/context.jpg" data-alt="Analog synth setup with projection work in progress"></div>
       </div>
     </section>
 
+    <section class="updates" aria-label="Signals from the lab">
+      <div class="container updates-grid">
+        <section class="now-next" aria-labelledby="nn-heading">
+          <h2 id="nn-heading">What’s on the bench</h2>
+          <ul class="nn-list">
+            <li><strong>Now:</strong> MN42 v0.2 tuning + latency notes.</li>
+            <li><strong>Next:</strong> faceTimes refactor (opt-in gate + delete-now).</li>
+            <li><strong>Proofs:</strong> Innovation &amp; 3D Printing kit refresh; quick-starts.</li>
+          </ul>
+        </section>
+        <section class="playable" aria-labelledby="play-heading">
+          <h2 id="play-heading">Playable</h2>
+          <p>Tap for a tiny tone—proof of life.</p>
+          <button id="ping" class="btn secondary">make a small sound</button>
+        </section>
+        <section class="patch-notes" aria-labelledby="patch-heading">
+          <h2 id="patch-heading">Patch notes</h2>
+          <ul>
+            <li><a href="https://github.com/bseverns/MOARkNOBS-42" target="_blank" rel="noopener">MN42</a> — mapping manifest tweaks</li>
+            <li><a href="https://github.com/bseverns/faceTimes" target="_blank" rel="noopener">faceTimes</a> — consent gate refactor</li>
+            <li><a href="/courses.html">Courses</a> — station cards consolidated</li>
+          </ul>
+        </section>
+      </div>
+    </section>
+
     <section class="pillars" aria-labelledby="pillars-title">
       <div class="container">
-        <h2 id="pillars-title">Three pillars</h2>
+        <h2 id="pillars-title">Three ways the lab shows up</h2>
         <div class="card-grid">
           <article class="card pillar">
             <div class="card-body">
@@ -92,37 +118,41 @@
       </div>
     </section>
 
-    <section class="whats-new" aria-labelledby="news-title">
-      <div class="container">
-        <h2 id="news-title">What’s new</h2>
-        <ul class="news-list">
-          <li>
-            <strong>Mini-lab toolkit iteration.</strong>
-            <span class="news-meta">Testing updated sensor harness workflow.</span>
-          </li>
-          <li>
-            <strong>MOARkNOBS-42 performance notes.</strong>
-            <span class="news-meta">Documenting latency audits for the current rig.</span>
-          </li>
-          <li>
-            <strong>Consent-forward sensing workshop.</strong>
-            <span class="news-meta">Refining prompts and open documentation sets.</span>
-          </li>
-        </ul>
-        <!-- TODO: Update "What’s new" entries as projects ship. -->
-      </div>
-    </section>
-
     <section class="archive-note" aria-labelledby="archive-note-title">
       <div class="container">
-        <h2 id="archive-note-title">Note on older pages</h2>
-        <p>Legacy write-ups stick around for transparency. An archive banner points back here so you always know where the current work lives.</p>
+        <h2 id="archive-note-title">Why the archive stays loud</h2>
+        <p>Legacy write-ups stay published for accountability. Every historical page links back here so the freshest work is one jump away.</p>
+        <nav class="legacy-links" aria-labelledby="legacy-links-title">
+          <h3 id="legacy-links-title">Legacy quick links</h3>
+          <ul class="legacy-list">
+            <li>
+              <a href="/2d/banners.html">2D · Banners</a>
+              <span>Early signal-flag print experiments.</span>
+            </li>
+            <li>
+              <a href="/3d/genfab.html">3D · GenFab prototype</a>
+              <span>Fabrication lab build notes and photos.</span>
+            </li>
+            <li>
+              <a href="/spin/">Spin</a>
+              <span>Legacy p5.js sketches keeping the motion studies alive.</span>
+            </li>
+            <li>
+              <a href="/text/text_program1.html">Text Program 1</a>
+              <span>Poetic systems research from the early archive.</span>
+            </li>
+            <li>
+              <a href="/robot/">Robot Lab prototypes</a>
+              <span>Documentation of the robotics teaching rigs.</span>
+            </li>
+          </ul>
+        </nav>
       </div>
     </section>
   </main>
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
-      <p>&copy; <span data-current-year></span> Ben Severns. Systems for builders.</p>
+      <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
       <nav aria-label="Footer">
         <ul>
           <li><a href="/press-kit.html">Press kit</a></li>
