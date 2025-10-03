@@ -1,102 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teaching projects · Ben Severns</title>
-  <meta name="description" content="Teaching work from Ben Severns: curricula, kits, and learning environments that support co-creation.">
-  <link rel="canonical" href="https://bseverns.github.io/courses.html">
-  <link rel="stylesheet" href="/css/site.css">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Teaching projects · Ben Severns">
-  <meta property="og:description" content="Teaching work from Ben Severns: curricula, kits, and learning environments that support co-creation.">
-  <meta property="og:url" content="https://bseverns.github.io/courses.html">
-  <meta property="og:image" content="/img/social/og-banner.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Teaching projects · Ben Severns">
-  <meta name="twitter:description" content="Teaching work from Ben Severns: curricula, kits, and learning environments that support co-creation.">
-  <meta name="twitter:image" content="/img/social/og-banner.jpg">
-  <script defer src="/js/site.js"></script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://bseverns.github.io/"},
-      {"@type":"ListItem","position":2,"name":"Teaching","item":"https://bseverns.github.io/courses.html"}
-    ]
-  }
-  </script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to main content</a>
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="/" class="brand-link" aria-label="Ben Severns home">Ben Severns</a>
-      </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          <li><a href="/art.html">Studio</a></li>
-          <li><a href="/courses.html" aria-current="page">Teaching</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <main id="main" class="site-main" tabindex="-1">
-    <div class="container page-intro">
-      <nav aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-          <li><a href="/">Home</a></li>
-          <li aria-current="page">Teaching</li>
-        </ol>
-      </nav>
-      <h1>Teaching projects</h1>
-      <p>Learning environments, kits, and curricula that prioritize agency, consent, and reproducibility.</p>
-    </div>
-
-    <div class="container card-grid">
-      <article class="card">
-        <div class="card-visual" data-src="/img/portfolio/flat/post.jpg" data-alt="Workshop tables laid out with electronics kits"></div>
-        <div class="card-body">
-          <h2>STEAM lab quick-starts</h2>
-          <p>Station cards and build recipes that get K–12 learners into fabrication safely and fast.</p>
-          <a class="card-link" href="https://github.com/bseverns/machine-docs">Open the fabrication lab playbook</a>
-        </div>
-      </article>
-      <article class="card">
-        <div class="card-visual" data-src="/img/logo/self_about.jpg" data-alt="Ben Severns facilitating a media arts workshop"></div>
-        <div class="card-body">
-          <h2>Consent-forward sensing workshop</h2>
-          <p>Curriculum that reframes data capture around permission, opt-out defaults, and transparent logs.</p>
-          <a class="card-link" href="https://github.com/bseverns/Human-Buffer#workshop-playlist">Drop into the full curriculum</a>
-        </div>
-      </article>
-      <article class="card">
-        <div class="card-visual" data-src="/img/portfolio/flat/augsburg-media-systems.svg" data-alt="Illustrated web browser window with layered layout blocks representing the Augsburg media systems syllabus toolkit"></div>
-        <div class="card-body">
-          <h2>Augsburg media systems</h2>
-          <p>Adjunct course emphasizing assumption ledgers and mapping manifests for every build.</p>
-          <a class="card-link" href="https://github.com/bseverns/ART215_SP22">Read the full syllabus + toolkit</a>
-        </div>
-      </article>
-    </div>
-    <!-- TODO: Update teaching cards with final links and copy. -->
-  </main>
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-      <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
-    </div>
-  </footer>
-</body>
-</html>
+---
+layout: default
+title: "Academic Portfolio"
+seo_description: "Teaching portfolio and course briefs"
+---
+<section class="page-intro">
+  <h1>Academic Portfolio</h1>
+  <p>Syllabi and assorted classroom experiments are simmering here. Check back while the dust settles.</p>
+  <p>Sample syllabi, briefs, and outcomes. Full materials live at <a href="https://github.com/bseverns/Syllabus">github.com/bseverns/Syllabus</a>.</p>
+  <div class="cta">
+    <a class="btn secondary" href="https://github.com/bseverns/Syllabus">
+      Raid the full syllabus repo ↗
+    </a>
+  </div>
+</section>
+<div class="cards">
+  {% assign items = site.teaching | sort: "updated" | reverse %}
+  {% for item in items %}
+    {% include card.html item=item %}
+  {% endfor %}
+</div>
