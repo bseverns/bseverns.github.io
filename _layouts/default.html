@@ -21,6 +21,11 @@
     </div>
   </header>
   <main id="main" class="site-main" tabindex="-1">
+    {% if page.archived %}
+    <aside class="archive-banner" role="note">
+      <strong>Archived:</strong> Legacy documentation kept for reference. <a href="/">See current work →</a>
+    </aside>
+    {% endif %}
     <div class="content-area">
       {{ content }}
     </div>
