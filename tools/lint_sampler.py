@@ -100,11 +100,17 @@ assets = [
     "assets/images/cds/mn42-panel.svg",
     "assets/images/cds/glitch-geometry-still.svg",
     "assets/images/cds/ds200412-still.svg",
-    "assets/docs/Severns_CriticalDigitalStudies_Sampler.pdf"
 ]
 for a in assets:
     if not os.path.exists(os.path.join(ROOT, a)):
         issues.append(f"Missing asset: {a}")
+
+pdf_candidates = [
+    "assets/docs/Severns_CriticalDigitalStudies.pdf",
+    "assets/docs/Severns_CriticalDigitalStudies_Sampler.pdf",
+]
+if not any(os.path.exists(os.path.join(ROOT, p)) for p in pdf_candidates):
+    issues.append("Missing asset: assets/docs/Severns_CriticalDigitalStudies.pdf")
 
 if issues:
     print("Sampler checks: FAIL\n- " + "\n- ".join(issues))

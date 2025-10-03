@@ -2,10 +2,9 @@
 title: "Critical Making — Day One"
 level: "Grad/Undergrad"
 delivery: "Workshop"
-# TODO: swap in workshop photos when captured
-hero: /assets/images/cds/faceTimes-consent.svg
-hero_alt: "Critical Making placeholder still from CDS sampler"
-summary: "Day-one sprint mixing theory with solder."
+hero: /assets/images/cds/ds200412-still.jpg
+hero_alt: "Workshop table covered in sensors and breadboards while a projection-mapped consent workflow glows overhead"
+summary: "Day-one sprint where theory, consent practice, and solder fumes share the same table."
 why: "Kick off with a tangle of theory and solder smoke."
 outcomes:
   - "Map critical design lineage"

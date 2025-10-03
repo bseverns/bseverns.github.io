@@ -20,7 +20,8 @@ from reportlab.platypus import (Image, ListFlowable, PageBreak, Paragraph,
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "_data/cds.yml"
 PAGE_PATH = ROOT / "critical-digital-studies-sampler/index.md"
-OUTPUT_PATH = ROOT / "assets/docs/Severns_CriticalDigitalStudies_Sampler.pdf"
+# Keep the build target aligned with the asset actually linked on the site.
+OUTPUT_PATH = ROOT / "assets/docs/Severns_CriticalDigitalStudies.pdf"
 MAX_IMG_WIDTH = 6.5 * inch
 MAX_IMG_HEIGHT = 3.9 * inch
 
