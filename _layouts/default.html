@@ -2,59 +2,17 @@
 <html lang="en">
 <head>
   {% include head.html %}
-  {{ content_for_head }}
-  {% if page.extra_head %}
-  {{ page.extra_head }}
-  {% endif %}
+  {% if page.noindex %}<meta name="robots" content="noindex,nofollow">{% endif %}
 </head>
-{% assign body_class = page.body_class | default: '' %}
-<body{% if body_class != '' %} class="{{ body_class }}"{% endif %}>
-  <a class="skip-link" href="#main">Skip to main content</a>
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="/" class="brand-link" aria-label="{{ site.title }} home">{{ site.title }}</a>
-      </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          {% for link in site.data.navigation %}
-            {% assign nav_href = link.url | relative_url %}
-            {% assign nav_dir = nav_href | replace: '.html', '/' %}
-            {% assign nav_index = nav_href | replace: '.html', '/index.html' %}
-            {% if page.url == nav_href or page.url == nav_dir or page.url == nav_index %}
-              <li><a href="{{ nav_href }}" aria-current="page">{{ link.title }}</a></li>
-            {% else %}
-              <li><a href="{{ nav_href }}">{{ link.title }}</a></li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </nav>
-    </div>
-  </header>
-  {% assign main_class = page.main_class | default: 'site-main' %}
-  <main id="main" class="{{ main_class }}" tabindex="-1">
-    {% if page.wrap_content == false %}
-    {{ content }}
-    {% else %}
-    <div class="container">
-      <div class="content-area">
-        {{ content }}
-      </div>
-    </div>
-    {% endif %}
-  </main>
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-      <div>© <span id="yr"></span> {{ site.title }} — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
-    </div>
-  </footer>
-  <script defer src="/js/site.js"></script>
+<body>
+<header class="site-head">
+  <nav>
+    {% for link in site.data.navigation %}
+      <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
+    {% endfor %}
+  </nav>
+</header>
+<main id="content">{{ content }}</main>
+{% include footer.html %}
 </body>
 </html>
