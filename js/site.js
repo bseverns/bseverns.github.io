@@ -345,17 +345,30 @@
       const context = new AudioContextConstructor();
       const oscillator = context.createOscillator();
       const gain = context.createGain();
-      oscillator.type = 'triangle';
-      oscillator.frequency.value = 392;
-      gain.gain.value = 0.0001;
+      const waveforms = ['sine', 'triangle', 'square', 'sawtooth'];
+      const scale = [196, 220, 247, 262, 294, 330, 349, 392, 440, 494, 523, 587, 659, 698, 784];
+      const waveform = waveforms[Math.floor(Math.random() * waveforms.length)];
+      const baseFrequency = scale[Math.floor(Math.random() * scale.length)];
+      const fineDetune = (Math.random() - 0.5) * 80; // +/- 40 cents keeps it musical but lively.
+      const attack = 0.01 + Math.random() * 0.05;
+      const decay = 0.22 + Math.random() * 0.35;
+      const sustainLevel = 0.12 + Math.random() * 0.08;
+
+      oscillator.type = waveform;
+      oscillator.frequency.value = baseFrequency;
+      oscillator.detune.value = fineDetune;
+      gain.gain.setValueAtTime(0.0001, context.currentTime);
       oscillator.connect(gain).connect(context.destination);
       oscillator.start();
-      gain.gain.exponentialRampToValueAtTime(0.18, context.currentTime + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 0.4);
+
+      gain.gain.exponentialRampToValueAtTime(sustainLevel, context.currentTime + attack);
+      gain.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + attack + decay);
+
+      const cleanupDelay = Math.max(attack + decay + 0.08, 0.2) * 1000;
       setTimeout(function () {
         oscillator.stop();
         context.close();
-      }, 420);
+      }, cleanupDelay);
     });
   }
 
