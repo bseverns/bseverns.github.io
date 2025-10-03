@@ -4,6 +4,7 @@ nav_title: "Research"
 layout: default
 permalink: /research/
 summary: "Methods that make claims legible."
+archived: true
 ---
 
 # Research

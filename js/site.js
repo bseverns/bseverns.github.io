@@ -154,7 +154,7 @@
 
   async function renderStatusBadge(el, path) {
     if (!el || !path) {
-      return;
+      return false;
     }
 
     const status = el.querySelector('.asset-status');
@@ -175,15 +175,25 @@
         status.textContent = '✅ Present';
         status.dataset.state = 'present';
       }
-    } else if (status) {
+      el.dataset.state = 'present';
+      return true;
+    }
+
+    if (status) {
       status.textContent = '🕘 Not yet added';
       status.dataset.state = 'missing';
     }
+    el.dataset.state = 'missing';
+    return false;
   }
 
   function mountHeroImage() {
     const hero = document.querySelector('.hero-visual[data-hero="true"]');
     if (!hero) {
+      return;
+    }
+    const heroSection = hero.closest('.hero');
+    if (heroSection && heroSection.getAttribute('data-banner') === 'canvas') {
       return;
     }
     const src = hero.getAttribute('data-src') || OG_IMAGE;
@@ -200,12 +210,34 @@
     });
   }
 
-  function hydrateAssetStatuses() {
-    const items = document.querySelectorAll('[data-asset-status]');
-    items.forEach(function (item) {
+  async function hydrateAssetStatuses() {
+    const list = document.querySelector('[data-asset-list]');
+    const placeholder = document.querySelector('[data-asset-placeholder]');
+    const items = list ? list.querySelectorAll('[data-asset-status]') : document.querySelectorAll('[data-asset-status]');
+    if (!items.length) {
+      return;
+    }
+
+    if (list) {
+      list.hidden = true;
+    }
+    if (placeholder) {
+      placeholder.hidden = false;
+    }
+
+    const checks = await Promise.all(Array.prototype.map.call(items, function (item) {
       const path = item.getAttribute('data-path');
-      renderStatusBadge(item, path);
-    });
+      return renderStatusBadge(item, path);
+    }));
+
+    const presentCount = checks.filter(Boolean).length;
+
+    if (list) {
+      list.hidden = presentCount === 0;
+    }
+    if (placeholder) {
+      placeholder.hidden = presentCount !== 0;
+    }
   }
 
   function activateHeroBanner() {

@@ -9,7 +9,13 @@ collections:
     permalink: /teaching/:name/
 defaults:
   - scope: {path: "", type: "projects"}
-    values: {layout: project, author: "Ben Severns"}
+    values:
+      layout: project
+      author: "Ben Severns"
+      archived: true
   - scope: {path: "", type: "teaching"}
-    values: {layout: teaching, author: "Ben Severns"}
+    values:
+      layout: teaching
+      author: "Ben Severns"
+      archived: true
 markdown: kramdown
