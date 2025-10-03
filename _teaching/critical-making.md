@@ -2,9 +2,9 @@
 title: "Critical Making — Day One"
 level: "Grad/Undergrad"
 delivery: "Workshop"
-# TODO: add hero image at assets/images/placeholder.jpg (≤1600px wide)
-hero: /assets/images/placeholder.jpg
-hero_alt: "Placeholder teaching image"
+# TODO: swap in workshop photos when captured
+hero: /assets/images/cds/faceTimes-consent.svg
+hero_alt: "Critical Making placeholder still from CDS sampler"
 summary: "Day-one sprint mixing theory with solder."
 why: "Kick off with a tangle of theory and solder smoke."
 outcomes:

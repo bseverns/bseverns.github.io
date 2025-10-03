@@ -2,9 +2,9 @@
 title: "MCAD Media 2 — MTN Broadcast"
 level: "Undergrad"
 delivery: "Studio-Seminar"
-# TODO: add hero image at assets/images/placeholder.jpg (≤1600px wide)
-hero: /assets/images/placeholder.jpg
-hero_alt: "Placeholder teaching image"
+# TODO: replace with broadcast still once archived
+hero: /assets/images/cds/mcad-media2-mtn.svg
+hero_alt: "MCAD Media 2 broadcast placeholder still from CDS sampler"
 summary: "Students run a 28-minute broadcast from pitch to air."
 why: "Make media power felt through production and public broadcast."
 outcomes:
