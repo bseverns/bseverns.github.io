@@ -2,10 +2,9 @@
 title: "Creative Coding 101"
 level: "Undergrad"
 delivery: "Lab"
-# TODO: swap in studio shots once we document
-hero: /assets/images/cds/spectacle-mediafast.svg
-hero_alt: "Creative Coding 101 placeholder still from CDS sampler"
-summary: "First steps into generative sketching."
+hero: /assets/images/cds/spectacle-mediafast.jpg
+hero_alt: "Students annotating the Spectacle / Media Fast assignment board with neon tape during a critique huddle"
+summary: "First steps into generative sketching backed by documentation rituals and critique drills."
 why: "Start from zero to sketch systems with code."
 outcomes:
   - "Write tiny sketches in Processing/p5.js"
