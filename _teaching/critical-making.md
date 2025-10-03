@@ -24,6 +24,32 @@ featured: true
 ## Workshop tone
 Critical Making Day One is a mashup of theory, solder, and consent culture. We prime the room with readings (Dunne & Raby, Ruha Benjamin, Corita Kent’s Ten Rules) and immediately drop into builds pulled from our teaching repos so participants feel the politics in their hands.
 
+### How the room opens
+- The first five minutes are **consent + care roll call**: lights, sound levels, seating tweaks, hydration reminders. I quote from the [Shared Policies preamble](https://github.com/bseverns/Syllabus/blob/main/shared/policies/README.md) so people know the social contract is alive, not boilerplate.
+- Every table gets a placemat print of the workshop values (criticality, reparative play, documentation-as-witness) and a blank column to add their own.
+- I keep a rolling playlist (post-rock + synth minimalism) low in the background so solder fumes feel less like a lab and more like a studio jam.
+
+### Instructor vibe
+I facilitate like a lab partner with a bullhorn full of annotations. Expect:
+- **Live note-taking** on the projector. I write along with participants, linking to the exact repo files we reference so everything is reproducible.
+- **“Show receipts” reflex**. I narrate why each design choice exists, credit collaborators, and call out the TODOs still in flight. Transparency is a teaching tool.
+- **Gentle punk energy**. We celebrate when circuits squeal or fail—then we log an issue, mark the timestamp, and keep iterating.
+
+### Pre-flight email (sent 48 hours out)
+Participants receive:
+- Tool list with loaner request form and access notes (adapted from [`shared/policies/access.md`](https://github.com/bseverns/Syllabus/blob/main/shared/policies/access.md)).
+- Reading pack + optional listen-along playlist.
+- Link to a “why I build” warm-up prompt so everyone arrives with one sentence about their practice.
+
+### Documentation ritual
+- I run a shared HackMD with sections already scaffolded (`Intent`, `Build log`, `Ethics checkpoints`, `Questions for Ben`).
+- Polaroids + thermal printer strips get taped next to the HackMD log at the end of each block so the digital notes have an analog twin.
+
+### Care calls
+- Breaks every 55 minutes. No exceptions. Stretch, ventilate, hydrate.
+- Fume extractors, masks, and ear protection are opt-out, not opt-in—they’re already on the table.
+- Explicit heads-up about sensory spikes (lights dimming, motors whining) before each demo.
+
 ## Day-one itinerary (6-hour sprint)
 | Time | Move | Repo anchor |
 | --- | --- | --- |
@@ -47,6 +73,8 @@ Critical Making Day One is a mashup of theory, solder, and consent culture. We p
 - Use **documentation karaoke** — participants read repo excerpts aloud (assumption ledgers, testing rituals, README quick starts) so the ethos sticks alongside the code.
 - Encourage **issue-filing as critique**. Every team logs at least one issue in the appropriate repo, framing observations as actionable prompts rather than passive notes.
 - Close each block with a **“what broke?” round**. Failure stories become the blueprint for next steps.
+- Keep a **“bench feedback” loop** with my lab assistant: while I’m roving, they log patterns, accessibility pings, and ideas for re-teaching so we can pivot in real time.
+- End the day with a **mutual aid swap**—participants list skills, gear, or readings they can lend before the longer-form studio kicks in.
 
 ## Assessment & artifacts
 - **Setup ledger** — teams capture their wiring diagrams, software versions, and consent signage in a shared markdown doc.
@@ -63,6 +91,7 @@ Critical Making Day One is a mashup of theory, solder, and consent culture. We p
 - Extend the workshop into a 3-week studio where teams fork `Human-Buffer` to design alternative input devices (foot pedals, gaze, gesture) and update the assumption ledger accordingly.
 - Pair `MOARkNOBS-42` with `MotorLightSound` to explore telepresence or distributed control — map the ethics of remote agency.
 - Invite community partners to test the prototypes and record oral histories (with consent) to weave qualitative data into the repo documentation.
+- Spin up a **documentation after-party** 48 hours later: a remote session where we close issues, merge light PRs, and publish reflection snippets to the course site so accountability doesn’t fade.
 
 ## Link stash
 - Human-Buffer teaching build: <https://github.com/bseverns/Human-Buffer>
