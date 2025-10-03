@@ -104,22 +104,27 @@ Unifying these threads is a simple measure of success: how well other people cre
         <h2 id="image-drop-points">Image drop points (optional)</h2>
         <p>Supply press-friendly imagery at these paths and the site will surface them automatically. No upload? The status stays in “Not yet added” mode.</p>
         <p class="asset-note" role="note">Status badges update after a quick HEAD request—no heavy downloads, just enough to confirm the files exist.</p>
-        <ul class="asset-status-list">
-          <li data-asset-status data-path="/img/press/headshot.jpg">
+        <p class="asset-placeholder" data-asset-placeholder hidden>Image set updating—email <a href="mailto:hello@bseverns.me">hello@bseverns.me</a> for assets.</p>
+        <ul class="asset-status-list" data-asset-list hidden>
+          <li data-asset-status data-path="/img/press/headshot.jpg" data-state="pending">
             <span class="asset-path">/img/press/headshot.jpg</span>
-            <span class="asset-status" aria-live="polite">Checking…</span>
+            <span class="asset-status" aria-live="polite" data-state="pending">🕘 Not yet added</span>
+            <span class="asset-drop" aria-hidden="true">Drop image here</span>
           </li>
-          <li data-asset-status data-path="/img/social/og-banner.jpg">
+          <li data-asset-status data-path="/img/social/og-banner.jpg" data-state="pending">
             <span class="asset-path">/img/social/og-banner.jpg</span>
-            <span class="asset-status" aria-live="polite">Checking…</span>
+            <span class="asset-status" aria-live="polite" data-state="pending">🕘 Not yet added</span>
+            <span class="asset-drop" aria-hidden="true">Drop image here</span>
           </li>
-          <li data-asset-status data-path="/img/studio/studio-1.jpg">
+          <li data-asset-status data-path="/img/studio/studio-1.jpg" data-state="pending">
             <span class="asset-path">/img/studio/studio-1.jpg</span>
-            <span class="asset-status" aria-live="polite">Checking…</span>
+            <span class="asset-status" aria-live="polite" data-state="pending">🕘 Not yet added</span>
+            <span class="asset-drop" aria-hidden="true">Drop image here</span>
           </li>
-          <li data-asset-status data-path="/img/install/install-1.jpg">
+          <li data-asset-status data-path="/img/install/install-1.jpg" data-state="pending">
             <span class="asset-path">/img/install/install-1.jpg</span>
-            <span class="asset-status" aria-live="polite">Checking…</span>
+            <span class="asset-status" aria-live="polite" data-state="pending">🕘 Not yet added</span>
+            <span class="asset-drop" aria-hidden="true">Drop image here</span>
           </li>
         </ul>
         <div class="asset-preview" data-src="/img/press/headshot.jpg" data-alt="Portrait of Ben Severns"></div>

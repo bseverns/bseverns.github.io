@@ -6,6 +6,7 @@ seo_description: "Unlisted sampler of practice-based work in critical digital st
 sitemap: false
 noindex: true
 updated: "2025-09-14"
+archived: true
 ---
 <link rel="stylesheet" href="{{ '/assets/css/cds-sampler.css' | relative_url }}">
 <link rel="stylesheet" href="{{ '/assets/css/print-cds.css' | relative_url }}">

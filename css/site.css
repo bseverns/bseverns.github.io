@@ -678,6 +678,7 @@ article.teaching li {
   border: 1px dashed var(--border);
   border-radius: 0.45rem;
   padding: 0.75rem 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .asset-path {
@@ -695,12 +696,48 @@ article.teaching li {
   font-size: 0.95rem;
 }
 
+.asset-placeholder {
+  margin: 0.5rem 0 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.asset-placeholder a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .asset-status[data-state="present"] {
   color: #0b8f3c;
 }
 
 .asset-status[data-state="missing"] {
   color: var(--muted);
+}
+
+.asset-status-list li[data-state="present"] {
+  border-color: rgba(11, 143, 60, 0.5);
+  background: rgba(11, 143, 60, 0.05);
+}
+
+.asset-drop {
+  display: none;
+  flex-basis: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px dashed var(--border);
+  border-radius: 0.4rem;
+  padding: 0.35rem 0.5rem;
+  background: var(--surface-muted);
+  pointer-events: none;
+  user-select: none;
+}
+
+.asset-status-list li[data-state="missing"] .asset-drop {
+  display: block;
 }
 
 .site-footer {
@@ -749,6 +786,7 @@ article.teaching li {
   padding: 0.6rem 1rem;
   text-align: center;
   font-weight: 600;
+  margin-bottom: clamp(18px, 4vw, 32px);
 }
 
 .archive-banner a {
@@ -843,6 +881,18 @@ article.teaching li {
 
 .hero[data-banner="canvas"] .hero-visual::before {
   display: none;
+}
+
+.hero[data-banner="canvas"] .hero-visual {
+  background: radial-gradient(140% 140% at 0% 30%, rgba(125, 211, 252, 0.55) 0%, rgba(37, 99, 235, 0.35) 45%, rgba(236, 72, 153, 0.25) 100%),
+    linear-gradient(125deg, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.65) 50%, rgba(15, 23, 42, 0.9) 100%);
+}
+
+.hero[data-banner="canvas"] .hero-visual canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes drift {

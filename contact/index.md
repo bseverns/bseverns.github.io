@@ -2,6 +2,7 @@
 layout: default
 title: "Contact"
 seo_description: "Reach out to Ben Severns"
+archived: true
 ---
 # Contact
 
