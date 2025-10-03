@@ -2,7 +2,7 @@
 title: "Critical Making — Day One"
 level: "Grad/Undergrad"
 delivery: "Workshop"
-hero: /assets/images/cds/criticalMaaking.jpg
+hero: /assets/images/cds/criticalMaking.jpg
 hero_alt: "Workshop table covered in sensors and breadboards while a projection-mapped consent workflow glows overhead"
 summary: "Day-one sprint where theory, consent practice, and solder fumes share the same table."
 why: "Kick off with a tangle of theory and solder smoke."
