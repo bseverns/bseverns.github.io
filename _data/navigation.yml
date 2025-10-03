@@ -1,12 +1,8 @@
-- title: Home
-  url: /index.html
-- title: Studio Portfolio
+- title: Studio
   url: /art.html
-- title: Academic Portfolio
-  url: https://bseverns.github.io/courses.html
-- title: Research
-  url: /research/
-- title: About / CV
-  url: /about/
+- title: Teaching
+  url: /courses.html
+- title: Press kit
+  url: /press-kit.html
 - title: Contact
   url: /contact.html
