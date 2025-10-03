@@ -1,3 +1,9 @@
+---
+title: "Documentation, Ethics & Meta-Research"
+layout: default
+permalink: /research/Documentation_Ethics_Me/
+---
+
 <!-- Filename: 6_Documentation_Ethics_MetaResearch.md -->
 # 6) Documentation, Ethics & Meta-Research
 

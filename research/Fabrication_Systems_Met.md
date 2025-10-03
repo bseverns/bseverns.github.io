@@ -1,3 +1,9 @@
+---
+title: "Fabrication & Systems as Artistic Method"
+layout: default
+permalink: /research/Fabrication_Systems_Met/
+---
+
 <!-- Filename: 7_Fabrication_Systems_Method.md -->
 # 7) Fabrication & Systems as Artistic Method
 

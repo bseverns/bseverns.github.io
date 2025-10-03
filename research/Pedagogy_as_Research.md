@@ -1,3 +1,9 @@
+---
+title: "Pedagogy-as-Research (Courses as Methods)"
+layout: default
+permalink: /research/Pedagogy_as_Research/
+---
+
 <!-- Filename: 5_Pedagogy_as_Research.md -->
 # 5) Pedagogy-as-Research (Courses as Methods)
 
