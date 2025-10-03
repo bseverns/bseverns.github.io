@@ -2,6 +2,7 @@
 layout: default
 title: "Academic Portfolio"
 seo_description: "Teaching portfolio and course briefs"
+permalink: /teaching/
 ---
 # Academic Portfolio
 <p>Syllabi and assorted classroom experiments are simmering here. Check back while the dust settles.</p>

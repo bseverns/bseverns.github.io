@@ -31,6 +31,7 @@ This repo now runs like a stripped-down landing pad for Ben Severns: three pilla
 - Drop files at the listed paths (`/img/press/headshot.jpg`, `/img/social/og-banner.jpg`, etc.) and refresh—JS will surface them.
 - If a path stays empty, the placeholder announces itself via `aria-label="… (placeholder)"` so screen readers know what’s happening.
 - Want different art on a card? Update the `data-src` and `data-alt` attributes and the script does the rest.
+- The loader now waits for actual image load events (instead of fragile `HEAD` checks), so you’ll either see the image, the documented fallback, or a loud placeholder—no more silent failures.
 
 ## Archiving the old site (optional but handy)
 Legacy HTML still lives throughout this repo. To tack on the new archive banner + canonical link automatically:
