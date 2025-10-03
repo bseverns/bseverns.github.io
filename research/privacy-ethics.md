@@ -166,7 +166,7 @@ Each project includes a `PRIVACY-ADDENDUM.md` with:
 ---
 
 ## 13. Contact
-- **Primary:** severns3@gmail.com
+- **Primary:** <a href="mailto:severns3@gmail.com">severns3@gmail.com</a>
 - **Security/Erasure Requests:** same for the time being
 
 ---
