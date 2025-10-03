@@ -2,6 +2,7 @@
 layout: default
 title: "About / CV"
 seo_description: "Bio, CV, and contact"
+permalink: /about/
 ---
 # About
 

@@ -27,17 +27,85 @@
     });
   }
 
-  async function requestHead(src) {
+  async function requestResource(path) {
     if (typeof fetch !== 'function') {
       return false;
     }
 
     try {
-      const response = await fetch(src, { method: 'HEAD' });
-      return response.ok;
+      const headResponse = await fetch(path, { method: 'HEAD' });
+      if (headResponse.ok) {
+        return true;
+      }
+
+      if (headResponse.status && headResponse.status !== 405 && headResponse.status !== 403) {
+        return false;
+      }
+    } catch (error) {
+      // Intentionally fall back to a GET check below.
+    }
+
+    try {
+      const getResponse = await fetch(path, { method: 'GET', cache: 'no-store' });
+      if (getResponse.ok) {
+        if (getResponse.body && typeof getResponse.body.cancel === 'function') {
+          getResponse.body.cancel();
+        }
+        return true;
+      }
     } catch (error) {
       return false;
     }
+
+    return false;
+  }
+
+  function createImageElement(options) {
+    const { alt, className, width, height } = options || {};
+    const img = document.createElement('img');
+    img.alt = alt || 'Image';
+    img.decoding = 'async';
+    img.loading = 'lazy';
+    if (className) {
+      img.className = className;
+    }
+    if (typeof width === 'number') {
+      img.width = width;
+    }
+    if (typeof height === 'number') {
+      img.height = height;
+    }
+    return img;
+  }
+
+  function loadImageElement(img, src) {
+    return new Promise(function (resolve) {
+      if (!img) {
+        resolve(false);
+        return;
+      }
+
+      const handleLoad = function () {
+        cleanup();
+        resolve(true);
+      };
+
+      const handleError = function () {
+        cleanup();
+        resolve(false);
+      };
+
+      function cleanup() {
+        img.removeEventListener('load', handleLoad);
+        img.removeEventListener('error', handleError);
+      }
+
+      img.addEventListener('load', handleLoad, { once: true });
+      img.addEventListener('error', handleError, { once: true });
+      if (src) {
+        img.src = src;
+      }
+    });
   }
 
   async function conditionallyRenderImage(options) {
@@ -49,54 +117,36 @@
     if (mount.dataset.rendered === 'true') {
       return;
     }
-
     mount.innerHTML = '';
     const friendlyAlt = alt || 'Image';
-    const ok = await requestHead(src);
 
-    if (ok) {
-      const img = document.createElement('img');
-      img.src = src;
-      img.alt = friendlyAlt;
-      img.decoding = 'async';
-      img.loading = 'lazy';
-      if (className) {
-        img.className = className;
-      }
-      if (typeof width === 'number') {
-        img.width = width;
-      }
-      if (typeof height === 'number') {
-        img.height = height;
-      }
-      mount.appendChild(img);
+    const candidate = createImageElement({ alt: friendlyAlt, className, width, height });
+    const imageLoaded = await loadImageElement(candidate, src);
+
+    if (imageLoaded) {
+      mount.appendChild(candidate);
+      mount.dataset.rendered = 'true';
+      return;
+    }
+
+    const fallback = createImageElement({
+      alt: friendlyAlt + ' (fallback documentation image)',
+      className,
+      width,
+      height
+    });
+
+    const fallbackLoaded = await loadImageElement(fallback, FALLBACK_IMAGE);
+
+    if (fallbackLoaded) {
+      mount.appendChild(fallback);
     } else {
-      const fallbackOk = await requestHead(FALLBACK_IMAGE);
-
-      if (fallbackOk) {
-        const fallbackImg = document.createElement('img');
-        fallbackImg.src = FALLBACK_IMAGE;
-        fallbackImg.alt = friendlyAlt + ' (fallback documentation image)';
-        fallbackImg.decoding = 'async';
-        fallbackImg.loading = 'lazy';
-        if (className) {
-          fallbackImg.className = className;
-        }
-        if (typeof width === 'number') {
-          fallbackImg.width = width;
-        }
-        if (typeof height === 'number') {
-          fallbackImg.height = height;
-        }
-        mount.appendChild(fallbackImg);
-      } else {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'ph';
-        placeholder.setAttribute('role', 'img');
-        placeholder.setAttribute('aria-label', friendlyAlt + ' (placeholder)');
-        placeholder.textContent = 'Image placeholder';
-        mount.appendChild(placeholder);
-      }
+      const placeholder = document.createElement('div');
+      placeholder.className = 'ph';
+      placeholder.setAttribute('role', 'img');
+      placeholder.setAttribute('aria-label', friendlyAlt + ' (placeholder)');
+      placeholder.textContent = 'Image placeholder';
+      mount.appendChild(placeholder);
     }
 
     mount.dataset.rendered = 'true';
@@ -109,7 +159,7 @@
 
     const status = el.querySelector('.asset-status');
     const existingPath = el.querySelector('.asset-path');
-    const ok = await requestHead(path);
+    const ok = await requestResource(path);
 
     if (ok) {
       if (existingPath) {
