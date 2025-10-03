@@ -9,6 +9,8 @@
 <meta property="og:image" content="{{ page.og_image | default: '/assets/og-default.png' | relative_url }}">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="{{ '/css/site.css' | relative_url }}">
+<script defer src="{{ '/js/site.js' | relative_url }}"></script>
+
 {% if page.noindex %}
 <meta name="robots" content="noindex, noarchive, noimageindex">
 {% endif %}

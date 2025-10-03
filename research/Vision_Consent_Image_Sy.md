@@ -1,3 +1,9 @@
+---
+title: "Vision, Consent & Image Systems"
+layout: default
+permalink: /research/Vision_Consent_Image_Sy/
+---
+
 <!-- Filename: 2_Vision_Consent_Image_Systems.md -->
 # 2) Vision, Consent & Image Systems
 

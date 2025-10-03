@@ -321,6 +321,19 @@ a:focus-visible {
   border-radius: 0.85rem;
   background: var(--surface);
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.legacy-list h4 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.legacy-lede {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 .legacy-list a {
   font-weight: 700;
@@ -337,6 +350,27 @@ a:focus-visible {
   color: var(--muted);
   font-size: 0.95rem;
   line-height: 1.4;
+}
+.legacy-sublist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+.legacy-sublist li {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.legacy-sublist a {
+  font-weight: 600;
+}
+.legacy-sublist span {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
 }
 
 .news-list {
