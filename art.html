@@ -1,102 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Studio projects · Ben Severns</title>
-  <meta name="description" content="Studio projects from Ben Severns: consent-forward installations, instruments, and performance systems.">
-  <link rel="canonical" href="https://bseverns.github.io/art.html">
-  <link rel="stylesheet" href="/css/site.css">
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="Studio projects · Ben Severns">
-  <meta property="og:description" content="Studio projects from Ben Severns: consent-forward installations, instruments, and performance systems.">
-  <meta property="og:url" content="https://bseverns.github.io/art.html">
-  <meta property="og:image" content="/img/social/og-banner.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Studio projects · Ben Severns">
-  <meta name="twitter:description" content="Studio projects from Ben Severns: consent-forward installations, instruments, and performance systems.">
-  <meta name="twitter:image" content="/img/social/og-banner.jpg">
-  <script defer src="/js/site.js"></script>
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"BreadcrumbList",
-    "itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://bseverns.github.io/"},
-      {"@type":"ListItem","position":2,"name":"Studio","item":"https://bseverns.github.io/art.html"}
-    ]
-  }
-  </script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to main content</a>
-  <header class="site-header" role="banner">
-    <div class="container header-inner">
-      <div class="brand">
-        <a href="/" class="brand-link" aria-label="Ben Severns home">Ben Severns</a>
-      </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          <li><a href="/art.html" aria-current="page">Studio</a></li>
-          <li><a href="/courses.html">Teaching</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-  <main id="main" class="site-main" tabindex="-1">
-    <div class="container page-intro">
-      <nav aria-label="Breadcrumb" class="breadcrumb">
-        <ol>
-          <li><a href="/">Home</a></li>
-          <li aria-current="page">Studio</li>
-        </ol>
-      </nav>
-      <h1>Studio projects</h1>
-      <p>Scenes, installations, and performances that foreground agency, documentation, and reproducibility.</p>
-    </div>
-
-    <div class="container card-grid">
-      <article class="card">
-        <div class="card-visual" data-src="/img/portfolio/flat/ex1.jpg" data-alt="Synth modules and performance setup"></div>
-        <div class="card-body">
-          <h2>MOARkNOBS-42 live rig</h2>
-          <p>Modular instrument rig with latency ledgers and reproducible routing for collaborators.</p>
-          <a class="card-link" href="https://github.com/bseverns/MOARkNOBS-42">Read the build notes</a>
-        </div>
-      </article>
-      <article class="card">
-        <div class="card-visual" data-src="/img/portfolio/3d/truth.jpg" data-alt="Projection-mapped installation still"></div>
-        <div class="card-body">
-          <h2>Consent-forward sensing kiosk</h2>
-          <p>Interactive station that foregrounds opt-in telemetry, hushing surveillance vibes.</p>
-          <a class="card-link" href="https://github.com/bseverns/Human-Buffer">Tour the build + workshop kit</a>
-        </div>
-      </article>
-      <article class="card">
-        <div class="card-visual" data-src="/img/portfolio/3d/save.jpg" data-alt="Immersive light installation still"></div>
-        <div class="card-body">
-          <h2>Room-playing media suite</h2>
-          <p>Audio-responsive environment mapping space as collaborator rather than channel.</p>
-          <a class="card-link" href="https://github.com/bseverns/perceptual-drift">Dig into the installation field manual</a>
-        </div>
-      </article>
-    </div>
-    <!-- TODO: Update studio cards with final links and copy. -->
-  </main>
-  <footer class="site-footer" role="contentinfo">
-    <div class="container footer-inner">
-      <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
-    </div>
-  </footer>
-</body>
-</html>
+---
+layout: default
+title: "Studio Portfolio"
+seo_description: "Selected studio projects by Ben Severns"
+---
+<section class="page-intro">
+  <h1>Studio Portfolio</h1>
+  <p>Hover or tap a card to get the gist; click through for the full noise.</p>
+  <div class="cta">
+    <a class="btn secondary" href="/#archive-note-title">
+      Dig through the archive stacks ↗
+    </a>
+  </div>
+</section>
+<div class="cards">
+  {% assign items = site.projects | sort: "year" | reverse %}
+  {% for item in items %}
+    {% include card.html item=item %}
+  {% endfor %}
+</div>
