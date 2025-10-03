@@ -1,18 +1,70 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  {% include head.html %}
-  {% if page.noindex %}<meta name="robots" content="noindex,nofollow">{% endif %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% assign base_title = page.seo_title | default: page.title | default: site.title %}
+  {% assign og_image = page.og_image | default: '/img/social/og-banner.jpg' %}
+  <title>{{ base_title }} · {{ site.title }}</title>
+  <meta name="description" content="{{ page.seo_description | default: site.description }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <link rel="stylesheet" href="/css/site.css">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ base_title }} · {{ site.title }}">
+  <meta property="og:description" content="{{ page.seo_description | default: site.description }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:image" content="{{ og_image | absolute_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ base_title }} · {{ site.title }}">
+  <meta name="twitter:description" content="{{ page.seo_description | default: site.description }}">
+  <meta name="twitter:image" content="{{ og_image | absolute_url }}">
+  <script defer src="/js/site.js"></script>
+  {% if page.noindex %}
+  <meta name="robots" content="noindex,noarchive,noimageindex,nofollow">
+  {% endif %}
 </head>
 <body>
-<header class="site-head">
-  <nav>
-    {% for link in site.data.navigation %}
-      <a href="{{ link.url | relative_url }}">{{ link.title }}</a>
-    {% endfor %}
-  </nav>
-</header>
-<main id="content">{{ content }}</main>
-{% include footer.html %}
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="/" class="brand-link" aria-label="Ben Severns home">Ben Severns</a>
+      </div>
+      <nav aria-label="Primary" class="primary-nav">
+        <ul>
+          {% for link in site.data.navigation %}
+            {% assign nav_href = link.url | relative_url %}
+            {% assign nav_dir = nav_href | replace: '.html', '/' %}
+            {% assign nav_index = nav_href | replace: '.html', '/index.html' %}
+            {% if page.url == nav_href or page.url == nav_dir or page.url == nav_index %}
+              <li><a href="{{ nav_href }}" aria-current="page">{{ link.title }}</a></li>
+            {% else %}
+              <li><a href="{{ nav_href }}">{{ link.title }}</a></li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="site-main" tabindex="-1">
+    <div class="container">
+      <div class="content-area">
+        {{ content }}
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
+      <nav aria-label="Footer">
+        <ul>
+          <li><a href="/press-kit.html">Press kit</a></li>
+          <li><a href="/contact.html">Contact</a></li>
+          <li><a href="/sitemap.xml">Sitemap</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
 </body>
 </html>
