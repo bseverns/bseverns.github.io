@@ -187,13 +187,13 @@
     return false;
   }
 
-  function mountHeroImage() {
+  function mountHeroImage(force) {
     const hero = document.querySelector('.hero-visual[data-hero="true"]');
     if (!hero) {
       return;
     }
     const heroSection = hero.closest('.hero');
-    if (heroSection && heroSection.getAttribute('data-banner') === 'canvas') {
+    if (heroSection && heroSection.getAttribute('data-banner') === 'canvas' && !force) {
       return;
     }
     const src = hero.getAttribute('data-src') || OG_IMAGE;
@@ -240,6 +240,8 @@
     }
   }
 
+  let heroSketchController = null;
+
   function activateHeroBanner() {
     const hero = document.querySelector('.hero');
     if (!hero) {
@@ -252,187 +254,213 @@
     }
 
     const mount = hero.querySelector('.hero-visual');
-    if (!mount || mount.querySelector('canvas')) {
+    if (!mount) {
       return;
     }
 
-    const canvas = document.createElement('canvas');
-    canvas.id = 'flow';
-    canvas.setAttribute('aria-hidden', 'true');
-    canvas.style.width = '100%';
-    canvas.style.height = '100%';
-    canvas.style.display = 'block';
-    canvas.style.borderRadius = 'inherit';
-    mount.appendChild(canvas);
-    flowField(canvas);
+    if (heroSketchController || mount.dataset.sketchMounted === 'true') {
+      return;
+    }
+
+    if (typeof window.p5 !== 'function') {
+      mountHeroImage(true);
+      return;
+    }
+
+    const controller = createFlowFieldHero({ mount });
+    if (controller) {
+      heroSketchController = controller;
+      mount.dataset.sketchMounted = 'true';
+    } else {
+      mountHeroImage(true);
+    }
   }
 
-  function flowField(canvas) {
-    const ctx = canvas.getContext('2d');
-    if (!ctx) {
-      return;
+  function createFlowFieldHero(options) {
+    const mount = options && options.mount;
+    if (!mount || typeof window.p5 !== 'function') {
+      return null;
     }
 
-    const DPR = Math.max(1, window.devicePixelRatio || 1);
     const rootStyles = window.getComputedStyle ? getComputedStyle(document.documentElement) : null;
     const brandColor = rootStyles ? (rootStyles.getPropertyValue('--brand') || '#2563eb').trim() : '#2563eb';
     const accentColor = rootStyles ? (rootStyles.getPropertyValue('--accent') || '#1e66f5').trim() : '#1e66f5';
     const surfaceColor = rootStyles ? (rootStyles.getPropertyValue('--surface-muted') || rootStyles.getPropertyValue('--surface') || '#0f172a').trim() : '#0f172a';
     const focusColor = rootStyles ? (rootStyles.getPropertyValue('--accent-contrast') || '#f8fafc').trim() : '#f8fafc';
+    const palette = [focusColor || '#f8fafc', brandColor || '#2563eb', accentColor || '#1e66f5', '#f472b6'];
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const layerCount = 16;
-    const segments = 360;
-    const step = (Math.PI * 2) / segments;
-    const palette = [focusColor, brandColor, accentColor, '#f472b6'];
-    let width = 0;
-    let height = 0;
-    let baseScale = 0;
-    let frame = 0;
-    let clock = 0;
-    let lastTimestamp = 0;
+    const controller = { instance: null };
 
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
+    mount.innerHTML = '';
 
-    function resize() {
-      width = canvas.clientWidth || (canvas.parentElement ? canvas.parentElement.clientWidth : 0) || 0;
-      height = canvas.clientHeight || (canvas.parentElement ? canvas.parentElement.clientHeight : 0) || 0;
-      canvas.width = Math.max(1, Math.floor(width * DPR));
-      canvas.height = Math.max(1, Math.floor(height * DPR));
-      width = width || canvas.width / DPR;
-      height = height || canvas.height / DPR;
-      baseScale = Math.min(width, height) * 0.42;
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      paintBackground();
-    }
+    const sketch = function (p) {
+      const layerCount = 18;
+      const segments = 320;
+      const step = (Math.PI * 2) / segments;
+      let animate = !motionQuery.matches;
+      let width = 0;
+      let height = 0;
+      let time = 0;
 
-    function paintBackground() {
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = surfaceColor || '#0f172a';
-      ctx.fillRect(0, 0, width, height);
-      const gradient = ctx.createLinearGradient(0, 0, width, height);
-      gradient.addColorStop(0, brandColor || '#2563eb');
-      gradient.addColorStop(0.5, accentColor || '#1e66f5');
-      gradient.addColorStop(1, '#f472b6');
-      ctx.globalAlpha = 0.45;
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, height);
-      ctx.globalAlpha = 1;
-    }
-
-    function superformulaRadius(phi, m, n1, n2, n3) {
-      const a = 1;
-      const b = 1;
-      let t1 = Math.cos((m * phi) / 4) / a;
-      let t2 = Math.sin((m * phi) / 4) / b;
-      t1 = Math.pow(Math.abs(t1), n2);
-      t2 = Math.pow(Math.abs(t2), n3);
-      const sum = Math.pow(t1 + t2, 1 / n1);
-      if (!isFinite(sum) || sum === 0) {
-        return 0;
-      }
-      return 1 / sum;
-    }
-
-    // Adapted from the Visualize_Superformula Processing sketch in the dataVis repo:
-    // https://github.com/bseverns/dataVis/blob/main/Visualize_Superformula/Visualize_Superformula.pde
-    function renderFrame(elapsed, staticMode) {
-      if (!width || !height) {
-        return;
-      }
-
-      if (!staticMode) {
-        ctx.globalAlpha = 0.14;
-        ctx.fillStyle = 'rgba(5, 8, 20, 0.9)';
-        ctx.fillRect(0, 0, width, height);
-        ctx.globalAlpha = 1;
-      }
-
-      ctx.save();
-      ctx.translate(width / 2, height / 2);
-      const baseRotation = Math.sin(elapsed * 0.18) * 0.25;
-      let scale = baseScale;
-
-      for (let layer = 0; layer < layerCount; layer += 1) {
-        const layerRatio = layer / Math.max(1, layerCount - 1);
-        const mm = 2 + layer * 0.35 + Math.sin(elapsed * 0.58 + layer * 0.4) * 0.9;
-        const nn1 = 18 + layer * 0.28 + Math.sin(elapsed * 0.42 + layer * 0.25) * 2.2;
-        const nn2 = 1.2 + Math.cos(elapsed * 0.36 - layer * 0.18) * 0.6;
-        const nn3 = 1.2 + Math.sin(elapsed * 0.33 + layer * 0.22) * 0.6;
-        const rotation = baseRotation + layerRatio * 0.85;
-        const color = palette[layer % palette.length];
-
-        ctx.save();
-        ctx.rotate(rotation);
-        ctx.beginPath();
-        for (let i = 0; i <= segments; i += 1) {
-          const phi = step * i;
-          const r = superformulaRadius(phi, mm, nn1, nn2, nn3);
-          const x = r * Math.cos(phi) * scale;
-          const y = r * Math.sin(phi) * scale;
-          if (i === 0) {
-            ctx.moveTo(x, y);
-          } else {
-            ctx.lineTo(x, y);
-          }
+      function superformulaRadius(phi, m, n1, n2, n3) {
+        const a = 1;
+        const b = 1;
+        let t1 = Math.cos((m * phi) / 4) / a;
+        let t2 = Math.sin((m * phi) / 4) / b;
+        t1 = Math.pow(Math.abs(t1), n2);
+        t2 = Math.pow(Math.abs(t2), n3);
+        const sum = Math.pow(t1 + t2, 1 / Math.max(0.0001, n1));
+        if (!isFinite(sum) || sum === 0) {
+          return 0;
         }
-        ctx.closePath();
-        ctx.globalAlpha = 0.85 - layerRatio * 0.6;
-        ctx.strokeStyle = color;
-        ctx.lineWidth = 1.1 + (1 - layerRatio) * 1.8;
-        ctx.stroke();
+        return 1 / sum;
+      }
+
+      function fadeBackground(alpha) {
+        const backgroundColor = p.color(surfaceColor || '#0f172a');
+        backgroundColor.setAlpha(alpha);
+        p.push();
+        p.noStroke();
+        p.fill(backgroundColor);
+        p.rect(0, 0, width, height);
+        p.pop();
+      }
+
+      function tintGradient(opacity) {
+        const ctx = p.drawingContext;
+        if (!ctx) {
+          return;
+        }
+        ctx.save();
+        ctx.globalAlpha = opacity;
+        const gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, brandColor || '#2563eb');
+        gradient.addColorStop(0.5, accentColor || '#1e66f5');
+        gradient.addColorStop(1, '#f472b6');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
         ctx.restore();
-
-        scale *= 0.9;
       }
 
-      ctx.restore();
-      ctx.globalAlpha = 1;
-    }
+      function drawLayers(currentTime) {
+        const baseScale = Math.min(width, height) * 0.42;
+        const baseRotation = Math.sin(currentTime * 0.18) * 0.25;
+        let scale = baseScale;
+        p.push();
+        p.translate(width / 2, height / 2);
+        p.noFill();
+        p.strokeJoin(p.ROUND);
+        p.strokeCap(p.ROUND);
 
-    function draw(timestamp) {
-      const seconds = (timestamp || 0) / 1000;
-      if (!lastTimestamp) {
-        lastTimestamp = seconds;
+        for (let layer = 0; layer < layerCount; layer += 1) {
+          const layerRatio = layer / Math.max(1, layerCount - 1);
+          const mm = 2 + layer * 0.35 + Math.sin(currentTime * 0.58 + layer * 0.4) * 0.9;
+          const nn1 = 18 + layer * 0.28 + Math.sin(currentTime * 0.42 + layer * 0.25) * 2.2;
+          const nn2 = 1.2 + Math.cos(currentTime * 0.36 - layer * 0.18) * 0.6;
+          const nn3 = 1.2 + Math.sin(currentTime * 0.33 + layer * 0.22) * 0.6;
+          const rotation = baseRotation + layerRatio * 0.85;
+          const strokeColor = p.color(palette[layer % palette.length] || '#ffffff');
+          const opacity = 0.85 - layerRatio * 0.6;
+          strokeColor.setAlpha(Math.max(0, Math.min(1, opacity)) * 255);
+          p.push();
+          p.rotate(rotation);
+          p.stroke(strokeColor);
+          p.strokeWeight(1.1 + (1 - layerRatio) * 1.8);
+          p.beginShape();
+          for (let i = 0; i <= segments; i += 1) {
+            const phi = step * i;
+            const r = superformulaRadius(phi, mm, nn1, nn2, nn3);
+            const x = r * Math.cos(phi) * scale;
+            const y = r * Math.sin(phi) * scale;
+            p.vertex(x, y);
+          }
+          p.endShape(p.CLOSE);
+          p.pop();
+          scale *= 0.9;
+        }
+
+        p.pop();
       }
-      const delta = Math.min(0.05, Math.max(0, seconds - lastTimestamp));
-      lastTimestamp = seconds;
-      clock += delta;
-      renderFrame(clock, false);
-      frame = requestAnimationFrame(draw);
-    }
 
-    function start() {
-      cancelAnimationFrame(frame);
-      clock = 0;
-      lastTimestamp = 0;
-      if (!width || !height) {
-        resize();
+      function resizeCanvasToMount() {
+        const nextWidth = Math.max(1, mount.clientWidth || (mount.parentElement ? mount.parentElement.clientWidth : 0) || p.width || 1);
+        const nextHeight = Math.max(1, mount.clientHeight || (mount.parentElement ? mount.parentElement.clientHeight : 0) || p.height || 1);
+        if (nextWidth !== width || nextHeight !== height) {
+          width = nextWidth;
+          height = nextHeight;
+          p.resizeCanvas(width, height, false);
+        }
       }
-      if (motionQuery.matches) {
-        paintBackground();
-        renderFrame(0, true);
-        return;
+
+      function renderStaticFrame() {
+        fadeBackground(255);
+        tintGradient(0.55);
+        drawLayers(time);
       }
-      paintBackground();
-      renderFrame(0, false);
-      frame = requestAnimationFrame(draw);
-    }
 
-    resize();
-    start();
+      p.setup = function () {
+        width = Math.max(1, mount.clientWidth || 0);
+        height = Math.max(1, mount.clientHeight || 0);
+        controller.canvas = p.createCanvas(width || 1, height || 1);
+        p.pixelDensity(Math.max(1, window.devicePixelRatio || 1));
+        p.frameRate(60);
+        fadeBackground(255);
+        tintGradient(0.55);
+        drawLayers(time);
+        if (!animate) {
+          p.noLoop();
+        }
+      };
 
-    const handleResize = function () {
-      resize();
-      start();
+      p.draw = function () {
+        if (!animate) {
+          return;
+        }
+        resizeCanvasToMount();
+        const deltaSeconds = Math.min(0.05, Math.max(0.016, (p.deltaTime || 16) / 1000));
+        time += deltaSeconds;
+        fadeBackground(34);
+        tintGradient(0.38);
+        drawLayers(time);
+      };
+
+      p.windowResized = function () {
+        resizeCanvasToMount();
+        renderStaticFrame();
+      };
+
+      controller.updateMotionPreference = function (shouldAnimate) {
+        animate = shouldAnimate;
+        if (animate) {
+          time = 0;
+          fadeBackground(255);
+          tintGradient(0.55);
+          drawLayers(time);
+          p.loop();
+        } else {
+          renderStaticFrame();
+          p.noLoop();
+        }
+      };
+
+      controller.renderStaticFrame = renderStaticFrame;
     };
 
-    window.addEventListener('resize', handleResize, { passive: true });
+    controller.instance = new window.p5(sketch, mount);
+
+    const handleMotionChange = function (event) {
+      if (typeof controller.updateMotionPreference === 'function') {
+        controller.updateMotionPreference(!event.matches);
+      }
+    };
+
     if (typeof motionQuery.addEventListener === 'function') {
-      motionQuery.addEventListener('change', start);
+      motionQuery.addEventListener('change', handleMotionChange);
     } else if (typeof motionQuery.addListener === 'function') {
-      motionQuery.addListener(start);
+      motionQuery.addListener(handleMotionChange);
     }
+
+    return controller;
   }
 
   function attachPlayable() {
