@@ -1,7 +1,20 @@
 (function () {
+  /*
+   * Hey future weirdo (compliment): this file is the tiny brainstem for the site.
+   * It wires up progressive image loading, asset health badges, the audio easter egg,
+   * and the animated hero canvas. Every function documents both the "what" *and* the "why"
+   * so the file reads like a field guide / studio notebook mashup.
+   */
   const OG_IMAGE = '/img/social/og-banner.jpg';
   const FALLBACK_IMAGE = '/img/front/context.jpg';
+  // The hero sketch treats this multiplier as gospel when calculating oscillations.
+  // Keep it in one place so that "double the motion" or "dial it down" is a one-line change.
+  const HERO_MOTION_MULTIPLIER = 2;
 
+  /**
+   * Swap any `[data-current-year]` node content for the current year.
+   * Keeps the footer accurate without shipping heavy frameworks.
+   */
   function setCurrentYear() {
     const year = String(new Date().getFullYear());
     const nodes = document.querySelectorAll('[data-current-year], #yr');
@@ -10,6 +23,9 @@
     });
   }
 
+  /**
+   * Give the skip link a focusable target so keyboard users can jump into `<main>` immediately.
+   */
   function bindSkipLinkFocus() {
     const skipLink = document.querySelector('.skip-link');
     const main = document.getElementById('main');
@@ -27,6 +43,10 @@
     });
   }
 
+  /**
+   * Probe a resource URL with a `HEAD` request, falling back to `GET` when servers reject `HEAD`.
+   * Returns a boolean so UI code can render ✅ or 🕘 badges.
+   */
   async function requestResource(path) {
     if (typeof fetch !== 'function') {
       return false;
@@ -60,6 +80,9 @@
     return false;
   }
 
+  /**
+   * Build a lazily-decoding `<img>` with optional sizing hints and friendly defaults.
+   */
   function createImageElement(options) {
     const { alt, className, width, height } = options || {};
     const img = document.createElement('img');
@@ -78,6 +101,9 @@
     return img;
   }
 
+  /**
+   * Attach one-shot load/error handlers and resolve after the image succeeds or fails.
+   */
   function loadImageElement(img, src) {
     return new Promise(function (resolve) {
       if (!img) {
@@ -108,6 +134,9 @@
     });
   }
 
+  /**
+   * Replace a mount node's contents with a real `<img>` if the source loads, or a fallback otherwise.
+   */
   async function conditionallyRenderImage(options) {
     const { mount, src, alt, className, width, height } = options || {};
     if (!mount || !src) {
@@ -152,6 +181,9 @@
     mount.dataset.rendered = 'true';
   }
 
+  /**
+   * Decorate press-kit asset entries with their availability status.
+   */
   async function renderStatusBadge(el, path) {
     if (!el || !path) {
       return false;
@@ -187,6 +219,9 @@
     return false;
   }
 
+  /**
+   * Force a static hero `<img>` when the canvas animation is disabled or unsupported.
+   */
   function mountHeroImage(force) {
     const hero = document.querySelector('.hero-visual[data-hero="true"]');
     if (!hero) {
@@ -201,6 +236,9 @@
     conditionallyRenderImage({ mount: hero, src, alt, width: hero.clientWidth || undefined, height: hero.clientHeight || undefined });
   }
 
+  /**
+   * Hydrate every non-hero `[data-src]` element with its image (or fallback) once the DOM is ready.
+   */
   function mountOtherImages() {
     const mounts = document.querySelectorAll('[data-src]:not([data-hero="true"])');
     mounts.forEach(function (mount) {
@@ -210,6 +248,9 @@
     });
   }
 
+  /**
+   * Check every `[data-asset-status]` entry and toggle the UI scaffolding based on availability.
+   */
   async function hydrateAssetStatuses() {
     const list = document.querySelector('[data-asset-list]');
     const placeholder = document.querySelector('[data-asset-placeholder]');
@@ -240,8 +281,13 @@
     }
   }
 
+  // Cache the current hero sketch so we don't initialize multiple instances.
   let heroSketchController = null;
 
+  /**
+   * Spin up the hero canvas when `data-banner="canvas"` is present and p5 is loaded.
+   * If anything is missing we gracefully fall back to the static image.
+   */
   function activateHeroBanner() {
     const hero = document.querySelector('.hero');
     if (!hero) {
@@ -276,6 +322,9 @@
     }
   }
 
+  /**
+   * Build the hero flow-field sketch and return a controller for external toggles (motion prefs, etc.).
+   */
   function createFlowFieldHero(options) {
     const mount = options && options.mount;
     if (!mount || typeof window.p5 !== 'function') {
@@ -302,6 +351,9 @@
       let height = 0;
       let time = 0;
 
+      /**
+       * Evaluate the superformula with guard rails so NaN/Infinity never leak into the vertex positions.
+       */
       function superformulaRadius(phi, m, n1, n2, n3) {
         const a = 1;
         const b = 1;
@@ -316,6 +368,9 @@
         return 1 / sum;
       }
 
+      /**
+       * Wash the canvas with a translucent rectangle to create a motion trail between frames.
+       */
       function fadeBackground(alpha) {
         const backgroundColor = p.color(surfaceColor || '#0f172a');
         backgroundColor.setAlpha(alpha);
@@ -326,6 +381,9 @@
         p.pop();
       }
 
+      /**
+       * Paint a gradient overlay so the sketch inherits the site's brand colors.
+       */
       function tintGradient(opacity) {
         const ctx = p.drawingContext;
         if (!ctx) {
@@ -342,9 +400,13 @@
         ctx.restore();
       }
 
+      /**
+       * Iterate across layered superformula outlines and rotate them for motion.
+       * HERO_MOTION_MULTIPLIER flows through both rotation and shape modulation so the motion doubles cleanly.
+       */
       function drawLayers(currentTime) {
         const baseScale = Math.min(width, height) * 0.42;
-        const baseRotation = Math.sin(currentTime * 0.18) * 0.25;
+        const baseRotation = Math.sin(currentTime * 0.18) * 0.25 * HERO_MOTION_MULTIPLIER;
         let scale = baseScale;
         p.push();
         p.translate(width / 2, height / 2);
@@ -354,10 +416,10 @@
 
         for (let layer = 0; layer < layerCount; layer += 1) {
           const layerRatio = layer / Math.max(1, layerCount - 1);
-          const mm = 2 + layer * 0.35 + Math.sin(currentTime * 0.58 + layer * 0.4) * 0.9;
-          const nn1 = 18 + layer * 0.28 + Math.sin(currentTime * 0.42 + layer * 0.25) * 2.2;
-          const nn2 = 1.2 + Math.cos(currentTime * 0.36 - layer * 0.18) * 0.6;
-          const nn3 = 1.2 + Math.sin(currentTime * 0.33 + layer * 0.22) * 0.6;
+          const mm = 2 + layer * 0.35 + Math.sin(currentTime * 0.58 + layer * 0.4) * 0.9 * HERO_MOTION_MULTIPLIER;
+          const nn1 = 18 + layer * 0.28 + Math.sin(currentTime * 0.42 + layer * 0.25) * 2.2 * HERO_MOTION_MULTIPLIER;
+          const nn2 = 1.2 + Math.cos(currentTime * 0.36 - layer * 0.18) * 0.6 * HERO_MOTION_MULTIPLIER;
+          const nn3 = 1.2 + Math.sin(currentTime * 0.33 + layer * 0.22) * 0.6 * HERO_MOTION_MULTIPLIER;
           const rotation = baseRotation + layerRatio * 0.85;
           const strokeColor = p.color(palette[layer % palette.length] || '#ffffff');
           const opacity = 0.85 - layerRatio * 0.6;
@@ -382,6 +444,9 @@
         p.pop();
       }
 
+      /**
+       * Resize the canvas when the layout changes so pixels stay sharp across breakpoints.
+       */
       function resizeCanvasToMount() {
         const nextWidth = Math.max(1, mount.clientWidth || (mount.parentElement ? mount.parentElement.clientWidth : 0) || p.width || 1);
         const nextHeight = Math.max(1, mount.clientHeight || (mount.parentElement ? mount.parentElement.clientHeight : 0) || p.height || 1);
@@ -392,12 +457,16 @@
         }
       }
 
+      /**
+       * Draw one fully opaque frame—a reset button for window resizes and reduced-motion mode.
+       */
       function renderStaticFrame() {
         fadeBackground(255);
         tintGradient(0.55);
         drawLayers(time);
       }
 
+      // p5 lifecycle hook: run once when the sketch boots.
       p.setup = function () {
         width = Math.max(1, mount.clientWidth || 0);
         height = Math.max(1, mount.clientHeight || 0);
@@ -412,6 +481,7 @@
         }
       };
 
+      // p5 lifecycle hook: runs each frame unless `noLoop()` is active.
       p.draw = function () {
         if (!animate) {
           return;
@@ -429,6 +499,7 @@
         renderStaticFrame();
       };
 
+      // External toggle for reduced-motion listeners.
       controller.updateMotionPreference = function (shouldAnimate) {
         animate = shouldAnimate;
         if (animate) {
@@ -448,6 +519,7 @@
 
     controller.instance = new window.p5(sketch, mount);
 
+    // Respect `prefers-reduced-motion` toggles in real time.
     const handleMotionChange = function (event) {
       if (typeof controller.updateMotionPreference === 'function') {
         controller.updateMotionPreference(!event.matches);
@@ -463,6 +535,9 @@
     return controller;
   }
 
+  /**
+   * Wire up the "ping" button so it spits out a short randomized synth note.
+   */
   function attachPlayable() {
     const button = document.getElementById('ping');
     if (!button) {
@@ -507,6 +582,9 @@
     });
   }
 
+  /**
+   * Kick off the whole script once the DOM is ready.
+   */
   function init() {
     setCurrentYear();
     bindSkipLinkFocus();
@@ -517,10 +595,12 @@
     attachPlayable();
   }
 
+  // Expose helpers for older pages/tests that poke at these utilities manually.
   window.conditionallyRenderImage = conditionallyRenderImage;
   window.renderStatusBadge = renderStatusBadge;
   window.mountHeroImage = mountHeroImage;
 
+  // Old-school DOM ready check so we fire once regardless of script location.
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
