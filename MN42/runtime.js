@@ -185,18 +185,19 @@ function createSimulator() {
   let index = 0;
   const lines = [];
   let resolver;
-  const manifest = {
-    fw_version: 'sim-fw',
-    fw_git: 'deadbeef',
-    build_ts: new Date().toISOString(),
-    schema_version: '1.3.0',
-    slot_count: 42,
-    capabilities: { atomicApply: true },
-    max_table_lengths: { ledColors: 16, efSlots: 6 },
-    free: { ram: 48000, flash: 512000 }
-  };
-  const config = {
-    slots: Array.from({ length: manifest.slot_count }, (_, idx) => ({
+    const slotCount = 42;
+    const manifest = {
+      fw_version: 'sim-fw',
+      fw_git: 'deadbeef',
+      build_ts: new Date().toISOString(),
+      schema_version: '1.3.0',
+      slot_count: slotCount,
+      capabilities: { atomicApply: true },
+      max_table_lengths: { ledColors: slotCount, efSlots: 6 },
+      free: { ram: 48000, flash: 512000 }
+    };
+    const config = {
+      slots: Array.from({ length: manifest.slot_count }, (_, idx) => ({
       id: idx,
       active: idx % 2 === 0,
       type: 'CC',
@@ -205,8 +206,8 @@ function createSimulator() {
       efIndex: idx % manifest.max_table_lengths.efSlots,
       pot: true
     })),
-    arg: { method: 'blend', enable: true, a: 1, b: 1 },
-    filter: { type: 0, freq: 800, q: 1 },
+    arg: { method: 'PLUS', enable: true, a: 1, b: 1 },
+    filter: { type: 'LINEAR', freq: 800, q: 1 },
     ledColors: Array.from({ length: manifest.max_table_lengths.ledColors }, () => ({ color: '#ff00ff' }))
   };
   const telemetry = () => ({
