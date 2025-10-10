@@ -533,11 +533,13 @@ window.addEventListener('DOMContentLoaded', () => {
     toggle.className = 'takeover';
     toggle.textContent = slot?.takeover ? 'Takeover' : 'Guarded';
     toggle.onclick = () => {
+      let nextTakeover = slot?.takeover ?? false;
       runtime.stage((draft) => {
         draft.slots[index].takeover = !draft.slots[index].takeover;
+        nextTakeover = draft.slots[index].takeover;
         return draft;
       });
-      runtime.setPotGuard([index], !slot?.takeover);
+      runtime.setPotGuard([index], !nextTakeover);
     };
     el.append(label, state, value, toggle);
     el.onclick = () => selectSlot(index);
