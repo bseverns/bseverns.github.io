@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_version": "1.3.0",
+  "title": "MOARkNOBS Runtime Configuration",
+  "type": "object",
+  "required": ["slots", "efSlots", "filter", "arg", "ledColors"],
+  "properties": {
+    "slots": {
+      "type": "array",
+      "title": "Slot Configuration",
+      "minItems": 42,
+      "maxItems": 42,
+      "items": {
+        "type": "object",
+        "required": ["type", "midiChannel", "data1", "efIndex", "active", "pot"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["OFF", "CC", "Note", "PitchBend", "ProgramChange", "Aftertouch", "ModWheel", "NRPN", "RPN", "SysEx"]
+          },
+          "midiChannel": { "type": "integer", "minimum": 1, "maximum": 16 },
+          "data1": { "type": "integer", "minimum": 0, "maximum": 127 },
+          "efIndex": { "type": "integer", "minimum": 0, "maximum": 5 },
+          "active": { "type": "boolean" },
+          "pot": { "type": "boolean" },
+          "label": { "type": "string" },
+          "takeover": { "type": "boolean" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "efSlots": {
+      "type": "array",
+      "title": "Envelope Assignments",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "required": ["slot"],
+        "properties": {
+          "slot": { "type": "integer", "minimum": 0, "maximum": 41 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "filter": {
+      "type": "object",
+      "required": ["type", "freq", "q"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["LINEAR", "OPPOSITE_LINEAR", "EXPONENTIAL", "RANDOM", "LOWPASS", "HIGHPASS", "BANDPASS"]
+        },
+        "freq": { "type": "integer", "minimum": 20, "maximum": 5000 },
+        "q": { "type": "number", "minimum": 0.5, "maximum": 4.0 }
+      },
+      "additionalProperties": false
+    },
+    "arg": {
+      "type": "object",
+      "required": ["method", "a", "b"],
+      "properties": {
+        "method": {
+          "type": "string",
+          "enum": ["PLUS", "MIN", "PECK", "SHAV", "SQAR", "BABS", "TABS", "MULT", "DIVI", "AVG", "XABS", "MAXX", "MINN", "XORR"]
+        },
+        "a": { "type": "number", "minimum": 0, "maximum": 5 },
+        "b": { "type": "number", "minimum": 0, "maximum": 5 },
+        "enable": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "led": {
+      "type": "object",
+      "required": ["brightness", "color"],
+      "properties": {
+        "brightness": { "type": "integer", "minimum": 0, "maximum": 255 },
+        "color": { "type": "string", "pattern": "^#([0-9a-fA-F]{6})$" }
+      },
+      "additionalProperties": false
+    },
+    "ledColors": {
+      "type": "array",
+      "title": "Per-LED Colors",
+      "minItems": 42,
+      "maxItems": 42,
+      "items": {
+        "type": "object",
+        "required": ["color"],
+        "properties": {
+          "color": { "type": "string", "pattern": "^#([0-9a-fA-F]{6})$" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "envelopeMode": {
+      "type": "string",
+      "enum": ["LINEAR", "EXPONENTIAL", "LOG"],
+      "default": "LINEAR"
+    }
+  },
+  "additionalProperties": false
+}
