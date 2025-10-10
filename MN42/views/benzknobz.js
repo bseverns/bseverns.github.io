@@ -10,6 +10,24 @@ const localManifest = {
   }
 };
 
+const ARG_METHODS = [
+  'PLUS',
+  'MIN',
+  'PECK',
+  'SHAV',
+  'SQAR',
+  'BABS',
+  'TABS',
+  'MULT',
+  'DIVI',
+  'AVG',
+  'XABS',
+  'MAXX',
+  'MINN',
+  'XORR'
+];
+const ARG_METHOD_DEFAULT = ARG_METHODS[0];
+
 const runtime = createRuntime({
   schemaUrl: './config_schema.json',
   localManifest
@@ -46,6 +64,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const filterTypeEl = document.getElementById('filter-type');
   const filterFreqEl = document.getElementById('filter-freq');
   const filterQEl = document.getElementById('filter-q');
+  const argMethodEl = document.getElementById('arg-method');
   const argEnableEl = document.getElementById('arg-enable');
   const argAEl = document.getElementById('arg-a');
   const argBEl = document.getElementById('arg-b');
@@ -141,6 +160,11 @@ window.addEventListener('DOMContentLoaded', () => {
   filterTypeEl?.addEventListener('change', () => stageFilter('type', filterTypeEl.value));
   filterFreqEl?.addEventListener('change', () => stageFilter('freq', Number(filterFreqEl.value)));
   filterQEl?.addEventListener('change', () => stageFilter('q', Number(filterQEl.value)));
+  argMethodEl?.addEventListener('change', () => {
+    const value = argMethodEl.value;
+    if (!ARG_METHODS.includes(value)) return;
+    stageArg('method', value);
+  });
   argEnableEl?.addEventListener('change', () => stageArg('enable', argEnableEl.value === 'true'));
   argAEl?.addEventListener('change', () => stageArg('a', Number(argAEl.value)));
   argBEl?.addEventListener('change', () => stageArg('b', Number(argBEl.value)));
@@ -430,6 +454,14 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function populateArg(staged) {
     if (!staged) return;
+    const method = staged.arg?.method;
+    const safeMethod = typeof method === 'string' && ARG_METHODS.includes(method) ? method : ARG_METHOD_DEFAULT;
+    if (argMethodEl) {
+      argMethodEl.value = safeMethod;
+      if (method !== safeMethod) {
+        stageArg('method', safeMethod);
+      }
+    }
     if (argEnableEl) argEnableEl.value = String(staged.arg?.enable ?? true);
     if (argAEl) argAEl.value = staged.arg?.a ?? 0;
     if (argBEl) argBEl.value = staged.arg?.b ?? 0;
