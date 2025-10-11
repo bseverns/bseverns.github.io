@@ -291,6 +291,7 @@ export function createRuntime({
   let seq = 0;
   let lastKnownChecksum = null;
   let potGuard = new Set();
+  let lastConflictDiff = null;
 
   const ajv = new Ajv({ strict: false, allErrors: true });
   addFormats(ajv);
@@ -407,6 +408,7 @@ export function createRuntime({
     liveConfig = clone(config);
     stagedConfig = clone(config);
     dirty = false;
+    lastConflictDiff = null;
     emit('schema', schema);
     emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
     scheduleTelemetry();
@@ -470,6 +472,9 @@ export function createRuntime({
     if (!next) return;
     stagedConfig = clone(next);
     dirty = JSON.stringify(stagedConfig) !== JSON.stringify(liveConfig);
+    if (dirty) {
+      lastConflictDiff = null;
+    }
     emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
   }
 
@@ -555,37 +560,55 @@ export function createRuntime({
       await rollback();
       throw new Error('Device failed to acknowledge apply');
     }
+    const ackChecksum = ack.checksum || ack.digest || null;
+    if (ackChecksum && checksum && ackChecksum !== checksum) {
+      const diffSnapshot = shallowDiff(liveConfig ?? {}, stagedConfig ?? {});
+      lastConflictDiff = diffSnapshot;
+      emit('apply-mismatch', {
+        expected: checksum,
+        received: ackChecksum,
+        conflicts: Array.isArray(ack.conflicts) && ack.conflicts.length ? ack.conflicts : diffSnapshot.map((entry) => entry.path),
+        diff: diffSnapshot
+      });
+      await rollback({ silent: true });
+      throw new Error('Device reported checksum mismatch');
+    }
     liveConfig = clone(stagedConfig);
     dirty = false;
     lastKnownChecksum = checksum;
+    lastConflictDiff = null;
     emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
     emit('applied', { checksum });
     return { applied: true, checksum };
   }
 
   async function waitForAck(checksum) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const timeout = setTimeout(() => {
         off();
-        resolve(false);
+        resolve(null);
       }, ACK_TIMEOUT_MS);
       const off = on('ack', (msg) => {
         if (!msg) return;
-        if (msg.checksum && checksum && msg.checksum !== checksum) {
+        if (msg.seq && seq && msg.seq !== seq) {
           return;
         }
         clearTimeout(timeout);
         off();
-        resolve(true);
+        resolve(msg);
       });
     });
   }
 
-  async function rollback() {
+  async function rollback(options = {}) {
+    const { silent = false } = options;
     stagedConfig = clone(liveConfig);
     dirty = false;
     emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
-    emit('rollback', {});
+    if (!silent) {
+      lastConflictDiff = null;
+      emit('rollback', {});
+    }
   }
 
   async function disconnect() {
@@ -600,6 +623,10 @@ export function createRuntime({
 
   function diff() {
     return shallowDiff(liveConfig ?? {}, stagedConfig ?? {});
+  }
+
+  function getConflictDiff() {
+    return lastConflictDiff ? clone(lastConflictDiff) : [];
   }
 
   function setPotGuard(indices, enabled) {
@@ -620,6 +647,7 @@ export function createRuntime({
     getState,
     on,
     setPotGuard,
+    getConflictDiff,
     createThrottle,
     requestPort,
     useSimulator(toggle) {

@@ -28,10 +28,96 @@ const ARG_METHODS = [
 ];
 const ARG_METHOD_DEFAULT = ARG_METHODS[0];
 
+const SLOT_TYPE_OPTIONS = [
+  'OFF',
+  'CC',
+  'Note',
+  'PitchBend',
+  'ProgramChange',
+  'Aftertouch',
+  'ModWheel',
+  'NRPN',
+  'RPN',
+  'SysEx'
+];
+
+const CONTROL_LABELS = {
+  'slot.type': 'MIDI Type',
+  'slot.midiChannel': 'MIDI Channel',
+  'slot.data1': 'Data (CC/Note)',
+  'slot.efIndex': 'Envelope Follow',
+  'slot.active': 'Active',
+  'slot.pot': 'Pot mapped',
+  'slot.takeover': 'Take control',
+  'ef.slot': 'Follower slot',
+  'filter.type': 'Filter Type',
+  'filter.freq': 'Filter Frequency',
+  'filter.q': 'Filter Resonance',
+  'arg.method': 'ARG Method',
+  'arg.enable': 'ARG Enable',
+  'arg.a': 'ARG A',
+  'arg.b': 'ARG B',
+  'led.color': 'LED Color'
+};
+
+const SLOT_CONTROLS = [
+  { id: 'slot.type', type: 'select', range: { options: SLOT_TYPE_OPTIONS }, target: 'slots.{index}.type' },
+  {
+    id: 'slot.midiChannel',
+    type: 'number',
+    range: { min: 1, max: 16, step: 1 },
+    target: 'slots.{index}.midiChannel'
+  },
+  { id: 'slot.data1', type: 'number', range: { min: 0, max: 127, step: 1 }, target: 'slots.{index}.data1' },
+  {
+    id: 'slot.efIndex',
+    type: 'number',
+    range: { min: 0, max: localManifest.max_table_lengths.efSlots - 1, step: 1 },
+    target: 'slots.{index}.efIndex'
+  },
+  { id: 'slot.active', type: 'toggle', range: {}, target: 'slots.{index}.active' },
+  { id: 'slot.pot', type: 'toggle', range: {}, target: 'slots.{index}.pot' }
+];
+
+const TAKEOVER_CONTROL = { id: 'slot.takeover', type: 'toggle', range: {}, target: 'slots.{index}.takeover' };
+
+const FILTER_CONTROLS = [
+  { id: 'filter.type', type: 'select', range: { options: ['LINEAR', 'OPPOSITE_LINEAR', 'EXPONENTIAL', 'RANDOM', 'LOWPASS', 'HIGHPASS', 'BANDPASS'] }, target: 'filter.type' },
+  { id: 'filter.freq', type: 'number', range: { min: 20, max: 5000, step: 1 }, target: 'filter.freq' },
+  { id: 'filter.q', type: 'number', range: { min: 0.5, max: 4, step: 0.01 }, target: 'filter.q' }
+];
+
+const ARG_CONTROLS = [
+  { id: 'arg.method', type: 'select', range: { options: ARG_METHODS }, target: 'arg.method' },
+  {
+    id: 'arg.enable',
+    type: 'select',
+    range: { options: [{ value: true, label: 'ON' }, { value: false, label: 'OFF' }] },
+    target: 'arg.enable'
+  },
+  { id: 'arg.a', type: 'number', range: { min: 0, max: 5, step: 0.01 }, target: 'arg.a' },
+  { id: 'arg.b', type: 'number', range: { min: 0, max: 5, step: 0.01 }, target: 'arg.b' }
+];
+
+const EF_CONTROL = {
+  id: 'ef.slot',
+  type: 'number',
+  range: { min: 0, max: localManifest.slot_count - 1, step: 1 },
+  target: 'efSlots.{index}.slot'
+};
+
 const runtime = createRuntime({
   schemaUrl: './config_schema.json',
   localManifest
 });
+
+const CONTROL_POST_COMMIT = {
+  'slot.takeover': (value, context) => {
+    if (typeof context.index === 'number') {
+      runtime.setPotGuard([context.index], !value);
+    }
+  }
+};
 
 const sharedResizeObserver =
   typeof ResizeObserver === 'function'
@@ -77,6 +163,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const slotDetailEnvelope = document.getElementById('slot-detail-envelope');
   const slotDetailArg = document.getElementById('slot-detail-arg');
   const slotDetailValue = document.getElementById('slot-detail-value');
+  const slotTakeoverPanel = document.getElementById('slot-takeover-control');
+  const slotTakeoverToggle = document.getElementById('slot-takeover-toggle');
   const deviceMonitor = document.getElementById('device-monitor');
   const logEl = document.getElementById('log');
   const migrationDialog = document.getElementById('migration-dialog');
@@ -92,6 +180,9 @@ window.addEventListener('DOMContentLoaded', () => {
     selected: 0,
     telemetry: null
   };
+
+  const controlBindings = new Map();
+  let conflictHighlights = [];
 
   const slotVirtualizer = new VirtualGrid(slotContainer, {
     columns: 6,
@@ -125,6 +216,7 @@ window.addEventListener('DOMContentLoaded', () => {
       await runtime.apply();
       setStatus('ok', 'Synced', 'Device acknowledged the staged edits.');
     } catch (err) {
+      if (err?.message === 'Device reported checksum mismatch') return;
       setStatus('err', 'Apply failed', err.message || String(err));
     }
   });
@@ -157,17 +249,13 @@ window.addEventListener('DOMContentLoaded', () => {
     selectSlot(Math.max(0, Math.min(slotState.slots.length - 1, next)));
   });
 
-  filterTypeEl?.addEventListener('change', () => stageFilter('type', filterTypeEl.value));
-  filterFreqEl?.addEventListener('change', () => stageFilter('freq', Number(filterFreqEl.value)));
-  filterQEl?.addEventListener('change', () => stageFilter('q', Number(filterQEl.value)));
-  argMethodEl?.addEventListener('change', () => {
-    const value = argMethodEl.value;
-    if (!ARG_METHODS.includes(value)) return;
-    stageArg('method', value);
-  });
-  argEnableEl?.addEventListener('change', () => stageArg('enable', argEnableEl.value === 'true'));
-  argAEl?.addEventListener('change', () => stageArg('a', Number(argAEl.value)));
-  argBEl?.addEventListener('change', () => stageArg('b', Number(argBEl.value)));
+  bindStaticControl(filterTypeEl, FILTER_CONTROLS[0]);
+  bindStaticControl(filterFreqEl, FILTER_CONTROLS[1]);
+  bindStaticControl(filterQEl, FILTER_CONTROLS[2]);
+  bindStaticControl(argMethodEl, ARG_CONTROLS[0]);
+  bindStaticControl(argEnableEl, ARG_CONTROLS[1]);
+  bindStaticControl(argAEl, ARG_CONTROLS[2]);
+  bindStaticControl(argBEl, ARG_CONTROLS[3]);
 
   exportPresetBtn?.addEventListener('click', () => {
     const { staged } = runtime.getState();
@@ -229,6 +317,9 @@ window.addEventListener('DOMContentLoaded', () => {
     slotVirtualizer.setData(slotState.slots);
     slotVirtualizer.highlight(slotState.selected);
     efVirtualizer.setData(slotState.efSlots);
+    if (dirty) {
+      conflictHighlights = [];
+    }
     updateDiff(dirty);
     markDirty(dirty);
     populateDetail();
@@ -250,9 +341,16 @@ window.addEventListener('DOMContentLoaded', () => {
     diffOutput.textContent = `Schema violations:\n${errors.map((e) => `• ${e.instancePath || '/'} ${e.message}`).join('\n')}`;
   });
   runtime.on('applied', ({ checksum }) => {
+    conflictHighlights = [];
+    highlightConflicts([]);
     diffPanel?.setAttribute('hidden', '');
     diffOutput.textContent = '';
     setStatus('ok', 'Device synced', `Checksum ${checksum.slice(0, 8)}…`);
+  });
+  runtime.on('apply-mismatch', ({ expected, received, conflicts }) => {
+    conflictHighlights = Array.isArray(conflicts) ? conflicts : [];
+    const proof = typeof received === 'string' ? received.slice(0, 8) : '????';
+    setStatus('err', 'Checksum mismatch', `Firmware proof ${proof} disagreed. Diff reopened with highlights.`);
   });
   runtime.on('migration-required', ({ from, to, canAdapt }) => {
     if (!migrationDialog || !migrationPreview) return;
@@ -287,6 +385,8 @@ window.addEventListener('DOMContentLoaded', () => {
   runtime.on('rollback', () => {
     updateDiff(false);
     markDirty(false);
+    conflictHighlights = [];
+    highlightConflicts([]);
     setStatus('warn', 'Rollback', 'Local edits were discarded.');
   });
 
@@ -305,14 +405,26 @@ window.addEventListener('DOMContentLoaded', () => {
 
   function updateDiff(isDirty) {
     if (!diffPanel || !diffOutput) return;
-    const changes = runtime.diff();
-    if (!isDirty || !changes.length) {
+    const conflictDiff = runtime.getConflictDiff();
+    const showConflict = !isDirty && conflictDiff.length > 0;
+    const changes = isDirty ? runtime.diff() : showConflict ? conflictDiff : [];
+    if (!changes.length) {
       diffPanel.setAttribute('hidden', '');
+      diffPanel.removeAttribute('data-state');
       diffOutput.textContent = '';
+      if (!isDirty) highlightConflicts([]);
       return;
     }
     diffPanel.removeAttribute('hidden');
-    diffOutput.textContent = changes.map(({ path, before, after }) => `${path}: ${JSON.stringify(before)} → ${JSON.stringify(after)}`).join('\n');
+    if (showConflict) diffPanel.dataset.state = 'conflict';
+    else diffPanel.removeAttribute('data-state');
+    diffOutput.textContent = changes
+      .map(({ path, before, after }) => `${showConflict ? '!' : '•'} ${path}: ${JSON.stringify(before)} → ${JSON.stringify(after)}`)
+      .join('\n');
+    const highlightPaths = showConflict
+      ? (conflictHighlights.length ? conflictHighlights : conflictDiff.map((entry) => entry.path))
+      : [];
+    highlightConflicts(highlightPaths);
   }
 
   function updateHeader(config) {
@@ -350,6 +462,7 @@ window.addEventListener('DOMContentLoaded', () => {
     if (slotDetailArg) slotDetailArg.textContent = slotState.staged?.arg?.method ?? '—';
     const value = Array.isArray(telemetry.slots) ? telemetry.slots[slotState.selected] : null;
     if (slotDetailValue) slotDetailValue.textContent = value ?? '—';
+    updateTakeoverToggle(slot, slotState.selected);
     renderSlotEditor();
   }
 
@@ -365,64 +478,14 @@ window.addEventListener('DOMContentLoaded', () => {
     form.className = 'slot-editor';
     form.addEventListener('submit', (event) => event.preventDefault());
 
-    form.appendChild(makeSelect('MIDI Type', ['OFF', 'CC', 'Note', 'PitchBend', 'ProgramChange', 'Aftertouch', 'ModWheel', 'NRPN', 'RPN', 'SysEx'], slot.type, (value) => stageSlotField(slotState.selected, 'type', value)));
-    form.appendChild(makeNumber('MIDI Channel', slot.midiChannel ?? 1, 1, 16, 1, (value) => stageSlotField(slotState.selected, 'midiChannel', value)));
-    form.appendChild(makeNumber('Data (CC/Note)', slot.data1 ?? 0, 0, 127, 1, (value) => stageSlotField(slotState.selected, 'data1', value)));
-    form.appendChild(makeNumber('Envelope Follow', slot.efIndex ?? 0, 0, localManifest.max_table_lengths.efSlots - 1, 1, (value) => stageSlotField(slotState.selected, 'efIndex', value)));
-    form.appendChild(makeToggle('Active', !!slot.active, (value) => stageSlotField(slotState.selected, 'active', value)));
-    form.appendChild(makeToggle('Pot mapped', !!slot.pot, (value) => stageSlotField(slotState.selected, 'pot', value)));
-
-    const takeover = makeToggle('Take Control', !!slot.takeover, (value) => {
-      stageSlotField(slotState.selected, 'takeover', value);
-      runtime.setPotGuard([slotState.selected], !value);
+    const staged = slotState.staged;
+    const context = { index: slotState.selected };
+    SLOT_CONTROLS.forEach((control) => {
+      const field = renderControl(control, context, staged);
+      if (field) form.appendChild(field);
     });
-    form.appendChild(takeover);
 
     formContainer.appendChild(form);
-  }
-
-  function makeSelect(labelText, options, current, onChange) {
-    const wrap = document.createElement('label');
-    wrap.textContent = labelText;
-    const select = document.createElement('select');
-    options.forEach((opt) => {
-      const option = document.createElement('option');
-      option.value = opt;
-      option.textContent = opt;
-      if (opt === current) option.selected = true;
-      select.appendChild(option);
-    });
-    select.onchange = () => onChange(select.value);
-    wrap.appendChild(select);
-    return wrap;
-  }
-
-  function makeNumber(labelText, current, min, max, step, onCommit) {
-    const wrap = document.createElement('label');
-    wrap.textContent = labelText;
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.min = String(min);
-    input.max = String(max);
-    input.step = String(step);
-    input.value = current;
-    input.onchange = () => onCommit(Number(input.value));
-    attachCoarseFine(input, step);
-    wrap.appendChild(input);
-    return wrap;
-  }
-
-  function makeToggle(labelText, current, onCommit) {
-    const wrap = document.createElement('label');
-    wrap.className = 'toggle';
-    const input = document.createElement('input');
-    input.type = 'checkbox';
-    input.checked = current;
-    input.onchange = () => onCommit(input.checked);
-    const span = document.createElement('span');
-    span.textContent = labelText;
-    wrap.append(input, span);
-    return wrap;
   }
 
   function attachCoarseFine(input, baseStep) {
@@ -436,51 +499,12 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function stageSlotField(index, key, value) {
-    runtime.stage((draft) => {
-      draft.slots = draft.slots || [];
-      if (!draft.slots[index]) draft.slots[index] = {};
-      draft.slots[index][key] = value;
-      return draft;
-    });
-  }
-
   function populateFilter(staged) {
-    if (!staged) return;
-    if (filterTypeEl) filterTypeEl.value = staged.filter?.type ?? 'LINEAR';
-    if (filterFreqEl) filterFreqEl.value = staged.filter?.freq ?? 20;
-    if (filterQEl) filterQEl.value = staged.filter?.q ?? 1;
+    populateBoundControls(staged, FILTER_CONTROLS);
   }
 
   function populateArg(staged) {
-    if (!staged) return;
-    const method = staged.arg?.method;
-    const safeMethod = typeof method === 'string' && ARG_METHODS.includes(method) ? method : ARG_METHOD_DEFAULT;
-    if (argMethodEl) {
-      argMethodEl.value = safeMethod;
-      if (method !== safeMethod) {
-        stageArg('method', safeMethod);
-      }
-    }
-    if (argEnableEl) argEnableEl.value = String(staged.arg?.enable ?? true);
-    if (argAEl) argAEl.value = staged.arg?.a ?? 0;
-    if (argBEl) argBEl.value = staged.arg?.b ?? 0;
-  }
-
-  function stageFilter(key, value) {
-    runtime.stage((draft) => {
-      draft.filter = draft.filter || {};
-      draft.filter[key] = value;
-      return draft;
-    });
-  }
-
-  function stageArg(key, value) {
-    runtime.stage((draft) => {
-      draft.arg = draft.arg || {};
-      draft.arg[key] = value;
-      return draft;
-    });
+    populateBoundControls(staged, ARG_CONTROLS);
   }
 
   function renderLedGrid(staged) {
@@ -489,24 +513,422 @@ window.addEventListener('DOMContentLoaded', () => {
     const leds = staged?.ledColors ?? [];
     const fragment = document.createDocumentFragment();
     leds.forEach((entry, index) => {
+      const control = { id: 'led.color', type: 'color', range: {}, target: 'ledColors.{index}.color' };
       const wrap = document.createElement('label');
       wrap.className = 'led-chip';
-      wrap.textContent = `LED ${index + 1}`;
+      const labelSpan = document.createElement('span');
+      labelSpan.className = 'control-label';
+      labelSpan.textContent = `LED ${String(index + 1).padStart(2, '0')}`;
       const input = document.createElement('input');
       input.type = 'color';
       input.value = entry?.color ?? '#000000';
-      input.addEventListener('input', runtime.createThrottle((event) => {
-        runtime.stage((draft) => {
-          draft.ledColors = draft.ledColors || [];
-          if (!draft.ledColors[index]) draft.ledColors[index] = { color: '#000000' };
-          draft.ledColors[index].color = event.target.value;
-          return draft;
-        });
-      }));
-      wrap.appendChild(input);
+      setControlMetadata(wrap, input, control, { index });
+      input.addEventListener(
+        'input',
+        runtime.createThrottle((event) => {
+          stageControl(control, event.target.value, { index });
+        })
+      );
+      wrap.append(labelSpan, input);
       fragment.appendChild(wrap);
     });
     ledGrid.appendChild(fragment);
+  }
+
+  function updateTakeoverToggle(slot, index) {
+    if (!slotTakeoverPanel || !slotTakeoverToggle) return;
+    const label = slotTakeoverPanel.querySelector('label.toggle');
+    if (!label) return;
+    const control = TAKEOVER_CONTROL;
+    const context = { index };
+    if (!slot || index === undefined) {
+      slotTakeoverPanel.setAttribute('hidden', '');
+      controlBindings.delete(bindingKey(control, context));
+      return;
+    }
+    slotTakeoverPanel.removeAttribute('hidden');
+    applyControlLabel(label, control);
+    setControlMetadata(label, slotTakeoverToggle, control, context);
+    for (const [key, binding] of controlBindings.entries()) {
+      if (binding.control.id === control.id) {
+        controlBindings.delete(key);
+      }
+    }
+    registerBinding(control, slotTakeoverToggle, context);
+    slotTakeoverToggle.checked = !!slot.takeover;
+    slotTakeoverToggle.onchange = () => {
+      stageControl(control, slotTakeoverToggle.checked, context);
+    };
+  }
+
+  function bindStaticControl(element, control, context = {}) {
+    if (!element || !control) return;
+    const wrapper = element.closest('label');
+    if (!wrapper) return;
+    applyControlLabel(wrapper, control);
+    if (control.type === 'select') {
+      populateSelectOptions(element, control);
+    }
+    if (control.type === 'number') {
+      if (control.range?.min !== undefined) element.min = String(control.range.min);
+      if (control.range?.max !== undefined) element.max = String(control.range.max);
+      if (control.range?.step !== undefined) element.step = String(control.range.step);
+      attachCoarseFine(element, control.range?.step ?? 1);
+    }
+    setControlMetadata(wrapper, element, control, context);
+    element.addEventListener('change', (event) => {
+      const raw = control.type === 'toggle' ? event.target.checked : event.target.value;
+      stageControl(control, raw, context);
+    });
+    registerBinding(control, element, context);
+    const state = runtime.getState?.().staged;
+    if (state) {
+      const value = getValueAtPath(state, resolveTarget(control, context));
+      setControlInputValue(element, control, value, context);
+    } else if (control.type === 'select') {
+      const opts = control.range?.options;
+      if (Array.isArray(opts) && opts.length) {
+        const first = opts[0];
+        element.value = String(typeof first === 'object' ? first.value : first);
+      }
+    } else if (control.type === 'number' && control.range?.min !== undefined) {
+      element.value = String(control.range.min);
+    }
+  }
+
+  function registerBinding(control, element, context = {}) {
+    const key = bindingKey(control, context);
+    if (!key) return;
+    controlBindings.set(key, { control, element, context });
+  }
+
+  function bindingKey(control, context = {}) {
+    if (!control?.id) return null;
+    if (typeof context.index === 'number') {
+      return `${control.id}:${context.index}`;
+    }
+    return control.id;
+  }
+
+  function getBinding(control, context = {}) {
+    const key = bindingKey(control, context);
+    if (!key) return null;
+    return controlBindings.get(key) || null;
+  }
+
+  function populateBoundControls(state, controls, context = {}) {
+    if (!state) return;
+    controls.forEach((control) => {
+      const binding = getBinding(control, context);
+      if (!binding) return;
+      const value = getValueAtPath(state, resolveTarget(control, context));
+      setControlInputValue(binding.element, control, value, context);
+    });
+  }
+
+  function renderControl(control, context, state) {
+    if (!control) return null;
+    const wrapper = document.createElement('label');
+    if (control.type === 'toggle') {
+      wrapper.className = 'toggle control-field';
+    } else {
+      wrapper.className = 'control-field';
+    }
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'control-label';
+    const input = createControlInput(control, context, state);
+    if (!input) return null;
+    if (control.type === 'toggle') {
+      wrapper.append(input, labelSpan);
+    } else {
+      wrapper.append(labelSpan, input);
+    }
+    applyControlLabel(wrapper, control);
+    setControlMetadata(wrapper, input, control, context);
+    return wrapper;
+  }
+
+  function createControlInput(control, context, state) {
+    let input;
+    const value = state ? getValueAtPath(state, resolveTarget(control, context)) : undefined;
+    if (control.type === 'select') {
+      input = document.createElement('select');
+      populateSelectOptions(input, control);
+      setControlInputValue(input, control, value, context);
+      input.addEventListener('change', (event) => stageControl(control, event.target.value, context));
+    } else if (control.type === 'number') {
+      input = document.createElement('input');
+      input.type = 'number';
+      if (control.range?.min !== undefined) input.min = String(control.range.min);
+      if (control.range?.max !== undefined) input.max = String(control.range.max);
+      if (control.range?.step !== undefined) input.step = String(control.range.step);
+      setControlInputValue(input, control, value, context);
+      input.addEventListener('change', (event) => stageControl(control, event.target.value, context));
+      attachCoarseFine(input, control.range?.step ?? 1);
+    } else if (control.type === 'toggle') {
+      input = document.createElement('input');
+      input.type = 'checkbox';
+      setControlInputValue(input, control, value, context);
+      input.addEventListener('change', (event) => stageControl(control, event.target.checked, context));
+    } else if (control.type === 'color') {
+      input = document.createElement('input');
+      input.type = 'color';
+      setControlInputValue(input, control, value, context);
+      input.addEventListener('change', (event) => stageControl(control, event.target.value, context));
+    } else {
+      input = document.createElement('input');
+      input.type = 'text';
+      setControlInputValue(input, control, value, context);
+      input.addEventListener('change', (event) => stageControl(control, event.target.value, context));
+    }
+    return input;
+  }
+
+  function stageControl(control, rawValue, context = {}) {
+    const value = coerceControlValue(control, rawValue);
+    runtime.stage((draft) => {
+      const path = resolveTarget(control, context);
+      setValueAtPath(draft, path, value);
+      return draft;
+    });
+    const hook = CONTROL_POST_COMMIT[control.id];
+    if (typeof hook === 'function') {
+      hook(value, context);
+    }
+  }
+
+  function coerceControlValue(control, rawValue) {
+    if (!control) return rawValue;
+    if (control.type === 'number') {
+      let value = typeof rawValue === 'number' ? rawValue : Number(rawValue);
+      if (Number.isNaN(value)) value = control.range?.min ?? 0;
+      return clampControlValue(control, value);
+    }
+    if (control.type === 'toggle') {
+      if (typeof rawValue === 'string') return rawValue === 'true';
+      return Boolean(rawValue);
+    }
+    if (control.type === 'select') {
+      return decodeControlValue(control, rawValue);
+    }
+    return rawValue;
+  }
+
+  function decodeControlValue(control, rawValue) {
+    const options = control.range?.options;
+    if (!Array.isArray(options)) return rawValue;
+    for (const option of options) {
+      if (typeof option === 'string' && option === rawValue) {
+        return option;
+      }
+      if (option && typeof option === 'object') {
+        if (String(option.value) === String(rawValue)) return option.value;
+      }
+    }
+    return rawValue;
+  }
+
+  function encodeControlValue(control, value) {
+    if (control.type === 'select') {
+      const options = control.range?.options;
+      if (Array.isArray(options)) {
+        for (const option of options) {
+          if (typeof option === 'string' && option === value) return option;
+          if (option && typeof option === 'object' && option.value === value) {
+            return String(option.value);
+          }
+        }
+      }
+      if (typeof value === 'boolean') return String(value);
+      return value != null ? String(value) : '';
+    }
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (value == null) return '';
+    return value;
+  }
+
+  function clampControlValue(control, value) {
+    if (!control?.range) return value;
+    let next = value;
+    if (typeof control.range.min === 'number') next = Math.max(control.range.min, next);
+    if (typeof control.range.max === 'number') next = Math.min(control.range.max, next);
+    return next;
+  }
+
+  function controlLabel(id) {
+    return CONTROL_LABELS[id] || id;
+  }
+
+  function applyControlLabel(wrapper, control) {
+    if (!wrapper || !control) return;
+    let span = wrapper.querySelector('.control-label');
+    if (!span) {
+      span = document.createElement('span');
+      span.className = 'control-label';
+      if (wrapper.classList.contains('toggle')) wrapper.appendChild(span);
+      else wrapper.prepend(span);
+    }
+    span.textContent = controlLabel(control.id);
+  }
+
+  function setControlMetadata(wrapper, input, control, context = {}) {
+    if (!wrapper || !control) return;
+    const template = control.target;
+    const actualPath = resolveTarget(control, context);
+    wrapper.setAttribute('data-control-id', control.id);
+    wrapper.setAttribute('data-control-template', template);
+    wrapper.setAttribute('data-control-path', actualPath);
+    if (typeof context.index === 'number') wrapper.setAttribute('data-control-index', String(context.index));
+    else wrapper.removeAttribute('data-control-index');
+    if (!input) return;
+    const id = contextualControlId(control, context);
+    input.id = id;
+    input.setAttribute('data-control-id', control.id);
+    input.setAttribute('data-control-template', template);
+    input.setAttribute('data-control-path', actualPath);
+    if (typeof context.index === 'number') input.setAttribute('data-control-index', String(context.index));
+    else input.removeAttribute('data-control-index');
+  }
+
+  function contextualControlId(control, context = {}) {
+    const suffix = typeof context.index === 'number' ? `-${context.index}` : '';
+    return `control-${control.id.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}${suffix}`;
+  }
+
+  function resolveTarget(control, context = {}) {
+    if (!control?.target) return '';
+    if (control.target.includes('{index}')) {
+      const index = context.index;
+      if (typeof index === 'number') {
+        return control.target.replaceAll('{index}', String(index));
+      }
+    }
+    return control.target;
+  }
+
+  function parsePath(path) {
+    if (!path) return [];
+    return path.split('.').map((segment) => {
+      if (/^-?\d+$/.test(segment)) return Number(segment);
+      return segment;
+    });
+  }
+
+  function setValueAtPath(target, path, value) {
+    const segments = parsePath(path);
+    if (!segments.length) return;
+    let node = target;
+    for (let i = 0; i < segments.length - 1; i += 1) {
+      const part = segments[i];
+      const next = segments[i + 1];
+      if (typeof part === 'number') {
+        if (!Array.isArray(node)) return;
+        if (node[part] === undefined) {
+          node[part] = typeof next === 'number' ? [] : {};
+        }
+        node = node[part];
+      } else {
+        if (typeof next === 'number') {
+          if (!Array.isArray(node[part])) node[part] = [];
+        } else if (!node[part] || typeof node[part] !== 'object') {
+          node[part] = {};
+        }
+        node = node[part];
+      }
+    }
+    const last = segments[segments.length - 1];
+    if (typeof last === 'number') {
+      if (!Array.isArray(node)) return;
+      node[last] = value;
+    } else {
+      node[last] = value;
+    }
+  }
+
+  function getValueAtPath(source, path) {
+    if (!source) return undefined;
+    const segments = parsePath(path);
+    let node = source;
+    for (const part of segments) {
+      if (node == null) return undefined;
+      node = node[part];
+    }
+    return node;
+  }
+
+  function populateSelectOptions(select, control) {
+    if (!select || control.type !== 'select') return;
+    const options = control.range?.options;
+    if (!Array.isArray(options)) return;
+    select.innerHTML = '';
+    options.forEach((entry) => {
+      const option = document.createElement('option');
+      if (typeof entry === 'string') {
+        option.value = entry;
+        option.textContent = entry;
+      } else if (entry && typeof entry === 'object') {
+        option.value = String(entry.value);
+        option.textContent = entry.label ?? String(entry.value);
+      }
+      select.appendChild(option);
+    });
+  }
+
+  function setControlInputValue(element, control, value, context = {}, options = {}) {
+    const { allowStageFallback = true } = options;
+    if (!element || !control) return;
+    if (control.type === 'select') {
+      const encoded = encodeControlValue(control, value);
+      const options = Array.from(element.options).map((opt) => opt.value);
+      if (encoded && options.includes(String(encoded))) {
+        element.value = String(encoded);
+      } else if (options.length) {
+        element.value = options[0];
+        const first = control.range?.options?.[0];
+        const fallback = typeof first === 'object' ? first?.value : first;
+        if (fallback !== undefined && allowStageFallback) stageControl(control, fallback, context);
+      } else {
+        element.value = '';
+      }
+    } else if (control.type === 'toggle') {
+      element.checked = Boolean(value);
+    } else if (control.type === 'number') {
+      const numeric = clampControlValue(control, typeof value === 'number' ? value : Number(value));
+      element.value = Number.isFinite(numeric) ? String(numeric) : String(control.range?.min ?? 0);
+    } else if (control.type === 'color') {
+      element.value = typeof value === 'string' ? value : '#000000';
+    } else {
+      element.value = value ?? '';
+    }
+  }
+
+  function highlightConflicts(paths) {
+    const flagged = document.querySelectorAll('[data-control-conflict]');
+    flagged.forEach((node) => node.removeAttribute('data-control-conflict'));
+    if (!paths || !paths.length) return;
+    paths.forEach((path) => {
+      const normalized = normalizeConflictPath(path);
+      if (!normalized) return;
+      const { template, index } = normalized;
+      const selector = `[data-control-template="${template}"]${index !== undefined ? `[data-control-index="${index}"]` : ''}`;
+      document.querySelectorAll(selector).forEach((node) => node.setAttribute('data-control-conflict', ''));
+    });
+  }
+
+  function normalizeConflictPath(path) {
+    if (!path) return null;
+    const segments = path.split('.');
+    if (segments.length < 2) {
+      return { template: path, index: undefined };
+    }
+    const root = segments[0];
+    if (root === 'slots' || root === 'ledColors' || root === 'efSlots') {
+      const idx = Number(segments[1]);
+      if (Number.isNaN(idx)) return null;
+      segments[1] = '{index}';
+      return { template: segments.join('.'), index: idx };
+    }
+    return { template: path, index: undefined };
   }
 
   function updateTakeoverGuards(slots) {
@@ -565,13 +987,8 @@ window.addEventListener('DOMContentLoaded', () => {
     toggle.className = 'takeover';
     toggle.textContent = slot?.takeover ? 'Takeover' : 'Guarded';
     toggle.onclick = () => {
-      let nextTakeover = slot?.takeover ?? false;
-      runtime.stage((draft) => {
-        draft.slots[index].takeover = !draft.slots[index].takeover;
-        nextTakeover = draft.slots[index].takeover;
-        return draft;
-      });
-      runtime.setPotGuard([index], !nextTakeover);
+      const context = { index };
+      stageControl(TAKEOVER_CONTROL, !(slot?.takeover), context);
     };
     el.append(label, state, value, toggle);
     el.onclick = () => selectSlot(index);
@@ -582,22 +999,25 @@ window.addEventListener('DOMContentLoaded', () => {
   function renderEfRow(el, index, item) {
     el.className = 'ef-row';
     el.innerHTML = '';
-    const label = document.createElement('span');
-    label.textContent = `EF ${index + 1}`;
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.min = 0;
-    input.max = slotState.slots.length - 1;
-    input.value = item?.slot ?? 0;
-    input.addEventListener('change', () => {
-      runtime.stage((draft) => {
-        draft.efSlots = draft.efSlots || [];
-        if (!draft.efSlots[index]) draft.efSlots[index] = { slot: 0 };
-        draft.efSlots[index].slot = Number(input.value);
-        return draft;
-      });
-    });
-    el.append(label, input);
+    const title = document.createElement('span');
+    title.className = 'ef-label';
+    title.textContent = `EF ${String(index + 1).padStart(2, '0')}`;
+    const field = renderControl(EF_CONTROL, { index }, slotState.staged);
+    if (field) {
+      const labelSpan = field.querySelector('.control-label');
+      if (labelSpan) labelSpan.textContent = CONTROL_LABELS[EF_CONTROL.id];
+      const input = field.querySelector('input');
+      if (input) {
+        input.min = String(EF_CONTROL.range.min);
+        input.max = String(EF_CONTROL.range.max);
+        if (typeof item?.slot === 'number') {
+          input.value = String(item.slot);
+        }
+      }
+      el.append(title, field);
+    } else {
+      el.appendChild(title);
+    }
   }
 
   function paintTelemetry(frame) {
