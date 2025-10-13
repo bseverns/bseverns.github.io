@@ -47,13 +47,6 @@
               <div><dt>ARG Method</dt><dd id="slot-detail-arg">—</dd></div>
               <div><dt>Last Value</dt><dd id="slot-detail-value">—</dd></div>
             </dl>
-            <div id="slot-takeover-control" class="slot-takeover" hidden>
-              <label class="toggle">
-                <input type="checkbox" id="slot-takeover-toggle" />
-                <span class="control-label">Take control</span>
-              </label>
-              <p class="microcopy">Flip this before live pot moves. Encoders stay free-running.</p>
-            </div>
           </section>
         </div>
         <fieldset id="ef-assignment-card">
@@ -90,41 +83,55 @@
         <div class="stack">
           <button id="export-preset" disabled>Export preset</button>
           <button id="import-preset" disabled>Import preset</button>
+          <select id="preset-picker">
+            <option value="">Select a preset…</option>
+          </select>
           <button id="simulator-toggle" type="button">Start simulator</button>
         </div>
         <fieldset id="filter-settings">
           <legend>Filter</legend>
-          <label>
-            <span class="control-label">Filter Type</span>
-            <select id="filter-type"></select>
+          <label>Type
+            <select id="filter-type">
+              <option value="LINEAR">LINEAR</option>
+              <option value="OPPOSITE_LINEAR">OPPOSITE_LINEAR</option>
+              <option value="EXPONENTIAL">EXPONENTIAL</option>
+              <option value="RANDOM">RANDOM</option>
+              <option value="LOWPASS">LOWPASS</option>
+              <option value="HIGHPASS">HIGHPASS</option>
+              <option value="BANDPASS">BANDPASS</option>
+            </select>
           </label>
-          <label>
-            <span class="control-label">Filter Frequency</span>
-            <input id="filter-freq" type="number" min="20" max="5000" />
-          </label>
-          <label>
-            <span class="control-label">Filter Resonance</span>
-            <input id="filter-q" type="number" min="0.5" max="4" step="0.01" />
-          </label>
+          <label>Freq <input id="filter-freq" type="number" min="20" max="5000" data-control="pot" /></label>
+          <label>Q <input id="filter-q" type="number" min="0.5" max="4" step="0.01" data-control="encoder" /></label>
         </fieldset>
         <fieldset id="arg-settings">
           <legend>ARG Pair</legend>
-          <label>
-            <span class="control-label">ARG Method</span>
-            <select id="arg-method"></select>
+          <label>Enable
+            <select id="arg-enable">
+              <option value="true">ON</option>
+              <option value="false">OFF</option>
+            </select>
           </label>
-          <label>
-            <span class="control-label">ARG Enable</span>
-            <select id="arg-enable"></select>
+          <label>Method
+            <select id="arg-method">
+              <option value="PLUS">PLUS</option>
+              <option value="MIN">MIN</option>
+              <option value="PECK">PECK</option>
+              <option value="SHAV">SHAV</option>
+              <option value="SQAR">SQAR</option>
+              <option value="BABS">BABS</option>
+              <option value="TABS">TABS</option>
+              <option value="MULT">MULT</option>
+              <option value="DIVI">DIVI</option>
+              <option value="AVG">AVG</option>
+              <option value="XABS">XABS</option>
+              <option value="MAXX">MAXX</option>
+              <option value="MINN">MINN</option>
+              <option value="XORR">XORR</option>
+            </select>
           </label>
-          <label>
-            <span class="control-label">ARG A</span>
-            <input id="arg-a" type="number" min="0" max="5" step="0.01" />
-          </label>
-          <label>
-            <span class="control-label">ARG B</span>
-            <input id="arg-b" type="number" min="0" max="5" step="0.01" />
-          </label>
+          <label>A <input id="arg-a" type="number" min="0" max="5" step="0.01" /></label>
+          <label>B <input id="arg-b" type="number" min="0" max="5" step="0.01" /></label>
         </fieldset>
         <fieldset id="led-settings">
           <legend>LED Colors</legend>

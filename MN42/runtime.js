@@ -185,19 +185,18 @@ function createSimulator() {
   let index = 0;
   const lines = [];
   let resolver;
-    const slotCount = 42;
-    const manifest = {
-      fw_version: 'sim-fw',
-      fw_git: 'deadbeef',
-      build_ts: new Date().toISOString(),
-      schema_version: '1.3.0',
-      slot_count: slotCount,
-      capabilities: { atomicApply: true },
-      max_table_lengths: { ledColors: slotCount, efSlots: 6 },
-      free: { ram: 48000, flash: 512000 }
-    };
-    const config = {
-      slots: Array.from({ length: manifest.slot_count }, (_, idx) => ({
+  const manifest = {
+    fw_version: 'sim-fw',
+    fw_git: 'deadbeef',
+    build_ts: new Date().toISOString(),
+    schema_version: '1.3.0',
+    slot_count: 42,
+    capabilities: { atomicApply: true },
+    max_table_lengths: { ledColors: 16, efSlots: 6 },
+    free: { ram: 48000, flash: 512000 }
+  };
+  const config = {
+    slots: Array.from({ length: manifest.slot_count }, (_, idx) => ({
       id: idx,
       active: idx % 2 === 0,
       type: 'CC',
@@ -207,7 +206,7 @@ function createSimulator() {
       pot: true
     })),
     arg: { method: 'PLUS', enable: true, a: 1, b: 1 },
-    filter: { type: 'LINEAR', freq: 800, q: 1 },
+    filter: { type: 'LOWPASS', freq: 800, q: 1 },
     ledColors: Array.from({ length: manifest.max_table_lengths.ledColors }, () => ({ color: '#ff00ff' }))
   };
   const telemetry = () => ({
@@ -291,7 +290,6 @@ export function createRuntime({
   let seq = 0;
   let lastKnownChecksum = null;
   let potGuard = new Set();
-  let lastConflictDiff = null;
 
   const ajv = new Ajv({ strict: false, allErrors: true });
   addFormats(ajv);
@@ -408,7 +406,6 @@ export function createRuntime({
     liveConfig = clone(config);
     stagedConfig = clone(config);
     dirty = false;
-    lastConflictDiff = null;
     emit('schema', schema);
     emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
     scheduleTelemetry();
@@ -472,9 +469,6 @@ export function createRuntime({
     if (!next) return;
     stagedConfig = clone(next);
     dirty = JSON.stringify(stagedConfig) !== JSON.stringify(liveConfig);
-    if (dirty) {
-      lastConflictDiff = null;
-    }
     emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
   }
 
@@ -560,55 +554,37 @@ export function createRuntime({
       await rollback();
       throw new Error('Device failed to acknowledge apply');
     }
-    const ackChecksum = ack.checksum || ack.digest || null;
-    if (ackChecksum && checksum && ackChecksum !== checksum) {
-      const diffSnapshot = shallowDiff(liveConfig ?? {}, stagedConfig ?? {});
-      lastConflictDiff = diffSnapshot;
-      emit('apply-mismatch', {
-        expected: checksum,
-        received: ackChecksum,
-        conflicts: Array.isArray(ack.conflicts) && ack.conflicts.length ? ack.conflicts : diffSnapshot.map((entry) => entry.path),
-        diff: diffSnapshot
-      });
-      await rollback({ silent: true });
-      throw new Error('Device reported checksum mismatch');
-    }
     liveConfig = clone(stagedConfig);
     dirty = false;
     lastKnownChecksum = checksum;
-    lastConflictDiff = null;
     emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
     emit('applied', { checksum });
     return { applied: true, checksum };
   }
 
   async function waitForAck(checksum) {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
         off();
-        resolve(null);
+        resolve(false);
       }, ACK_TIMEOUT_MS);
       const off = on('ack', (msg) => {
         if (!msg) return;
-        if (msg.seq && seq && msg.seq !== seq) {
+        if (msg.checksum && checksum && msg.checksum !== checksum) {
           return;
         }
         clearTimeout(timeout);
         off();
-        resolve(msg);
+        resolve(true);
       });
     });
   }
 
-  async function rollback(options = {}) {
-    const { silent = false } = options;
+  async function rollback() {
     stagedConfig = clone(liveConfig);
     dirty = false;
     emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
-    if (!silent) {
-      lastConflictDiff = null;
-      emit('rollback', {});
-    }
+    emit('rollback', {});
   }
 
   async function disconnect() {
@@ -623,10 +599,6 @@ export function createRuntime({
 
   function diff() {
     return shallowDiff(liveConfig ?? {}, stagedConfig ?? {});
-  }
-
-  function getConflictDiff() {
-    return lastConflictDiff ? clone(lastConflictDiff) : [];
   }
 
   function setPotGuard(indices, enabled) {
@@ -647,7 +619,6 @@ export function createRuntime({
     getState,
     on,
     setPotGuard,
-    getConflictDiff,
     createThrottle,
     requestPort,
     useSimulator(toggle) {

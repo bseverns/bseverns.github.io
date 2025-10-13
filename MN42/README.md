@@ -1,6 +1,6 @@
 # WebSerial Configuration App
 
-`index.html` (still answering to the name `benzknobz.html`) is the browser-based patch bay for MOARkNOBS. The page is now split between a tiny runtime “kernel” and a BenzKnobz-specific view layer:
+`index.html` (still answering to the name `benzknobz.html`) is the browser-based patch bay for the MOARkNOBS-42 controller. The page is now split between a tiny runtime “kernel” and a BenzKnobz-specific view layer:
 
 - `runtime.js` – owns WebSerial, schema validation (AJV), state diffing, checksum/rollback handling, throttling, and the simulator transport.
 - `views/benzknobz.js` – renders the current layout, wires UI controls to the runtime API, and keeps the hardware muscle-memory alive.
@@ -20,8 +20,8 @@ The repo deliberately feels like half studio notebook, half field guide. Snag th
 3. Hit <http://localhost:8000/> (or `/benzknobz.html` if you prefer the old URL) in Chrome or Edge.
 4. Click **Connect**, pick the MOARkNOBS port, and let the header pill confirm the firmware, schema version, and memory stats.
 5. Stage edits in the right-hand column. The **Apply** button only lights up after the JSON passes AJV validation.
-6. On Apply the runtime pushes a single `SET_ALL` payload, waits for a `{checksum}` proof, and only then commits the local snapshot. If the proof is missing or mismatched the UI auto-rolls back, re-opens the diff panel, and paints the offending controls in neon shame.
-7. Use the **Take Control** toggle in Slot Details before sending live pot data to avoid on-stage jumps. Encoders still stream immediately.
+6. On Apply the runtime pushes a single `SET_ALL` payload, waits for a `{checksum}` ACK, and only then commits the local snapshot. If the ACK is missing or mismatched the UI auto-rolls back and re-opens the diff panel.
+7. Use the **Take Control** toggles per slot before sending live pot data to avoid on-stage jumps. Encoders still stream immediately.
 8. Need hardware-free testing? Toggle the **Start simulator** button—the runtime swaps transports and replays canned manifest/state frames.
 
 ## Accessibility & Controls
@@ -35,12 +35,6 @@ The repo deliberately feels like half studio notebook, half field guide. Snag th
 - Outbound pot changes are debounced to ≥24 ms through a shared utility so every control shares the same cadence.
 - Schema mismatches fire a migration dialog before any live writes. The manifest now includes `fw_version`, `fw_git`, `build_ts`, and `schema_version` so bug reports can pin exact builds.
 - Last-used USB IDs are remembered in `localStorage`; on load the app nudges you to reconnect but never reopens without a user gesture (WebSerial rules).
-
-## Control Registry
-
-- Every editable widget is declared as `{id, type, range, target}` so labels stay view-only copy while the firmware contract stays the single source of truth.
-- Deterministic IDs double as DOM attributes, letting the diff highlighter and staged proof tie firmware responses back to specific controls.
-- Per-slot and per-table controls respect the same registry, so EF routing, slot editors, and LED chips all inherit the same pipeline.
 
 ## Simulator & CI Hooks
 

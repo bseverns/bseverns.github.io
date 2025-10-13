@@ -426,24 +426,6 @@ label select {
   font-size: 0.95rem;
 }
 
-.control-field {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.control-label {
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-muted);
-}
-
-.control-field input,
-.control-field select {
-  width: 100%;
-}
-
 label input:focus,
 label select:focus {
   outline: 2px solid rgba(45, 226, 230, 0.35);
@@ -462,27 +444,6 @@ label select:focus {
   height: 20px;
 }
 
-.slot-takeover {
-  margin-top: 12px;
-  display: grid;
-  gap: 6px;
-}
-
-.slot-takeover .microcopy {
-  font-size: 0.78rem;
-  color: var(--color-muted);
-}
-
-.toggle.control-field {
-  flex-direction: row;
-  align-items: center;
-  gap: 10px;
-}
-
-.toggle.control-field .control-label {
-  order: 1;
-}
-
 #led-settings {
   gap: 12px;
 }
@@ -499,25 +460,6 @@ label select:focus {
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.22);
-}
-
-.ef-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 6px 0;
-}
-
-.ef-label {
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-muted);
-  min-width: 56px;
-}
-
-.ef-row .control-field {
-  flex: 1;
 }
 
 .led-chip {
@@ -582,20 +524,6 @@ label select:focus {
   white-space: pre-wrap;
   font-family: var(--font-mono);
   font-size: 0.85rem;
-}
-
-#diff-panel[data-state='conflict'] {
-  border-color: var(--color-hot);
-}
-
-#diff-panel[data-state='conflict'] #diff-output {
-  color: var(--color-hot);
-}
-
-[data-control-conflict] {
-  outline: 2px solid var(--color-hot);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 2px rgba(255, 95, 150, 0.25);
 }
 
 .slot-editor {
