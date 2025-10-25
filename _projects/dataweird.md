@@ -3,7 +3,7 @@ title: "Data Weird"
 year: 2023
 media: "Workshop installation"
 context: "Collaborative prototype"
-hero: /img/portfolio/3d/genF1.jpg
+hero: /img/portfolio/3d/genF2.jpg
 hero_alt: "genF1 PETG print from the Generative Fabrication series, ribboned isosurface with cellular cavities"
 summary: "An overnight data sculpture jam where live sensors drive projection-mapped acrylic towers and invite walk-up debugging."
 featured: true

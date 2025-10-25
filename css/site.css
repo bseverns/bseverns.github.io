@@ -13,6 +13,18 @@
   --brand: #2563eb;
 }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0f1014;
@@ -488,6 +500,23 @@ article.teaching li {
   flex-direction: column;
   gap: 0.75rem;
 }
+.legacy-card-link {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+.legacy-card-link:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: inherit;
+}
+.legacy-card-link:hover .legacy-cta,
+.legacy-card-link:focus-visible .legacy-cta {
+  text-decoration: underline;
+}
 .legacy-list h4 {
   margin: 0;
   font-size: 1.1rem;
@@ -507,33 +536,52 @@ article.teaching li {
 .legacy-list a:focus-visible {
   text-decoration: underline;
 }
-.legacy-list span {
-  display: block;
-  margin-top: 0.35rem;
+.legacy-cta {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.download-section {
+  padding: 0 0 4rem;
+}
+
+.download-list {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.download-list li {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--surface);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+  display: grid;
+  gap: 0.35rem;
+}
+
+.download-list a {
+  font-weight: 700;
+  color: inherit;
+  text-decoration: none;
+}
+
+.download-list a:hover,
+.download-list a:focus-visible {
+  text-decoration: underline;
+}
+
+.download-list span {
   color: var(--muted);
   font-size: 0.95rem;
   line-height: 1.4;
-}
-.legacy-sublist {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0.5rem;
-}
-.legacy-sublist li {
-  padding: 0;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.legacy-sublist a {
-  font-weight: 600;
-}
-.legacy-sublist span {
-  margin-top: 0.25rem;
-  font-size: 0.9rem;
 }
 
 .news-list {
