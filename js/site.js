@@ -346,10 +346,78 @@
       const layerCount = 18;
       const segments = 320;
       const step = (Math.PI * 2) / segments;
+      const scanLineSettings = {
+        spawnInterval: 0.85,
+        minThickness: 0.004,
+        maxThickness: 0.02,
+        minOpacity: 0.06,
+        maxOpacity: 0.16,
+        minTTL: 2.5,
+        maxTTL: 5,
+        minBumpStrength: 0.01,
+        maxBumpStrength: 0.06,
+        bumpFrequency: 1.8,
+        scrollSpeed: 0.02,
+      };
       let animate = !motionQuery.matches;
       let width = 0;
       let height = 0;
       let time = 0;
+      const scanLines = [];
+      let scanLineAccumulator = 0;
+
+      function spawnScanLine() {
+        const lifespan = p.random(scanLineSettings.minTTL, scanLineSettings.maxTTL);
+        scanLines.push({
+          yNorm: Math.random(),
+          thickness: p.random(scanLineSettings.minThickness, scanLineSettings.maxThickness),
+          bumpStrength: p.random(scanLineSettings.minBumpStrength, scanLineSettings.maxBumpStrength),
+          opacity: p.random(scanLineSettings.minOpacity, scanLineSettings.maxOpacity),
+          ttl: lifespan,
+          lifespan,
+          phase: p.random(Math.PI * 2),
+        });
+      }
+
+      function updateScanLines(deltaSeconds) {
+        if (!animate) {
+          return;
+        }
+        scanLineAccumulator += deltaSeconds;
+        while (scanLineAccumulator >= scanLineSettings.spawnInterval) {
+          spawnScanLine();
+          scanLineAccumulator -= scanLineSettings.spawnInterval;
+        }
+        for (let index = scanLines.length - 1; index >= 0; index -= 1) {
+          const line = scanLines[index];
+          line.yNorm += deltaSeconds * scanLineSettings.scrollSpeed;
+          line.ttl -= deltaSeconds;
+          if (line.ttl <= 0 || line.yNorm > 1.2) {
+            scanLines.splice(index, 1);
+          }
+        }
+      }
+
+      function drawScanLines() {
+        if (!scanLines.length) {
+          return;
+        }
+        const strokeColor = p.color(focusColor || '#f8fafc');
+        p.push();
+        p.noFill();
+        p.blendMode(p.SCREEN);
+        for (let i = 0; i < scanLines.length; i += 1) {
+          const line = scanLines[i];
+          const wobble = Math.sin((time + line.phase) * scanLineSettings.bumpFrequency) * line.bumpStrength;
+          const y = (line.yNorm + wobble) * height;
+          const fade = Math.max(0, Math.min(1, line.ttl / Math.max(0.0001, line.lifespan)));
+          strokeColor.setAlpha(Math.max(0, Math.min(1, line.opacity * fade)) * 255);
+          p.stroke(strokeColor);
+          p.strokeWeight(Math.max(1, line.thickness * height));
+          p.line(0, y, width, y);
+        }
+        p.pop();
+      }
 
       /**
        * Evaluate the superformula with guard rails so NaN/Infinity never leak into the vertex positions.
@@ -464,6 +532,7 @@
         fadeBackground(255);
         tintGradient(0.55);
         drawLayers(time);
+        drawScanLines();
       }
 
       // p5 lifecycle hook: run once when the sketch boots.
@@ -489,9 +558,11 @@
         resizeCanvasToMount();
         const deltaSeconds = Math.min(0.05, Math.max(0.016, (p.deltaTime || 16) / 1000));
         time += deltaSeconds;
+        updateScanLines(deltaSeconds);
         fadeBackground(34);
         tintGradient(0.38);
         drawLayers(time);
+        drawScanLines();
       };
 
       p.windowResized = function () {
@@ -504,11 +575,16 @@
         animate = shouldAnimate;
         if (animate) {
           time = 0;
+          scanLines.length = 0;
+          scanLineAccumulator = 0;
           fadeBackground(255);
           tintGradient(0.55);
           drawLayers(time);
+          drawScanLines();
           p.loop();
         } else {
+          scanLines.length = 0;
+          scanLineAccumulator = 0;
           renderStaticFrame();
           p.noLoop();
         }
