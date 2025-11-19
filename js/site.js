@@ -346,6 +346,14 @@
       const layerCount = 18;
       const segments = 320;
       const step = (Math.PI * 2) / segments;
+      // Scan-line definitions live here so both the math nerds and the future me know where
+      // to tweak the vertical bump map. `yNorm` and `thickness` are 0–1 values relative to
+      // the canvas height.
+      const scanLines = [
+        { yNorm: 0.18, thickness: 0.08, bumpStrength: 0.18, frequency: 3.1, phase: 0.4, timeScale: 0.7 },
+        { yNorm: 0.45, thickness: 0.12, bumpStrength: 0.22, frequency: 2.4, phase: 1.2, timeScale: 0.55 },
+        { yNorm: 0.72, thickness: 0.09, bumpStrength: 0.16, frequency: 3.8, phase: 2.1, timeScale: 0.9 }
+      ];
       let animate = !motionQuery.matches;
       let width = 0;
       let height = 0;
@@ -434,7 +442,36 @@
             const r = superformulaRadius(phi, mm, nn1, nn2, nn3);
             const x = r * Math.cos(phi) * scale;
             const y = r * Math.sin(phi) * scale;
-            p.vertex(x, y);
+            // Normalize the vertex Y position so scan lines can live in 0–1 space.
+            const yCanvasNorm = Math.max(
+              0,
+              Math.min(1, (y + height * 0.5) / Math.max(1, height))
+            );
+            let vertexInfluence = 0;
+
+            for (let lineIndex = 0; lineIndex < scanLines.length; lineIndex += 1) {
+              const line = scanLines[lineIndex];
+              const thickness = Math.max(0.0001, line.thickness);
+              const distance = Math.abs(line.yNorm - yCanvasNorm);
+              if (distance <= thickness) {
+                const falloff = 1 - distance / thickness;
+                const timeDrift = line.timeScale
+                  ? currentTime * line.timeScale * HERO_MOTION_MULTIPLIER
+                  : 0;
+                const oscillation = Math.sin(phi * line.frequency + timeDrift + (line.phase || 0));
+                vertexInfluence += falloff * line.bumpStrength * oscillation;
+              }
+            }
+
+            const boundedInfluence = Math.max(-0.45, Math.min(0.45, vertexInfluence));
+            const radiusMagnitude = Math.sqrt(x * x + y * y);
+            const safeRadius = Math.max(0.0001, radiusMagnitude);
+            const unitX = x / safeRadius;
+            const unitY = y / safeRadius;
+            const radialPush = safeRadius * boundedInfluence;
+            const modX = x + unitX * radialPush;
+            const modY = y + unitY * radialPush;
+            p.vertex(modX, modY);
           }
           p.endShape(p.CLOSE);
           p.pop();
