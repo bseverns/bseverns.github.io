@@ -349,11 +349,6 @@
       // Scan-line definitions live here so both the math nerds and the future me know where
       // to tweak the vertical bump map. `yNorm` and `thickness` are 0–1 values relative to
       // the canvas height.
-      const scanLines = [
-        { yNorm: 0.18, thickness: 0.08, bumpStrength: 0.18, frequency: 3.1, phase: 0.4, timeScale: 0.7 },
-        { yNorm: 0.45, thickness: 0.12, bumpStrength: 0.22, frequency: 2.4, phase: 1.2, timeScale: 0.55 },
-        { yNorm: 0.72, thickness: 0.09, bumpStrength: 0.16, frequency: 3.8, phase: 2.1, timeScale: 0.9 }
-      ];
       const scanLineSettings = {
         spawnInterval: 0.85,
         minThickness: 0.004,
