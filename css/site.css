@@ -1016,6 +1016,50 @@ article.teaching li {
   font-weight: 600;
 }
 
+.patch-note-groups {
+  display: grid;
+  gap: clamp(20px, 3vw, 32px);
+  margin-top: clamp(16px, 2vw, 24px);
+}
+
+.patch-list h3 {
+  margin-top: 0;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.patch-list ul {
+  margin-top: 0.75rem;
+}
+
+.patch-list .badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.1rem 0.45rem;
+  margin-left: 0.35rem;
+  border-radius: 999px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  color: var(--brand);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.patch-list.highlight {
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(236, 72, 153, 0.08));
+  border-radius: 0.75rem;
+  padding: clamp(16px, 2vw, 20px);
+}
+
+.patch-list.latest {
+  border: 1px dashed var(--border);
+  border-radius: 0.75rem;
+  padding: clamp(16px, 2vw, 20px);
+}
+
 @media (max-width: 800px) {
   .hero-grid {
     grid-template-columns: 1fr;
@@ -1023,6 +1067,11 @@ article.teaching li {
 }
 
 @media (min-width: 900px) {
+  .patch-note-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
   .updates-grid {
     grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
     align-items: start;
