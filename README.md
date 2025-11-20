@@ -10,9 +10,9 @@ This repo now runs like a stripped-down landing pad for Ben Severns: three pilla
 graph TD
     thesis["Empower people to build with agency using open tools,<br>consent-forward scenes,<br>and learning environments — all documented loudly."]
 
-    toolsPillar["🧰 Tools"]
-    scenesPillar["🎭 Scenes"]
-    learningPillar["📚 Learning Environments"]
+    toolsPillar["Tools"]
+    scenesPillar["Scenes"]
+    learningPillar["Learning Environments"]
     agencyHub["Agency / Authorship / Feedback Loops"]
     opennessHub["Open Documentation & Consent-Forward Ethos"]
 
