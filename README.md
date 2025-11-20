@@ -3,36 +3,31 @@
 This repo now runs like a stripped-down landing pad for Ben Severns: three pillars (Tools / Scenes / Learning), a press kit with living copy, and a tiny JS layer that only does conditional image checks. Think studio notebook meets teaching guide—every file is here to explain itself.
 
 ## Portfolio diagram
+<div align="center" style="max-width:800px; overflow-x:auto;">
+    
+```mermaid
 %%{ init: { "flowchart": { "defaultRenderer": "dagre-d3", "rankSpacing": 30, "nodeSpacing": 12 } } }%%
 graph TD
-    %% Core Thesis
     thesis["Empower people to build with agency using open tools,<br>consent-forward scenes,<br>and learning environments — all documented loudly."]
 
-    %% Main Pillars
     toolsPillar["🧰 Tools"]
     scenesPillar["🎭 Scenes"]
     learningPillar["📚 Learning Environments"]
-
-    %% Conceptual Anchors
     agencyHub["Agency / Authorship / Feedback Loops"]
     opennessHub["Open Documentation & Consent-Forward Ethos"]
 
-    %% Thesis feeds pillars
     thesis --> toolsPillar
     thesis --> scenesPillar
     thesis --> learningPillar
 
-    %% Circular inter-pillar flow
     toolsPillar --> scenesPillar
     scenesPillar --> learningPillar
     learningPillar --> toolsPillar
 
-    %% Feedback notes (compactly expressed)
     toolsPillar -. "informs design literacy" .-> learningPillar
     learningPillar -. "develops pedagogy" .-> scenesPillar
     scenesPillar -. "provides embodied context" .-> toolsPillar
 
-    %% Shared conceptual anchors
     toolsPillar --> agencyHub
     scenesPillar --> agencyHub
     learningPillar --> agencyHub
@@ -41,7 +36,6 @@ graph TD
     scenesPillar --> opennessHub
     learningPillar --> opennessHub
 
-    %% Compact toolchain cluster
     subgraph Toolset
       direction TB
       tmsLib["tms-lib"]
@@ -55,7 +49,6 @@ graph TD
       toolsPillar --> tmsLib --> seedBox --> lofiSampler --> MOARkNOBS42 --> PdRepo --> VCVpatch --> arduinoSketches --> microGranny2
     end
 
-    %% Compact scene cluster
     subgraph Scenes
       direction TB
       perceptualDrift["perceptual-drift"]
@@ -70,7 +63,6 @@ graph TD
       scenesPillar --> perceptualDrift --> pointyClumps --> droneChorus --> roomLens --> StringFieldNode --> DiceLoopNode --> hallwayReactor --> ArduinoSculpture --> HumanBuffer
     end
 
-    %% Compact learning cluster
     subgraph Learning
       direction TB
       SyllabusRepo["Syllabus"]
@@ -81,14 +73,12 @@ graph TD
       learningPillar --> SyllabusRepo --> ART215 --> repairStudio --> machineDocs --> personalSite
     end
 
-    %% Cross-pillar connections (minimal, strategic)
     MOARkNOBS42 -. "used in workshops" .-> learningPillar
     ArduinoSculpture -. "exhibited as learning prototype" .-> learningPillar
     SyllabusRepo -. "informs" .-> ART215
     repairStudio -. "inspired" .-> machineDocs
     tmsLib -. "extends" .-> seedBox
 
-    %% Style definitions
     classDef tools fill:#FFEBCC,stroke:#B57614,stroke-width:2px;
     classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px;
     classDef learning fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px;
@@ -98,6 +88,8 @@ graph TD
     class scenesPillar,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer scenes;
     class learningPillar,SyllabusRepo,ART215,repairStudio,machineDocs,personalSite learning;
     class agencyHub,opennessHub hub;
+```
+</div>
 
 
 ## Stack snapshot
