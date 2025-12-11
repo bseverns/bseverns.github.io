@@ -81,12 +81,12 @@ graph TD
     repairStudio -. "inspired" .-> machineDocs
     tmsLib -. "extends" .-> seedBox
 
-    classDef tools fill:#FFEBCC,stroke:#B57614,stroke-width:2px;
+    classDef tools fill:#00EBCC,stroke:#FFFFFF,stroke-width:2px;
     classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px;
     classDef learning fill:#DAE8FC,stroke:#6C8EBF,stroke-width:2px;
     classDef hub fill:#FFF2CC,stroke:#999,stroke-width:2px,stroke-dasharray: 3 3;
 
-    class thesis,toolsPillar,tmsLib,seedBox,lofiSampler,MOARkNOBS42,PdRepo,VCVpatch,arduinoSketches,microGranny2 tools;
+    class thesis,toolsPillar,tmsLib,seedBox,Horizon,DustPress,lofiSampler,MOARkNOBS42,PdRepo,VCVpatch,arduinoSketches,microGranny2 tools;
     class scenesPillar,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer scenes;
     class learningPillar,SyllabusRepo,ART215,repairStudio,machineDocs,personalSite learning;
     class agencyHub,opennessHub hub;
