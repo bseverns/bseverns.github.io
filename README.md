@@ -40,13 +40,15 @@ graph TD
       direction TB
       tmsLib["tms-lib"]
       seedBox["seedBox"]
+      Horizon["Horizon"]
+      DustPress["DustPress"]
       lofiSampler["lofi-sampler"]
       MOARkNOBS42["MOARkNOBS-42"]
       PdRepo["Pd"]
       VCVpatch["VCV_patch"]
       arduinoSketches["arduinoSketches"]
       microGranny2["microGranny2"]
-      toolsPillar --> tmsLib --> seedBox --> lofiSampler --> MOARkNOBS42 --> PdRepo --> VCVpatch --> arduinoSketches --> microGranny2
+      toolsPillar --> tmsLib --> seedBox --> Horizon --> DustPress --> lofiSampler --> MOARkNOBS42 --> PdRepo --> VCVpatch --> arduinoSketches --> microGranny2
     end
 
     subgraph Scenes
