@@ -404,6 +404,10 @@ article.teaching li {
   margin: 2rem 0 0;
 }
 
+.selected-grid {
+  margin-top: 1.5rem;
+}
+
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -434,6 +438,20 @@ article.teaching li {
   border: 1px solid var(--border);
 }
 
+.selected-card .card-thumb {
+  aspect-ratio: 4 / 3;
+  border-radius: 0.55rem;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.selected-card .card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
 .card h3 {
   margin: 0;
   font-size: 1.35rem;
@@ -456,6 +474,21 @@ article.teaching li {
 .card-body p {
   margin: 0 0 1rem;
   color: var(--muted);
+}
+
+.archive-link-note {
+  margin: 1.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.archive-link-note a {
+  color: inherit;
+}
+
+.archive-link-note a:hover,
+.archive-link-note a:focus-visible {
+  color: var(--fg);
 }
 
 .card-link {
