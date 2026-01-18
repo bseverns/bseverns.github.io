@@ -1,10 +1,12 @@
-import Ajv from 'https://cdn.jsdelivr.net/npm/ajv@8/dist/ajv7.mjs';
-import addFormats from 'https://cdn.jsdelivr.net/npm/ajv-formats@3/dist/ajv-formats.mjs';
+import Ajv from './lib/mini-ajv.js';
+import addFormats from './lib/add-formats.js';
 
 const DEFAULT_DEBOUNCE = 24;
 const TELEMETRY_FRAME_MS = 16;
-const ACK_TIMEOUT_MS = 1500;
+const RPC_THROTTLE_INTERVAL_MS = 1000 / 120;
+const RPC_TIMEOUT_MS = 3000;
 const STORAGE_KEY = 'moarknobs:last-port';
+const STATE_STORAGE_KEY = 'moarknobs:last-state';
 const EF_FILTER_NAMES = [
   'LINEAR',
   'OPPOSITE_LINEAR',
@@ -13,6 +15,18 @@ const EF_FILTER_NAMES = [
   'LOWPASS',
   'HIGHPASS',
   'BANDPASS'
+];
+const SLOT_TYPE_NAMES = [
+  'OFF',
+  'CC',
+  'Note',
+  'PitchBend',
+  'ProgramChange',
+  'Aftertouch',
+  'ModWheel',
+  'NRPN',
+  'RPN',
+  'SysEx'
 ];
 const ARG_METHOD_NAMES = [
   'PLUS',
@@ -62,15 +76,6 @@ function decoder() {
   return new TextDecoder();
 }
 
-function chunkBuffer(buffer, chunkSize) {
-  if (buffer.length <= chunkSize) return [buffer];
-  const out = [];
-  for (let i = 0; i < buffer.length; i += chunkSize) {
-    out.push(buffer.slice(i, i + chunkSize));
-  }
-  return out;
-}
-
 async function digest(message) {
   const bytes = typeof message === 'string' ? new TextEncoder().encode(message) : message;
   const hash = await crypto.subtle.digest('SHA-256', bytes);
@@ -118,6 +123,29 @@ function shallowEqual(a, b) {
     if (a[key] !== b[key]) return false;
   }
   return true;
+}
+
+function parseSegment(segment) {
+  const idx = Number(segment);
+  return Number.isInteger(idx) && String(idx) === segment ? idx : segment;
+}
+
+function setNestedValue(target, path, value) {
+  if (!path) return;
+  const segments = path.split('.').map(parseSegment);
+  let cursor = target;
+  for (let i = 0; i < segments.length; i += 1) {
+    const segment = segments[i];
+    if (i === segments.length - 1) {
+      cursor[segment] = value;
+      break;
+    }
+    const nextSegment = segments[i + 1];
+    if (cursor[segment] === undefined || cursor[segment] === null) {
+      cursor[segment] = typeof nextSegment === 'number' ? [] : {};
+    }
+    cursor = cursor[segment];
+  }
 }
 
 function clamp(value, min, max) {
@@ -311,26 +339,74 @@ function normalizeSlotArg(slot, efLimit = 6) {
     methodIndex = ARG_METHOD_NAMES.indexOf(arg.method_name);
   }
   if (methodIndex < 0) methodIndex = defaults.method;
-  arg.method = clamp(methodIndex, 0, ARG_METHOD_NAMES.length - 1);
+  arg.method = clamp(Math.round(methodIndex), 0, ARG_METHOD_NAMES.length - 1);
   arg.method_name = ARG_METHOD_NAMES[arg.method] || defaults.method_name;
-  const followerMax = Math.max(0, efLimit - 1);
-  arg.sourceA = clamp(Number.isFinite(Number(arg.sourceA)) ? Number(arg.sourceA) : defaults.sourceA, 0, followerMax || 0);
-  arg.sourceB = clamp(Number.isFinite(Number(arg.sourceB)) ? Number(arg.sourceB) : defaults.sourceB, 0, followerMax || 0);
+  const sourceA = Number.isFinite(Number(arg.sourceA)) ? Math.round(Number(arg.sourceA)) : defaults.sourceA;
+  const sourceB = Number.isFinite(Number(arg.sourceB)) ? Math.round(Number(arg.sourceB)) : defaults.sourceB;
+  arg.sourceA = sourceA;
+  arg.sourceB = sourceB;
   return arg;
 }
 
 function normalizeSlotConfig(slot, efLimit = 6) {
-  const next = slot && typeof slot === 'object' ? { ...slot } : {};
-  next.ef = normalizeSlotEnvelope(next);
-  next.efIndex = Number.isFinite(Number(next.efIndex)) ? Number(next.efIndex) : next.ef.index;
-  if (!Number.isFinite(Number(next.efIndex))) next.efIndex = next.ef.index;
-  next.arg = normalizeSlotArg(next, efLimit);
-  return next;
+  const source = slot && typeof slot === 'object' ? slot : {};
+  const efMax = Math.max(-1, Math.round(Number.isFinite(Number(efLimit)) ? Number(efLimit) - 1 : 5));
+  const typeCandidate =
+    typeof source.type === 'string'
+      ? source.type
+      : typeof source.type_name === 'string'
+      ? source.type_name
+      : null;
+  const type = SLOT_TYPE_NAMES.includes(typeCandidate) ? typeCandidate : 'OFF';
+
+  const midiChannelCandidate = Number(source.midiChannel ?? source.channel);
+  const midiChannel = Number.isFinite(midiChannelCandidate)
+    ? clamp(Math.round(midiChannelCandidate), 1, 16)
+    : 1;
+
+  const dataCandidate = Number(source.data1 ?? source.cc ?? source.note ?? source.value);
+  const data1 = Number.isFinite(dataCandidate) ? clamp(Math.round(dataCandidate), 0, 127) : 0;
+
+  const efIndexCandidate = Number(source.efIndex ?? source.ef_index ?? source.ef?.index);
+  const efIndex = Number.isFinite(efIndexCandidate)
+    ? clamp(Math.round(efIndexCandidate), -1, Math.max(-1, efMax))
+    : -1;
+
+  const ef = normalizeSlotEnvelope(source);
+  ef.index = efIndex;
+
+  const activeCandidate = source.active ?? source.enabled;
+  const active = typeof activeCandidate === 'boolean' ? activeCandidate : Boolean(activeCandidate);
+
+  const potCandidate = source.pot;
+  let pot;
+  if (typeof potCandidate === 'boolean') pot = potCandidate;
+  else if (typeof potCandidate === 'number') pot = potCandidate !== 0;
+  else if (typeof potCandidate === 'string') pot = potCandidate === 'true' || potCandidate === '1';
+  else pot = Boolean(potCandidate);
+
+  const arg = normalizeSlotArg(source, efLimit);
+
+  const normalized = { type, midiChannel, data1, efIndex, ef, active, pot, arg };
+
+  const label = typeof source.label === 'string' ? source.label : undefined;
+  if (label !== undefined) normalized.label = label;
+
+  const takeoverCandidate = source.takeover;
+  if (typeof takeoverCandidate === 'boolean') normalized.takeover = takeoverCandidate;
+  else if (typeof takeoverCandidate === 'number') normalized.takeover = takeoverCandidate !== 0;
+
+  let sysexTemplate = source.sysexTemplate ?? source.sysex_template;
+  if (typeof sysexTemplate === 'string') {
+    sysexTemplate = sysexTemplate.trim().slice(0, 128);
+    normalized.sysexTemplate = sysexTemplate;
+  }
+
+  return normalized;
 }
 
 function normalizeConfig(config, manifest = {}) {
   if (!config || typeof config !== 'object') return config;
-  const next = { ...config };
   const slotCount = Number.isFinite(Number(manifest.slot_count))
     ? Number(manifest.slot_count)
     : Array.isArray(config.slots)
@@ -341,10 +417,11 @@ function normalizeConfig(config, manifest = {}) {
   const followerEf = Array.isArray(config.envelopes?.followers) ? config.envelopes.followers.length : null;
   const efCount = manifestEf ?? configEf ?? followerEf ?? 0;
 
-  next.slots = Array.from({ length: slotCount }, (_, idx) => normalizeSlotConfig(config.slots?.[idx], efCount));
+  const slots = Array.from({ length: slotCount }, (_, idx) => normalizeSlotConfig(config.slots?.[idx], efCount));
 
+  let efSlots;
   if (Array.isArray(config.efSlots)) {
-    next.efSlots = Array.from({ length: efCount }, (_, idx) => {
+    efSlots = Array.from({ length: efCount }, (_, idx) => {
       const entry = config.efSlots[idx];
       const slotIndex = entry && Number.isFinite(Number(entry.slot)) ? Number(entry.slot) : -1;
       if (slotIndex < 0) return { slot: -1 };
@@ -362,7 +439,7 @@ function normalizeConfig(config, manifest = {}) {
       const capped = clamp(potIndex, 0, Math.max(0, slotCount - 1));
       derived[follower] = { slot: capped };
     });
-    next.slots.forEach((slot, slotIndex) => {
+    slots.forEach((slot, slotIndex) => {
       const raw = Number.isFinite(Number(slot?.efIndex))
         ? Number(slot.efIndex)
         : Number.isFinite(Number(slot?.ef?.index))
@@ -372,7 +449,7 @@ function normalizeConfig(config, manifest = {}) {
       if (derived[raw].slot !== -1) return;
       derived[raw] = { slot: clamp(slotIndex, 0, Math.max(0, slotCount - 1)) };
     });
-    next.efSlots = derived;
+    efSlots = derived;
   }
 
   let legacyLedColor = null;
@@ -380,100 +457,125 @@ function normalizeConfig(config, manifest = {}) {
     const swatch = config.ledColors.find((entry) => typeof entry?.color === 'string' && /^#([0-9a-fA-F]{6})$/.test(entry.color));
     if (swatch) legacyLedColor = swatch.color.toUpperCase();
   }
-  if ('ledColors' in next) {
-    delete next.ledColors;
+  const env = config.envelopes && typeof config.envelopes === 'object' ? config.envelopes : {};
+
+  const filterSource = config.filter && typeof config.filter === 'object' ? config.filter : {};
+  const envFilter = env.filter && typeof env.filter === 'object' ? env.filter : {};
+  const filter = {};
+  const freqCandidate = Number(filterSource.freq ?? filterSource.frequency);
+  if (Number.isFinite(freqCandidate)) {
+    filter.freq = freqCandidate;
+  } else {
+    const envFreq = Number(envFilter.frequency ?? envFilter.freq);
+    if (Number.isFinite(envFreq)) filter.freq = envFreq;
+  }
+  if (!Number.isFinite(filter.freq)) filter.freq = 20;
+
+  const qCandidate = Number(filterSource.q);
+  if (Number.isFinite(qCandidate)) {
+    filter.q = qCandidate;
+  } else {
+    const envQ = Number(envFilter.q);
+    if (Number.isFinite(envQ)) filter.q = envQ;
+  }
+  if (!Number.isFinite(filter.q)) filter.q = 1;
+
+  if (typeof filterSource.type === 'string' && EF_FILTER_NAMES.includes(filterSource.type)) {
+    filter.type = filterSource.type;
+  } else if (typeof envFilter.type === 'string' && EF_FILTER_NAMES.includes(envFilter.type)) {
+    filter.type = envFilter.type;
+  } else {
+    const followerFilter = env.followers?.find((entry) => typeof entry?.filter === 'string')?.filter;
+    const slotFilter = slots.find((slot) => typeof slot?.ef?.filter_name === 'string')?.ef?.filter_name;
+    const derivedFilter = followerFilter || slotFilter;
+    filter.type = typeof derivedFilter === 'string' && EF_FILTER_NAMES.includes(derivedFilter) ? derivedFilter : 'LINEAR';
   }
 
+  const argSource = config.arg && typeof config.arg === 'object' ? config.arg : {};
+  const pair = env.arg_pair && typeof env.arg_pair === 'object' ? env.arg_pair : {};
+  const readNumber = (value, fallback) => {
+    const num = Number(value);
+    return Number.isFinite(num) ? num : fallback;
+  };
+
+  let methodName = null;
+  if (typeof argSource.method === 'string' && ARG_METHOD_NAMES.includes(argSource.method)) {
+    methodName = argSource.method;
+  } else if (typeof argSource.method_name === 'string' && ARG_METHOD_NAMES.includes(argSource.method_name)) {
+    methodName = argSource.method_name;
+  } else if (Number.isFinite(Number(argSource.method))) {
+    const idx = Math.max(0, Math.min(ARG_METHOD_NAMES.length - 1, Math.round(Number(argSource.method))));
+    methodName = ARG_METHOD_NAMES[idx];
+  } else if (typeof env.arg_method_name === 'string' && ARG_METHOD_NAMES.includes(env.arg_method_name)) {
+    methodName = env.arg_method_name;
+  } else if (Number.isFinite(Number(env.arg_method))) {
+    const idx = Math.max(0, Math.min(ARG_METHOD_NAMES.length - 1, Math.round(Number(env.arg_method))));
+    methodName = ARG_METHOD_NAMES[idx];
+  } else {
+    methodName = ARG_METHOD_NAMES[0];
+  }
+
+  let enabled;
+  if (typeof argSource.enable === 'boolean') enabled = argSource.enable;
+  else if (typeof argSource.enabled === 'boolean') enabled = argSource.enabled;
+  else if (typeof env.arg_enable === 'boolean') enabled = env.arg_enable;
+  else if (typeof env.arg_enabled === 'boolean') enabled = env.arg_enabled;
+  else enabled = true;
+
+  let argA = readNumber(argSource.a ?? argSource.sourceA, undefined);
+  if (argA === undefined) argA = readNumber(pair.a, 0);
+  if (!Number.isFinite(argA)) argA = 0;
+
+  let argB = readNumber(argSource.b ?? argSource.sourceB, undefined);
+  if (argB === undefined) argB = readNumber(pair.b, Math.max(0, Math.min(1, efCount - 1)));
+  if (!Number.isFinite(argB)) argB = Math.max(0, Math.min(1, efCount - 1));
+
+  const arg = { method: methodName, a: argA, b: argB, enable: Boolean(enabled) };
+
+  let led;
   if (config.led && typeof config.led === 'object') {
-    const led = { ...config.led };
-    const brightness = Number(led.brightness);
-    led.brightness = Number.isFinite(brightness) ? clamp(Math.round(brightness), 0, 255) : 0;
-    if (typeof led.color !== 'string' || !/^#([0-9a-fA-F]{6})$/.test(led.color)) {
-      if (typeof led.hex === 'string' && /^#([0-9a-fA-F]{6})$/.test(led.hex)) {
-        led.color = led.hex.toUpperCase();
-      } else if (led.rgb && Number.isFinite(led.rgb.r) && Number.isFinite(led.rgb.g) && Number.isFinite(led.rgb.b)) {
-        led.color = `#${[led.rgb.r, led.rgb.g, led.rgb.b]
+    const ledCandidate = { ...config.led };
+    const brightness = Number(ledCandidate.brightness);
+    const parsed = Number.isFinite(brightness) ? clamp(Math.round(brightness), 0, 255) : 0;
+    let color = ledCandidate.color;
+    if (typeof color !== 'string' || !/^#([0-9a-fA-F]{6})$/.test(color)) {
+      if (typeof ledCandidate.hex === 'string' && /^#([0-9a-fA-F]{6})$/.test(ledCandidate.hex)) {
+        color = ledCandidate.hex.toUpperCase();
+      } else if (
+        ledCandidate.rgb &&
+        Number.isFinite(ledCandidate.rgb.r) &&
+        Number.isFinite(ledCandidate.rgb.g) &&
+        Number.isFinite(ledCandidate.rgb.b)
+      ) {
+        color = `#${[ledCandidate.rgb.r, ledCandidate.rgb.g, ledCandidate.rgb.b]
           .map((value) => clamp(Math.round(value), 0, 255).toString(16).padStart(2, '0'))
           .join('')}`.toUpperCase();
       } else {
-        led.color = '#000000';
+        color = '#000000';
       }
     }
-    next.led = { brightness: led.brightness, color: led.color };
-  } else if (next.led && typeof next.led === 'object') {
-    const led = { ...next.led };
-    const brightness = Number(led.brightness);
-    led.brightness = Number.isFinite(brightness) ? clamp(Math.round(brightness), 0, 255) : 0;
-    if (typeof led.color !== 'string' || !/^#([0-9a-fA-F]{6})$/.test(led.color)) {
-      led.color = '#000000';
-    }
-    next.led = led;
-  } else {
-    next.led = { brightness: 0, color: '#000000' };
+    led = { brightness: parsed, color: color.toUpperCase?.() || '#000000' };
+  }
+
+  if (!led) {
+    led = { brightness: 0, color: '#000000' };
   }
 
   if (legacyLedColor) {
-    if (!next.led || typeof next.led !== 'object') {
-      next.led = { brightness: 0, color: legacyLedColor };
-    } else if (typeof next.led.color !== 'string' || !/^#([0-9a-fA-F]{6})$/.test(next.led.color)) {
-      next.led = { ...next.led, color: legacyLedColor };
+    if (!led || typeof led !== 'object') {
+      led = { brightness: 0, color: legacyLedColor };
+    } else if (typeof led.color !== 'string' || !/^#([0-9a-fA-F]{6})$/.test(led.color)) {
+      led = { ...led, color: legacyLedColor };
     }
   }
 
-  if (config.envelopes && typeof config.envelopes === 'object') {
-    const env = config.envelopes;
-    if (!next.filter || typeof next.filter !== 'object') next.filter = {};
-    if (env.filter && typeof env.filter === 'object') {
-      const freq = Number(env.filter.frequency ?? env.filter.freq);
-      const q = Number(env.filter.q);
-      if (Number.isFinite(freq)) next.filter.freq = freq;
-      if (Number.isFinite(q)) next.filter.q = q;
-    }
-    if (!next.filter.type) {
-      const followerFilter = env.followers?.find((entry) => typeof entry?.filter === 'string')?.filter;
-      const slotFilter = next.slots.find((slot) => typeof slot?.ef?.filter_name === 'string')?.ef?.filter_name;
-      const derivedFilter = followerFilter || slotFilter;
-      if (typeof derivedFilter === 'string' && EF_FILTER_NAMES.includes(derivedFilter)) {
-        next.filter.type = derivedFilter;
-      } else {
-        next.filter.type = 'LINEAR';
-      }
-    }
+  let envelopeMode = null;
+  if (typeof config.envelopeMode === 'string') envelopeMode = config.envelopeMode;
+  else if (typeof env.mode_name === 'string') envelopeMode = env.mode_name;
 
-    const argMethodName = typeof env.arg_method_name === 'string' ? env.arg_method_name : undefined;
-    const argMethodIndex = Number(env.arg_method);
-    const methodName = argMethodName || (Number.isFinite(argMethodIndex) ? ARG_METHOD_NAMES[argMethodIndex] : undefined) || 'PLUS';
-    const pair = env.arg_pair && typeof env.arg_pair === 'object' ? env.arg_pair : {};
-    const followerMax = Math.max(0, efCount - 1);
-    const rawA = Number.isFinite(Number(pair.a)) ? Number(pair.a) : 0;
-    const rawB = Number.isFinite(Number(pair.b)) ? Number(pair.b) : 1;
-    next.arg = {
-      method: methodName,
-      enable: Boolean(env.arg_enable ?? env.arg_enabled ?? true),
-      a: clamp(rawA, 0, followerMax || 0),
-      b: clamp(rawB, 0, followerMax || 0)
-    };
-
-    if (env.mode_name && typeof env.mode_name === 'string') {
-      next.envelopeMode = env.mode_name;
-    }
-  } else {
-    if (next.filter && typeof next.filter === 'object') {
-      next.filter = { ...next.filter };
-    }
-    if (next.arg && typeof next.arg === 'object') {
-      const globalArg = { ...next.arg };
-      if (globalArg.method && typeof globalArg.method !== 'string') {
-        const idx = Number(globalArg.method);
-        if (Number.isFinite(idx) && ARG_METHOD_NAMES[idx]) {
-          globalArg.method = ARG_METHOD_NAMES[idx];
-        }
-      }
-      next.arg = globalArg;
-    }
-  }
-
-  return next;
+  const normalized = { slots, efSlots, filter, arg, led };
+  if (envelopeMode) normalized.envelopeMode = envelopeMode;
+  return normalized;
 }
 
 function applyEfSlotPatch(target, patch) {
@@ -568,6 +670,7 @@ function createSimulator() {
   let index = 0;
   const lines = [];
   let resolver;
+
   const manifest = {
     fw_version: 'sim-fw',
     git_sha: 'deadbeef',
@@ -581,7 +684,8 @@ function createSimulator() {
     free_ram: 48000,
     free_flash: 512000
   };
-  const config = {
+
+  let config = {
     fw_version: manifest.fw_version,
     schema_version: manifest.schema_version,
     pots: Array.from({ length: manifest.pot_count }, (_, idx) => ({
@@ -655,6 +759,9 @@ function createSimulator() {
       rgb: { r: 255, g: 0, b: 255 }
     }
   };
+  const profileSlots = Array.from({ length: 4 }, () => clone(config));
+  const defaultProfile = clone(config);
+
   const telemetry = () => ({
     slots: Array.from({ length: manifest.slot_count }, () => Math.floor(Math.random() * 127)),
     slotArgs: Array.from({ length: manifest.slot_count }, (_, idx) => ({
@@ -685,32 +792,79 @@ function createSimulator() {
     opened = true;
   }
 
+  function pushLine(payload) {
+    lines.push(JSON.stringify(payload));
+    if (resolver) {
+      const fn = resolver;
+      resolver = null;
+      fn(lines.shift());
+    }
+  }
+
   async function writeLine(line) {
     if (!opened) throw new Error('simulator closed');
-    if (line.startsWith('GET_MANIFEST') || line.startsWith('HELLO')) {
-      lines.push(JSON.stringify(manifest));
-    } else if (line.startsWith('GET_CONFIG')) {
-      lines.push(JSON.stringify(config));
-    } else if (line.startsWith('SET_ALL')) {
-      try {
-        const payload = JSON.parse(line.replace(/^SET_ALL\s+/, ''));
-        if (payload?.config) {
-          Object.assign(config, payload.config);
-        }
-        lines.push(JSON.stringify({ type: 'ack', checksum: payload?.checksum || 'sim' }));
-      } catch (err) {
-        lines.push(JSON.stringify({ type: 'error', message: err.message }));
-      }
-    } else if (line.startsWith('PING')) {
-      lines.push(JSON.stringify({ type: 'pong' }));
+    const trimmed = line.trim();
+    if (!trimmed) return;
+    let request;
+    try {
+      request = JSON.parse(trimmed);
+    } catch (err) {
+      pushLine({ error: { message: err.message } });
+      return;
     }
-    queueMicrotask(() => {
-      if (resolver) {
-        const fn = resolver;
-        resolver = null;
-        fn(lines.shift());
+    const rpc = request.rpc ?? request.method;
+    const respond = (result) => {
+      if (request.id === undefined) return;
+      pushLine({ id: request.id, result });
+    };
+    const clampSlot = (value) => {
+      const idx = Number.isFinite(Number(value)) ? Number(value) : 0;
+      return Math.max(0, Math.min(profileSlots.length - 1, Math.floor(idx)));
+    };
+    switch (rpc) {
+      case 'hello':
+        respond({ message: 'hello' });
+        break;
+      case 'get_manifest':
+        respond({ manifest });
+        break;
+      case 'get_config':
+        respond({ config });
+        break;
+      case 'set_config':
+        if (request.config && typeof request.config === 'object') {
+          config = { ...config, ...request.config };
+        }
+        respond({ checksum: request.checksum ?? 'sim-checksum' });
+        break;
+      case 'save_profile': {
+        const slot = clampSlot(request.slot ?? request.id ?? 0);
+        profileSlots[slot] = clone(config);
+        respond({ slot, saved: true });
+        break;
       }
-    });
+      case 'load_profile': {
+        const slot = clampSlot(request.slot ?? request.id ?? 0);
+        const loaded = profileSlots[slot] ?? clone(defaultProfile);
+        config = clone(loaded);
+        respond({ slot, config: clone(config) });
+        break;
+      }
+      case 'reset_profile': {
+        const slot = clampSlot(request.slot ?? request.id ?? 0);
+        profileSlots[slot] = clone(defaultProfile);
+        config = clone(defaultProfile);
+        respond({ slot, config: clone(config) });
+        break;
+      }
+      case 'hang':
+        break;
+      default:
+        if (request.id !== undefined) {
+          pushLine({ id: request.id, error: { message: 'Unsupported RPC' } });
+        }
+        break;
+    }
   }
 
   function nextLine() {
@@ -720,10 +874,7 @@ function createSimulator() {
       resolver = resolve;
       setTimeout(() => {
         if (!resolver) return;
-        const fn = resolver;
-        resolver = null;
-        lines.push(JSON.stringify({ type: 'telemetry', ...telemetry() }));
-        fn(lines.shift());
+        pushLine({ type: 'telemetry', ...telemetry() });
       }, TELEMETRY_FRAME_MS * 4);
     });
   }
@@ -735,16 +886,149 @@ function createSimulator() {
   return { open, writeLine, nextLine, close, rawPort: { getInfo: () => ({ usbVendorId: 0xfeed, usbProductId: 0xbeef }) } };
 }
 
+function createWebSocketTransport(url) {
+  let socket = null;
+  let queue = [];
+  let resolver = null;
+  let buffer = '';
+  let closed = false;
+  const decoder = typeof TextDecoder === 'function' ? new TextDecoder() : null;
+
+  const enqueueLine = (line) => {
+    queue.push(line);
+    if (resolver) {
+      const pending = resolver;
+      resolver = null;
+      const next = queue.shift();
+      pending.resolve(next);
+    }
+  };
+
+  const flushBuffer = () => {
+    if (!buffer) return;
+    const trimmed = buffer.trim();
+    buffer = '';
+    if (trimmed) enqueueLine(trimmed);
+  };
+
+  const handleMessage = (event) => {
+    if (!event || closed) return;
+    const data = event.data;
+    const text = typeof data === 'string' ? data : decoder?.decode(data) ?? '';
+    if (!text) return;
+    buffer += text;
+    let index;
+    while ((index = buffer.indexOf('\n')) >= 0) {
+      const segment = buffer.slice(0, index);
+      buffer = buffer.slice(index + 1);
+      const trimmed = segment.trim();
+      if (trimmed) enqueueLine(trimmed);
+    }
+  };
+
+  const handleClose = () => {
+    closed = true;
+    flushBuffer();
+    if (resolver) {
+      const pending = resolver;
+      resolver = null;
+      pending.reject(new Error('WebSocket closed'));
+    }
+  };
+
+  function open() {
+    if (socket) {
+      if (socket.readyState === WebSocket.OPEN) return Promise.resolve();
+      if (socket.readyState === WebSocket.CONNECTING) return new Promise((resolve, reject) => {
+        const cleanup = () => {
+          socket.removeEventListener('open', onOpen);
+          socket.removeEventListener('error', onError);
+        };
+        const onOpen = () => {
+          cleanup();
+          resolve();
+        };
+        const onError = (event) => {
+          cleanup();
+          reject(new Error('WebSocket error'));
+        };
+        socket.addEventListener('open', onOpen);
+        socket.addEventListener('error', onError);
+      });
+    }
+    if (typeof WebSocket === 'undefined') return Promise.reject(new Error('WebSocket unsupported'));
+    closed = false;
+    buffer = '';
+    queue = [];
+    socket = new WebSocket(url);
+    socket.binaryType = 'arraybuffer';
+    return new Promise((resolve, reject) => {
+      const onOpen = () => {
+        socket.addEventListener('message', handleMessage);
+        socket.addEventListener('close', handleClose);
+        resolve();
+      };
+      const onError = (event) => {
+        handleClose();
+        reject(new Error('WebSocket error'));
+      };
+      socket.addEventListener('open', onOpen, { once: true });
+      socket.addEventListener('error', onError, { once: true });
+    });
+  }
+
+  function writeLine(line) {
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      return Promise.reject(new Error('WebSocket not connected'));
+    }
+    socket.send(`${typeof line === 'string' ? line.trim() : String(line)}\n`);
+    return Promise.resolve();
+  }
+
+  function nextLine() {
+    if (queue.length) {
+      return Promise.resolve(queue.shift());
+    }
+    if (closed) {
+      return Promise.reject(new Error('WebSocket closed'));
+    }
+    return new Promise((resolve, reject) => {
+      resolver = { resolve, reject };
+    });
+  }
+
+  function close() {
+    if (!socket) return Promise.resolve();
+    if (socket.readyState === WebSocket.CLOSING || socket.readyState === WebSocket.CLOSED) {
+      return Promise.resolve();
+    }
+    socket.close();
+    return Promise.resolve();
+  }
+
+  return {
+    open,
+    writeLine,
+    nextLine,
+    close,
+    rawPort: { getInfo: () => null }
+  };
+}
+
 export function createRuntime({
   schemaUrl = './config_schema.json',
   localManifest,
   migrations = {},
-  useSimulator = false
+  useSimulator = false,
+  rpcTimeoutMs = RPC_TIMEOUT_MS,
+  testHooks,
+  wsUrl
 } = {}) {
   const { emit, on } = makeEmitter();
 
   let transport = null;
-  let telemetryTimer = null;
+  let readTimer = null;
+  let readLoopActive = false;
   let queuedTelemetry = null;
   let remoteManifest = null;
   let schema = null;
@@ -755,13 +1039,27 @@ export function createRuntime({
   let seq = 0;
   let lastKnownChecksum = null;
   let potGuard = new Set();
+  const statusListeners = new Set();
+  let rpcSeq = 0;
+  const rpcQueue = [];
+  let rpcBusy = false;
+  let lastRpcTimestamp = 0;
+  const pendingRpc = new Map();
 
   const ajv = new Ajv({ strict: false, allErrors: true });
   addFormats(ajv);
 
-  const outboundQueue = [];
-  let writing = false;
-  let lastSend = 0;
+  const hooks =
+    testHooks ?? (typeof globalThis !== 'undefined' ? globalThis.__MN42_TEST_HOOKS : null) ?? null;
+  const rpcTimeout = Number.isFinite(Number(rpcTimeoutMs)) ? Number(rpcTimeoutMs) : RPC_TIMEOUT_MS;
+  const params =
+    typeof window !== 'undefined' && typeof URLSearchParams === 'function' && typeof window.location === 'object'
+      ? new URLSearchParams(window.location.search)
+      : null;
+  let websocketUrl =
+    typeof wsUrl === 'string' && wsUrl.trim().length
+      ? wsUrl.trim()
+      : params?.get('ws')?.trim() ?? null;
 
   function getPortInfo(port) {
     if (!port?.getInfo) return null;
@@ -808,12 +1106,119 @@ export function createRuntime({
     return createTransportPort(port);
   }
 
+  function notifyStatus(payload) {
+    if (!payload || !statusListeners.size) return;
+    const snapshot = clone(payload);
+    for (const listener of [...statusListeners]) {
+      try {
+        listener(snapshot);
+      } catch (err) {
+        console.error('runtime status listener error', err);
+      }
+    }
+  }
+
+  function onStatus(handler) {
+    if (typeof handler !== 'function') return () => {};
+    statusListeners.add(handler);
+    return () => statusListeners.delete(handler);
+  }
+
+  async function processRpcQueue() {
+    if (rpcBusy || !transport) return;
+    rpcBusy = true;
+    try {
+      while (rpcQueue.length && transport) {
+        const message = rpcQueue.shift();
+        const elapsed = performance.now() - lastRpcTimestamp;
+        const wait = Math.max(0, RPC_THROTTLE_INTERVAL_MS - elapsed);
+        if (wait) await new Promise((resolve) => setTimeout(resolve, wait));
+        try {
+          await transport.writeLine(JSON.stringify(message));
+        } catch (err) {
+          const pending = pendingRpc.get(message.id);
+          if (pending) {
+            if (pending.timer) clearTimeout(pending.timer);
+            pendingRpc.delete(message.id);
+            pending.reject(err);
+          }
+          break;
+        }
+        lastRpcTimestamp = performance.now();
+        const pending = pendingRpc.get(message.id);
+        if (pending) {
+          pending.timer = setTimeout(() => {
+            if (pendingRpc.delete(message.id)) {
+              pending.reject(new Error('RPC timeout'));
+            }
+          }, pending.timeoutMs);
+        }
+      }
+    } finally {
+      rpcBusy = false;
+    }
+  }
+
+  function handleRpcResponse(msg) {
+    const pending = pendingRpc.get(msg.id);
+    if (!pending) return;
+    if (pending.timer) {
+      clearTimeout(pending.timer);
+      pending.timer = null;
+    }
+    pendingRpc.delete(msg.id);
+    if (msg.error) {
+      const error = new Error(msg.error.message ?? 'RPC error');
+      if (msg.error.code !== undefined) error.code = msg.error.code;
+      pending.reject(error);
+      return;
+    }
+    const response = Object.prototype.hasOwnProperty.call(msg, 'result') ? msg.result : msg;
+    pending.resolve(response);
+  }
+
+  function sendRpc(payload, { timeoutMs } = {}) {
+    if (!payload || typeof payload !== 'object' || !payload.rpc) {
+      return Promise.reject(new Error('RPC payload must include rpc property'));
+    }
+    if (!transport) return Promise.reject(new Error('Not connected'));
+    const id = ++rpcSeq;
+    const message = { ...payload, id };
+    return new Promise((resolve, reject) => {
+      const entry = {
+        resolve,
+        reject,
+        timeoutMs: Number.isFinite(Number(timeoutMs)) ? Number(timeoutMs) : rpcTimeout,
+        timer: null
+      };
+      pendingRpc.set(id, entry);
+      rpcQueue.push(message);
+      processRpcQueue();
+    });
+  }
+
+  function flushRpcPending(error) {
+    rpcQueue.length = 0;
+    for (const [id, pending] of pendingRpc) {
+      if (pending.timer) clearTimeout(pending.timer);
+      pending.reject(error);
+      pendingRpc.delete(id);
+    }
+  }
+
   async function connect(existingPort) {
     try {
       emit('status', { stage: 'handshake', level: 'info', message: 'Negotiating manifest…' });
-      transport = existingPort ?? (await requestPort());
+      let candidate = existingPort ?? null;
+      if (!candidate) {
+        candidate = websocketUrl ? createWebSocketTransport(websocketUrl) : await requestPort();
+      }
+      transport = candidate;
+      hooks?.mutateTransport?.(transport);
       await transport.open();
+      lastRpcTimestamp = 0;
       persistPortInfo(transport.rawPort);
+      startReadLoop();
       emit('transport-open', transport);
       await performHandshake();
       await hydrate();
@@ -826,34 +1231,42 @@ export function createRuntime({
       emit('error', err);
       await transport?.close().catch(() => {});
       transport = null;
+      flushRpcPending(err ?? new Error('Connection failed'));
       throw err;
     }
   }
 
   async function performHandshake() {
-    let manifestRaw;
     try {
-      manifestRaw = await send('GET_MANIFEST');
+      await sendRpc({ rpc: 'hello' });
     } catch (err) {
-      try {
-        manifestRaw = await send('HELLO');
-      } catch (_) {
-        manifestRaw = JSON.stringify({
-          fw_version: 'unknown',
-          git_sha: 'offline',
-          build_time: new Date().toISOString(),
-          schema_version: localManifest?.schema_version,
-          slot_count: localManifest?.slot_count,
-          pot_count: localManifest?.pot_count,
-          envelope_count: localManifest?.envelope_count,
-          arg_method_count: ARG_METHOD_NAMES.length,
-          led_count: localManifest?.led_count ?? 0,
-          free_ram: 0,
-          free_flash: 0
-        });
-      }
+      console.debug('hello RPC failed', err);
     }
-    remoteManifest = JSON.parse(manifestRaw);
+    let manifestPayload;
+    try {
+      manifestPayload = await sendRpc({ rpc: 'get_manifest' });
+    } catch (err) {
+      console.debug('get_manifest RPC failed', err);
+      manifestPayload = null;
+    }
+    const manifestData = manifestPayload?.manifest ?? manifestPayload;
+    if (manifestData && typeof manifestData === 'object') {
+      remoteManifest = manifestData;
+    } else {
+      remoteManifest = {
+        fw_version: 'unknown',
+        git_sha: 'offline',
+        build_time: new Date().toISOString(),
+        schema_version: localManifest?.schema_version,
+        slot_count: localManifest?.slot_count,
+        pot_count: localManifest?.pot_count,
+        envelope_count: localManifest?.envelope_count,
+        arg_method_count: ARG_METHOD_NAMES.length,
+        led_count: localManifest?.led_count ?? 0,
+        free_ram: 0,
+        free_flash: 0
+      };
+    }
     emit('manifest', remoteManifest);
     if (!remoteManifest.schema_version && remoteManifest.schemaVersion) {
       remoteManifest.schema_version = remoteManifest.schemaVersion;
@@ -871,33 +1284,46 @@ export function createRuntime({
   async function hydrate() {
     schema = await fetch(schemaUrl).then((res) => res.json());
     validator = ajv.compile(schema);
-    const raw = await send('GET_CONFIG');
-    const config = JSON.parse(raw);
+    const configPayload = await sendRpc({ rpc: 'get_config' });
+    const config = configPayload?.config ?? configPayload;
     const normalized = normalizeConfig(config, remoteManifest ?? localManifest ?? {});
     liveConfig = clone(normalized);
     stagedConfig = clone(normalized);
     dirty = false;
     emit('schema', schema);
-    emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
-    scheduleTelemetry();
+    broadcastConfig({ persist: false });
+    const snapshot = readStateSnapshot();
+    if (snapshot?.staged) {
+      stage(() => snapshot.staged);
+    }
+    startReadLoop();
   }
 
-  function scheduleTelemetry() {
-    if (telemetryTimer) return;
+  function startReadLoop() {
+    if (readLoopActive) return;
+    readLoopActive = true;
     const pump = async () => {
-      telemetryTimer = null;
-      if (!transport) return;
+      readTimer = null;
+      if (!transport) {
+        readLoopActive = false;
+        return;
+      }
       try {
         const line = await transport.nextLine();
         handleLine(line);
       } catch (err) {
         emit('error', err);
         await disconnect();
+        return;
       } finally {
-        if (transport) telemetryTimer = setTimeout(pump, TELEMETRY_FRAME_MS);
+        if (transport) {
+          readTimer = setTimeout(pump, TELEMETRY_FRAME_MS);
+        } else {
+          readLoopActive = false;
+        }
       }
     };
-    telemetryTimer = setTimeout(pump, TELEMETRY_FRAME_MS);
+    pump();
   }
 
   function handleLine(line) {
@@ -907,6 +1333,10 @@ export function createRuntime({
       msg = JSON.parse(line);
     } catch (err) {
       emit('log', line);
+      return;
+    }
+    if (msg?.id !== undefined) {
+      handleRpcResponse(msg);
       return;
     }
     if (msg.type === 'telemetry' || msg.slots || msg.envelopes) {
@@ -931,12 +1361,12 @@ export function createRuntime({
       }
       return;
     }
-    if (msg.type === 'ack') {
-      emit('ack', msg);
-      return;
-    }
     if (msg.type === 'error') {
       emit('device-error', msg);
+      return;
+    }
+    if (msg.status || msg.event || msg.type === 'status') {
+      notifyStatus(msg);
       return;
     }
     emit('log', line);
@@ -944,8 +1374,65 @@ export function createRuntime({
 
   function flushTelemetry() {
     if (!queuedTelemetry) return;
-    emit('telemetry', queuedTelemetry);
+    const frame = clone(queuedTelemetry);
+    emit('telemetry', frame);
+    notifyStatus({ type: 'telemetry', ...frame });
     queuedTelemetry = null;
+  }
+
+  function persistStateSnapshot() {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      if (stagedConfig === null || stagedConfig === undefined) {
+        localStorage.removeItem(STATE_STORAGE_KEY);
+        return;
+      }
+      localStorage.setItem(
+        STATE_STORAGE_KEY,
+        JSON.stringify({
+          schema_version: remoteManifest?.schema_version ?? localManifest?.schema_version,
+          staged: stagedConfig,
+          timestamp: Date.now()
+        })
+      );
+    } catch (err) {
+      console.debug('persist state snapshot failed', err);
+    }
+  }
+
+  function readStateSnapshot() {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(STATE_STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (err) {
+      console.debug('read state snapshot failed', err);
+      return null;
+    }
+  }
+
+  function broadcastConfig({ persist = true } = {}) {
+    const payload = { config: clone(liveConfig), staged: clone(stagedConfig), dirty };
+    if (persist) persistStateSnapshot();
+    emit('config', payload);
+  }
+
+  function restoreLocalState() {
+    const snapshot = readStateSnapshot();
+    if (!snapshot?.staged) return false;
+    stage(() => snapshot.staged);
+    return true;
+  }
+
+  function replaceConfig(configPayload) {
+    if (!configPayload || typeof configPayload !== 'object') return false;
+    const normalized = normalizeConfig(configPayload, remoteManifest ?? localManifest ?? {});
+    liveConfig = clone(normalized);
+    stagedConfig = clone(normalized);
+    dirty = false;
+    broadcastConfig();
+    return true;
   }
 
   function applyConfigPatch(patch) {
@@ -1111,7 +1598,7 @@ export function createRuntime({
     liveConfig = clone(normalizedLive);
     stagedConfig = clone(normalizedStaged);
     dirty = JSON.stringify(stagedConfig) !== JSON.stringify(liveConfig);
-    emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
+    broadcastConfig();
   }
 
   function stage(updater) {
@@ -1122,7 +1609,20 @@ export function createRuntime({
     liveConfig = clone(normalizedLive);
     stagedConfig = clone(normalizedStaged);
     dirty = JSON.stringify(stagedConfig) !== JSON.stringify(liveConfig);
-    emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
+    broadcastConfig();
+  }
+
+  function applyPatch(path, value) {
+    if (!path || typeof path !== 'string') {
+      return Promise.reject(new Error('Invalid patch path'));
+    }
+    // Stage the payload locally so the UI stays in sync while we hit the device.
+    stage((draft) => {
+      setNestedValue(draft, path, value);
+      return draft;
+    });
+    // Apply the patch with the JSON-RPC kernel so we can reuse the same timeout/throttle.
+    return sendRpc({ rpc: 'set_param', path, value });
   }
 
   function getState() {
@@ -1136,42 +1636,6 @@ export function createRuntime({
     };
   }
 
-  async function send(cmd) {
-    if (!transport) throw new Error('Not connected');
-    return enqueue(cmd, { reply: true });
-  }
-
-  async function enqueue(line, { reply = false } = {}) {
-    return new Promise((resolve, reject) => {
-      outboundQueue.push({ line, reply, resolve, reject });
-      pumpQueue();
-    });
-  }
-
-  async function pumpQueue() {
-    if (writing) return;
-    writing = true;
-    while (outboundQueue.length && transport) {
-      const job = outboundQueue.shift();
-      try {
-        const now = performance.now();
-        const wait = Math.max(0, DEFAULT_DEBOUNCE - (now - lastSend));
-        if (wait) await new Promise((r) => setTimeout(r, wait));
-        await transport.writeLine(job.line);
-        lastSend = performance.now();
-        if (job.reply) {
-          const line = await transport.nextLine();
-          job.resolve(line);
-        } else {
-          job.resolve();
-        }
-      } catch (err) {
-        job.reject(err);
-      }
-    }
-    writing = false;
-  }
-
   async function apply() {
     if (!dirty) return { applied: false };
     if (!validator(stagedConfig)) {
@@ -1181,6 +1645,7 @@ export function createRuntime({
       throw error;
     }
     const payload = {
+      rpc: 'set_config',
       seq: ++seq,
       schema_version: schema?.schema_version || schema?.properties?.schema_version?.default,
       manifest: {
@@ -1194,49 +1659,24 @@ export function createRuntime({
     const body = JSON.stringify(payload);
     const checksum = await digest(body);
     payload.checksum = checksum;
-    const json = JSON.stringify(payload);
-    const frames = chunkBuffer(json, 512);
-    let index = 0;
-    for (const chunk of frames) {
-      await enqueue(`SET_ALL ${chunk}`, { reply: false });
-      emit('progress', { type: 'chunk', index, total: frames.length });
-      index += 1;
-    }
-    const ack = await waitForAck(checksum);
-    if (!ack) {
+    const response = await sendRpc(payload);
+    const ackChecksum = response?.checksum ?? response?.result?.checksum ?? null;
+    if (ackChecksum !== checksum) {
       await rollback();
       throw new Error('Device failed to acknowledge apply');
     }
     liveConfig = clone(stagedConfig);
     dirty = false;
     lastKnownChecksum = checksum;
-    emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
+    broadcastConfig();
     emit('applied', { checksum });
     return { applied: true, checksum };
-  }
-
-  async function waitForAck(checksum) {
-    return new Promise((resolve, reject) => {
-      const timeout = setTimeout(() => {
-        off();
-        resolve(false);
-      }, ACK_TIMEOUT_MS);
-      const off = on('ack', (msg) => {
-        if (!msg) return;
-        if (msg.checksum && checksum && msg.checksum !== checksum) {
-          return;
-        }
-        clearTimeout(timeout);
-        off();
-        resolve(true);
-      });
-    });
   }
 
   async function rollback() {
     stagedConfig = clone(liveConfig);
     dirty = false;
-    emit('config', { config: clone(liveConfig), staged: clone(stagedConfig), dirty });
+    broadcastConfig();
     emit('rollback', {});
   }
 
@@ -1246,6 +1686,12 @@ export function createRuntime({
       await transport.close();
     } finally {
       transport = null;
+      if (readTimer) {
+        clearTimeout(readTimer);
+        readTimer = null;
+      }
+      readLoopActive = false;
+      flushRpcPending(new Error('Disconnected'));
       emit('disconnected');
     }
   }
@@ -1271,6 +1717,11 @@ export function createRuntime({
     diff,
     getState,
     on,
+    onStatus,
+    sendRpc,
+    applyPatch,
+    restoreLocalState,
+    replaceConfig,
     setPotGuard,
     createThrottle,
     requestPort,
