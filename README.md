@@ -7,83 +7,75 @@ This repo now runs like a stripped-down landing pad for Ben Severns: three pilla
 ## Portfolio diagram
 
 ```mermaid
-%%{ init: { "flowchart": { "defaultRenderer": "dagre-d3", "rankSpacing": 26, "nodeSpacing": 10 } } }%%
+%%{ init: { "flowchart": { "defaultRenderer": "dagre-d3", "rankSpacing": 34, "nodeSpacing": 8 } } }%%
 graph TD
     thesis["Empower people to build with agency using open tools,<br>consent-forward scenes,<br>and learning environments — all documented loudly."]
 
-    toolsPillar["Tools"] --> scenesPillar["Scenes"] --> learningPillar["Learning Environments"] --> infraPillar["Systems & Distribution"]
-    thesis --> toolsPillar
+    thesis --> toolsPillar["Tools"]
 
-    agencyHub["Agency / Authorship / Feedback Loops"]
-    opennessHub["Open Documentation & Consent-Forward Ethos"]
-    resilienceHub["Field Reliability / Safety / Care"]
-
-    infraPillar --> agencyHub --> opennessHub --> resilienceHub
-    toolsPillar --> agencyHub
-    scenesPillar --> agencyHub
-    learningPillar --> agencyHub
-    toolsPillar --> opennessHub
-    scenesPillar --> opennessHub
-    learningPillar --> opennessHub
-    infraPillar --> opennessHub
-
-    toolsAudio["Tools: sound + patch worlds"]
-    toolsControl["Tools: control surfaces + hardware"]
-    toolsAnalysis["Tools: analysis + triggers + DSP"]
-
-    toolsPillar --> toolsAudio --> toolsControl --> toolsAnalysis
+    %% TOOLS (audio -> control -> analysis), all in one vertical chain
+    toolsPillar --> toolsAudio["Tools: sound + patch worlds"]
     toolsAudio --> tmsLib["tms-lib"] --> seedBox["seedBox"] --> Horizon["Horizon"] --> DustPress["DustPress"] --> lofiSampler["lofi-sampler"] --> PdRepo["Pd"] --> VCVpatch["VCV_patch"]
-    toolsControl --> MOARkNOBS42["MOARkNOBS-42"] --> MN42Configurator["MN42 configurator (bseverns.github.io/MN42)"] --> arduinoSketches["arduinoSketches"] --> microGranny2["microGranny2"] --> x0xb0x["x0xb0x"]
+
+    VCVpatch --> toolsControl["Tools: control + hardware"]
+    toolsControl --> MOARkNOBS42["MOARkNOBS-42"] --> MN42Configurator["MN42 configurator"] --> arduinoSketches["arduinoSketches"] --> microGranny2["microGranny2"] --> x0xb0x["x0xb0x"]
+
+    x0xb0x --> toolsAnalysis["Tools: analysis + triggers + DSP"]
     toolsAnalysis --> frZone["frZone_core"] --> teensyDSP["Teensy DSP fx unit"]
 
-    scenesWorks["Scenes: works + studies"]
-    scenesStage["Scenes: stage interop stack"]
-
-    scenesPillar --> scenesWorks --> scenesStage
+    %% SCENES (works -> stage stack), continuing the same vertical chain
+    teensyDSP --> scenesPillar["Scenes"]
+    scenesPillar --> scenesWorks["Scenes: works + studies"]
     scenesWorks --> perceptualDrift["perceptual-drift"] --> pointyClumps["pointy-clumps"] --> droneChorus["drone-chorus"] --> roomLens["roomLens"] --> StringFieldNode["StringField"] --> DiceLoopNode["DiceLoop"] --> hallwayReactor["hallway-reactor"] --> ArduinoSculpture["ArduinoSculpture_MCAD"] --> HumanBuffer["Human-Buffer"]
+
+    HumanBuffer --> scenesStage["Scenes: stage interop stack"]
     scenesStage --> liveRig["live-rig"] --> liveRigCtrl["live-rig-control"] --> interstream["interstream"] --> maelstrom["maelstrom"] --> scVideoMixer["SC Video Mixer"] --> clipFoundry["new_wrld (clip foundry)"] --> deskCam["desk camera feed"]
 
-    learnCurricula["Learning: createMPLS curricula"]
-    learnFactory["Learning: course factory + templates"]
-    learnDocs["Learning: documentation + public site"]
-    learnOps["Learning: teacher workflow"]
+    %% LEARNING (curricula -> factory -> docs -> ops), continuing the same chain
+    deskCam --> learningPillar["Learning Environments"]
+    learningPillar --> learnCurricula["Learning: createMPLS curricula"]
+    learnCurricula --> cMCurricula["cM_curricula"] --> scratch["Scratch (12w)"] --> printing["3D print/CAD (4)"] --> lego["LEGO Spike/BricQ"] --> piper["Piper/RPi"] --> dronesEd["Drones curriculum"] --> privacyMedia["Privacy media course"]
 
-    learningPillar --> learnCurricula --> learnFactory --> learnDocs --> learnOps
-    learnCurricula --> cMCurricula["cM_curricula"] --> scratch["Scratch game design (12w)"] --> printing["3D printing/CAD (4 sessions)"] --> lego["LEGO Spike/BricQ"] --> piper["Piper/RPi creative computing"] --> dronesEd["Drones curriculum"] --> privacyMedia["Privacy-focused media course"]
+    privacyMedia --> learnFactory["Learning: course factory"]
     learnFactory --> SyllabusRepo["Syllabus"] --> ART215["ART215_SP22"]
+
+    ART215 --> learnDocs["Learning: docs + public site"]
     learnDocs --> repairStudio["repair-studio"] --> machineDocs["machine-docs"] --> personalSite["bseverns.github.io"]
-    learnOps --> teacherOps["Teacher workflow (make → deploy → assess)"]
 
-    infraLMS["Systems: classroom doorways"]
-    infraFleet["Systems: deployment + device fleet"]
-    infraArchive["Systems: indexing + publishing"]
-    infraLab["Systems: studio infrastructure"]
-    infraGov["Systems: governance + ethics scaffolding"]
+    personalSite --> learnOps["Learning: teacher workflow"]
+    learnOps --> teacherOps["make → deploy → assess"]
 
-    infraPillar --> infraLMS --> infraFleet --> infraArchive --> infraLab --> infraGov
+    %% SYSTEMS (LMS -> fleet -> archive -> infra -> governance), continuing the chain
+    teacherOps --> infraPillar["Systems & Distribution"]
+    infraPillar --> infraLMS["Systems: classroom doorways"]
     infraLMS --> tailoredu["TailorEDU"] --> tailoreduRepo["Tailoredu repo"] --> djangoLMS["LMS redesign (Django)"] --> classhub["selfhosted-classhub"] --> infraStack["Infra stack (PG/Redis/MinIO/Caddy)"]
-    infraFleet --> piImaging["Pi imaging kit"] --> docker["Docker/docker-compose"] --> server["Ubuntu server"] --> openvpn["OpenVPN"]
+
+    infraStack --> infraFleet["Systems: deployment + device fleet"]
+    infraFleet --> piImaging["Pi imaging kit"] --> docker["Docker/compose"] --> server["Ubuntu server"] --> openvpn["OpenVPN"]
+
+    openvpn --> infraArchive["Systems: indexing + publishing"]
     infraArchive --> llfs["LlamaFS"] --> studio1["Studio1"] --> ghPages["GitHub Pages"]
+
+    ghPages --> infraLab["Systems: studio infrastructure"]
     infraLab --> homeauto["homeauto"] --> turingpi2["Turing Pi 2"] --> printServer["Repetier-Server node"]
-    infraGov --> governance["AGENTS.md + checklists + consent notes"]
 
-    MOARkNOBS42 -. "workshops" .-> cMCurricula
-    frZone -. "triggers" .-> liveRigCtrl
-    classhub -. "delivers" .-> cMCurricula
-    llfs -. "feeds" .-> personalSite
-    dronesEd -. "feeds" .-> droneChorus
+    printServer --> infraGov["Systems: governance + ethics"]
+    infraGov --> governance["AGENTS + checklists + consent notes"]
 
-    classDef tools fill:#383838,stroke:#000000,stroke-width:2px;
-    classDef scenes fill:#D5E8D4,stroke:#000000,stroke-width:2px;
-    classDef learning fill:#BAE8FC,stroke:#000000,stroke-width:2px;
-    classDef infra fill:#E7D7FF,stroke:#000000,stroke-width:2px;
-    classDef hub fill:#F2F2CC,stroke:#000000,stroke-width:2px,stroke-dasharray: 3 3;
+    %% Hubs as a final vertical footer
+    governance --> agencyHub["Agency / Authorship / Feedback Loops"] --> opennessHub["Open Documentation & Consent-Forward Ethos"] --> resilienceHub["Field Reliability / Safety / Care"]
 
-    class thesis tools;
-    class toolsPillar,toolsAudio,toolsControl,toolsAnalysis,tmsLib,seedBox,Horizon,DustPress,lofiSampler,PdRepo,VCVpatch,MOARkNOBS42,MN42Configurator,arduinoSketches,microGranny2,x0xb0x,frZone,teensyDSP tools;
-    class scenesPillar,scenesWorks,scenesStage,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer,liveRig,liveRigCtrl,interstream,maelstrom,scVideoMixer,clipFoundry,deskCam scenes;
-    class learningPillar,learnCurricula,learnFactory,learnDocs,learnOps,cMCurricula,scratch,printing,lego,piper,dronesEd,privacyMedia,SyllabusRepo,ART215,repairStudio,machineDocs,personalSite,teacherOps learning;
-    class infraPillar,infraLMS,infraFleet,infraArchive,infraLab,infraGov,tailoredu,tailoreduRepo,djangoLMS,classhub,infraStack,piImaging,docker,server,openvpn,llfs,studio1,ghPages,homeauto,turingpi2,printServer,governance infra;
+    %% STYLES
+    classDef tools fill:#383838,stroke:#FFFFFF,stroke-width:2px;
+    classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px;
+    classDef learning fill:#BAE8FC,stroke:#6C8EBF,stroke-width:2px;
+    classDef infra fill:#E7D7FF,stroke:#7C5CBF,stroke-width:2px;
+    classDef hub fill:#F2F2CC,stroke:#999,stroke-width:2px,stroke-dasharray: 3 3;
+
+    class thesis,toolsPillar,toolsAudio,tmsLib,seedBox,Horizon,DustPress,lofiSampler,PdRepo,VCVpatch,toolsControl,MOARkNOBS42,MN42Configurator,arduinoSketches,microGranny2,x0xb0x,toolsAnalysis,frZone,teensyDSP tools;
+    class scenesPillar,scenesWorks,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer,scenesStage,liveRig,liveRigCtrl,interstream,maelstrom,scVideoMixer,clipFoundry,deskCam scenes;
+    class learningPillar,learnCurricula,cMCurricula,scratch,printing,lego,piper,dronesEd,privacyMedia,learnFactory,SyllabusRepo,ART215,learnDocs,repairStudio,machineDocs,personalSite,learnOps,teacherOps learning;
+    class infraPillar,infraLMS,tailoredu,tailoreduRepo,djangoLMS,classhub,infraStack,infraFleet,piImaging,docker,server,openvpn,infraArchive,llfs,studio1,ghPages,infraLab,homeauto,turingpi2,printServer,infraGov,governance infra;
     class agencyHub,opennessHub,resilienceHub hub;
 ```
 </div>
