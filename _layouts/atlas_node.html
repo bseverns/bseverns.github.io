@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include head.html %}
+  <link rel="stylesheet" href="{{ '/css/atlas.css' | relative_url }}">
+</head>
+<body class="atlas-page atlas-node-page">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="/" class="brand-link" aria-label="{{ site.title }} home">{{ site.title }}</a>
+      </div>
+      <nav aria-label="Primary" class="primary-nav">
+        <ul>
+          {% for item in site.data.navigation %}
+          <li>
+            <a href="{{ item.url }}" {% if page.url == item.url %}aria-current="page"{% endif %}>
+              {{ item.title }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="site-main" tabindex="-1">
+    <div class="content-area">
+      <article class="atlas-node">
+        <header class="atlas-node-header">
+          <p class="eyebrow">Atlas node</p>
+          <h1>{{ page.title }}</h1>
+          {% if page.repo %}
+          <p class="atlas-node-meta"><a href="{{ page.repo }}" target="_blank" rel="noopener">Repository &rarr;</a></p>
+          {% endif %}
+        </header>
+        <section class="atlas-node-section" aria-labelledby="node-summary">
+          <h2 id="node-summary">Summary</h2>
+          <p>{{ page.summary | default: "Summary coming soon." }}</p>
+        </section>
+        <section class="atlas-node-section" aria-labelledby="node-artifacts">
+          <h2 id="node-artifacts">Artifacts</h2>
+          <ul class="atlas-todo">
+            <li>Demo video - TODO</li>
+            {% if page.artifacts %}
+            {% for item in page.artifacts %}
+            <li>{{ item }}</li>
+            {% endfor %}
+            {% else %}
+            <li>Photos - TODO</li>
+            <li>Build notes - TODO</li>
+            {% endif %}
+          </ul>
+        </section>
+        <section class="atlas-node-section" aria-labelledby="node-code">
+          <h2 id="node-code">Code</h2>
+          {{ content }}
+        </section>
+      </article>
+    </div>
+  </main>
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>&copy; <span id="yr"></span> {{ site.title }} &mdash; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
+      <nav aria-label="Footer">
+        <ul>
+          {% for item in site.data.navigation %}
+          <li>
+            <a href="{{ item.url }}" {% if page.url == item.url %}aria-current="page"{% endif %}>
+              {{ item.title }}
+            </a>
+          </li>
+          {% endfor %}
+          <li><a href="/sitemap.xml">Sitemap</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>

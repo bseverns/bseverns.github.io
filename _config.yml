@@ -7,6 +7,9 @@ collections:
   teaching:
     output: true
     permalink: /teaching/:name/
+  nodes:
+    output: true
+    permalink: /atlas/n/:name/
 defaults:
   - scope: {path: "", type: "projects"}
     values:
@@ -18,4 +21,8 @@ defaults:
       layout: teaching
       author: "Ben Severns"
       archived: true
+  - scope: {path: "", type: "nodes"}
+    values:
+      layout: atlas_node
+      author: "Ben Severns"
 markdown: kramdown

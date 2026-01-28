@@ -1,0 +1,109 @@
+.atlas-hero,
+.atlas-section,
+.atlas-doors {
+  padding: 3rem 0;
+}
+
+.atlas-hero .eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
+.atlas-hero h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2.4rem, 3.5vw + 1rem, 3.4rem);
+  letter-spacing: -0.01em;
+}
+
+.atlas-hero .atlas-lede,
+.atlas-section p,
+.atlas-node-section p {
+  color: var(--muted);
+  max-width: 64ch;
+}
+
+.atlas-diagram {
+  padding: 0 0 3rem;
+}
+
+.atlas-diagram-frame {
+  margin: 1.5rem auto 0;
+  padding: clamp(1rem, 3vw, 2rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  overflow-x: auto;
+}
+
+.atlas-diagram-frame .mermaid {
+  min-width: 960px;
+}
+
+.atlas-diagram-frame svg {
+  width: 100%;
+  height: auto;
+}
+
+.mermaid svg g.node {
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease, filter 0.2s ease;
+}
+
+.mermaid svg.atlas-has-hover g.node {
+  opacity: 0.2;
+}
+
+.mermaid svg.atlas-has-hover g.node.atlas-node-active {
+  opacity: 1;
+  transform: translateY(-2px);
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.18));
+}
+
+.mermaid svg.atlas-has-hover g.edgePath {
+  opacity: 0.15;
+}
+
+.atlas-diagram-note {
+  margin-top: 0.75rem;
+  color: var(--muted);
+}
+
+.atlas-doors .card-grid {
+  margin-top: 1.5rem;
+}
+
+.atlas-node {
+  padding: 3rem 0;
+}
+
+.atlas-node-header h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 3vw + 1rem, 3rem);
+}
+
+.atlas-node-meta {
+  margin: 0 0 1.5rem;
+}
+
+.atlas-node-section {
+  margin-top: 2rem;
+}
+
+.atlas-todo {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: var(--muted);
+}
+
+.atlas-todo li {
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 720px) {
+  .atlas-diagram-frame .mermaid {
+    min-width: 720px;
+  }
+}

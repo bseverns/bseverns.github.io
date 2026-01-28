@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% include head.html %}
+  <link rel="stylesheet" href="{{ '/css/atlas.css' | relative_url }}">
+  {% if page.url == "/atlas/" %}
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="{{ '/js/atlas.js' | relative_url }}"></script>
+  {% endif %}
+</head>
+<body class="atlas-page">
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header" role="banner">
+    <div class="container header-inner">
+      <div class="brand">
+        <a href="/" class="brand-link" aria-label="{{ site.title }} home">{{ site.title }}</a>
+      </div>
+      <nav aria-label="Primary" class="primary-nav">
+        <ul>
+          {% for item in site.data.navigation %}
+          <li>
+            <a href="{{ item.url }}" {% if page.url == item.url %}aria-current="page"{% endif %}>
+              {{ item.title }}
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main" class="site-main" tabindex="-1">
+    <div class="content-area">
+      {{ content }}
+    </div>
+  </main>
+  <footer class="site-footer" role="contentinfo">
+    <div class="container footer-inner">
+      <div>&copy; <span id="yr"></span> {{ site.title }} &mdash; <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
+      <nav aria-label="Footer">
+        <ul>
+          {% for item in site.data.navigation %}
+          <li>
+            <a href="{{ item.url }}" {% if page.url == item.url %}aria-current="page"{% endif %}>
+              {{ item.title }}
+            </a>
+          </li>
+          {% endfor %}
+          <li><a href="/sitemap.xml">Sitemap</a></li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
