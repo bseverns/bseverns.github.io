@@ -3,8 +3,8 @@
 This repo now runs like a stripped-down landing pad for Ben Severns: three pillars (Tools / Scenes / Learning), a press kit with living copy, and a tiny JS layer that only does conditional image checks. Think studio notebook meets teaching guide—every file is here to explain itself.
 
 ## Portfolio diagram
-```mermaid
 <div align="center" style="max-width:800px; overflow-x:auto;">
+    ```mermaid
 %%{ init: { "flowchart": { "defaultRenderer": "dagre-d3", "rankSpacing": 26, "nodeSpacing": 10 } } }%%
 graph TD
     thesis["Empower people to build with agency using open tools,<br>consent-forward scenes,<br>and learning environments — all documented loudly."]
