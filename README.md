@@ -73,11 +73,11 @@ graph TD
     llfs -. "feeds" .-> personalSite
     dronesEd -. "feeds" .-> droneChorus
 
-    classDef tools fill:#383838,stroke:#FFFFFF,stroke-width:2px;
-    classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px;
-    classDef learning fill:#BAE8FC,stroke:#6C8EBF,stroke-width:2px;
-    classDef infra fill:#E7D7FF,stroke:#7C5CBF,stroke-width:2px;
-    classDef hub fill:#F2F2CC,stroke:#999,stroke-width:2px,stroke-dasharray: 3 3;
+    classDef tools fill:#383838,stroke:#000000,stroke-width:2px;
+    classDef scenes fill:#D5E8D4,stroke:#000000,stroke-width:2px;
+    classDef learning fill:#BAE8FC,stroke:#000000,stroke-width:2px;
+    classDef infra fill:#E7D7FF,stroke:#000000,stroke-width:2px;
+    classDef hub fill:#F2F2CC,stroke:#000000,stroke-width:2px,stroke-dasharray: 3 3;
 
     class thesis tools;
     class toolsPillar,toolsAudio,toolsControl,toolsAnalysis,tmsLib,seedBox,Horizon,DustPress,lofiSampler,PdRepo,VCVpatch,MOARkNOBS42,MN42Configurator,arduinoSketches,microGranny2,x0xb0x,frZone,teensyDSP tools;
