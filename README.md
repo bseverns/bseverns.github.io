@@ -85,7 +85,7 @@ graph TD
     class learningPillar,learnCurricula,learnFactory,learnDocs,learnOps,cMCurricula,scratch,printing,lego,piper,dronesEd,privacyMedia,SyllabusRepo,ART215,repairStudio,machineDocs,personalSite,teacherOps learning;
     class infraPillar,infraLMS,infraFleet,infraArchive,infraLab,infraGov,tailoredu,tailoreduRepo,djangoLMS,classhub,infraStack,piImaging,docker,server,openvpn,llfs,studio1,ghPages,homeauto,turingpi2,printServer,governance infra;
     class agencyHub,opennessHub,resilienceHub hub;
-
+```
 </div>
 
 
