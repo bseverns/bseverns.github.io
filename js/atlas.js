@@ -15,7 +15,8 @@
     startOnLoad: false,
     securityLevel: 'strict',
     flowchart: {
-      htmlLabels: true
+      htmlLabels: true,
+      useMaxWidth: false
     }
   });
 
