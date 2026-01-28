@@ -134,7 +134,16 @@
   }
 
   function navigateToNode(nodeId) {
-    const target = `/atlas/n/${encodeURIComponent(nodeId)}/`;
+    const slug = slugify(nodeId);
+    const target = `/atlas/n/${encodeURIComponent(slug)}/`;
     window.location.href = target;
+  }
+
+  function slugify(value) {
+    return String(value)
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
   }
 })();

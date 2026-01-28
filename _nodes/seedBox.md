@@ -1,6 +1,6 @@
 ---
-
 title: "seedBox"
+permalink: /atlas/n/seedbox/
 summary: "Community seed kit for hands-on making, residency installs, and portable learning environments."
 repo: "https://github.com/bseverns/seedBox"
 artifacts:
