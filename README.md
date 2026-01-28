@@ -4,6 +4,7 @@ This repo now runs like a stripped-down landing pad for Ben Severns: three pilla
 
 ## Portfolio diagram
 <div align="center" style="max-width:800px; overflow-x:auto;">
+    ```mermaid
 %%{ init: { "flowchart": { "defaultRenderer": "dagre-d3", "rankSpacing": 26, "nodeSpacing": 10 } } }%%
 graph TD
     thesis["Empower people to build with agency using open tools,<br>consent-forward scenes,<br>and learning environments — all documented loudly."]
