@@ -33,7 +33,7 @@ const ARG_METHOD_NAMES = [
 
 const localManifest = {
   ui_version: '2025.03.01',
-  schema_version: 4,
+  schema_version: 5,
   slot_count: 42,
   pot_count: 42,
   envelope_count: 6,
@@ -267,15 +267,55 @@ const boot = () => {
   const profileSaveBtn = document.getElementById('profile-save');
   const profileLoadBtn = document.getElementById('profile-load');
   const profileResetBtn = document.getElementById('profile-reset');
+  const profileWizardTarget = document.getElementById('profile-wizard-target');
+  const profileWizardSwitchBtn = document.getElementById('profile-wizard-switch');
+  const profileWizardApplyBtn = document.getElementById('profile-wizard-apply');
+  const profileWizardSaveBtn = document.getElementById('profile-wizard-save');
+  const profileWizardStatus = document.getElementById('profile-wizard-status');
   const profileDownloadBtn = document.getElementById('profile-download');
   const profileUploadBtn = document.getElementById('profile-upload');
+  const macroSaveBtn = document.getElementById('macro-save');
+  const macroRecallBtn = document.getElementById('macro-recall');
+  const macroStatusEl = document.getElementById('macro-status');
+  const sceneGrid = document.getElementById('scene-grid');
+  const sceneStatusEl = document.getElementById('scene-status');
+  const uiModeButtons = Array.from(document.querySelectorAll('[data-ui-mode-btn]'));
+  const uiModeHint = document.getElementById('ui-mode-hint');
+  const advancedTierNodes = Array.from(document.querySelectorAll('[data-ui-tier="advanced"]'));
   const PROFILE_LABELS = ['A', 'B', 'C', 'D'];
+  const MACRO_SAVE_COMMAND = 'SAVE_MACRO_SLOT';
+  const MACRO_RECALL_COMMAND = 'RECALL_MACRO_SLOT';
   const PROFILE_STORAGE_KEY = 'moarknobs:selected-profile';
+  const UI_MODE_STORAGE_KEY = 'moarknobs:ui-mode';
+  const UI_MODE_HINTS = {
+    basic: 'Basic mode keeps common knob-to-MIDI mapping controls visible.',
+    advanced: 'Advanced mode reveals EF, ARG, filter tuning, and scope diagnostics.'
+  };
+  const GLOSSARY = {
+    mapping: 'Knob to MIDI mapping: choose the message type, channel, and number your synth or DAW expects.',
+    takeover: 'Take Control waits for the knob to pass the current value so tweaks do not jump.',
+    ef: 'EF (Envelope Follower) tracks input level to drive dynamic modulation.',
+    arg: 'ARG combines two envelope followers with a math method before mapping to MIDI.',
+    filter: 'Filter shape and tuning control how aggressively the envelope follower reacts.',
+    sysex: 'SysEx template uses hex bytes; XX, MSB, and LSB placeholders are replaced with live values.'
+  };
   const migrationDialog = document.getElementById('migration-dialog');
   const profileRpcButtons = [profileSaveBtn, profileLoadBtn, profileResetBtn].filter(Boolean);
   let profileInteractable = false;
   let profileRpcLocked = false;
+  let profileWizardBusy = false;
+  let macroBusy = false;
+  let macroAvailable = true;
+  const SCENE_SLOT_COUNT = 6;
+  const sceneSlotState = Array.from({ length: SCENE_SLOT_COUNT }, () => ({
+    name: '',
+    available: false
+  }));
+  const sceneSlotElements = [];
+  let sceneBusy = false;
   let activeProfileSlot = clampProfileSlot(readProfileSlotPreference());
+  let profileWizardTargetSlot = activeProfileSlot;
+  let activeUiMode = normalizeUIMode(readUIModePreference());
   const migrationPreview = document.getElementById('migration-preview');
   const migrationApply = document.getElementById('migration-apply');
   const migrationCancel = document.getElementById('migration-cancel');
@@ -306,6 +346,36 @@ const boot = () => {
   };
   rebuildMeters(localManifest.envelope_count || 0);
   slotVirtualizer.setData([]);
+
+  if (sceneGrid) {
+    for (let slotIndex = 0; slotIndex < SCENE_SLOT_COUNT; slotIndex++) {
+      const slotEl = document.createElement('div');
+      slotEl.className = 'scene-slot';
+      slotEl.dataset.sceneSlot = String(slotIndex);
+      slotEl.innerHTML = `
+        <div class="scene-slot-meta">
+          <span>Scene ${slotIndex + 1}</span>
+          <span class="scene-slot-status">Slot ${slotIndex + 1} empty</span>
+        </div>
+        <input class="scene-name-input" type="text" maxlength="15" placeholder="Name (optional)" />
+        <div class="scene-actions">
+          <button class="scene-save" type="button" title="Save current state to this slot.">Save</button>
+          <button class="scene-recall" type="button" title="Recall this scene snapshot.">Recall</button>
+        </div>`;
+      sceneGrid.appendChild(slotEl);
+      const slotInfo = {
+        slot: slotIndex,
+        element: slotEl,
+        statusEl: slotEl.querySelector('.scene-slot-status'),
+        nameInput: slotEl.querySelector('.scene-name-input'),
+        saveBtn: slotEl.querySelector('.scene-save'),
+        recallBtn: slotEl.querySelector('.scene-recall')
+      };
+      slotInfo.saveBtn?.addEventListener('click', () => handleSceneSave(slotIndex));
+      slotInfo.recallBtn?.addEventListener('click', () => handleSceneRecall(slotIndex));
+      sceneSlotElements.push(slotInfo);
+    }
+  }
 
   connectBtn?.addEventListener('click', async () => {
     try {
@@ -357,14 +427,44 @@ const boot = () => {
     });
   }
 
+  uiModeButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      setUIMode(button.dataset.uiModeBtn);
+    });
+  });
+  setUIMode(activeUiMode, { persist: false });
+
   profileSlotButtons.forEach((button) => {
     button.addEventListener('click', () => {
       const slotIndex = clampProfileSlot(Number(button.dataset.profileSlot));
       setActiveProfileSlot(slotIndex);
     });
   });
+  if (profileWizardTarget) {
+    profileWizardTarget.value = String(profileWizardTargetSlot);
+    profileWizardTarget.addEventListener('change', () => {
+      profileWizardTargetSlot = clampProfileSlot(Number(profileWizardTarget.value));
+      updateProfileWizardControls();
+    });
+  }
+  profileWizardSwitchBtn?.addEventListener('click', () => handleWizardSwitchProfile());
+  profileWizardApplyBtn?.addEventListener('click', () => handleWizardApplyEdits());
+  profileWizardSaveBtn?.addEventListener('click', () => handleWizardSaveProfile());
   setActiveProfileSlot(activeProfileSlot, { persist: false });
   refreshProfileControls();
+
+  macroSaveBtn?.addEventListener('click', () => {
+    const confirmation =
+      typeof window !== 'undefined' && typeof window.confirm === 'function'
+        ? window.confirm('Overwrite the macro snapshot stored in EEPROM slot 254?')
+        : true;
+    if (!confirmation) return;
+    runMacroCommand(MACRO_SAVE_COMMAND);
+  });
+
+  macroRecallBtn?.addEventListener('click', () => runMacroCommand(MACRO_RECALL_COMMAND));
+
+  setMacroStatus('muted', 'Awaiting the first snapshot.');
 
   slotContainer?.addEventListener('keydown', (event) => {
     if (!slotState.slots.length) return;
@@ -465,8 +565,8 @@ const boot = () => {
   );
   profileLoadBtn?.addEventListener('click', () =>
     runProfileRpc('load_profile', {
-      busyLabel: 'Loading profile…',
-      successLabel: 'Profile loaded',
+      busyLabel: 'Switching profile…',
+      successLabel: 'Profile switched',
       successCopy: `${describeSlot()} active`,
       expectConfig: true
     }),
@@ -494,6 +594,7 @@ const boot = () => {
   });
 
   runtime.on('status', ({ level, message }) => {
+    // Normalize transport/runtime status levels onto the small UI state palette.
     const map = { error: 'err', warn: 'warn', info: 'ok', ok: 'ok' };
     const state = map[level] || 'warn';
     setStatus(state, level?.toUpperCase?.() || 'NOTE', message);
@@ -506,6 +607,8 @@ const boot = () => {
     paintTelemetry(frame);
   });
   runtime.on('config', ({ staged, config, dirty }) => {
+    // `staged` is the single source of truth for editor controls; keep all derived UI panes in
+    // sync from this one event to avoid mixed snapshots.
     slotState.slots = staged?.slots ?? [];
     slotState.efSlots = staged?.efSlots ?? [];
     slotState.staged = staged;
@@ -522,6 +625,7 @@ const boot = () => {
     renderLedControls(staged);
     updateTakeoverGuards(slotState.slots);
     formRenderer.updateValues();
+    updateProfileWizardControls();
   });
   runtime.on('manifest', (manifest) => {
     updateHeaderManifest(manifest);
@@ -550,6 +654,7 @@ const boot = () => {
     migrationDialog.showModal();
   });
   runtime.on('connected', ({ manifest }) => {
+    // Connection flips the entire toolbar/profile surface into interactive mode.
     if (connectionPill) {
       connectionPill.dataset.stage = 'live';
       connectionPill.textContent = `Connected • ${manifest?.fw_version || 'fw?'}`;
@@ -561,8 +666,10 @@ const boot = () => {
     setStatus('ok', 'Connected', 'Schema synced. Stage edits before applying.');
     profileInteractable = true;
     refreshProfileControls();
+    refreshSceneList();
   });
   runtime.on('disconnected', () => {
+    // Mirror the connected handler in reverse so stale controls cannot issue RPCs offline.
     if (connectionPill) {
       connectionPill.dataset.stage = 'disconnected';
       connectionPill.textContent = 'Disconnected';
@@ -575,8 +682,10 @@ const boot = () => {
     profileInteractable = false;
     profileRpcLocked = false;
     refreshProfileControls();
+    setSceneStatus('muted', 'Scenes offline');
   });
   runtime.on('error', (err) => {
+    // Runtime errors are treated as hard disconnects from the UI perspective.
     if (connectionPill) {
       connectionPill.dataset.stage = 'disconnected';
       connectionPill.textContent = 'Disconnected';
@@ -585,6 +694,39 @@ const boot = () => {
     profileInteractable = false;
     profileRpcLocked = false;
     refreshProfileControls();
+    setSceneStatus('muted', 'Scenes offline');
+  });
+  runtime.on('macro', ({ available } = {}) => {
+    if (available === undefined) return;
+    macroAvailable = Boolean(available);
+    updateMacroControls();
+  });
+  runtime.on('scene', (payload) => {
+    if (!sceneSlotElements.length || !payload) return;
+    if (payload.type === 'list' && Array.isArray(payload.scenes)) {
+      payload.scenes.forEach((entry) => {
+        if (typeof entry.slot === 'number') {
+          updateSceneSlot(entry.slot, {
+            name: entry.name ?? '',
+            available: entry.available
+          });
+        }
+      });
+      setSceneStatus('muted', 'Scenes synced with the deck.');
+      return;
+    }
+    if (payload.type === 'saved' && typeof payload.slot === 'number') {
+      updateSceneSlot(payload.slot, {
+        name: payload.name ?? '',
+        available: payload.available
+      });
+    }
+    if (payload.type === 'recalled' && typeof payload.slot === 'number') {
+      updateSceneSlot(payload.slot, {
+        name: payload.name ?? '',
+        available: payload.available
+      });
+    }
   });
   runtime.on('rollback', () => {
     updateDiff(false);
@@ -597,6 +739,7 @@ const boot = () => {
   new ScopePanel({ container: document.getElementById('scope-panel'), runtime, manifest: localManifest });
 
   function setStatus(state, label, message) {
+    // Single status sink used by transport, schema, profile, macro, and scene flows.
     if (!statusEl || !statusLabel || !statusMessage) return;
     statusEl.dataset.state = state;
     statusLabel.textContent = label;
@@ -632,6 +775,53 @@ const boot = () => {
     }
   }
 
+  function normalizeUIMode(mode) {
+    return mode === 'advanced' ? 'advanced' : 'basic';
+  }
+
+  function readUIModePreference() {
+    if (typeof localStorage === 'undefined') return 'basic';
+    try {
+      return normalizeUIMode(localStorage.getItem(UI_MODE_STORAGE_KEY));
+    } catch (err) {
+      console.debug('read ui mode preference failed', err);
+      return 'basic';
+    }
+  }
+
+  function persistUIMode(mode) {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.setItem(UI_MODE_STORAGE_KEY, normalizeUIMode(mode));
+    } catch (err) {
+      console.debug('persist ui mode failed', err);
+    }
+  }
+
+  function setUIMode(mode, { persist = true } = {}) {
+    activeUiMode = normalizeUIMode(mode);
+    if (docRoot) docRoot.dataset.uiMode = activeUiMode;
+    // Basic mode is presentational only: it hides advanced cards but preserves full runtime state.
+    const hideAdvanced = activeUiMode !== 'advanced';
+    advancedTierNodes.forEach((node) => {
+      node.classList.toggle('ui-tier-hidden', hideAdvanced);
+      if (hideAdvanced) {
+        node.setAttribute('aria-hidden', 'true');
+      } else {
+        node.removeAttribute('aria-hidden');
+      }
+    });
+    uiModeButtons.forEach((button) => {
+      const buttonMode = normalizeUIMode(button.dataset.uiModeBtn);
+      button.setAttribute('aria-pressed', buttonMode === activeUiMode ? 'true' : 'false');
+    });
+    if (uiModeHint) {
+      uiModeHint.textContent = UI_MODE_HINTS[activeUiMode] || UI_MODE_HINTS.basic;
+    }
+    if (persist) persistUIMode(activeUiMode);
+    if (slotState.slots.length) renderSlotEditor();
+  }
+
   function slotLabel(index) {
     return PROFILE_LABELS[index] ?? PROFILE_LABELS[0];
   }
@@ -662,18 +852,221 @@ const boot = () => {
       if (!button) return;
       button.disabled = !canInteract;
     });
+    updateProfileWizardControls();
+    updateMacroControls();
+    updateSceneControls();
+  }
+
+  function setProfileWizardStatus(state, message) {
+    if (!profileWizardStatus) return;
+    profileWizardStatus.dataset.state = state;
+    profileWizardStatus.textContent = message;
+  }
+
+  function updateProfileWizardControls() {
+    // Guided flow state machine: switch to target slot -> apply dirty edits -> save slot.
+    const target = clampProfileSlot(Number(profileWizardTarget?.value ?? profileWizardTargetSlot));
+    profileWizardTargetSlot = target;
+    const canInteract = profileInteractable && !profileRpcLocked && !profileWizardBusy;
+    if (profileWizardTarget) profileWizardTarget.disabled = !canInteract;
+    if (profileWizardSwitchBtn) profileWizardSwitchBtn.disabled = !canInteract;
+    const dirtyNow = runtime.getState().dirty;
+    const onTarget = activeProfileSlot === target;
+    if (profileWizardApplyBtn) {
+      profileWizardApplyBtn.disabled = !canInteract || !onTarget || !dirtyNow;
+    }
+    if (profileWizardSaveBtn) {
+      profileWizardSaveBtn.disabled = !canInteract || !onTarget;
+    }
+
+    if (!profileInteractable) {
+      setProfileWizardStatus('muted', 'Connect to the device to start the guided flow.');
+      return;
+    }
+    if (!onTarget) {
+      setProfileWizardStatus(
+        'busy',
+        `Step 1: switch to Slot ${slotLabel(target)} (currently ${slotLabel(activeProfileSlot)}).`,
+      );
+      return;
+    }
+    if (dirtyNow) {
+      setProfileWizardStatus('busy', `Step 2: apply edits, then save Slot ${slotLabel(target)}.`);
+      return;
+    }
+    setProfileWizardStatus('ok', `Step 3: save Slot ${slotLabel(target)} to store current mapping.`);
+  }
+
+  function updateMacroControls() {
+    const offline = !profileInteractable;
+    if (macroSaveBtn) macroSaveBtn.disabled = offline || macroBusy;
+    if (macroRecallBtn) macroRecallBtn.disabled = offline || macroBusy || !macroAvailable;
+  }
+
+  function setMacroStatus(state, message) {
+    if (!macroStatusEl) return;
+    macroStatusEl.dataset.state = state;
+    if (typeof message === 'string') {
+      macroStatusEl.textContent = message;
+    }
+  }
+
+  function setSceneStatus(state, message) {
+    if (!sceneStatusEl) return;
+    sceneStatusEl.dataset.state = state;
+    if (typeof message === 'string') {
+      sceneStatusEl.textContent = message;
+    }
+  }
+
+  function updateSceneSlot(slotIndex, { name, available }) {
+    const slotInfo = sceneSlotElements.find((entry) => entry.slot === slotIndex);
+    if (!slotInfo) return;
+    const displayName = available
+      ? name || `Scene ${slotIndex + 1}`
+      : `Slot ${slotIndex + 1} empty`;
+    if (slotInfo.statusEl) slotInfo.statusEl.textContent = displayName;
+    sceneSlotState[slotIndex] = { name: name ?? '', available: Boolean(available) };
+    updateSceneControls();
+  }
+
+  function updateSceneControls() {
+    const offline = !profileInteractable;
+    sceneSlotElements.forEach((slotInfo) => {
+      const state = sceneSlotState[slotInfo.slot];
+      if (slotInfo.saveBtn) slotInfo.saveBtn.disabled = offline || sceneBusy;
+      if (slotInfo.recallBtn) {
+        slotInfo.recallBtn.disabled = offline || sceneBusy || !state.available;
+      }
+    });
+  }
+
+  async function refreshSceneList() {
+    if (!sceneGrid) return;
+    setSceneStatus('busy', 'Loading scenes…');
+    try {
+      await runtime.requestScenes();
+      setSceneStatus('muted', 'Scenes synced with the deck.');
+    } catch (err) {
+      setSceneStatus('err', `Scenes refresh failed: ${err.message || String(err)}`);
+    }
+  }
+
+  async function handleSceneSave(slotIndex) {
+    if (!profileInteractable || sceneBusy) return;
+    const slotInfo = sceneSlotElements.find((entry) => entry.slot === slotIndex);
+    if (!slotInfo) return;
+    const name = slotInfo.nameInput?.value.trim();
+    sceneBusy = true;
+    updateSceneControls();
+    setSceneStatus('busy', `Saving scene ${slotIndex + 1}…`);
+    try {
+      await runtime.sendSceneCommand({
+        cmd: 'SAVE_SCENE',
+        slot: slotIndex,
+        name: name || undefined
+      });
+      setSceneStatus('ok', `Scene ${slotIndex + 1} saved.`);
+      await refreshSceneList();
+    } catch (err) {
+      setSceneStatus('err', `Scene save failed: ${err.message || String(err)}`);
+    } finally {
+      sceneBusy = false;
+      updateSceneControls();
+    }
+  }
+
+  async function handleSceneRecall(slotIndex) {
+    if (!profileInteractable || sceneBusy) return;
+    sceneBusy = true;
+    updateSceneControls();
+    setSceneStatus('busy', `Recalling scene ${slotIndex + 1}…`);
+    try {
+      await runtime.sendSceneCommand({ cmd: 'RECALL_SCENE', slot: slotIndex });
+      setSceneStatus('ok', `Scene ${slotIndex + 1} recalled.`);
+      try {
+        const configPayload = await runtime.sendRpc({ rpc: 'get_config' });
+        const configData = configPayload?.config ?? configPayload;
+        if (configData && typeof configData === 'object') {
+          runtime.replaceConfig(configData);
+        }
+      } catch (refreshErr) {
+        setStatus('warn', 'Config refresh failed', refreshErr.message || String(refreshErr));
+      }
+      await refreshSceneList();
+    } catch (err) {
+      setSceneStatus('err', `Scene recall failed: ${err.message || String(err)}`);
+    } finally {
+      sceneBusy = false;
+      updateSceneControls();
+    }
+  }
+
+  async function runMacroCommand(command) {
+    if (!profileInteractable) {
+      setMacroStatus('muted', 'Connect to the deck before using macro snapshots.');
+      setStatus('warn', 'Macro offline', 'Connect to the deck before using macro snapshots.');
+      return;
+    }
+    macroBusy = true;
+    updateMacroControls();
+    const isSave = command === MACRO_SAVE_COMMAND;
+    setMacroStatus('busy', isSave ? 'Saving macro snapshot…' : 'Recalling macro snapshot…');
+    try {
+      await runtime.sendMacroCommand(command);
+      setMacroStatus(
+        'ok',
+        isSave ? 'Macro snapshot stored in EEPROM slot 254.' : 'Macro snapshot recalled from EEPROM slot 254.'
+      );
+      if (!isSave) {
+        try {
+          const configPayload = await runtime.sendRpc({ rpc: 'get_config' });
+          const configData = configPayload?.config ?? configPayload;
+          if (configData && typeof configData === 'object') {
+            runtime.replaceConfig(configData);
+          }
+        } catch (refreshErr) {
+          setStatus('warn', 'Config refresh failed', refreshErr.message || String(refreshErr));
+        }
+      }
+    } catch (err) {
+      const label = isSave ? 'Macro save' : 'Macro recall';
+      setMacroStatus('err', `${label} failed: ${err.message || String(err)}`);
+      setStatus('err', `${label} failed`, err.message || String(err));
+    } finally {
+      macroBusy = false;
+      updateMacroControls();
+    }
   }
 
   async function runProfileRpc(method, { busyLabel, successLabel, successCopy, expectConfig } = {}) {
+    // Shared profile RPC lane: one in-flight action at a time to keep slot/apply state coherent.
     if (!profileInteractable) {
       setStatus('warn', 'Profile offline', 'Connect to the deck before using profiles.');
       return;
     }
+    const dirtyBefore = runtime.getState().dirty;
     profileRpcLocked = true;
     refreshProfileControls();
+    try {
+      // Saving a profile always snapshots firmware state, so stage/apply first to avoid storing
+      // stale EEPROM values when local edits are still dirty.
+      if (method === 'save_profile' && dirtyBefore) {
+        setStatus('warn', 'Applying staged edits…', `${describeSlot()} • syncing before save`);
+        await runtime.apply();
+      }
+    } catch (err) {
+      profileRpcLocked = false;
+      refreshProfileControls();
+      setStatus('err', 'Apply failed', err.message || String(err));
+      return;
+    }
     setStatus('warn', busyLabel, `${describeSlot()} • busy`);
     try {
       const response = await runtime.sendRpc({ rpc: method, slot: activeProfileSlot });
+      // Firmware may report an authoritative slot index; trust it and realign local selection.
+      const responseSlot = clampProfileSlot(response?.slot ?? response?.profile ?? activeProfileSlot);
+      setActiveProfileSlot(responseSlot);
       if (expectConfig) {
         const payload = response?.config ?? response;
         if (payload && typeof payload === 'object') {
@@ -685,6 +1078,71 @@ const boot = () => {
       setStatus('err', `${successLabel ?? 'Profile'} failed`, err.message || String(err));
     } finally {
       profileRpcLocked = false;
+      refreshProfileControls();
+    }
+  }
+
+  async function handleWizardSwitchProfile() {
+    // Step 1: bind the UI to the selected slot and pull that slot's config into staged/live state.
+    if (!profileInteractable || profileRpcLocked || profileWizardBusy) return;
+    profileWizardBusy = true;
+    refreshProfileControls();
+    try {
+      setActiveProfileSlot(profileWizardTargetSlot);
+      await runProfileRpc('load_profile', {
+        busyLabel: 'Switching profile…',
+        successLabel: 'Profile switched',
+        successCopy: `${describeSlot()} active`,
+        expectConfig: true,
+      });
+    } finally {
+      profileWizardBusy = false;
+      refreshProfileControls();
+    }
+  }
+
+  async function handleWizardApplyEdits() {
+    // Step 2: commit staged edits to firmware (without persisting profile slot yet).
+    if (!profileInteractable || profileRpcLocked || profileWizardBusy) return;
+    if (activeProfileSlot !== profileWizardTargetSlot) {
+      setStatus('warn', 'Wrong slot', `Switch to Slot ${slotLabel(profileWizardTargetSlot)} first.`);
+      return;
+    }
+    if (!runtime.getState().dirty) {
+      setStatus('warn', 'Nothing to apply', 'Adjust a parameter before applying.');
+      return;
+    }
+    profileWizardBusy = true;
+    refreshProfileControls();
+    try {
+      setStatus('warn', 'Applying…', `${describeSlot()} • waiting for firmware ACK`);
+      await runtime.apply();
+      setStatus('ok', 'Synced', `${describeSlot()} applied. Now save to persist.`);
+    } catch (err) {
+      setStatus('err', 'Apply failed', err.message || String(err));
+    } finally {
+      profileWizardBusy = false;
+      refreshProfileControls();
+    }
+  }
+
+  async function handleWizardSaveProfile() {
+    // Step 3: persist the currently active slot after Step 2 succeeds.
+    if (!profileInteractable || profileRpcLocked || profileWizardBusy) return;
+    if (activeProfileSlot !== profileWizardTargetSlot) {
+      setStatus('warn', 'Wrong slot', `Switch to Slot ${slotLabel(profileWizardTargetSlot)} first.`);
+      return;
+    }
+    profileWizardBusy = true;
+    refreshProfileControls();
+    try {
+      await runProfileRpc('save_profile', {
+        busyLabel: 'Saving profile…',
+        successLabel: 'Profile saved',
+        successCopy: `${describeSlot()} archived`,
+      });
+    } finally {
+      profileWizardBusy = false;
       refreshProfileControls();
     }
   }
@@ -730,6 +1188,7 @@ const boot = () => {
         if (Number.isFinite(requestedSlot)) {
           setActiveProfileSlot(requestedSlot);
         }
+        // Import is staged-only by design so users can inspect diffs before pushing to hardware.
         runtime.stage(() => configData);
         setStatus('warn', 'Profile imported', `${describeSlot()} staged. Apply to push it to the deck.`);
       } catch (err) {
@@ -740,6 +1199,7 @@ const boot = () => {
   }
 
   function markDirty(isDirty) {
+    console.debug('[UI] markDirty', isDirty);
     if (dirtyBadge) dirtyBadge.toggleAttribute('hidden', !isDirty);
     if (applyBtn) applyBtn.disabled = !isDirty;
     if (rollbackBtn) rollbackBtn.disabled = !isDirty;
@@ -822,33 +1282,59 @@ const boot = () => {
     form.className = 'slot-editor';
     form.addEventListener('submit', (event) => event.preventDefault());
 
-    const basics = makeFieldset('Slot Basics');
+    const basics = makeFieldset(
+      'Knob -> MIDI Mapping',
+      'Pick what this knob sends. Switch to Advanced mode for EF/ARG modulation and deep filter controls.',
+    );
     basics.appendChild(
       makeSelect(
-        'MIDI Type',
+        'Knob -> MIDI message',
         ['OFF', 'CC', 'Note', 'PitchBend', 'ProgramChange', 'Aftertouch', 'ModWheel', 'NRPN', 'RPN', 'SysEx'],
         slot.type,
         (value) => stageSlotField(slotState.selected, 'type', value),
+        { help: GLOSSARY.mapping },
       ),
     );
     basics.appendChild(
-      makeNumber('MIDI Channel', slot.midiChannel ?? 1, 1, 16, 1, (value) => stageSlotField(slotState.selected, 'midiChannel', value)),
+      makeNumber(
+        'MIDI channel',
+        slot.midiChannel ?? 1,
+        1,
+        16,
+        1,
+        (value) => stageSlotField(slotState.selected, 'midiChannel', value),
+        { help: 'Use channels 1 to 16 to match your synth or DAW track.' },
+      ),
     );
     basics.appendChild(
-      makeNumber('Data (CC/Note)', slot.data1 ?? 0, 0, 127, 1, (value) => stageSlotField(slotState.selected, 'data1', value)),
+      makeNumber(
+        'CC/Note number',
+        slot.data1 ?? 0,
+        0,
+        127,
+        1,
+        (value) => stageSlotField(slotState.selected, 'data1', value),
+        { help: 'The controller number or note number this knob targets.' },
+      ),
     );
     basics.appendChild(
-      makeNumber('Arp Root Note', slot.arpNote ?? 0, 0, 127, 1, (value) => stageSlotField(slotState.selected, 'arpNote', value)),
+      makeText('Slot label', slot.label ?? '', 'Verse / build / drop cues', (value) => stageSlotField(slotState.selected, 'label', value)),
+    );
+    if (activeUiMode === 'advanced') {
+      basics.appendChild(
+        makeNumber('Arp root note', slot.arpNote ?? 0, 0, 127, 1, (value) => stageSlotField(slotState.selected, 'arpNote', value)),
+      );
+    }
+    basics.appendChild(
+      makeToggle('Enabled', !!slot.active, (value) => stageSlotField(slotState.selected, 'active', value)),
     );
     basics.appendChild(
-      makeText('Label', slot.label ?? '', 'Verse / build / drop cues', (value) => stageSlotField(slotState.selected, 'label', value)),
+      makeToggle('Knob sends MIDI', !!slot.pot, (value) => stageSlotField(slotState.selected, 'pot', value)),
     );
-    basics.appendChild(makeToggle('Active', !!slot.active, (value) => stageSlotField(slotState.selected, 'active', value)));
-    basics.appendChild(makeToggle('Pot mapped', !!slot.pot, (value) => stageSlotField(slotState.selected, 'pot', value)));
-    const takeover = makeToggle('Take Control', !!slot.takeover, (value) => {
+    const takeover = makeToggle('Take Control (pickup)', !!slot.takeover, (value) => {
       stageSlotField(slotState.selected, 'takeover', value);
       runtime.setPotGuard([slotState.selected], !value);
-    });
+    }, { help: GLOSSARY.takeover });
     basics.appendChild(takeover);
     if (slot.type === 'SysEx') {
       basics.appendChild(
@@ -860,6 +1346,7 @@ const boot = () => {
             const normalised = normaliseSysexTemplate(value);
             stageSlotField(slotState.selected, 'sysexTemplate', normalised);
           },
+          { help: GLOSSARY.sysex },
         ),
       );
       const hint = document.createElement('p');
@@ -867,70 +1354,86 @@ const boot = () => {
       hint.textContent = 'Hex bytes + XX/MSB/LSB placeholders. We swap the placeholders with live values.';
       basics.appendChild(hint);
     }
+    if (activeUiMode !== 'advanced') {
+      const hint = document.createElement('p');
+      hint.className = 'slot-hint';
+      hint.textContent = 'Need EF or ARG modulation? Switch to Advanced mode.';
+      basics.appendChild(hint);
+    }
     form.appendChild(basics);
 
-    const manifest = runtime.getState().manifest ?? localManifest;
-    const ef = normalizeEf(slot);
-    const efSlots = manifest?.envelope_count ?? localManifest?.envelope_count ?? 0;
-    const efFieldset = makeFieldset('Envelope Follower', 'These values live with the slot and retune the hardware follower on apply.');
-    efFieldset.appendChild(
-      makeNumber('Follower Index', ef.index ?? -1, -1, Math.max(-1, efSlots - 1), 1, (value) => {
-        stageSlotField(slotState.selected, 'efIndex', value);
-        stageSlotEnvelopeField(slotState.selected, 'index', value);
-      }),
-    );
-    const currentFilter = ef.filter_name || (Number.isFinite(Number(ef.filter_index)) ? EF_FILTER_NAMES[Number(ef.filter_index)] : 'LINEAR');
-    efFieldset.appendChild(
-      makeSelect('Filter Shape', EF_FILTER_NAMES, currentFilter, (value) => {
-        const idx = Math.max(0, EF_FILTER_NAMES.indexOf(value));
-        stageSlotEnvelopeField(slotState.selected, 'filter_name', value);
-        stageSlotEnvelopeField(slotState.selected, 'filter_index', idx);
-      }),
-    );
-    efFieldset.appendChild(
-      makeNumber('Frequency (Hz)', ef.frequency ?? 1000, 0, 20000, 1, (value) => stageSlotEnvelopeField(slotState.selected, 'frequency', value)),
-    );
-    efFieldset.appendChild(
-      makeNumber('Resonance (Q)', ef.q ?? 0.707, 0, 10, 0.01, (value) => stageSlotEnvelopeField(slotState.selected, 'q', value)),
-    );
-    efFieldset.appendChild(
-      makeNumber('Oversample', ef.oversample ?? 4, 1, 32, 1, (value) => stageSlotEnvelopeField(slotState.selected, 'oversample', value)),
-    );
-    efFieldset.appendChild(
-      makeNumber('Smoothing', ef.smoothing ?? 0.2, 0, 1, 0.01, (value) => stageSlotEnvelopeField(slotState.selected, 'smoothing', value)),
-    );
-    efFieldset.appendChild(
-      makeNumber('Baseline Offset', ef.baseline ?? 0, -10, 10, 0.1, (value) => stageSlotEnvelopeField(slotState.selected, 'baseline', value)),
-    );
-    efFieldset.appendChild(
-      makeNumber('Gain', ef.gain ?? 1, 0, 8, 0.1, (value) => stageSlotEnvelopeField(slotState.selected, 'gain', value)),
-    );
-    form.appendChild(efFieldset);
+    if (activeUiMode === 'advanced') {
+      const manifest = runtime.getState().manifest ?? localManifest;
+      const ef = normalizeEf(slot);
+      const efSlots = manifest?.envelope_count ?? localManifest?.envelope_count ?? 0;
+      const efFieldset = makeFieldset(
+        'Envelope Follower (EF)',
+        'EF tracks input level so this slot can react to dynamics.',
+      );
+      efFieldset.appendChild(
+        makeNumber('Follower index', ef.index ?? -1, -1, Math.max(-1, efSlots - 1), 1, (value) => {
+          stageSlotField(slotState.selected, 'efIndex', value);
+          stageSlotEnvelopeField(slotState.selected, 'index', value);
+        }, { help: GLOSSARY.ef }),
+      );
+      const currentFilter = ef.filter_name || (Number.isFinite(Number(ef.filter_index)) ? EF_FILTER_NAMES[Number(ef.filter_index)] : 'LINEAR');
+      efFieldset.appendChild(
+        makeSelect('Response shape', EF_FILTER_NAMES, currentFilter, (value) => {
+          const idx = Math.max(0, EF_FILTER_NAMES.indexOf(value));
+          stageSlotEnvelopeField(slotState.selected, 'filter_name', value);
+          stageSlotEnvelopeField(slotState.selected, 'filter_index', idx);
+        }, { help: GLOSSARY.filter }),
+      );
+      efFieldset.appendChild(
+        makeNumber('Tracking frequency (Hz)', ef.frequency ?? 1000, 0, 20000, 1, (value) => stageSlotEnvelopeField(slotState.selected, 'frequency', value)),
+      );
+      efFieldset.appendChild(
+        makeNumber('Resonance (Q)', ef.q ?? 0.707, 0, 10, 0.01, (value) => stageSlotEnvelopeField(slotState.selected, 'q', value)),
+      );
+      efFieldset.appendChild(
+        makeNumber('Oversample amount', ef.oversample ?? 4, 1, 32, 1, (value) => stageSlotEnvelopeField(slotState.selected, 'oversample', value)),
+      );
+      efFieldset.appendChild(
+        makeNumber('Smoothing', ef.smoothing ?? 0.2, 0, 1, 0.01, (value) => stageSlotEnvelopeField(slotState.selected, 'smoothing', value)),
+      );
+      efFieldset.appendChild(
+        makeNumber('Baseline offset', ef.baseline ?? 0, -10, 10, 0.1, (value) => stageSlotEnvelopeField(slotState.selected, 'baseline', value)),
+      );
+      efFieldset.appendChild(
+        makeNumber('Gain', ef.gain ?? 1, 0, 8, 0.1, (value) => stageSlotEnvelopeField(slotState.selected, 'gain', value)),
+      );
+      form.appendChild(efFieldset);
 
-    const arg = normalizeArg(slot);
-    const argFieldset = makeFieldset('ARG Combiner', 'Crossfade or mash followers before the slot screams MIDI.');
-    argFieldset.appendChild(makeToggle('Enabled', !!arg.enabled, (value) => stageSlotArgField(slotState.selected, 'enabled', value)));
-    argFieldset.appendChild(
-      makeSelect('Method', ARG_METHOD_NAMES, resolveArgMethodName(arg) ?? ARG_METHOD_NAMES[0], (value) => {
-        const idx = Math.max(0, ARG_METHOD_NAMES.indexOf(value));
-        stageSlotArgField(slotState.selected, 'method', idx);
-        stageSlotArgField(slotState.selected, 'method_name', value);
-      }),
-    );
-    argFieldset.appendChild(
-      makeNumber('Source A', arg.sourceA ?? 0, 0, Math.max(0, efSlots - 1), 1, (value) => stageSlotArgField(slotState.selected, 'sourceA', value)),
-    );
-    argFieldset.appendChild(
-      makeNumber('Source B', arg.sourceB ?? 1, 0, Math.max(0, efSlots - 1), 1, (value) => stageSlotArgField(slotState.selected, 'sourceB', value)),
-    );
-    form.appendChild(argFieldset);
+      const arg = normalizeArg(slot);
+      const argFieldset = makeFieldset(
+        'Follower Combiner (ARG)',
+        'ARG blends two followers before this slot sends MIDI.',
+      );
+      argFieldset.appendChild(
+        makeToggle('Enable combiner', !!arg.enabled, (value) => stageSlotArgField(slotState.selected, 'enabled', value), { help: GLOSSARY.arg }),
+      );
+      argFieldset.appendChild(
+        makeSelect('Combine method', ARG_METHOD_NAMES, resolveArgMethodName(arg) ?? ARG_METHOD_NAMES[0], (value) => {
+          const idx = Math.max(0, ARG_METHOD_NAMES.indexOf(value));
+          stageSlotArgField(slotState.selected, 'method', idx);
+          stageSlotArgField(slotState.selected, 'method_name', value);
+        }),
+      );
+      argFieldset.appendChild(
+        makeNumber('Follower A', arg.sourceA ?? 0, 0, Math.max(0, efSlots - 1), 1, (value) => stageSlotArgField(slotState.selected, 'sourceA', value)),
+      );
+      argFieldset.appendChild(
+        makeNumber('Follower B', arg.sourceB ?? 1, 0, Math.max(0, efSlots - 1), 1, (value) => stageSlotArgField(slotState.selected, 'sourceB', value)),
+      );
+      form.appendChild(argFieldset);
+    }
 
     formContainer.appendChild(form);
   }
 
-  function makeSelect(labelText, options, current, onChange) {
+  function makeSelect(labelText, options, current, onChange, { help } = {}) {
     const wrap = document.createElement('label');
-    wrap.textContent = labelText;
+    wrap.appendChild(makeControlLabel(labelText, help));
     const select = document.createElement('select');
     options.forEach((opt) => {
       const option = document.createElement('option');
@@ -944,9 +1447,9 @@ const boot = () => {
     return wrap;
   }
 
-  function makeNumber(labelText, current, min, max, step, onCommit) {
+  function makeNumber(labelText, current, min, max, step, onCommit, { help } = {}) {
     const wrap = document.createElement('label');
-    wrap.textContent = labelText;
+    wrap.appendChild(makeControlLabel(labelText, help));
     const input = document.createElement('input');
     input.type = 'number';
     if (min !== undefined && min !== null) input.min = String(min);
@@ -960,9 +1463,9 @@ const boot = () => {
     return wrap;
   }
 
-  function makeText(labelText, current, placeholder, onCommit) {
+  function makeText(labelText, current, placeholder, onCommit, { help } = {}) {
     const wrap = document.createElement('label');
-    wrap.textContent = labelText;
+    wrap.appendChild(makeControlLabel(labelText, help));
     const input = document.createElement('input');
     input.type = 'text';
     input.value = current ?? '';
@@ -972,17 +1475,34 @@ const boot = () => {
     return wrap;
   }
 
-  function makeToggle(labelText, current, onCommit) {
+  function makeToggle(labelText, current, onCommit, { help } = {}) {
     const wrap = document.createElement('label');
     wrap.className = 'toggle';
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.checked = current;
     input.onchange = () => onCommit(input.checked);
-    const span = document.createElement('span');
-    span.textContent = labelText;
-    wrap.append(input, span);
+    wrap.append(input, makeControlLabel(labelText, help));
     return wrap;
+  }
+
+  function makeControlLabel(text, helpText) {
+    const line = document.createElement('span');
+    line.className = 'control-label';
+    line.textContent = text;
+    appendHelpBadge(line, helpText);
+    return line;
+  }
+
+  function appendHelpBadge(container, helpText) {
+    if (!helpText) return;
+    const badge = document.createElement('span');
+    badge.className = 'help-badge';
+    badge.textContent = 'i';
+    badge.title = helpText;
+    badge.setAttribute('aria-label', helpText);
+    badge.setAttribute('role', 'img');
+    container.appendChild(badge);
   }
 
   function makeFieldset(title, hint) {

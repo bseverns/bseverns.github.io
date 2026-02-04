@@ -5,6 +5,17 @@ const DEFAULT_DEBOUNCE = 24;
 const TELEMETRY_FRAME_MS = 16;
 const RPC_THROTTLE_INTERVAL_MS = 1000 / 120;
 const RPC_TIMEOUT_MS = 3000;
+const MACRO_COMMAND_TIMEOUT_MS = 6000;
+const MACRO_RESPONSE_KEYS = {
+  SAVE_MACRO_SLOT: 'macro_saved',
+  RECALL_MACRO_SLOT: 'macro_recalled'
+};
+const SCENE_COMMAND_TIMEOUT_MS = 6000;
+const SCENE_RESPONSE_KEYS = {
+  SAVE_SCENE: 'scene_saved',
+  RECALL_SCENE: 'scene_recalled',
+  GET_SCENES: 'scenes'
+};
 const STORAGE_KEY = 'moarknobs:last-port';
 const STATE_STORAGE_KEY = 'moarknobs:last-state';
 const EF_FILTER_NAMES = [
@@ -569,6 +580,19 @@ function normalizeConfig(config, manifest = {}) {
     }
   }
 
+  if (led && typeof led === 'object') {
+    let ledModeValue = null;
+    if (config.led && typeof config.led === 'object' && typeof config.led.mode === 'string') {
+      ledModeValue = config.led.mode.toUpperCase();
+    } else if (env.led && typeof env.led === 'object' && typeof env.led.mode === 'string') {
+      ledModeValue = env.led.mode.toUpperCase();
+    }
+    if (!ledModeValue) {
+      ledModeValue = 'STATIC';
+    }
+    led.mode = ledModeValue;
+  }
+
   let envelopeMode = null;
   if (typeof config.envelopeMode === 'string') envelopeMode = config.envelopeMode;
   else if (typeof env.mode_name === 'string') envelopeMode = env.mode_name;
@@ -675,7 +699,7 @@ function createSimulator() {
     fw_version: 'sim-fw',
     git_sha: 'deadbeef',
     build_time: new Date().toISOString(),
-    schema_version: 4,
+    schema_version: 5,
     slot_count: 42,
     pot_count: 42,
     envelope_count: 6,
@@ -759,6 +783,7 @@ function createSimulator() {
       rgb: { r: 255, g: 0, b: 255 }
     }
   };
+  let macroSnapshot = null;
   const profileSlots = Array.from({ length: 4 }, () => clone(config));
   const defaultProfile = clone(config);
 
@@ -801,10 +826,29 @@ function createSimulator() {
     }
   }
 
+  function handleSimulatorMacroCommand(command) {
+    if (!command) return false;
+    if (command === 'SAVE_MACRO_SLOT') {
+      macroSnapshot = clone(config);
+      pushLine({ macro_saved: true, macro_available: true });
+      return true;
+    }
+    if (command === 'RECALL_MACRO_SLOT') {
+      const hasSnapshot = Boolean(macroSnapshot);
+      if (hasSnapshot) {
+        config = clone(macroSnapshot);
+      }
+      pushLine({ macro_recalled: hasSnapshot, macro_available: hasSnapshot });
+      return true;
+    }
+    return false;
+  }
+
   async function writeLine(line) {
     if (!opened) throw new Error('simulator closed');
     const trimmed = line.trim();
     if (!trimmed) return;
+    if (handleSimulatorMacroCommand(trimmed)) return;
     let request;
     try {
       request = JSON.parse(trimmed);
@@ -836,6 +880,16 @@ function createSimulator() {
           config = { ...config, ...request.config };
         }
         respond({ checksum: request.checksum ?? 'sim-checksum' });
+        break;
+      case 'set_param':
+        if (typeof request.path !== 'string' || !request.path.length) {
+          if (request.id !== undefined) {
+            pushLine({ id: request.id, error: { message: 'set_param requires path' } });
+          }
+          break;
+        }
+        setNestedValue(config, request.path, request.value);
+        respond({ ok: true, path: request.path, value: request.value });
         break;
       case 'save_profile': {
         const slot = clampSlot(request.slot ?? request.id ?? 0);
@@ -1045,6 +1099,9 @@ export function createRuntime({
   let rpcBusy = false;
   let lastRpcTimestamp = 0;
   const pendingRpc = new Map();
+  let macroPending = null;
+  let macroAvailability = true;
+  let scenePending = null;
 
   const ajv = new Ajv({ strict: false, allErrors: true });
   addFormats(ajv);
@@ -1124,35 +1181,69 @@ export function createRuntime({
     return () => statusListeners.delete(handler);
   }
 
+  function createCompletionLatch() {
+    // Serial transport stays strictly ordered, so each queued RPC waits until its response
+    // releases this latch before the next write goes out.
+    let released = false;
+    let resolveLatch = () => {};
+    const promise = new Promise((resolve) => {
+      resolveLatch = resolve;
+    });
+    return {
+      promise,
+      release() {
+        if (released) return;
+        released = true;
+        resolveLatch();
+      }
+    };
+  }
+
   async function processRpcQueue() {
-    if (rpcBusy || !transport) return;
+    if (rpcBusy || !transport || !rpcQueue.length) return;
     rpcBusy = true;
     try {
-      while (rpcQueue.length && transport) {
-        const message = rpcQueue.shift();
+      while (transport && rpcQueue.length) {
+        // Keep one in-flight RPC at a time: firmware responses are line-oriented and keyed by id,
+        // so serialized writes avoid cross-talk when links get jittery.
+        const message = rpcQueue[0];
+        const entry = pendingRpc.get(message.id);
+        if (!entry) {
+          rpcQueue.shift();
+          continue;
+        }
         const elapsed = performance.now() - lastRpcTimestamp;
         const wait = Math.max(0, RPC_THROTTLE_INTERVAL_MS - elapsed);
-        if (wait) await new Promise((resolve) => setTimeout(resolve, wait));
+        if (wait) {
+          await new Promise((resolve) => setTimeout(resolve, wait));
+        }
         try {
           await transport.writeLine(JSON.stringify(message));
         } catch (err) {
-          const pending = pendingRpc.get(message.id);
-          if (pending) {
-            if (pending.timer) clearTimeout(pending.timer);
-            pendingRpc.delete(message.id);
-            pending.reject(err);
+          if (entry.timer) {
+            clearTimeout(entry.timer);
+            entry.timer = null;
           }
+          pendingRpc.delete(message.id);
+          entry.release?.();
+          entry.reject(err);
+          flushRpcPending(err);
           break;
         }
         lastRpcTimestamp = performance.now();
-        const pending = pendingRpc.get(message.id);
-        if (pending) {
-          pending.timer = setTimeout(() => {
-            if (pendingRpc.delete(message.id)) {
-              pending.reject(new Error('RPC timeout'));
-            }
-          }, pending.timeoutMs);
-        }
+        entry.timer = setTimeout(() => {
+          const pending = pendingRpc.get(message.id);
+          if (!pending) return;
+          if (pending.timer) {
+            clearTimeout(pending.timer);
+            pending.timer = null;
+          }
+          pending.release?.();
+          pendingRpc.delete(message.id);
+          pending.reject(new Error('RPC timeout'));
+        }, entry.timeoutMs);
+        await entry.completion;
+        rpcQueue.shift();
       }
     } finally {
       rpcBusy = false;
@@ -1171,10 +1262,12 @@ export function createRuntime({
       const error = new Error(msg.error.message ?? 'RPC error');
       if (msg.error.code !== undefined) error.code = msg.error.code;
       pending.reject(error);
+      pending.release?.();
       return;
     }
     const response = Object.prototype.hasOwnProperty.call(msg, 'result') ? msg.result : msg;
     pending.resolve(response);
+    pending.release?.();
   }
 
   function sendRpc(payload, { timeoutMs } = {}) {
@@ -1184,26 +1277,173 @@ export function createRuntime({
     if (!transport) return Promise.reject(new Error('Not connected'));
     const id = ++rpcSeq;
     const message = { ...payload, id };
-    return new Promise((resolve, reject) => {
+    const request = new Promise((resolve, reject) => {
+      const completion = createCompletionLatch();
       const entry = {
         resolve,
         reject,
         timeoutMs: Number.isFinite(Number(timeoutMs)) ? Number(timeoutMs) : rpcTimeout,
-        timer: null
+        timer: null,
+        completion: completion.promise,
+        release: completion.release
       };
       pendingRpc.set(id, entry);
       rpcQueue.push(message);
       processRpcQueue();
     });
+    // Any failed RPC rolls staged edits back to the last known-good live config so the UI does
+    // not stay in a half-applied state.
+    return request.catch(async (err) => {
+      try {
+        await rollback();
+      } catch (rollbackErr) {
+        console.debug('rollback failed', rollbackErr);
+      }
+      throw err;
+    });
+  }
+
+  function sendMacroCommand(command, { timeoutMs } = {}) {
+    if (!command || !MACRO_RESPONSE_KEYS[command]) {
+      return Promise.reject(new Error('Unknown macro command'));
+    }
+    if (!transport) return Promise.reject(new Error('Not connected'));
+    if (macroPending) return Promise.reject(new Error('Macro command already in progress'));
+    let resolveFn;
+    let rejectFn;
+    const promise = new Promise((resolve, reject) => {
+      resolveFn = resolve;
+      rejectFn = reject;
+    });
+    const pending = { command, resolve: resolveFn, reject: rejectFn, timer: null };
+    macroPending = pending;
+    const timeout = Number.isFinite(Number(timeoutMs)) ? Number(timeoutMs) : MACRO_COMMAND_TIMEOUT_MS;
+    pending.timer = setTimeout(() => {
+      settleMacroPending(pending, { error: new Error('Macro command timed out') });
+    }, timeout);
+    transport.writeLine(command).catch((err) => {
+      settleMacroPending(pending, { error: err });
+    });
+    return promise;
+  }
+
+  function settleScenePending(pending, { error, response } = {}) {
+    if (!pending) return;
+    if (pending.timer) {
+      clearTimeout(pending.timer);
+      pending.timer = null;
+    }
+    if (scenePending === pending) {
+      scenePending = null;
+    }
+    if (error) {
+      pending.reject(error);
+      return;
+    }
+    pending.resolve(response);
+  }
+
+  function sendSceneCommand(payload, { timeoutMs } = {}) {
+    if (!payload || typeof payload !== 'object' || typeof payload.cmd !== 'string') {
+      return Promise.reject(new Error('Scene command requires cmd property'));
+    }
+    if (!transport) return Promise.reject(new Error('Not connected'));
+    if (scenePending) return Promise.reject(new Error('Scene command already in progress'));
+    const expectedKey = SCENE_RESPONSE_KEYS[payload.cmd];
+    if (!expectedKey) return Promise.reject(new Error('Unknown scene command'));
+    let resolveFn;
+    let rejectFn;
+    const promise = new Promise((resolve, reject) => {
+      resolveFn = resolve;
+      rejectFn = reject;
+    });
+    const pending = {
+      command: payload.cmd,
+      expectedKey,
+      resolve: resolveFn,
+      reject: rejectFn,
+      timer: null
+    };
+    scenePending = pending;
+    const timeout = Number.isFinite(Number(timeoutMs)) ? Number(timeoutMs) : SCENE_COMMAND_TIMEOUT_MS;
+    pending.timer = setTimeout(() => {
+      settleScenePending(pending, { error: new Error('Scene command timed out') });
+    }, timeout);
+    transport.writeLine(JSON.stringify(payload)).catch((err) => {
+      settleScenePending(pending, { error: err });
+    });
+    return promise;
+  }
+
+  function handleSceneLine(msg) {
+    if (!msg || typeof msg !== 'object') return false;
+    const hasSceneField =
+      Object.prototype.hasOwnProperty.call(msg, 'scene_saved') ||
+      Object.prototype.hasOwnProperty.call(msg, 'scene_recalled') ||
+      Array.isArray(msg.scenes);
+    if (!hasSceneField) return false;
+
+    if (Array.isArray(msg.scenes)) {
+      const scenes = msg.scenes.map((entry) => ({
+        slot: Number.isFinite(Number(entry?.slot)) ? Number(entry.slot) : 0,
+        name: typeof entry?.name === 'string' ? entry.name : '',
+        available: Boolean(entry?.available)
+      }));
+      emit('scene', { type: 'list', scenes });
+    }
+
+    const pending = scenePending;
+    if (pending) {
+      const expectedKey = pending.expectedKey;
+      if (Object.prototype.hasOwnProperty.call(msg, expectedKey)) {
+        const success =
+          expectedKey === 'scenes' ? true : Boolean(msg[expectedKey]);
+        if (success) {
+          settleScenePending(pending, { response: msg });
+        } else {
+          const errorMessage =
+            msg.scene_error?.message ?? msg.scene_error ?? `${pending.command} failed`;
+          settleScenePending(pending, { error: new Error(errorMessage) });
+        }
+      }
+    }
+
+    if (Object.prototype.hasOwnProperty.call(msg, 'scene_saved')) {
+      emit('scene', {
+        type: 'saved',
+        slot: Number.isFinite(Number(msg.scene_slot)) ? Number(msg.scene_slot) : -1,
+        name: typeof msg.scene_name === 'string' ? msg.scene_name : '',
+        available: Boolean(msg.scene_available),
+        raw: msg
+      });
+    }
+    if (Object.prototype.hasOwnProperty.call(msg, 'scene_recalled')) {
+      emit('scene', {
+        type: 'recalled',
+        slot: Number.isFinite(Number(msg.scene_slot)) ? Number(msg.scene_slot) : -1,
+        name: typeof msg.scene_name === 'string' ? msg.scene_name : '',
+        available: Boolean(msg.scene_available),
+        raw: msg
+      });
+    }
+
+    return true;
+  }
+
+  function requestScenes(options = {}) {
+    return sendSceneCommand({ cmd: 'GET_SCENES' }, options);
   }
 
   function flushRpcPending(error) {
     rpcQueue.length = 0;
     for (const [id, pending] of pendingRpc) {
       if (pending.timer) clearTimeout(pending.timer);
+      pending.release?.();
       pending.reject(error);
       pendingRpc.delete(id);
     }
+    settleMacroPending(macroPending, { error: error ?? new Error('Connection lost') });
+    settleScenePending(scenePending, { error: error ?? new Error('Connection lost') });
   }
 
   async function connect(existingPort) {
@@ -1326,7 +1566,57 @@ export function createRuntime({
     pump();
   }
 
+  function settleMacroPending(pending, { error, response } = {}) {
+    if (!pending) return;
+    if (pending.timer) {
+      clearTimeout(pending.timer);
+      pending.timer = null;
+    }
+    if (macroPending === pending) {
+      macroPending = null;
+    }
+    if (error) {
+      pending.reject(error);
+    } else {
+      pending.resolve(response);
+    }
+  }
+
+  function handleMacroLine(msg) {
+    if (!msg || typeof msg !== 'object') return false;
+    const hasMacroField =
+      Object.prototype.hasOwnProperty.call(msg, 'macro_saved') ||
+      Object.prototype.hasOwnProperty.call(msg, 'macro_recalled') ||
+      Object.prototype.hasOwnProperty.call(msg, 'macro_available');
+    if (!hasMacroField) return false;
+    if (Object.prototype.hasOwnProperty.call(msg, 'macro_available')) {
+      macroAvailability = Boolean(msg.macro_available);
+    }
+    emit('macro', {
+      saved: Boolean(msg.macro_saved),
+      recalled: Boolean(msg.macro_recalled),
+      available: macroAvailability,
+      raw: msg
+    });
+    const pending = macroPending;
+    if (pending) {
+      const expectedKey = MACRO_RESPONSE_KEYS[pending.command];
+      if (expectedKey && Object.prototype.hasOwnProperty.call(msg, expectedKey)) {
+        const success = Boolean(msg[expectedKey]);
+        if (success) {
+          settleMacroPending(pending, { response: msg });
+        } else {
+          const errorMessage = msg.error?.message ?? `${pending.command} failed`;
+          settleMacroPending(pending, { error: new Error(errorMessage) });
+        }
+      }
+    }
+    return true;
+  }
+
   function handleLine(line) {
+    // Dispatch order matters: scene/macro replies can look like normal JSON payloads, so route
+    // their handlers first before generic RPC/telemetry parsing.
     if (!line) return;
     let msg;
     try {
@@ -1335,6 +1625,8 @@ export function createRuntime({
       emit('log', line);
       return;
     }
+    if (handleSceneLine(msg)) return;
+    if (handleMacroLine(msg)) return;
     if (msg?.id !== undefined) {
       handleRpcResponse(msg);
       return;
@@ -1415,6 +1707,7 @@ export function createRuntime({
   function broadcastConfig({ persist = true } = {}) {
     const payload = { config: clone(liveConfig), staged: clone(stagedConfig), dirty };
     if (persist) persistStateSnapshot();
+    console.debug('[runtime] broadcastConfig dirty=', dirty);
     emit('config', payload);
   }
 
@@ -1436,6 +1729,8 @@ export function createRuntime({
   }
 
   function applyConfigPatch(patch) {
+    // Device-side patches update the live snapshot first, then selectively merge into staged
+    // values only where the user has not diverged locally.
     if (!patch || typeof patch !== 'object' || !liveConfig) return;
     const prevLive = clone(liveConfig);
     const nextLive = clone(liveConfig);
@@ -1597,7 +1892,6 @@ export function createRuntime({
     const normalizedStaged = normalizeConfig(nextStaged, remoteManifest ?? localManifest ?? {});
     liveConfig = clone(normalizedLive);
     stagedConfig = clone(normalizedStaged);
-    dirty = JSON.stringify(stagedConfig) !== JSON.stringify(liveConfig);
     broadcastConfig();
   }
 
@@ -1608,7 +1902,7 @@ export function createRuntime({
     const normalizedStaged = normalizeConfig(next, remoteManifest ?? localManifest ?? {});
     liveConfig = clone(normalizedLive);
     stagedConfig = clone(normalizedStaged);
-    dirty = JSON.stringify(stagedConfig) !== JSON.stringify(liveConfig);
+    dirty = shallowDiff(normalizedLive ?? {}, normalizedStaged ?? {}).length > 0;
     broadcastConfig();
   }
 
@@ -1719,6 +2013,9 @@ export function createRuntime({
     on,
     onStatus,
     sendRpc,
+    sendMacroCommand,
+    sendSceneCommand,
+    requestScenes,
     applyPatch,
     restoreLocalState,
     replaceConfig,
