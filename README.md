@@ -8,13 +8,19 @@ This repo now runs like a stripped-down landing pad for Ben Severns: three pilla
 
 ```mermaid
 %%{ init: { "flowchart": { "defaultRenderer": "dagre-d3", "rankSpacing": 30, "nodeSpacing": 10 } } }%%
-graph TD
-    thesis["Empower people to build with agency using open tools,<br>consent-forward scenes,<br>and learning environments — all documented loudly."]
+flowchart TD
+  thesis["Empower people to build with agency using open tools,<br/>consent-forward scenes,<br/>and learning environments — documented loudly."]
 
-    thesis --> toolsPillar["Tools"]
-    thesis --> scenesPillar["Scenes"]
-    thesis --> learningPillar["Learning Environments"]
-    thesis --> infraPillar["Systems & Distribution"]
+  thesis --> toolsPillar["Tools"]
+  thesis --> scenesPillar["Scenes"]
+  thesis --> learningPillar["Learning Environments"]
+  thesis --> infraPillar["Systems & Distribution"]
+
+  %% -------------------------
+  %% NARRATIVE (your tall chains live here)
+  %% -------------------------
+  subgraph NARRATIVE["Narrative (lineage / causality)"]
+    direction TB
 
     %% TOOLS (one tall chain)
     toolsPillar --> toolsAudio["Tools: sound + patch worlds"]
@@ -51,28 +57,92 @@ graph TD
     infraLab --> homeauto["homeauto"] --> turingpi2["Turing Pi 2"] --> printServer["Repetier-Server node"]
     printServer --> infraGov["Systems: governance + ethics"]
     infraGov --> governance["AGENTS + checklists + consent notes"]
+  end
 
-    governance --> agencyHub["Agency / Authorship / Feedback Loops"] --> opennessHub["Open Documentation & Consent-Forward Ethos"] --> resilienceHub["Field Reliability / Safety / Care"]
+  %% -------------------------
+  %% INDEX OVERLAY (cork board)
+  %% -------------------------
+  subgraph INDEX["Index overlay (cork board / retrieval)"]
+    direction LR
 
-    %% Cross-links (kept high-level so columns stay vertical)
-    toolsControl -. "workshops" .-> learnCurricula
-    toolsAnalysis -. "triggers" .-> scenesStage
-    infraLMS -. "delivers" .-> learnCurricula
-    infraArchive -. "publishes" .-> learnDocs
-    learnCurricula -. "fieldwork feeds" .-> scenesWorks
+    subgraph TAGS["Tags (mostly stable buckets)"]
+      direction TB
+      tag_audio((audio))
+      tag_dsp((dsp))
+      tag_firmware((firmware))
+      tag_hardware((hardware))
+      tag_web((web))
+      tag_docs((docs))
+      tag_pedagogy((pedagogy))
+      tag_infra((infra))
+      tag_performance((performance))
+      tag_fabrication((fabrication))
+      tag_archiving((archiving))
+    end
 
-    %% STYLES
-    classDef tools fill:#383838,stroke:#FFFFFF,stroke-width:2px;
-    classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px;
-    classDef learning fill:#BAE8FC,stroke:#6C8EBF,stroke-width:2px;
-    classDef infra fill:#E7D7FF,stroke:#7C5CBF,stroke-width:2px;
-    classDef hub fill:#F2F2CC,stroke:#999,stroke-width:2px,stroke-dasharray: 3 3;
+    subgraph CONCEPTS["Concepts & practices (allowed to change)"]
+      direction TB
+      c_consent{{consent-forward design}}
+      c_field{{field reliability / care}}
+      c_portable{{portable learning artifacts}}
+      c_memory{{memory / time / degradation}}
+      c_registry{{reference & registry thinking}}
+      c_loops{{feedback loops (make→deploy→assess)}}
+    end
 
-    class thesis,toolsPillar,toolsAudio,tmsLib,seedBox,Horizon,DustPress,lofiSampler,PdRepo,VCVpatch,toolsControl,MOARkNOBS42,MN42Configurator,arduinoSketches,microGranny2,x0xb0x,toolsAnalysis,frZone,teensyDSP tools;
-    class scenesPillar,scenesWorks,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer,scenesStage,liveRig,liveRigCtrl,interstream,maelstrom,scVideoMixer,clipFoundry,deskCam scenes;
-    class learningPillar,learnCurricula,cMCurricula,scratch,printing,lego,piper,dronesEd,privacyMedia,learnFactory,SyllabusRepo,ART215,learnDocs,repairStudio,machineDocs,personalSite,learnOps,teacherOps learning;
-    class infraPillar,infraLMS,tailoredu,tailoreduRepo,djangoLMS,classhub,infraStack,infraFleet,piImaging,docker,server,openvpn,infraArchive,llfs,studio1,ghPages,infraLab,homeauto,turingpi2,printServer,infraGov,governance infra;
-    class agencyHub,opennessHub,resilienceHub hub;
+    subgraph NONPROJECTS["Non-project nodes (can evolve)"]
+      direction TB
+      np_workshops["Workshops (formats + facilitation moves)"]
+      np_templates["Templates / checklists as instruments"]
+      np_inventory["Kit inventory + maintenance reality"]
+      np_partners["Community partners + classrooms"]
+    end
+  end
+
+  %% -------------------------
+  %% LINKING LAYER (this is the integration)
+  %% dotted = “indexed as”
+  %% -------------------------
+
+  %% Projects ↔ Tags
+  seedBox -.-> tag_audio
+  seedBox -.-> tag_dsp
+  DustPress -.-> tag_audio
+  DustPress -.-> tag_dsp
+  classhub -.-> tag_web
+  classhub -.-> tag_infra
+  personalSite -.-> tag_docs
+  personalSite -.-> tag_web
+  cMCurricula -.-> tag_pedagogy
+  SyllabusRepo -.-> tag_docs
+  infraStack -.-> tag_infra
+
+  %% Projects ↔ Concepts/Practices (the “not explicitly projects” part)
+  classhub -.-> c_portable
+  classhub -.-> c_loops
+  governance -.-> c_consent
+  governance -.-> c_field
+  personalSite -.-> c_registry
+  droneChorus -.-> c_memory
+  cMCurricula -.-> np_workshops
+  SyllabusRepo -.-> np_templates
+
+  %% Optional: anchor tags back to pillars (so the overlay still “belongs”)
+  toolsPillar --- tag_audio
+  toolsPillar --- tag_dsp
+  toolsPillar --- tag_firmware
+  toolsPillar --- tag_hardware
+  scenesPillar --- tag_performance
+  learningPillar --- tag_pedagogy
+  learningPillar --- tag_docs
+  infraPillar --- tag_infra
+  infraPillar --- tag_web
+
+  %% Optional: connect non-projects to concepts (so they move without breaking narrative)
+  np_workshops -.-> c_loops
+  np_templates -.-> c_registry
+  np_inventory -.-> c_field
+  np_partners -.-> c_consent
 ```
 </div>
 
