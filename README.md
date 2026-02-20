@@ -6,321 +6,229 @@ This repo now runs like a stripped-down landing pad for Ben Severns: three pilla
 <div align="center" style="max-width:800px; overflow-x:auto;">
 ## Portfolio diagram
 
+## Systems topology
 ```mermaid
-%% Diagram: bseverns.github.io README — Narrative + Index Overlay
-%% Diagram-Version: 2026-02-20
-%% Target: GitHub Mermaid (flowchart)
-%% Notes:
-%% - Concepts/Non-projects are intentionally editable without re-threading lineage.
-%% - Keep lineage edges solid. Keep index edges dotted.
-%% - If rendering fails, remove the init line first and retry.
+%% bseverns.github.io — Portfolio map (SPINE)
+%% Diagram-Version: 2026-02-20.spine.v1
+%% Intent: legible overview; completeness lives in cork-boards below
+%% If render issues: delete the init line first.
 
-%%{ init: { "flowchart": { "rankSpacing": 30, "nodeSpacing": 10 } } }%%
+%%{ init: { "flowchart": { "rankSpacing": 22, "nodeSpacing": 18 } } }%%
 flowchart TD
   thesis["Empower people to build with agency using open tools,<br/>consent-forward scenes,<br/>and learning environments — documented loudly."]
 
-  thesis --> toolsPillar["Tools"]
-  thesis --> scenesPillar["Scenes"]
-  thesis --> learningPillar["Learning Environments"]
-  thesis --> infraPillar["Systems & Distribution"]
+  thesis --> Tools["Tools"]
+  thesis --> Scenes["Scenes"]
+  thesis --> Learning["Learning Environments"]
+  thesis --> Systems["Systems & Distribution"]
 
-  %% =========================================================
-  %% NARRATIVE (lineage / causality — your tall chains)
-  %% =========================================================
-  subgraph NARRATIVE["Narrative (lineage / causality)"]
-    direction TB
+  %% Tools (collapsed bundles; full lists in cork-board)
+  Tools --> T1["Sound + patch worlds<br/>tms-lib → seedBox → Horizon → DustPress → lofi-sampler → Pd → VCV_patch"]
+  Tools --> T2["Control + hardware<br/>MOARkNOBS-42 → MN42 configurator → arduinoSketches → microGranny2 → x0xb0x"]
+  Tools --> T3["Analysis + triggers + DSP<br/>frZone_core → Teensy DSP fx unit"]
 
-    %% TOOLS (one tall chain)
-    toolsPillar --> toolsAudio["Tools: sound + patch worlds"]
-    toolsAudio --> tmsLib["tms-lib"] --> seedBox["seedBox"] --> Horizon["Horizon"] --> DustPress["DustPress"] --> lofiSampler["lofi-sampler"] --> PdRepo["Pd"] --> VCVpatch["VCV_patch"]
-    VCVpatch --> toolsControl["Tools: control + hardware"]
-    toolsControl --> MOARkNOBS42["MOARkNOBS-42"] --> MN42Configurator["MN42 configurator"] --> arduinoSketches["arduinoSketches"] --> microGranny2["microGranny2"] --> x0xb0x["x0xb0x"]
-    x0xb0x --> toolsAnalysis["Tools: analysis + triggers + DSP"]
-    toolsAnalysis --> frZone["frZone_core"] --> teensyDSP["Teensy DSP fx unit"]
+  %% Scenes
+  Scenes --> S1["Works + studies<br/>perceptual-drift → pointy-clumps → drone-chorus → roomLens → StringField → DiceLoop → hallway-reactor → ArduinoSculpture_MCAD → Human-Buffer"]
+  Scenes --> S2["Stage interop stack<br/>live-rig → live-rig-control → interstream → maelstrom → SC Video Mixer → new_wrld (clip foundry) → desk camera feed"]
 
-    %% SCENES (one tall chain)
-    scenesPillar --> scenesWorks["Scenes: works + studies"]
-    scenesWorks --> perceptualDrift["perceptual-drift"] --> pointyClumps["pointy-clumps"] --> droneChorus["drone-chorus"] --> roomLens["roomLens"] --> StringFieldNode["StringField"] --> DiceLoopNode["DiceLoop"] --> hallwayReactor["hallway-reactor"] --> ArduinoSculpture["ArduinoSculpture_MCAD"] --> HumanBuffer["Human-Buffer"]
-    HumanBuffer --> scenesStage["Scenes: stage interop stack"]
-    scenesStage --> liveRig["live-rig"] --> liveRigCtrl["live-rig-control"] --> interstream["interstream"] --> maelstrom["maelstrom"] --> scVideoMixer["SC Video Mixer"] --> clipFoundry["new_wrld (clip foundry)"] --> deskCam["desk camera feed"]
+  %% Learning
+  Learning --> L1["createMPLS curricula<br/>cM_curricula → Scratch (12w) → 3D print/CAD (4) → LEGO Spike/BricQ → Piper/RPi → Drones curriculum → Privacy media course"]
+  Learning --> L2["Course factory + templates<br/>Syllabus → ART215_SP22"]
+  Learning --> L3["Docs + public site<br/>repair-studio → machine-docs → bseverns.github.io"]
+  Learning --> L4["Teacher workflow<br/>make → deploy → assess"]
 
-    %% LEARNING (one tall chain)
-    learningPillar --> learnCurricula["Learning: createMPLS curricula"]
-    learnCurricula --> cMCurricula["cM_curricula"] --> scratch["Scratch (12w)"] --> printing["3D print/CAD (4)"] --> lego["LEGO Spike/BricQ"] --> piper["Piper/RPi"] --> dronesEd["Drones curriculum"] --> privacyMedia["Privacy media course"]
-    privacyMedia --> learnFactory["Learning: course factory + templates"]
-    learnFactory --> SyllabusRepo["Syllabus"] --> ART215["ART215_SP22"]
-    ART215 --> learnDocs["Learning: docs + public site"]
-    learnDocs --> repairStudio["repair-studio"] --> machineDocs["machine-docs"] --> personalSite["bseverns.github.io"]
-    personalSite --> learnOps["Learning: teacher workflow"]
-    learnOps --> teacherOps["make → deploy → assess"]
+  %% Systems
+  Systems --> Y1["Classroom doorways<br/>TailorEDU → Tailoredu repo → LMS redesign (Django) → selfhosted-classhub → Infra stack (PG/Redis/MinIO/Caddy)"]
+  Systems --> Y2["Deployment + device fleet<br/>Pi imaging kit → Docker/compose → Ubuntu server → OpenVPN"]
+  Systems --> Y3["Indexing + publishing<br/>LlamaFS → Studio1 → GitHub Pages"]
+  Systems --> Y4["Studio infrastructure<br/>homeauto → Turing Pi 2 → Repetier-Server node"]
+  Systems --> Y5["Governance + ethics<br/>AGENTS + checklists + consent notes"]
 
-    %% SYSTEMS (one tall chain + governance hubs)
-    infraPillar --> infraLMS["Systems: classroom doorways"]
-    infraLMS --> tailoredu["TailorEDU"] --> tailoreduRepo["Tailoredu repo"] --> djangoLMS["LMS redesign (Django)"] --> classhub["selfhosted-classhub"] --> infraStack["Infra stack (PG/Redis/MinIO/Caddy)"]
-    infraStack --> infraFleet["Systems: deployment + device fleet"]
-    infraFleet --> piImaging["Pi imaging kit"] --> docker["Docker/compose"] --> server["Ubuntu server"] --> openvpn["OpenVPN"]
-    openvpn --> infraArchive["Systems: indexing + publishing"]
-    infraArchive --> llfs["LlamaFS"] --> studio1["Studio1"] --> ghPages["GitHub Pages"]
-    ghPages --> infraLab["Systems: studio infrastructure"]
-    infraLab --> homeauto["homeauto"] --> turingpi2["Turing Pi 2"] --> printServer["Repetier-Server node"]
-    printServer --> infraGov["Systems: governance + ethics"]
-    infraGov --> governance["AGENTS + checklists + consent notes"]
+  Y5 --> H1["Agency / Authorship / Feedback Loops"] --> H2["Open Documentation & Consent-Forward Ethos"] --> H3["Field Reliability / Safety / Care"]
 
-    governance --> agencyHub["Agency / Authorship / Feedback Loops"] --> opennessHub["Open Documentation & Consent-Forward Ethos"] --> resilienceHub["Field Reliability / Safety / Care"]
-
-    %% Cross-links (kept high-level so columns stay vertical)
-    toolsControl -. "workshops" .-> learnCurricula
-    toolsAnalysis -. "triggers" .-> scenesStage
-    infraLMS -. "delivers" .-> learnCurricula
-    infraArchive -. "publishes" .-> learnDocs
-    learnCurricula -. "fieldwork feeds" .-> scenesWorks
-  end
-
-  %% =========================================================
-  %% INDEX OVERLAY (cork board / retrieval — editable concepts)
-  %% =========================================================
-  subgraph INDEX["Index overlay (cork board / retrieval) — pin everything here"]
-    direction LR
-
-    subgraph TAGS["Tags (mostly stable buckets)"]
-      direction TB
-      tag_audio((audio))
-      tag_patch((patch worlds))
-      tag_dsp((dsp / triggers))
-      tag_firmware((firmware))
-      tag_hardware((hardware))
-      tag_web((web))
-      tag_docs((docs))
-      tag_pedagogy((pedagogy))
-      tag_infra((infra))
-      tag_deploy((deployment))
-      tag_archiving((archiving))
-      tag_performance((performance))
-      tag_fabrication((fabrication))
-      tag_privacy((privacy / ethics))
-      tag_registry((reference / registry))
-    end
-
-    subgraph CONCEPTS["Concepts & practices (allowed to change)"]
-      direction TB
-      c_consent(["consent-forward design"])
-      c_field(["field reliability / care"])
-      c_portable(["portable learning artifacts"])
-      c_memory(["memory / time / degradation"])
-      c_loops(["feedback loops (make→deploy→assess)"])
-      c_studioSystems(["studio-systems (tools → scenes → learning)"])
-      c_openDocs(["open documentation as instrument"])
-    end
-
-    subgraph NONPROJECTS["Non-project nodes (can evolve)"]
-      direction TB
-      np_workshops["Workshops (formats + facilitation moves)"]
-      np_templates["Templates / checklists as instruments"]
-      np_inventory["Kit inventory + maintenance reality"]
-      np_partners["Community partners + classrooms"]
-      np_routines["Weekly rhythm / planning systems"]
-      np_safety["Safety, care, boundaries (field)"]
-    end
-
-    subgraph SATELLITES["Satellites (add smaller repos here without disturbing lineage)"]
-      direction TB
-      sat_1["(add repo)"]
-      sat_2["(add repo)"]
-      sat_3["(add repo)"]
-      sat_4["(add repo)"]
-      sat_5["(add repo)"]
-    end
-  end
-
-  %% =========================================================
-  %% LINKING LAYER (integration)
-  %% Solid = lineage. Dotted = index pin.
-  %% =========================================================
-
-  %% Anchor tags back to pillars (so overlay “belongs”)
-  toolsPillar --- tag_audio
-  toolsPillar --- tag_patch
-  toolsPillar --- tag_dsp
-  toolsPillar --- tag_firmware
-  toolsPillar --- tag_hardware
-
-  scenesPillar --- tag_performance
-  scenesPillar --- tag_memory
-
-  learningPillar --- tag_pedagogy
-  learningPillar --- tag_docs
-  learningPillar --- tag_privacy
-
-  infraPillar --- tag_infra
-  infraPillar --- tag_web
-  infraPillar --- tag_deploy
-  infraPillar --- tag_archiving
-  infraPillar --- tag_registry
-
-  %% Bridge pins from chain headers to tags (makes the overlay feel “linked”)
-  toolsAudio -.-> tag_audio
-  toolsAudio -.-> tag_patch
-  toolsControl -.-> tag_hardware
-  toolsControl -.-> tag_firmware
-  toolsAnalysis -.-> tag_dsp
-
-  scenesWorks -.-> tag_performance
-  scenesWorks -.-> tag_memory
-  scenesStage -.-> tag_web
-  scenesStage -.-> tag_performance
-
-  learnCurricula -.-> tag_pedagogy
-  learnFactory -.-> tag_docs
-  learnDocs -.-> tag_docs
-  learnOps -.-> c_loops
-
-  infraLMS -.-> tag_web
-  infraStack -.-> tag_infra
-  infraFleet -.-> tag_deploy
-  infraArchive -.-> tag_archiving
-  infraGov -.-> tag_privacy
-
-  %% Projects ↔ Tags (pin major nodes; add more as desired)
-  tmsLib -.-> tag_audio
-  tmsLib -.-> tag_docs
-  seedBox -.-> tag_audio
-  seedBox -.-> tag_dsp
-  Horizon -.-> tag_audio
-  Horizon -.-> tag_dsp
-  DustPress -.-> tag_audio
-  DustPress -.-> tag_dsp
-  lofiSampler -.-> tag_audio
-  lofiSampler -.-> tag_hardware
-  PdRepo -.-> tag_patch
-  VCVpatch -.-> tag_patch
-
-  MOARkNOBS42 -.-> tag_hardware
-  MOARkNOBS42 -.-> tag_firmware
-  MN42Configurator -.-> tag_web
-  MN42Configurator -.-> tag_docs
-  arduinoSketches -.-> tag_firmware
-  microGranny2 -.-> tag_hardware
-  x0xb0x -.-> tag_hardware
-  frZone -.-> tag_dsp
-  teensyDSP -.-> tag_dsp
-  teensyDSP -.-> tag_hardware
-  teensyDSP -.-> tag_firmware
-
-  perceptualDrift -.-> tag_performance
-  pointyClumps -.-> tag_performance
-  droneChorus -.-> tag_performance
-  droneChorus -.-> tag_memory
-  roomLens -.-> tag_performance
-  StringFieldNode -.-> tag_performance
-  DiceLoopNode -.-> tag_performance
-  hallwayReactor -.-> tag_performance
-  ArduinoSculpture -.-> tag_hardware
-  HumanBuffer -.-> tag_memory
-
-  liveRig -.-> tag_performance
-  liveRig -.-> tag_audio
-  liveRigCtrl -.-> tag_web
-  interstream -.-> tag_web
-  maelstrom -.-> tag_web
-  scVideoMixer -.-> tag_performance
-  clipFoundry -.-> tag_web
-  deskCam -.-> tag_performance
-
-  cMCurricula -.-> tag_pedagogy
-  cMCurricula -.-> tag_docs
-  scratch -.-> tag_pedagogy
-  printing -.-> tag_fabrication
-  printing -.-> tag_pedagogy
-  lego -.-> tag_pedagogy
-  piper -.-> tag_pedagogy
-  piper -.-> tag_infra
-  dronesEd -.-> tag_pedagogy
-  privacyMedia -.-> tag_privacy
-  SyllabusRepo -.-> tag_docs
-  repairStudio -.-> tag_docs
-  repairStudio -.-> tag_fabrication
-  machineDocs -.-> tag_docs
-  personalSite -.-> tag_docs
-  personalSite -.-> tag_web
-  personalSite -.-> tag_registry
-  teacherOps -.-> c_loops
-
-  tailoreduRepo -.-> tag_web
-  tailoreduRepo -.-> tag_infra
-  djangoLMS -.-> tag_web
-  classhub -.-> tag_web
-  classhub -.-> tag_infra
-  classhub -.-> c_portable
-  classhub -.-> c_loops
-  infraStack -.-> tag_infra
-  piImaging -.-> tag_deploy
-  docker -.-> tag_deploy
-  server -.-> tag_deploy
-  openvpn -.-> tag_deploy
-  llfs -.-> tag_archiving
-  llfs -.-> tag_memory
-  studio1 -.-> tag_archiving
-  ghPages -.-> tag_web
-  homeauto -.-> tag_infra
-  turingpi2 -.-> tag_infra
-  printServer -.-> tag_fabrication
-  printServer -.-> tag_infra
-  governance -.-> tag_privacy
-  governance -.-> c_consent
-  governance -.-> c_field
-  governance -.-> c_openDocs
-
-  %% Projects ↔ Non-projects (so the “living” layer can change safely)
-  cMCurricula -.-> np_workshops
-  SyllabusRepo -.-> np_templates
-  repairStudio -.-> np_templates
-  lego -.-> np_inventory
-  printing -.-> np_inventory
-  piper -.-> np_inventory
-  infraFleet -.-> np_inventory
-  learnCurricula -.-> np_partners
-  infraLMS -.-> np_partners
-  resilienceHub -.-> np_safety
-  infraGov -.-> np_safety
-  learnOps -.-> np_routines
-
-  %% Non-projects ↔ Concepts (the editable “climate” around the work)
-  np_workshops -.-> c_loops
-  np_templates -.-> c_openDocs
-  np_inventory -.-> c_field
-  np_partners -.-> c_consent
-  np_routines -.-> c_studioSystems
-  np_safety -.-> c_field
-
-  %% =========================================================
-  %% STYLES (your originals + overlay styles)
-  %% =========================================================
-  classDef tools fill:#383838,stroke:#FFFFFF,stroke-width:2px,color:#FFFFFF;
-  classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px;
-  classDef learning fill:#BAE8FC,stroke:#6C8EBF,stroke-width:2px;
-  classDef infra fill:#E7D7FF,stroke:#7C5CBF,stroke-width:2px;
-  classDef hub fill:#F2F2CC,stroke:#999,stroke-width:2px,stroke-dasharray: 3 3;
-
-  classDef tag fill:#F7F7F7,stroke:#777,stroke-width:1px;
-  classDef concept fill:#FFF7E6,stroke:#AA7,stroke-width:1px;
-  classDef nonproj fill:#EEF7FF,stroke:#79A,stroke-width:1px,stroke-dasharray: 4 2;
-  classDef satellite fill:#FFFFFF,stroke:#BBB,stroke-width:1px,stroke-dasharray: 2 3;
-
-  %% Apply classes (narrative)
-  class thesis,toolsPillar,toolsAudio,tmsLib,seedBox,Horizon,DustPress,lofiSampler,PdRepo,VCVpatch,toolsControl,MOARkNOBS42,MN42Configurator,arduinoSketches,microGranny2,x0xb0x,toolsAnalysis,frZone,teensyDSP tools;
-  class scenesPillar,scenesWorks,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer,scenesStage,liveRig,liveRigCtrl,interstream,maelstrom,scVideoMixer,clipFoundry,deskCam scenes;
-  class learningPillar,learnCurricula,cMCurricula,scratch,printing,lego,piper,dronesEd,privacyMedia,learnFactory,SyllabusRepo,ART215,learnDocs,repairStudio,machineDocs,personalSite,learnOps,teacherOps learning;
-  class infraPillar,infraLMS,tailoredu,tailoreduRepo,djangoLMS,classhub,infraStack,infraFleet,piImaging,docker,server,openvpn,infraArchive,llfs,studio1,ghPages,infraLab,homeauto,turingpi2,printServer,infraGov,governance infra;
-  class agencyHub,opennessHub,resilienceHub hub;
-
-  %% Apply classes (overlay)
-  class tag_audio,tag_patch,tag_dsp,tag_firmware,tag_hardware,tag_web,tag_docs,tag_pedagogy,tag_infra,tag_deploy,tag_archiving,tag_performance,tag_fabrication,tag_privacy,tag_registry tag;
-  class c_consent,c_field,c_portable,c_memory,c_loops,c_studioSystems,c_openDocs concept;
-  class np_workshops,np_templates,np_inventory,np_partners,np_routines,np_safety nonproj;
-  class sat_1,sat_2,sat_3,sat_4,sat_5 satellite;
+  %% Only the few cross-links that matter at “spine resolution”
+  T2 -. "workshops" .-> L1
+  T3 -. "triggers" .-> S2
+  Y1 -. "delivers" .-> L1
+  Y3 -. "publishes" .-> L3
+  L1 -. "fieldwork feeds" .-> S1
 ```
-</div>
+## Tools
+```mermaid
+%% bseverns.github.io — Cork board (TOOLS)
+%% Diagram-Version: 2026-02-20.tools-index.v1
+flowchart LR
+  subgraph AUDIO["audio + patch worlds"]
+    direction TB
+    tms["tms-lib"]
+    seed["seedBox"]
+    hor["Horizon"]
+    dust["DustPress"]
+    lofi["lofi-sampler"]
+    pd["Pd"]
+    vcv["VCV_patch"]
+  end
 
+  subgraph CONTROL["control + hardware"]
+    direction TB
+    moar["MOARkNOBS-42"]
+    cfg["MN42 configurator"]
+    ard["arduinoSketches"]
+    micro["microGranny2"]
+    x0x["x0xb0x"]
+  end
+
+  subgraph DSP["analysis + triggers + DSP"]
+    direction TB
+    fr["frZone_core"]
+    teensy["Teensy DSP fx unit"]
+  end
+```
+
+## Scenes
+```mermaid
+%% bseverns.github.io — Cork board (SCENES)
+%% Diagram-Version: 2026-02-20.scenes-index.v1
+flowchart LR
+  subgraph WORKS["works + studies"]
+    direction TB
+    pd["perceptual-drift"]
+    pc["pointy-clumps"]
+    dc["drone-chorus"]
+    rl["roomLens"]
+    sf["StringField"]
+    dl["DiceLoop"]
+    hr["hallway-reactor"]
+    asc["ArduinoSculpture_MCAD"]
+    hb["Human-Buffer"]
+  end
+
+  subgraph STAGE["stage interop stack"]
+    direction TB
+    rig["live-rig"]
+    rigc["live-rig-control"]
+    inter["interstream"]
+    mael["maelstrom"]
+    scvm["SC Video Mixer"]
+    nw["new_wrld (clip foundry)"]
+    cam["desk camera feed"]
+  end
+```
+
+## Learning
+```mermaid
+%% bseverns.github.io — Cork board (LEARNING)
+%% Diagram-Version: 2026-02-20.learning-index.v1
+flowchart LR
+  subgraph CURR["createMPLS curricula"]
+    direction TB
+    cm["cM_curricula"]
+    scratch["Scratch (12w)"]
+    print["3D print/CAD (4)"]
+    lego["LEGO Spike/BricQ"]
+    piper["Piper/RPi"]
+    drones["Drones curriculum"]
+    priv["Privacy media course"]
+  end
+
+  subgraph FACTORY["course factory + templates"]
+    direction TB
+    syl["Syllabus"]
+    art215["ART215_SP22"]
+  end
+
+  subgraph DOCS["docs + public site"]
+    direction TB
+    repair["repair-studio"]
+    mach["machine-docs"]
+    site["bseverns.github.io"]
+  end
+
+  subgraph OPS["teacher workflow"]
+    direction TB
+    ops["make → deploy → assess"]
+  end
+```
+
+## Systems
+```mermaid
+%% bseverns.github.io — Cork board (SYSTEMS)
+%% Diagram-Version: 2026-02-20.systems-index.v1
+flowchart LR
+  subgraph LMS["classroom doorways"]
+    direction TB
+    te["TailorEDU"]
+    ter["Tailoredu repo"]
+    dj["LMS redesign (Django)"]
+    ch["selfhosted-classhub"]
+    stack["Infra stack (PG/Redis/MinIO/Caddy)"]
+  end
+
+  subgraph DEPLOY["deployment + device fleet"]
+    direction TB
+    pi["Pi imaging kit"]
+    dc["Docker/compose"]
+    srv["Ubuntu server"]
+    vpn["OpenVPN"]
+  end
+
+  subgraph ARCH["indexing + publishing"]
+    direction TB
+    llfs["LlamaFS"]
+    st1["Studio1"]
+    ghp["GitHub Pages"]
+  end
+
+  subgraph LAB["studio infrastructure"]
+    direction TB
+    ha["homeauto"]
+    tp["Turing Pi 2"]
+    ps["Repetier-Server node"]
+  end
+
+  subgraph GOV["governance + ethics"]
+    direction TB
+    gov["AGENTS + checklists + consent notes"]
+    hub1["Agency / Authorship / Feedback Loops"]
+    hub2["Open Documentation & Consent-Forward Ethos"]
+    hub3["Field Reliability / Safety / Care"]
+    gov --> hub1 --> hub2 --> hub3
+  end
+```
+
+## Living things that aren't neatly packed as much as the others
+
+```mermaid
+%% bseverns.github.io — Concepts climate (NON-PROJECTS)
+%% Diagram-Version: 2026-02-20.concepts.v1
+flowchart TD
+  subgraph Concepts["Concepts (can change)"]
+    direction TB
+    consent["consent-forward design"]
+    care["field reliability / care"]
+    loops["feedback loops (make→deploy→assess)"]
+    memory["memory / time / degradation"]
+    registry["reference & registry thinking"]
+  end
+
+  subgraph Practices["Practices (operational realities)"]
+    direction TB
+    workshops["Workshops (formats + facilitation moves)"]
+    templates["Templates / checklists as instruments"]
+    inventory["Kit inventory + maintenance reality"]
+    partners["Community partners + classrooms"]
+    rhythm["Weekly rhythm / planning systems"]
+    safety["Safety, care, boundaries (field)"]
+  end
+
+  workshops --> loops
+  templates --> registry
+  inventory --> care
+  partners --> consent
+  rhythm --> loops
+  safety --> care
+  memory --> registry
+```
 
 ## Stack snapshot
 - **HTML**: Hand-authored pages at the project root (`index.html`, `art.html`, `courses.html`, `press-kit.html`, `contact.html`, `404.html`). No templates, no includes—what you see is what ships.
