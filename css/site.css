@@ -456,6 +456,29 @@ article.teaching li {
   font-size: 0.95rem;
 }
 
+.diagram-disclosure {
+  margin-top: 1rem;
+}
+
+.diagram-disclosure summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--accent);
+  list-style: none;
+}
+
+.diagram-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+
+.diagram-disclosure summary::before {
+  content: "+ ";
+}
+
+.diagram-disclosure[open] summary::before {
+  content: "- ";
+}
+
 .diagram-frame {
   margin-top: 1rem;
   background: var(--surface-muted);
@@ -1288,6 +1311,10 @@ article.teaching li {
 @media (min-width: 900px) {
   .diagram-grid.two-up {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .diagram-grid.two-up > :only-child {
+    grid-column: 1 / -1;
   }
 
   .fleet-band-grid {
