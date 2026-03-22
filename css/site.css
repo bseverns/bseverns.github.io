@@ -462,23 +462,31 @@ article.teaching li {
   border: 1px dashed var(--border);
   border-radius: 0.9rem;
   padding: clamp(14px, 2vw, 18px);
-  overflow: auto;
+  overflow: hidden;
 }
 
 .diagram-render {
   min-height: 220px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .diagram-render .mermaid {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
   min-width: 100%;
+  width: 100%;
 }
 
 .diagram-render svg {
   display: block;
-  width: auto !important;
-  height: auto;
-  max-width: none !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  margin-inline: auto;
+  overflow: visible;
 }
 
 .diagram-placeholder {

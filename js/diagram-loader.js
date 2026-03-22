@@ -27,6 +27,11 @@
     .then(function () {
       return window.mermaid.run({ querySelector: selector });
     })
+    .then(function () {
+      Array.prototype.forEach.call(mounts, function (mount) {
+        normalizeRenderedSvg(mount);
+      });
+    })
     .catch(function () {
       // Leave the diagram placeholders in place if Mermaid initialization fails.
     });
@@ -78,5 +83,26 @@
     placeholder.className = 'diagram-placeholder';
     placeholder.textContent = message;
     mount.appendChild(placeholder);
+  }
+
+  function normalizeRenderedSvg(mount) {
+    if (!mount) {
+      return;
+    }
+
+    const svg = mount.querySelector('svg');
+    if (!svg) {
+      return;
+    }
+
+    const width = parseFloat(svg.getAttribute('width'));
+    const height = parseFloat(svg.getAttribute('height'));
+
+    if (!svg.getAttribute('viewBox') && Number.isFinite(width) && Number.isFinite(height)) {
+      svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
+    }
+
+    svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
+    svg.classList.add('diagram-svg');
   }
 })();

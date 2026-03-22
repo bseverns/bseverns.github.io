@@ -71,74 +71,6 @@
       </div>
     </section>
 
-    <section class="updates" aria-label="Signals from the lab">
-      <div class="container updates-grid">
-        <section class="now-next" aria-labelledby="nn-heading">
-          <h2 id="nn-heading">What’s on the bench</h2>
-          <ul class="nn-list">
-            <li><strong>Now:</strong> MN42 v0.2 latency lab — measuring feel before we publish the claim.</li>
-            <li><strong>Next:</strong> Human Buffer consent gate refactor with clearer assumption ledger callouts.</li>
-            <li><strong>Proofs:</strong> Innovation &amp; 3D Printing kits documenting erase-now rituals and civic use cases.</li>
-          </ul>
-        </section>
-        <section class="playable" aria-labelledby="play-heading">
-          <h2 id="play-heading">Playable</h2>
-          <p>Tap for a tiny random tone—small proof that the instruments stay playable while we interrogate them.</p>
-          <button id="ping" class="btn secondary">make a small sound</button>
-        </section>
-        <section class="patch-notes" aria-labelledby="patch-heading">
-          <h2 id="patch-heading">Patch notes</h2>
-          <div class="patch-note-groups">
-            <section class="patch-list highlight" aria-labelledby="patch-highlights-title">
-              <h3 id="patch-highlights-title">Highlights</h3>
-              <ul aria-labelledby="patch-highlights-title">
-                <li>
-                  <a href="https://github.com/bseverns/MOARkNOBS-42" target="_blank" rel="noopener">MN42</a>
-                  <span class="badge" aria-label="Flagship instrument">Flagship</span>
-                  — Consent-forward hardware synth with latency labs and mapping manifest.
-                </li>
-                <li>
-                  <a href="https://github.com/bseverns/Human-Buffer" target="_blank" rel="noopener">Human Buffer</a>
-                  <span class="badge" aria-label="Teaching kit">Teaching kit</span>
-                  — Consent gate rituals, Delete Now prompts, and civic workshop blueprints.
-                </li>
-                <li>
-                  <a href="https://github.com/bseverns/MotorLightSound" target="_blank" rel="noopener">MotorLightSound</a>
-                  <span class="badge" aria-label="Performance rig">Performance rig</span>
-                  — Immersive state-machine light orchestra with schematics, firmware, and teardown notes for remixing.
-                </li>
-              </ul>
-            </section>
-            <section class="patch-list latest" aria-labelledby="patch-latest-title">
-              <h3 id="patch-latest-title">Latest</h3>
-              <ul aria-labelledby="patch-latest-title">
-                <li>
-                  <a href="https://github.com/bseverns/MOARkNOBS-42" target="_blank" rel="noopener">MN42</a>
-                  — Logged the new latency lab in <code>docs/bench/latency/</code>, published the <code>latency_bench.csv</code> dataset, and wired the notes to <code>tools/rtl_latency_report.py</code> so collaborators can re-run the measurements.
-                </li>
-                <li>
-                  <a href="https://github.com/bseverns/seedBox" target="_blank" rel="noopener">seedBox</a>
-                  — Turned the community kit into a shippable release with a refreshed README, annotated BOM callouts, and the residency install checklists that make sure the boxes survive travel.
-                </li>
-                <li>
-                  <a href="https://github.com/bseverns/pointy-clumps" target="_blank" rel="noopener">pointy-clumps</a>
-                  — Wired wind telemetry into new EisenScript generators, shipped the Structure Synth presets, and documented how to turn those weather-driven OBJ exports into rapid sculptures.
-                </li>
-                <li>
-                  <a href="https://github.com/bseverns/drone-chorus" target="_blank" rel="noopener">drone-chorus</a>
-                  — Published the MSP→MIDI bridge scripts, the full control-stack playbook, and the multi-drone VCV Rack presets so pilots can score their telemetry safely.
-                </li>
-                <li>
-                  <a href="https://github.com/bseverns/StringField" target="_blank" rel="noopener">String Field</a>
-                  — Logged the sensor-stack refresh (optical, capacitive, MaKey-to-ground), gesture debugger, and touch-to-ground tuning kit so educators can teach the imaginary-string interface without guessing.
-                </li>
-              </ul>
-            </section>
-          </div>
-        </section>
-      </div>
-    </section>
-
     <section class="pillars" aria-labelledby="pillars-title">
       <div class="container">
         <h2 id="pillars-title">Four ways the lab shows up</h2>
@@ -154,7 +86,7 @@
             <div class="card-body">
               <h3>Scenes</h3>
               <p>Installations and performances that make power, consent, and spectatorship legible in the room.</p>
-              <a class="card-link" href="/art.html">Browse studio notes</a>
+              <a class="card-link" href="/art.html">Browse studio projects</a>
             </div>
           </article>
           <article class="card pillar">
@@ -194,17 +126,21 @@
               <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/fleet-map.md" data-diagram-fallback="Fleet map source not available yet."></div>
             </div>
           </article>
-          <article class="diagram-panel">
-            <div class="diagram-meta">
-              <p class="diagram-kicker">Homepage-level</p>
-              <h3>Core project relationships</h3>
-              <p class="diagram-summary">A second view showing that the core works behave like a fleet: instruments feeding scenes, kits feeding curricula, archives feeding future practice.</p>
-              <a class="diagram-link" href="/docs/visual-system/diagrams/core-project-relationships.md">Open source draft</a>
-            </div>
-            <div class="diagram-frame">
-              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/core-project-relationships.md" data-diagram-fallback="Core relationship map source not available yet."></div>
-            </div>
-          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="fleet-section cross-project-layer" aria-labelledby="cross-project-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Cross-project layer</p>
+          <h2 id="cross-project-title">studio-notes keeps reusable truth in one place</h2>
+          <p>Project repos are canonical for project-specific truth. studio-notes is canonical for cross-project truth: patterns, decisions, trusted reference, and teaching cards harvested from the working fleet.</p>
+        </div>
+        <p>Use the project repos when you need the live build, current setup, or implementation details. Use studio-notes when you need the reusable pattern, the reason behind a choice, or the teaching version of something.</p>
+        <div class="cta">
+          <a class="btn secondary" href="/atlas/n/studio-notes/">Open studio-notes</a>
+          <a class="btn secondary" href="https://github.com/bseverns/studio-notes" target="_blank" rel="noopener">Open repository</a>
         </div>
       </div>
     </section>
@@ -213,29 +149,11 @@
       <div class="container">
         <div class="section-intro">
           <p class="eyebrow">Fleet satellites</p>
-          <h2 id="fleet-satellites-title">Supporting projects that make the flagships legible</h2>
-          <p>The core projects matter more when their supporting systems, ethics layers, scene experiments, and care structures are visible too. These are not leftovers. They are part of the operating shape of the practice.</p>
-        </div>
-        <div class="fleet-band-grid">
-          {% for group in site.data.fleet.satellite_groups %}
-          <article class="fleet-band">
-            <h3>{{ group.title }}</h3>
-            <p>{{ group.summary }}</p>
-            <ul class="fleet-list">
-              {% for item in group.items %}
-              <li>
-                <a class="fleet-item-title" href="{{ item.url }}">{{ item.title }}</a>
-                <p class="fleet-item-copy">{{ item.why }}</p>
-                <p class="fleet-item-relates">{{ item.relates }}</p>
-                <div class="fleet-item-links">
-                  <a href="{{ item.url }}">Atlas node</a>
-                  <a href="{{ item.repo }}" target="_blank" rel="noopener">Repository</a>
-                </div>
-              </li>
-              {% endfor %}
-            </ul>
-          </article>
-          {% endfor %}
+          <h2 id="fleet-satellites-title">Supporting projects make the fleet readable</h2>
+          <p>Flagships are only part of the story. The surrounding studies, support repos, ethics layers, and care structures live in the Atlas so the homepage can stay simple.</p>
+          <div class="cta">
+            <a class="btn secondary" href="/atlas/">Explore the full fleet</a>
+          </div>
         </div>
       </div>
     </section>
@@ -244,67 +162,69 @@
       <div class="container">
         <h2 id="archive-note-title">Why the archive stays loud</h2>
         <p>Legacy write-ups stay published for accountability. They carry the documentation trail—assumption ledgers, privacy notes, iteration logs—so new work can cite its lineage without guesswork.</p>
-        <nav class="legacy-links" aria-labelledby="legacy-links-title">
-          <h3 id="legacy-links-title">Legacy quick links</h3>
-          <ul class="legacy-list">
-            <li class="legacy-card">
-              <a class="legacy-card-link" href="/about/">
-                <h4>Legacy profile &amp; CV</h4>
-                <p class="legacy-lede">The original biography, CV timeline, and document download hub still live in the Jekyll stack.</p>
-                <span class="legacy-cta">Open the legacy profile →</span>
-              </a>
-            </li>
-            <li class="legacy-card">
-              <a class="legacy-card-link" href="/studio/">
-                <h4>Project case studies</h4>
-                <p class="legacy-lede">Every collection entry that once drove the homepage grid is still linkable.</p>
-                <span class="legacy-cta">Enter the case studies hub →</span>
-              </a>
-            </li>
-            <li class="legacy-card">
-              <a class="legacy-card-link" href="/teaching/">
-                <h4>Teaching briefs</h4>
-                <p class="legacy-lede">Use these for syllabi comparisons or to raid the artifact lists.</p>
-                <span class="legacy-cta">Browse the teaching archive →</span>
-              </a>
-            </li>
-            <li class="legacy-card">
-              <a class="legacy-card-link" href="/research/">
-                <h4>Research notebooks</h4>
-                <p class="legacy-lede">Methods, assumption ledgers, and measurement labs from the previous build.</p>
-                <span class="legacy-cta">Dive into the research stack → (then check my git)</span>
-              </a>
-            </li>
-            <li class="legacy-card">
-              <a class="legacy-card-link" href="/2d/">
-                <h4>Legacy 2D works</h4>
-                <p class="legacy-lede">The preserved flat-work catalog: drawings, prints, and photo series with the original 2010s copy.</p>
-                <span class="legacy-cta">Browse 2D catalog →</span>
-              </a>
-            </li>
-            <li class="legacy-card">
-              <a class="legacy-card-link" href="/3d/">
-                <h4>Legacy 3D works</h4>
-                <p class="legacy-lede">Installations, sculpture, and action pieces archived with their untouched documentation.</p>
-                <span class="legacy-cta">Browse 3D catalog →</span>
-              </a>
-            </li>
-            <li class="legacy-card">
-              <a class="legacy-card-link" href="/spin/">
-                <h4>Interactive &amp; text experiments</h4>
-                <p class="legacy-lede">The browser-native sketches and readings that anchored the prior archive.</p>
-                <span class="legacy-cta">Surf the interactive lab →</span>
-              </a>
-            </li>
-            <li class="legacy-card">
-              <a class="legacy-card-link" href="/text/">
-                <h4>Legacy downloads</h4>
-                <p class="legacy-lede">Syllabi, briefs, and print profiles that used to hide in the footer.</p>
-                <span class="legacy-cta">Open the download bundle →</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
+        <details class="legacy-links">
+          <summary id="legacy-links-title">Open archive links</summary>
+          <nav aria-labelledby="legacy-links-title">
+            <ul class="legacy-list">
+              <li class="legacy-card">
+                <a class="legacy-card-link" href="/about/">
+                  <h4>Legacy profile &amp; CV</h4>
+                  <p class="legacy-lede">The original biography, CV timeline, and document download hub still live in the Jekyll stack.</p>
+                  <span class="legacy-cta">Open the legacy profile →</span>
+                </a>
+              </li>
+              <li class="legacy-card">
+                <a class="legacy-card-link" href="/studio/">
+                  <h4>Project case studies</h4>
+                  <p class="legacy-lede">Every collection entry that once drove the homepage grid is still linkable.</p>
+                  <span class="legacy-cta">Enter the case studies hub →</span>
+                </a>
+              </li>
+              <li class="legacy-card">
+                <a class="legacy-card-link" href="/teaching/">
+                  <h4>Teaching briefs</h4>
+                  <p class="legacy-lede">Use these for syllabi comparisons or to raid the artifact lists.</p>
+                  <span class="legacy-cta">Browse the teaching archive →</span>
+                </a>
+              </li>
+              <li class="legacy-card">
+                <a class="legacy-card-link" href="/research/">
+                  <h4>Research notebooks</h4>
+                  <p class="legacy-lede">Methods, assumption ledgers, and measurement labs from the previous build.</p>
+                  <span class="legacy-cta">Dive into the research stack → (then check my git)</span>
+                </a>
+              </li>
+              <li class="legacy-card">
+                <a class="legacy-card-link" href="/2d/">
+                  <h4>Legacy 2D works</h4>
+                  <p class="legacy-lede">The preserved flat-work catalog: drawings, prints, and photo series with the original 2010s copy.</p>
+                  <span class="legacy-cta">Browse 2D catalog →</span>
+                </a>
+              </li>
+              <li class="legacy-card">
+                <a class="legacy-card-link" href="/3d/">
+                  <h4>Legacy 3D works</h4>
+                  <p class="legacy-lede">Installations, sculpture, and action pieces archived with their untouched documentation.</p>
+                  <span class="legacy-cta">Browse 3D catalog →</span>
+                </a>
+              </li>
+              <li class="legacy-card">
+                <a class="legacy-card-link" href="/spin/">
+                  <h4>Interactive &amp; text experiments</h4>
+                  <p class="legacy-lede">The browser-native sketches and readings that anchored the prior archive.</p>
+                  <span class="legacy-cta">Surf the interactive lab →</span>
+                </a>
+              </li>
+              <li class="legacy-card">
+                <a class="legacy-card-link" href="/text/">
+                  <h4>Legacy downloads</h4>
+                  <p class="legacy-lede">Syllabi, briefs, and print profiles that used to hide in the footer.</p>
+                  <span class="legacy-cta">Open the download bundle →</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </details>
       </div>
     </section>
   </main>

@@ -8,14 +8,14 @@ seo_description: "Atlas of tools, scenes, learning environments, and systems tie
   <div class="container">
     <p class="eyebrow">Portfolio diagram</p>
     <h1>Atlas</h1>
-    <p class="atlas-lede">A living topology of the lab: tools, scenes, learning environments, and the systems that distribute them. Hover to spotlight a node, click to jump into its node page.</p>
+    <p class="atlas-lede">A living topology of the lab: tools, scenes, learning environments, and the systems that distribute them. studio-notes sits across the map as the distilled layer for cross-project patterns, decisions, reference, and teaching cards. Hover to spotlight a node, click to jump into its node page.</p>
   </div>
 </section>
 
 <section class="atlas-diagram" aria-labelledby="atlas-diagram-title">
   <div class="container">
     <h2 id="atlas-diagram-title">Portfolio diagram</h2>
-    <p class="atlas-diagram-note">The diagram mirrors the current repository map. It stays legible, auditable, and linked to node stubs.</p>
+    <p class="atlas-diagram-note">The diagram mirrors the current repository map. It stays legible, auditable, linked to node stubs, and explicit about the cross-project role of studio-notes.</p>
   </div>
   <div class="container">
     <div class="atlas-diagram-frame">
@@ -28,6 +28,7 @@ graph TD
     thesis --> scenesPillar["Scenes"]
     thesis --> learningPillar["Learning Environments"]
     thesis --> infraPillar["Systems & Distribution"]
+    thesis --> studioNotes["studio-notes<br>Cross-project layer"]
 
     %% TOOLS (one tall chain)
     toolsPillar --> toolsAudio["Tools: sound + patch worlds"]
@@ -73,18 +74,24 @@ graph TD
     infraLMS -. "delivers" .-> learnCurricula
     infraArchive -. "publishes" .-> learnDocs
     learnCurricula -. "fieldwork feeds" .-> scenesWorks
+    studioNotes -. "harvests patterns" .-> toolsPillar
+    studioNotes -. "distills scene logic" .-> scenesPillar
+    studioNotes -. "translates methods" .-> learningPillar
+    studioNotes -. "records decisions" .-> infraPillar
 
     %% STYLES
     classDef tools fill:#383838,stroke:#FFFFFF,stroke-width:2px;
     classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px;
     classDef learning fill:#BAE8FC,stroke:#6C8EBF,stroke-width:2px;
     classDef infra fill:#E7D7FF,stroke:#7C5CBF,stroke-width:2px;
+    classDef cross fill:#F8E4C8,stroke:#8A5A2B,stroke-width:2px;
     classDef hub fill:#F2F2CC,stroke:#999,stroke-width:2px,stroke-dasharray: 3 3;
 
     class thesis,toolsPillar,toolsAudio,tmsLib,seedBox,Horizon,DustPress,lofiSampler,PdRepo,VCVpatch,toolsControl,MOARkNOBS42,MN42Configurator,arduinoSketches,microGranny2,x0xb0x,toolsAnalysis,frZone,teensyDSP tools;
     class scenesPillar,scenesWorks,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer,memory_engine,scenesStage,liveRig,liveRigCtrl,interstream,maelstrom,scVideoMixer,clipFoundry,deskCam scenes;
     class learningPillar,learnCurricula,cMCurricula,scratch,printing,lego,piper,dronesEd,privacyMedia,learnFactory,SyllabusRepo,ART215,learnDocs,repairStudio,machineDocs,personalSite,learnOps,teacherOps learning;
     class infraPillar,infraLMS,tailoredu,tailoreduRepo,djangoLMS,classhub,infraStack,infraFleet,piImaging,docker,server,openvpn,infraArchive,llfs,studio1,ghPages,infraLab,homeauto,turingpi2,printServer,infraGov,governance infra;
+    class studioNotes cross;
     class agencyHub,opennessHub,resilienceHub hub;
       </div>
     </div>
@@ -121,6 +128,13 @@ graph TD
           <h3>Systems &amp; Distribution</h3>
           <p>Infrastructure, publishing workflows, and governance that move the work outward.</p>
           <a class="card-link" href="/atlas/systems/">Explore systems</a>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <h3>Cross-project layer</h3>
+          <p>Distilled patterns, decisions, trusted reference, and teaching cards harvested from the project repos.</p>
+          <a class="card-link" href="/atlas/n/studio-notes/">Open studio-notes</a>
         </div>
       </article>
     </div>
