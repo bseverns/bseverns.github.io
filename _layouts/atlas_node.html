@@ -38,6 +38,21 @@
           <h2 id="node-summary">Summary</h2>
           <p>{{ page.summary | default: "Summary coming soon." }}</p>
         </section>
+        {% if page.related_projects %}
+        <section class="atlas-node-section" aria-labelledby="node-related">
+          <h2 id="node-related">Related Fleet Projects</h2>
+          <ul class="atlas-related-list">
+            {% for item in page.related_projects %}
+            <li>
+              <a href="{{ item.url }}">{{ item.title }}</a>
+              {% if item.note %}
+              <span>{{ item.note }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
         <section class="atlas-node-section" aria-labelledby="node-artifacts">
           <h2 id="node-artifacts">Artifacts</h2>
           <ul class="atlas-todo">

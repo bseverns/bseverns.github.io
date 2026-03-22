@@ -13,6 +13,8 @@ seo_description: "Consent-aware installations and instruments documented with as
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <link rel="stylesheet" href="/css/site.css">
   <script defer src="/js/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="/js/diagram-loader.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -53,6 +55,50 @@ seo_description: "Consent-aware installations and instruments documented with as
         <p>Critical inquiry meets hands-on builds—every project makes its technical and ethical layers legible so you can audit, remix, and redeploy it.</p>
         <div class="cta">
           <a class="btn secondary" href="/#archive-note-title">Dig through the archive stacks ↗</a>
+        </div>
+      </div>
+    </section>
+    <section class="diagram-section" aria-labelledby="studio-maps-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Working maps</p>
+          <h2 id="studio-maps-title">System views for scene-facing work</h2>
+          <p>These diagrams carry explanatory weight where final installation or performance images may not exist yet. They show how participation, control, and operations are structured.</p>
+        </div>
+        <div class="diagram-grid two-up">
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Project-level</p>
+              <h3>Memory Engine flow</h3>
+              <p class="diagram-summary">Participant-facing path from kiosk terms and choice through room response, archive logic, and steward intervention.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/memory-engine-flow.md">Open source draft</a>
+            </div>
+            <div class="diagram-frame">
+              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/memory-engine-flow.md" data-diagram-fallback="Memory Engine flow source not available yet."></div>
+            </div>
+          </article>
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Project-level</p>
+              <h3>MOARkNOBS-42 stack</h3>
+              <p class="diagram-summary">A compact stack showing how the interface, firmware, bridge behavior, bench work, and public documentation make the instrument auditable.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/mn42-stack.md">Open source draft</a>
+            </div>
+            <div class="diagram-frame">
+              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/mn42-stack.md" data-diagram-fallback="MOARkNOBS-42 stack source not available yet."></div>
+            </div>
+          </article>
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Project-level</p>
+              <h3>live-rig topology</h3>
+              <p class="diagram-summary">Three lanes, one rig: audio, control, and video coordinated through a shared performance state and maintenance logic.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/live-rig-topology.md">Open source draft</a>
+            </div>
+            <div class="diagram-frame">
+              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/live-rig-topology.md" data-diagram-fallback="live-rig topology source not available yet."></div>
+            </div>
+          </article>
         </div>
       </div>
     </section>

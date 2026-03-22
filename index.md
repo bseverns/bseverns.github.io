@@ -3,6 +3,7 @@ layout: default
 title: "Home"
 seo_description: "Portfolio of studio projects and teaching by Ben Severns"
 archived: true
+permalink: /home-legacy/
 ---
 # Ben Severns — Studio & Teaching
 

@@ -1,3 +1,5 @@
+---
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +20,9 @@
   <meta name="twitter:description" content="Critical inquiry + hands-on digital practice. Systems-first lab documenting consent-aware instruments, civic media, and teachable methods.">
   <meta name="twitter:image" content="/img/social/og-banner.jpg">
   <script defer src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script defer src="/js/site.js"></script>
+  <script defer src="/js/diagram-loader.js"></script>
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -167,6 +171,71 @@
               <a class="card-link" href="/atlas/systems/">Open systems atlas</a>
             </div>
           </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="diagram-section" aria-labelledby="fleet-maps-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Fleet core</p>
+          <h2 id="fleet-maps-title">Maps for reading the practice</h2>
+          <p>These are working diagrams, not decorative summaries. They show how the core projects sit inside the tools / scenes / learning / systems ecology, and how the projects feed one another.</p>
+        </div>
+        <div class="diagram-grid two-up">
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Homepage-level</p>
+              <h3>Fleet map</h3>
+              <p class="diagram-summary">A practice-level map that places the core works inside the four main operating zones of the site.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/fleet-map.md">Open source draft</a>
+            </div>
+            <div class="diagram-frame">
+              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/fleet-map.md" data-diagram-fallback="Fleet map source not available yet."></div>
+            </div>
+          </article>
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Homepage-level</p>
+              <h3>Core project relationships</h3>
+              <p class="diagram-summary">A second view showing that the core works behave like a fleet: instruments feeding scenes, kits feeding curricula, archives feeding future practice.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/core-project-relationships.md">Open source draft</a>
+            </div>
+            <div class="diagram-frame">
+              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/core-project-relationships.md" data-diagram-fallback="Core relationship map source not available yet."></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="fleet-section" aria-labelledby="fleet-satellites-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Fleet satellites</p>
+          <h2 id="fleet-satellites-title">Supporting projects that make the flagships legible</h2>
+          <p>The core projects matter more when their supporting systems, ethics layers, scene experiments, and care structures are visible too. These are not leftovers. They are part of the operating shape of the practice.</p>
+        </div>
+        <div class="fleet-band-grid">
+          {% for group in site.data.fleet.satellite_groups %}
+          <article class="fleet-band">
+            <h3>{{ group.title }}</h3>
+            <p>{{ group.summary }}</p>
+            <ul class="fleet-list">
+              {% for item in group.items %}
+              <li>
+                <a class="fleet-item-title" href="{{ item.url }}">{{ item.title }}</a>
+                <p class="fleet-item-copy">{{ item.why }}</p>
+                <p class="fleet-item-relates">{{ item.relates }}</p>
+                <div class="fleet-item-links">
+                  <a href="{{ item.url }}">Atlas node</a>
+                  <a href="{{ item.repo }}" target="_blank" rel="noopener">Repository</a>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          </article>
+          {% endfor %}
         </div>
       </div>
     </section>

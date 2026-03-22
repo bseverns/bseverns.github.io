@@ -6,3 +6,5 @@ assets/images/.DS_Store
 assets/.DS_Store
 .DS_Store
 MN42/.DS_Store
+.venv/
+.jekyll-cache/

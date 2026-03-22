@@ -13,6 +13,8 @@ seo_description: "Systems-first teaching that ties digital literacy to justice, 
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   <link rel="stylesheet" href="/css/site.css">
   <script defer src="/js/site.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <script defer src="/js/diagram-loader.js"></script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -54,6 +56,50 @@ seo_description: "Systems-first teaching that ties digital literacy to justice, 
         <div class="cta">
           <a class="btn" href="https://github.com/bseverns/Syllabus">Raid the Syllabus repo ↗</a>
           <a class="btn secondary" href="/contact.html">Bring me to your program ↗</a>
+        </div>
+      </div>
+    </section>
+    <section class="diagram-section" aria-labelledby="teaching-maps-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Learning maps</p>
+          <h2 id="teaching-maps-title">Infrastructure behind the classroom-facing work</h2>
+          <p>These diagrams explain how kits, teaching archives, and platform layers relate. They make the pedagogical and distribution logic visible before every final screenshot or artifact exists.</p>
+        </div>
+        <div class="diagram-grid two-up">
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Project-level</p>
+              <h3>seedBox triangle</h3>
+              <p class="diagram-summary">A compact bridge among the physical kit, simulation/rehearsal layer, and the teaching arc that lets the kit travel.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/seedbox-triangle.md">Open source draft</a>
+            </div>
+            <div class="diagram-frame">
+              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/seedbox-triangle.md" data-diagram-fallback="seedBox triangle source not available yet."></div>
+            </div>
+          </article>
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Project-level</p>
+              <h3>Class Hub architecture</h3>
+              <p class="diagram-summary">A first-pass public architecture view of teacher, learner, steward, services, course data, and deployment care.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/class-hub-architecture.md">Open source draft</a>
+            </div>
+            <div class="diagram-frame">
+              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/class-hub-architecture.md" data-diagram-fallback="Class Hub architecture source not available yet."></div>
+            </div>
+          </article>
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Project-level</p>
+              <h3>Syllabus constellation</h3>
+              <p class="diagram-summary">A curriculum-and-archive view showing how course families, shared policies, prompts, and public reuse stay connected.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/syllabus-constellation.md">Open source draft</a>
+            </div>
+            <div class="diagram-frame">
+              <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/syllabus-constellation.md" data-diagram-fallback="Syllabus constellation source not available yet."></div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
