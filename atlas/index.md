@@ -80,12 +80,12 @@ graph TD
     studioNotes -. "records decisions" .-> infraPillar
 
     %% STYLES
-    classDef tools fill:#383838,stroke:#FFFFFF,stroke-width:2px;
-    classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px;
-    classDef learning fill:#BAE8FC,stroke:#6C8EBF,stroke-width:2px;
-    classDef infra fill:#E7D7FF,stroke:#7C5CBF,stroke-width:2px;
-    classDef cross fill:#F8E4C8,stroke:#8A5A2B,stroke-width:2px;
-    classDef hub fill:#F2F2CC,stroke:#999,stroke-width:2px,stroke-dasharray: 3 3;
+    classDef tools fill:#383838,stroke:#FFFFFF,stroke-width:2px,color:#F4F4F4;
+    classDef scenes fill:#D5E8D4,stroke:#82B366,stroke-width:2px,color:#1A1A1A;
+    classDef learning fill:#BAE8FC,stroke:#6C8EBF,stroke-width:2px,color:#1A1A1A;
+    classDef infra fill:#E7D7FF,stroke:#7C5CBF,stroke-width:2px,color:#1A1A1A;
+    classDef cross fill:#F8E4C8,stroke:#8A5A2B,stroke-width:2px,color:#1A1A1A;
+    classDef hub fill:#F2F2CC,stroke:#999,stroke-width:2px,stroke-dasharray: 3 3,color:#1A1A1A;
 
     class thesis,toolsPillar,toolsAudio,tmsLib,seedBox,Horizon,DustPress,lofiSampler,PdRepo,VCVpatch,toolsControl,MOARkNOBS42,MN42Configurator,arduinoSketches,microGranny2,x0xb0x,toolsAnalysis,frZone,teensyDSP tools;
     class scenesPillar,scenesWorks,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer,memory_engine,scenesStage,liveRig,liveRigCtrl,interstream,maelstrom,scVideoMixer,clipFoundry,deskCam scenes;

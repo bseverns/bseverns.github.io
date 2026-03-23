@@ -52,6 +52,37 @@
   overflow: visible;
 }
 
+.atlas-diagram-frame .mermaid svg .nodeLabel,
+.atlas-diagram-frame .mermaid svg .edgeLabel {
+  color: var(--fg);
+  line-height: 1.3;
+}
+
+.atlas-diagram-frame .mermaid svg .nodeLabel p,
+.atlas-diagram-frame .mermaid svg .edgeLabel p {
+  margin: 0;
+}
+
+.atlas-diagram-frame .mermaid svg .edgeLabel rect {
+  fill: var(--surface) !important;
+  stroke: var(--border) !important;
+  opacity: 0.96;
+}
+
+.atlas-diagram-frame .mermaid svg .edgeLabel span,
+.atlas-diagram-frame .mermaid svg .edgeLabel p {
+  background: var(--surface) !important;
+  color: var(--fg) !important;
+}
+
+.atlas-diagram-frame .mermaid svg g.node.atlas-node-dark .label text,
+.atlas-diagram-frame .mermaid svg g.node.atlas-node-dark .nodeLabel,
+.atlas-diagram-frame .mermaid svg g.node.atlas-node-dark .nodeLabel p,
+.atlas-diagram-frame .mermaid svg g.node.atlas-node-dark .nodeLabel span {
+  fill: #f4f4f4 !important;
+  color: #f4f4f4 !important;
+}
+
 .mermaid svg g.node {
   cursor: pointer;
   transition: opacity 0.2s ease, filter 0.2s ease;
@@ -63,7 +94,7 @@
 }
 
 .mermaid svg.atlas-has-hover g.node {
-  opacity: 0.45;
+  opacity: 0.62;
 }
 
 .mermaid svg.atlas-has-hover g.node.atlas-node-active {
@@ -72,7 +103,7 @@
 }
 
 .mermaid svg.atlas-has-hover g.edgePath {
-  opacity: 0.3;
+  opacity: 0.45;
 }
 
 .atlas-diagram-note {

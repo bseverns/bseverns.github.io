@@ -27,6 +27,7 @@
     }
 
     const nodeMap = mapNodes(svg);
+    annotateNodeContrast(nodeMap);
 
     nodeMap.forEach((node, nodeId) => {
       node.setAttribute('data-node-id', nodeId);
@@ -112,6 +113,92 @@
       }
     });
     return nodes;
+  }
+
+  function annotateNodeContrast(nodeMap) {
+    nodeMap.forEach((node) => {
+      const fill = getNodeFill(node);
+      if (fill && isDarkColor(fill)) {
+        node.classList.add('atlas-node-dark');
+      }
+    });
+  }
+
+  function getNodeFill(node) {
+    const shape = node.querySelector('.basic.label-container, rect, polygon, path, ellipse, circle');
+    if (!shape) {
+      return null;
+    }
+
+    const computedFill = window.getComputedStyle(shape).fill;
+    if (computedFill && computedFill !== 'none') {
+      return computedFill;
+    }
+
+    return shape.getAttribute('fill');
+  }
+
+  function isDarkColor(value) {
+    const rgb = parseColor(value);
+    if (!rgb) {
+      return false;
+    }
+
+    const [r, g, b] = rgb.map((channel) => {
+      const normalized = channel / 255;
+      return normalized <= 0.03928
+        ? normalized / 12.92
+        : ((normalized + 0.055) / 1.055) ** 2.4;
+    });
+
+    const luminance = (0.2126 * r) + (0.7152 * g) + (0.0722 * b);
+    return luminance < 0.35;
+  }
+
+  function parseColor(value) {
+    const color = String(value || '').trim();
+    if (!color || color === 'none' || color === 'transparent') {
+      return null;
+    }
+
+    if (color.startsWith('#')) {
+      let hex = color.slice(1);
+      if (hex.length === 3 || hex.length === 4) {
+        hex = hex
+          .slice(0, 3)
+          .split('')
+          .map((part) => part + part)
+          .join('');
+      } else if (hex.length >= 6) {
+        hex = hex.slice(0, 6);
+      }
+
+      if (hex.length !== 6) {
+        return null;
+      }
+
+      return [
+        Number.parseInt(hex.slice(0, 2), 16),
+        Number.parseInt(hex.slice(2, 4), 16),
+        Number.parseInt(hex.slice(4, 6), 16)
+      ];
+    }
+
+    const rgbMatch = color.match(/^rgba?\(([^)]+)\)$/i);
+    if (!rgbMatch) {
+      return null;
+    }
+
+    const channels = rgbMatch[1]
+      .split(',')
+      .slice(0, 3)
+      .map((part) => Number.parseFloat(part.trim()));
+
+    if (channels.length !== 3 || channels.some((channel) => Number.isNaN(channel))) {
+      return null;
+    }
+
+    return channels;
   }
 
   function setActive(svg, nodeMap, adjacencyMap, nodeId) {
