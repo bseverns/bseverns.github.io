@@ -35,20 +35,22 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 1rem;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .atlas-diagram-frame .mermaid {
-  display: inline-block;
-  width: max-content;
+  display: block;
+  width: 100%;
   min-width: 100%;
 }
 
 .atlas-diagram-frame svg {
   display: block;
-  width: auto !important;
-  height: auto;
-  max-width: none !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 100% !important;
+  margin-inline: auto;
   overflow: visible;
 }
 
@@ -178,5 +180,10 @@
 @media (max-width: 720px) {
   .atlas-diagram-frame .mermaid {
     min-width: 720px;
+  }
+
+  .atlas-diagram-frame svg {
+    width: auto !important;
+    max-width: none !important;
   }
 }

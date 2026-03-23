@@ -26,6 +26,8 @@
       return;
     }
 
+    normalizeSvgSizing(svg);
+
     const nodeMap = mapNodes(svg);
     annotateNodeContrast(nodeMap);
 
@@ -113,6 +115,19 @@
       }
     });
     return nodes;
+  }
+
+  function normalizeSvgSizing(svg) {
+    const width = Number.parseFloat(svg.getAttribute('width'));
+    const height = Number.parseFloat(svg.getAttribute('height'));
+
+    if (!svg.hasAttribute('viewBox') && Number.isFinite(width) && Number.isFinite(height)) {
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    }
+
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
   }
 
   function annotateNodeContrast(nodeMap) {
