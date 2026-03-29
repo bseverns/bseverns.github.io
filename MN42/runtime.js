@@ -1,11 +1,14 @@
 import Ajv from './lib/mini-ajv.js';
 import addFormats from './lib/add-formats.js';
+import { EF_FILTER_NAMES, SLOT_TYPE_NAMES, ARG_METHOD_NAMES } from './lib/constants.js';
+import { createLocalManifest } from './manifest_contract.js';
 
 const DEFAULT_DEBOUNCE = 24;
 const TELEMETRY_FRAME_MS = 16;
 const RPC_THROTTLE_INTERVAL_MS = 1000 / 120;
 const RPC_TIMEOUT_MS = 3000;
 const MACRO_COMMAND_TIMEOUT_MS = 6000;
+const NATIVE_SET_ALL_CHUNK_SIZE = 96;
 const MACRO_RESPONSE_KEYS = {
   SAVE_MACRO_SLOT: 'macro_saved',
   RECALL_MACRO_SLOT: 'macro_recalled'
@@ -18,44 +21,9 @@ const SCENE_RESPONSE_KEYS = {
 };
 const STORAGE_KEY = 'moarknobs:last-port';
 const STATE_STORAGE_KEY = 'moarknobs:last-state';
-const EF_FILTER_NAMES = [
-  'LINEAR',
-  'OPPOSITE_LINEAR',
-  'EXPONENTIAL',
-  'RANDOM',
-  'LOWPASS',
-  'HIGHPASS',
-  'BANDPASS'
-];
-const SLOT_TYPE_NAMES = [
-  'OFF',
-  'CC',
-  'Note',
-  'PitchBend',
-  'ProgramChange',
-  'Aftertouch',
-  'ModWheel',
-  'NRPN',
-  'RPN',
-  'SysEx'
-];
-const ARG_METHOD_NAMES = [
-  'PLUS',
-  'MIN',
-  'PECK',
-  'SHAV',
-  'SQAR',
-  'BABS',
-  'TABS',
-  'MULT',
-  'DIVI',
-  'AVG',
-  'XABS',
-  'MAXX',
-  'MINN',
-  'XORR'
-];
+const LOCAL_SLOT_META_STORAGE_KEY = 'moarknobs:slot-meta';
 
+// Small event bus shared by the runtime and the view layer.
 function makeEmitter() {
   const listeners = new Map();
   return {
@@ -79,14 +47,17 @@ function makeEmitter() {
   };
 }
 
+// Avoid repeated constructor churn when we encode serial/WebSocket payloads.
 function encoder() {
   return new TextEncoder();
 }
 
+// Keep a matching decoder helper beside the encoder for transport adapters.
 function decoder() {
   return new TextDecoder();
 }
 
+// Hash staged config payloads so Apply can demand an explicit firmware ACK.
 async function digest(message) {
   const bytes = typeof message === 'string' ? new TextEncoder().encode(message) : message;
   const hash = await crypto.subtle.digest('SHA-256', bytes);
@@ -99,12 +70,29 @@ async function digest(message) {
   return hex;
 }
 
+// Structured clone when available; JSON clone fallback keeps tests/browser support simple.
 function clone(value) {
   if (value === undefined) return value;
   if (typeof structuredClone === 'function') return structuredClone(value);
   return JSON.parse(JSON.stringify(value));
 }
 
+// Browser-local slot notes are stored outside device config and normalized here.
+function normalizeLocalSlotMetaEntry(entry = {}) {
+  return {
+    pot: entry?.pot === undefined ? true : Boolean(entry.pot),
+    label: typeof entry?.label === 'string' ? entry.label : '',
+    takeover: Boolean(entry?.takeover)
+  };
+}
+
+// Keep the local slot-meta array aligned with the current slot count.
+function normalizeLocalSlotMeta(meta, slotCount) {
+  const count = Math.max(0, Math.floor(Number(slotCount) || 0));
+  return Array.from({ length: count }, (_, index) => normalizeLocalSlotMetaEntry(meta?.[index]));
+}
+
+// Diff staged vs live state for the dirty badge and human-readable change panel.
 function shallowDiff(before, after, basePath = '') {
   const changes = [];
   if (before === after) return changes;
@@ -126,6 +114,7 @@ function shallowDiff(before, after, basePath = '') {
   return changes;
 }
 
+// Cheap field-level equality check for tiny metadata records.
 function shallowEqual(a, b) {
   if (a === b) return true;
   if (typeof a !== 'object' || typeof b !== 'object' || !a || !b) return false;
@@ -136,11 +125,13 @@ function shallowEqual(a, b) {
   return true;
 }
 
+// Convert dotted paths like `slots.3.data1` into array/object access tokens.
 function parseSegment(segment) {
   const idx = Number(segment);
   return Number.isInteger(idx) && String(idx) === segment ? idx : segment;
 }
 
+// Mutate a nested draft object in place for staged edits and test harness helpers.
 function setNestedValue(target, path, value) {
   if (!path) return;
   const segments = path.split('.').map(parseSegment);
@@ -159,11 +150,24 @@ function setNestedValue(target, path, value) {
   }
 }
 
+// Shared number clamp used throughout config normalization.
 function clamp(value, min, max) {
   if (!Number.isFinite(value)) return min;
   return Math.min(max, Math.max(min, value));
 }
 
+// Chunk large native `SET_ALL` bodies so serial transport stays within line limits.
+function chunkString(value, size) {
+  const text = typeof value === 'string' ? value : String(value ?? '');
+  const chunkSize = Math.max(1, Math.floor(Number(size) || 1));
+  const chunks = [];
+  for (let index = 0; index < text.length; index += chunkSize) {
+    chunks.push(text.slice(index, index + chunkSize));
+  }
+  return chunks.length ? chunks : [''];
+}
+
+// UI throttling helper for controls that should feel live without flooding transport.
 function createThrottle(fn, delay = DEFAULT_DEBOUNCE) {
   let timer = null;
   let pendingArgs = null;
@@ -186,11 +190,13 @@ function createThrottle(fn, delay = DEFAULT_DEBOUNCE) {
   };
 }
 
+// Coerce unknown ids into non-negative integer indices when possible.
 function coerceIndex(value) {
   const num = Number(value);
   return Number.isInteger(num) && num >= 0 ? num : null;
 }
 
+// Accept multiple historical slot-index field names from firmware/bridge payloads.
 function extractSlotIndex(payload, fallback) {
   const candidates = [payload?.index, payload?.slot, payload?.slot_index, payload?.slotIndex, fallback];
   for (const candidate of candidates) {
@@ -200,6 +206,7 @@ function extractSlotIndex(payload, fallback) {
   return null;
 }
 
+// Normalize incoming slot patch frames into one predictable shape before merging.
 function normalizeSlotPatchEntry(entry) {
   if (!entry || typeof entry !== 'object') return null;
   const index = coerceIndex(entry.index ?? entry.id ?? entry.slot);
@@ -282,16 +289,14 @@ function normalizeSlotPatchEntry(entry) {
     }
   }
   if (entry.active !== undefined) fields.active = Boolean(entry.active);
-  if (entry.takeover !== undefined) fields.takeover = Boolean(entry.takeover);
-  if (entry.pot !== undefined) fields.pot = Boolean(entry.pot);
   if (entry.arpNote !== undefined) {
     const value = Number(entry.arpNote);
     if (Number.isFinite(value)) fields.arpNote = value;
   }
-  if (entry.label !== undefined) fields.label = entry.label;
   return { index, fields };
 }
 
+// Build the per-slot envelope follower payload the App expects to render and stage.
 function normalizeSlotEnvelope(slot) {
   const defaults = {
     index: -1,
@@ -305,7 +310,26 @@ function normalizeSlotEnvelope(slot) {
     gain: 1
   };
   const efSource = slot?.ef && typeof slot.ef === 'object' ? slot.ef : {};
-  const ef = { ...defaults, ...efSource };
+  const ef = {
+    index: defaults.index,
+    filter_index: defaults.filter_index,
+    filter_name: defaults.filter_name,
+    frequency: defaults.frequency,
+    q: defaults.q,
+    oversample: defaults.oversample,
+    smoothing: defaults.smoothing,
+    baseline: defaults.baseline,
+    gain: defaults.gain
+  };
+  if (efSource.index !== undefined) ef.index = efSource.index;
+  if (efSource.filter_index !== undefined) ef.filter_index = efSource.filter_index;
+  if (efSource.filter_name !== undefined) ef.filter_name = efSource.filter_name;
+  if (efSource.frequency !== undefined) ef.frequency = efSource.frequency;
+  if (efSource.q !== undefined) ef.q = efSource.q;
+  if (efSource.oversample !== undefined) ef.oversample = efSource.oversample;
+  if (efSource.smoothing !== undefined) ef.smoothing = efSource.smoothing;
+  if (efSource.baseline !== undefined) ef.baseline = efSource.baseline;
+  if (efSource.gain !== undefined) ef.gain = efSource.gain;
   const index = Number.isFinite(Number(slot?.efIndex))
     ? Number(slot.efIndex)
     : Number.isFinite(Number(ef.index))
@@ -334,6 +358,7 @@ function normalizeSlotEnvelope(slot) {
   return ef;
 }
 
+// Normalize ARG combiner fields and recover sensible defaults from mixed payload styles.
 function normalizeSlotArg(slot, efLimit = 6) {
   const defaults = {
     enabled: false,
@@ -359,6 +384,7 @@ function normalizeSlotArg(slot, efLimit = 6) {
   return arg;
 }
 
+// Reduce all slot payload variants to the canonical App schema shape.
 function normalizeSlotConfig(slot, efLimit = 6) {
   const source = slot && typeof slot === 'object' ? slot : {};
   const efMax = Math.max(-1, Math.round(Number.isFinite(Number(efLimit)) ? Number(efLimit) - 1 : 5));
@@ -389,23 +415,9 @@ function normalizeSlotConfig(slot, efLimit = 6) {
   const activeCandidate = source.active ?? source.enabled;
   const active = typeof activeCandidate === 'boolean' ? activeCandidate : Boolean(activeCandidate);
 
-  const potCandidate = source.pot;
-  let pot;
-  if (typeof potCandidate === 'boolean') pot = potCandidate;
-  else if (typeof potCandidate === 'number') pot = potCandidate !== 0;
-  else if (typeof potCandidate === 'string') pot = potCandidate === 'true' || potCandidate === '1';
-  else pot = Boolean(potCandidate);
-
   const arg = normalizeSlotArg(source, efLimit);
 
-  const normalized = { type, midiChannel, data1, efIndex, ef, active, pot, arg };
-
-  const label = typeof source.label === 'string' ? source.label : undefined;
-  if (label !== undefined) normalized.label = label;
-
-  const takeoverCandidate = source.takeover;
-  if (typeof takeoverCandidate === 'boolean') normalized.takeover = takeoverCandidate;
-  else if (typeof takeoverCandidate === 'number') normalized.takeover = takeoverCandidate !== 0;
+  const normalized = { type, midiChannel, data1, efIndex, ef, active, arg };
 
   let sysexTemplate = source.sysexTemplate ?? source.sysex_template;
   if (typeof sysexTemplate === 'string') {
@@ -416,6 +428,7 @@ function normalizeSlotConfig(slot, efLimit = 6) {
   return normalized;
 }
 
+// Normalize a full config document before it becomes either live or staged state.
 function normalizeConfig(config, manifest = {}) {
   if (!config || typeof config !== 'object') return config;
   const slotCount = Number.isFinite(Number(manifest.slot_count))
@@ -593,12 +606,16 @@ function normalizeConfig(config, manifest = {}) {
   let envelopeMode = null;
   if (typeof config.envelopeMode === 'string') envelopeMode = config.envelopeMode;
   else if (typeof env.mode_name === 'string') envelopeMode = env.mode_name;
+  if (!['LINEAR', 'EXPONENTIAL', 'LOG'].includes(envelopeMode)) {
+    envelopeMode = null;
+  }
 
   const normalized = { slots, efSlots, filter, arg, led };
   if (envelopeMode) normalized.envelopeMode = envelopeMode;
   return normalized;
 }
 
+// Keep EF routing lists deduped, sorted, and bounded to real slot indices.
 function normalizeEfSlotTargets(entry, slotCount) {
   const rawSlots = [];
   if (Array.isArray(entry?.slots)) {
@@ -626,6 +643,7 @@ function normalizeEfSlotTargets(entry, slotCount) {
   return normalized;
 }
 
+// Tiny helper for comparing normalized slot-index arrays.
 function sameNumberArray(left, right) {
   if (!Array.isArray(left) || !Array.isArray(right)) return false;
   if (left.length !== right.length) return false;
@@ -635,6 +653,7 @@ function sameNumberArray(left, right) {
   return true;
 }
 
+// Merge a follower-routing patch without losing other assigned slots.
 function applyEfSlotPatch(target, patch, slotCount) {
   if (!Array.isArray(target)) target = [];
   const index = coerceIndex(patch.index);
@@ -687,6 +706,7 @@ function applyEfSlotPatch(target, patch, slotCount) {
   return changed ? copy : target;
 }
 
+// Native serial transport wrapper that exposes the same API as the simulator and WS bridge.
 function createTransportPort(port, options = {}) {
   const textEncoder = encoder();
   const textDecoder = decoder();
@@ -757,9 +777,10 @@ function createTransportPort(port, options = {}) {
     }
   }
 
-  return { open, writeLine, nextLine, close, rawPort: port };
+  return { open, writeLine, nextLine, close, rawPort: port, protocol: 'native' };
 }
 
+// Simulator transport used by tests and hardware-free UI rehearsal.
 function createSimulator() {
   let opened = false;
   let index = 0;
@@ -767,15 +788,20 @@ function createSimulator() {
   let resolver;
 
   const manifest = {
+    ...createLocalManifest({
+      uiVersion: 'simulator',
+      argMethodCount: ARG_METHOD_NAMES.length,
+      capabilities: {
+        profile_save: true,
+        profile_load: true,
+        profile_reset: true,
+        macro_snapshot: true,
+        scenes: true
+      }
+    }),
     fw_version: 'sim-fw',
     git_sha: 'deadbeef',
     build_time: new Date().toISOString(),
-    schema_version: 5,
-    slot_count: 42,
-    pot_count: 42,
-    envelope_count: 6,
-    arg_method_count: ARG_METHOD_NAMES.length,
-    led_count: 51,
     free_ram: 48000,
     free_flash: 512000
   };
@@ -823,10 +849,7 @@ function createSimulator() {
           sourceB: (efIndex + 1) % manifest.envelope_count
         },
         active: idx % 2 === 0,
-        pot: true,
-        takeover: idx % 5 === 0,
         arp_note: (idx * 3) % 128,
-        label: `Slot ${idx + 1}`,
         sysexTemplate: ''
       };
     }),
@@ -1008,9 +1031,17 @@ function createSimulator() {
     opened = false;
   }
 
-  return { open, writeLine, nextLine, close, rawPort: { getInfo: () => ({ usbVendorId: 0xfeed, usbProductId: 0xbeef }) } };
+  return {
+    open,
+    writeLine,
+    nextLine,
+    close,
+    rawPort: { getInfo: () => ({ usbVendorId: 0xfeed, usbProductId: 0xbeef }) },
+    protocol: 'json-rpc'
+  };
 }
 
+// Bridge websocket transport shim so the App can reuse the same runtime contract off-WebSerial.
 function createWebSocketTransport(url) {
   let socket = null;
   let queue = [];
@@ -1136,10 +1167,12 @@ function createWebSocketTransport(url) {
     writeLine,
     nextLine,
     close,
-    rawPort: { getInfo: () => null }
+    rawPort: { getInfo: () => null },
+    protocol: 'native'
   };
 }
 
+// Main App runtime: owns transport, staging, RPC queueing, rollback, and browser-local metadata.
 export function createRuntime({
   schemaUrl = './config_schema.json',
   localManifest,
@@ -1170,9 +1203,11 @@ export function createRuntime({
   let rpcBusy = false;
   let lastRpcTimestamp = 0;
   const pendingRpc = new Map();
+  let activeRpcId = null;
   let macroPending = null;
   let macroAvailability = true;
   let scenePending = null;
+  let localSlotMeta = normalizeLocalSlotMeta([], localManifest?.slot_count ?? 0);
 
   const ajv = new Ajv({ strict: false, allErrors: true });
   addFormats(ajv);
@@ -1212,6 +1247,82 @@ export function createRuntime({
       console.debug('persist port info failed', err);
     }
   }
+
+  function readLocalSlotMeta() {
+    if (typeof localStorage === 'undefined') return [];
+    try {
+      const raw = localStorage.getItem(LOCAL_SLOT_META_STORAGE_KEY);
+      if (!raw) return [];
+      return JSON.parse(raw);
+    } catch (err) {
+      console.debug('read local slot meta failed', err);
+      return [];
+    }
+  }
+
+  function persistLocalSlotMeta() {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      if (!localSlotMeta?.length) {
+        localStorage.removeItem(LOCAL_SLOT_META_STORAGE_KEY);
+        return;
+      }
+      localStorage.setItem(LOCAL_SLOT_META_STORAGE_KEY, JSON.stringify(localSlotMeta));
+    } catch (err) {
+      console.debug('persist local slot meta failed', err);
+    }
+  }
+
+  function currentSlotCount() {
+    return (
+      liveConfig?.slots?.length ??
+      stagedConfig?.slots?.length ??
+      remoteManifest?.slot_count ??
+      localManifest?.slot_count ??
+      0
+    );
+  }
+
+  function ensureLocalSlotMetaCount(slotCount = currentSlotCount()) {
+    const normalized = normalizeLocalSlotMeta(localSlotMeta, slotCount);
+    if (JSON.stringify(normalized) !== JSON.stringify(localSlotMeta)) {
+      localSlotMeta = normalized;
+      persistLocalSlotMeta();
+    }
+  }
+
+  function extractLocalSlotMetaFromConfig(config) {
+    if (!config || typeof config !== 'object' || !Array.isArray(config.slots)) return;
+    ensureLocalSlotMetaCount(config.slots.length);
+    let changed = false;
+    config.slots.forEach((slot, index) => {
+      if (!slot || typeof slot !== 'object') return;
+      const nextEntry = { ...localSlotMeta[index] };
+      if (slot.pot !== undefined) nextEntry.pot = Boolean(slot.pot);
+      if (slot.label !== undefined && typeof slot.label === 'string') nextEntry.label = slot.label;
+      if (slot.takeover !== undefined) nextEntry.takeover = Boolean(slot.takeover);
+      const normalized = normalizeLocalSlotMetaEntry(nextEntry);
+      if (!shallowEqual(localSlotMeta[index], normalized)) {
+        localSlotMeta[index] = normalized;
+        changed = true;
+      }
+    });
+    if (changed) persistLocalSlotMeta();
+  }
+
+  function mergeLocalSlotMeta(config) {
+    if (!config || typeof config !== 'object') return clone(config);
+    const merged = clone(config);
+    if (!Array.isArray(merged.slots)) return merged;
+    ensureLocalSlotMetaCount(merged.slots.length);
+    merged.slots = merged.slots.map((slot, index) => ({
+      ...(slot ?? {}),
+      ...normalizeLocalSlotMetaEntry(localSlotMeta[index])
+    }));
+    return merged;
+  }
+
+  localSlotMeta = normalizeLocalSlotMeta(readLocalSlotMeta(), localManifest?.slot_count ?? 0);
 
   function readPortPreference() {
     try {
@@ -1270,6 +1381,70 @@ export function createRuntime({
     };
   }
 
+  function isJsonRpcTransport() {
+    return (transport?.protocol ?? 'json-rpc') === 'json-rpc';
+  }
+
+  function isManifestPayload(msg) {
+    return (
+      msg &&
+      typeof msg === 'object' &&
+      !Array.isArray(msg) &&
+      typeof msg.device_name === 'string' &&
+      Number.isFinite(Number(msg.slot_count)) &&
+      Number.isFinite(Number(msg.pot_count))
+    );
+  }
+
+  function isConfigPayload(msg) {
+    return (
+      msg &&
+      typeof msg === 'object' &&
+      !Array.isArray(msg) &&
+      Array.isArray(msg.pots) &&
+      Array.isArray(msg.slots) &&
+      msg.led &&
+      typeof msg.led === 'object'
+    );
+  }
+
+  function buildNativeRpcRequest(message) {
+    switch (message.rpc) {
+      case 'hello':
+        return { kind: 'hello', lines: ['HELLO'] };
+      case 'get_manifest':
+        return { kind: 'manifest', lines: ['GET_MANIFEST'] };
+      case 'get_config':
+        return { kind: 'config', lines: ['GET_CONFIG'] };
+      case 'get_schema':
+        return { kind: 'schema', lines: ['GET_SCHEMA'] };
+      case 'save_profile':
+        return { kind: 'profile_save', lines: [`SAVE_PROFILE,${Number(message.slot) || 0}`] };
+      case 'load_profile':
+        return { kind: 'profile_load', lines: [`LOAD_PROFILE,${Number(message.slot) || 0}`] };
+      case 'reset_profile':
+        return { kind: 'profile_reset', lines: [`RESET_PROFILE,${Number(message.slot) || 0}`] };
+      case 'set_config': {
+        const payload = JSON.stringify({
+          seq: message.seq,
+          checksum: message.checksum,
+          config: message.config
+        });
+        return {
+          kind: 'ack',
+          lines: chunkString(payload, NATIVE_SET_ALL_CHUNK_SIZE).map((chunk) => `SET_ALL ${chunk}`)
+        };
+      }
+      default:
+        return null;
+    }
+  }
+
+  function getActivePendingRpc() {
+    if (activeRpcId === null) return null;
+    return pendingRpc.get(activeRpcId) ?? null;
+  }
+
   async function processRpcQueue() {
     if (rpcBusy || !transport || !rpcQueue.length) return;
     rpcBusy = true;
@@ -1289,8 +1464,22 @@ export function createRuntime({
           await new Promise((resolve) => setTimeout(resolve, wait));
         }
         try {
-          await transport.writeLine(JSON.stringify(message));
+          activeRpcId = message.id;
+          if (entry.protocolMode === 'native') {
+            entry.nativeRequest = buildNativeRpcRequest(message);
+            if (!entry.nativeRequest) {
+              throw new Error(`Unsupported device RPC: ${message.rpc}`);
+            }
+            for (const line of entry.nativeRequest.lines) {
+              await transport.writeLine(line);
+            }
+          } else {
+            await transport.writeLine(JSON.stringify(message));
+          }
         } catch (err) {
+          if (activeRpcId === message.id) {
+            activeRpcId = null;
+          }
           if (entry.timer) {
             clearTimeout(entry.timer);
             entry.timer = null;
@@ -1305,6 +1494,9 @@ export function createRuntime({
         entry.timer = setTimeout(() => {
           const pending = pendingRpc.get(message.id);
           if (!pending) return;
+          if (activeRpcId === message.id) {
+            activeRpcId = null;
+          }
           if (pending.timer) {
             clearTimeout(pending.timer);
             pending.timer = null;
@@ -1324,6 +1516,9 @@ export function createRuntime({
   function handleRpcResponse(msg) {
     const pending = pendingRpc.get(msg.id);
     if (!pending) return;
+    if (activeRpcId === msg.id) {
+      activeRpcId = null;
+    }
     if (pending.timer) {
       clearTimeout(pending.timer);
       pending.timer = null;
@@ -1346,6 +1541,9 @@ export function createRuntime({
       return Promise.reject(new Error('RPC payload must include rpc property'));
     }
     if (!transport) return Promise.reject(new Error('Not connected'));
+    if (!isJsonRpcTransport() && payload.rpc === 'set_param') {
+      return Promise.resolve({ deferred: true, path: payload.path, value: payload.value });
+    }
     const id = ++rpcSeq;
     const message = { ...payload, id };
     const request = new Promise((resolve, reject) => {
@@ -1356,7 +1554,9 @@ export function createRuntime({
         timeoutMs: Number.isFinite(Number(timeoutMs)) ? Number(timeoutMs) : rpcTimeout,
         timer: null,
         completion: completion.promise,
-        release: completion.release
+        release: completion.release,
+        protocolMode: isJsonRpcTransport() ? 'json-rpc' : 'native',
+        nativeRequest: null
       };
       pendingRpc.set(id, entry);
       rpcQueue.push(message);
@@ -1536,7 +1736,7 @@ export function createRuntime({
       emit('connected', {
         manifest: remoteManifest,
         schema,
-        config: liveConfig
+        config: mergeLocalSlotMeta(liveConfig)
       });
     } catch (err) {
       emit('error', err);
@@ -1565,6 +1765,7 @@ export function createRuntime({
       remoteManifest = manifestData;
     } else {
       remoteManifest = {
+        device_name: localManifest?.device_name ?? 'MOARkNOBS-42',
         fw_version: 'unknown',
         git_sha: 'offline',
         build_time: new Date().toISOString(),
@@ -1578,6 +1779,7 @@ export function createRuntime({
         free_flash: 0
       };
     }
+    ensureLocalSlotMetaCount(remoteManifest?.slot_count ?? localManifest?.slot_count ?? 0);
     emit('manifest', remoteManifest);
     if (!remoteManifest.schema_version && remoteManifest.schemaVersion) {
       remoteManifest.schema_version = remoteManifest.schemaVersion;
@@ -1702,6 +1904,95 @@ export function createRuntime({
       handleRpcResponse(msg);
       return;
     }
+    const activePending = getActivePendingRpc();
+    if (activePending?.protocolMode === 'native' && activePending.nativeRequest) {
+      if (msg.type === 'error') {
+        handleRpcResponse({
+          id: activeRpcId,
+          error: {
+            code: msg.code,
+            message: msg.message ?? msg.code ?? 'Device error'
+          }
+        });
+        return;
+      }
+      switch (activePending.nativeRequest.kind) {
+        case 'hello':
+          if (msg.hello !== undefined) {
+            handleRpcResponse({
+              id: activeRpcId,
+              result: { message: String(msg.hello) }
+            });
+            return;
+          }
+          break;
+        case 'manifest':
+          if (isManifestPayload(msg)) {
+            handleRpcResponse({ id: activeRpcId, result: { manifest: msg } });
+            return;
+          }
+          break;
+        case 'config':
+          if (isConfigPayload(msg)) {
+            handleRpcResponse({ id: activeRpcId, result: { config: msg } });
+            return;
+          }
+          break;
+        case 'schema':
+          if (msg.$schema || msg.type === 'object' || msg.properties) {
+            handleRpcResponse({ id: activeRpcId, result: msg });
+            return;
+          }
+          break;
+        case 'ack':
+          if (msg.type === 'ack') {
+            handleRpcResponse({ id: activeRpcId, result: msg });
+            return;
+          }
+          break;
+        case 'profile_save':
+          if (Object.prototype.hasOwnProperty.call(msg, 'profile_saved')) {
+            if (msg.profile_saved) {
+              handleRpcResponse({ id: activeRpcId, result: msg });
+            } else {
+              handleRpcResponse({
+                id: activeRpcId,
+                error: { message: msg.error ?? 'Profile save failed' }
+              });
+            }
+            return;
+          }
+          break;
+        case 'profile_load':
+          if (Object.prototype.hasOwnProperty.call(msg, 'profile_loaded')) {
+            if (msg.profile_loaded) {
+              handleRpcResponse({ id: activeRpcId, result: msg });
+            } else {
+              handleRpcResponse({
+                id: activeRpcId,
+                error: { message: msg.error ?? 'Profile load failed' }
+              });
+            }
+            return;
+          }
+          break;
+        case 'profile_reset':
+          if (Object.prototype.hasOwnProperty.call(msg, 'profile_reset')) {
+            if (msg.profile_reset) {
+              handleRpcResponse({ id: activeRpcId, result: msg });
+            } else {
+              handleRpcResponse({
+                id: activeRpcId,
+                error: { message: msg.error ?? 'Profile reset failed' }
+              });
+            }
+            return;
+          }
+          break;
+        default:
+          break;
+      }
+    }
     if (msg.type === 'telemetry' || msg.slots || msg.envelopes) {
       queuedTelemetry = { ...(queuedTelemetry || {}), ...msg };
       if (typeof requestAnimationFrame === 'function') {
@@ -1776,7 +2067,11 @@ export function createRuntime({
   }
 
   function broadcastConfig({ persist = true } = {}) {
-    const payload = { config: clone(liveConfig), staged: clone(stagedConfig), dirty };
+    const payload = {
+      config: mergeLocalSlotMeta(liveConfig),
+      staged: mergeLocalSlotMeta(stagedConfig),
+      dirty
+    };
     if (persist) persistStateSnapshot();
     console.debug('[runtime] broadcastConfig dirty=', dirty);
     emit('config', payload);
@@ -1986,6 +2281,7 @@ export function createRuntime({
   function stage(updater) {
     const next = typeof updater === 'function' ? updater(clone(stagedConfig)) : updater;
     if (!next) return;
+    extractLocalSlotMetaFromConfig(next);
     const normalizedLive = normalizeConfig(liveConfig, remoteManifest ?? localManifest ?? {});
     const normalizedStaged = normalizeConfig(next, remoteManifest ?? localManifest ?? {});
     liveConfig = clone(normalizedLive);
@@ -2011,8 +2307,8 @@ export function createRuntime({
     return {
       manifest: remoteManifest,
       schema,
-      live: clone(liveConfig),
-      staged: clone(stagedConfig),
+      live: mergeLocalSlotMeta(liveConfig),
+      staged: mergeLocalSlotMeta(stagedConfig),
       dirty,
       lastChecksum: lastKnownChecksum
     };
@@ -2090,6 +2386,20 @@ export function createRuntime({
     emit('pot-guard', { guards: new Set(potGuard) });
   }
 
+  function setLocalSlotMeta(index, patch = {}) {
+    const slotCount = currentSlotCount();
+    if (slotCount <= 0) return false;
+    ensureLocalSlotMetaCount(slotCount);
+    const idx = Math.max(0, Math.min(slotCount - 1, Math.floor(Number(index) || 0)));
+    const current = normalizeLocalSlotMetaEntry(localSlotMeta[idx]);
+    const next = normalizeLocalSlotMetaEntry({ ...current, ...patch });
+    if (shallowEqual(current, next)) return false;
+    localSlotMeta[idx] = next;
+    persistLocalSlotMeta();
+    broadcastConfig();
+    return true;
+  }
+
   return {
     connect,
     disconnect,
@@ -2108,6 +2418,7 @@ export function createRuntime({
     restoreLocalState,
     replaceConfig,
     setPotGuard,
+    setLocalSlotMeta,
     createThrottle,
     requestPort,
     useSimulator(toggle) {

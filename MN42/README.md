@@ -1,4 +1,14 @@
-# WebSerial Configuration App
+# MOARkNOBS-42 Browser Configurator
+
+Use the browser configurator when you want direct USB setup, monitoring, and profile management over WebSerial. If you need OSC or a virtual MIDI port on a desktop host instead, start with [docs/ConnectivityGuide.md](../docs/ConnectivityGuide.md) and use the bridge.
+
+Current support boundary:
+
+- strongest repo evidence for the direct-browser path: Chromium-based WebSerial
+- strongest repo evidence for the non-WebSerial path: the bridge-served `/app/` configurator on a Node 20 desktop host
+- not claimed here as a verified production path: Firefox/Safari WebSerial support or universal browser compatibility
+
+See [docs/HostCompatibility.md](../docs/HostCompatibility.md) for the conservative matrix before treating this as a broad browser-support promise.
 
 [bseverns.github.io/MN42](http://bseverns.github.io/MN42) is the browser-based patch bay for the MOARkNOBS-42 controller. The page is now split between a tiny runtime “kernel” and a BenzKnobz-specific view layer:
 
@@ -13,28 +23,31 @@ The repo deliberately feels like half studio notebook, half field guide. Snag th
 ## Quickstart
 
 1. Flash the firmware and plug the controller into USB.
-2. From this directory run a quick server (WebSerial refuses to jam over `file://`):
+2. Choose your transport:
+   - direct WebSerial path: from this directory run a quick server (WebSerial refuses to jam over `file://`):
    ```bash
    python3 -m http.server
    ```
-3. Hit <http://localhost:8000/> — that root path is now the canonical deck. The legacy `/benzknobz.html` URL sticks around as a redirect for old bookmarks.
-4. Click **Connect**, pick the MOARkNOBS port, and let the header pill confirm the firmware, schema version, and memory stats.
+   - bridge path: run `npm --prefix bridge start`, open <http://127.0.0.1:8787/>, then click **Open configurator**
+3. Hit <http://localhost:8000/> for the direct path, or the bridge-served `/app/` URL for the bridge path. The legacy `/benzknobz.html` URL sticks around as a redirect for old bookmarks.
+4. Click **Connect**, pick the MOARkNOBS port if you are on WebSerial, and let the header pill confirm the firmware, schema version, and memory stats.
 5. Stage edits in the right-hand column. The **Apply** button only lights up after the JSON passes the bundled schema validator.
-6. On Apply the runtime pushes a single `SET_ALL` payload, waits for a `{checksum}` ACK, and only then commits the local snapshot. If the ACK is missing or mismatched the UI auto-rolls back and re-opens the diff panel.
-7. Use the **Take Control** toggles per slot before sending live pot data to avoid on-stage jumps. Encoders still stream immediately.
+6. On Apply the runtime stages one config payload with schema version, manifest metadata, and a SHA-256 checksum. Simulator mode keeps the JSON-RPC envelope; native WebSerial and bridge sessions adapt that request onto the firmware's `SET_ALL` text protocol. Only a matching device ACK promotes staged state to live state; if the ACK is missing or mismatched the UI auto-rolls back and re-opens the diff panel.
+7. Use the browser-only **Take Control** toggles per slot before sending live pot data to avoid on-stage jumps. They are local safety guards, not firmware-backed config, so they do not require **Apply**.
 8. Need hardware-free testing? Toggle the **Start simulator** button—the runtime swaps transports and replays canned manifest/state frames.
 
-Screenshots pending (Teensy hardware is currently in the workshop, so visual captures will follow when the boards return).
+The written field guide below is the current operator-facing reference; add screenshots when you want a release-ready visual walkthrough, not as a substitute for the contract notes.
 
 ## UI Field Guide
 
 - **LED Color Lab** – Slide the brightness control and watch it punch straight into the staged JSON; the value is clamped to the same 0–255 lane the firmware enforces, so you’re rehearsing reality. Ride the fader slowly and the runtime’s [24 ms throttling](#runtime-contract) keeps chatter to a polite murmur; slam it and the staged hex display still tracks every move so you can screen-cap or copy/paste the exact color code. Hex edits round-trip: type a six-character value, press return, and the slider jumps to the matching luminance. If Apply can’t land (checksum blowout, unplugged cable), the [checksum rollback flow](#quickstart) rewinds both the slider and hex badge so the LED preview never lies.
 - **Preset Import/Export Pad** – Drop a `.json` file or click **Import** and the manifest streams into staging only after the mini-Ajv bundle gives it a clean bill of health—same validation gauntlet called out in [Quickstart](#quickstart). Export takes whatever is staged right now, including unsent tweaks, so you can stash experiments in git or share patches without touching hardware. When Apply sticks, the status pill records the checksum + filename combo so your studio notebook and the controller stay in lockstep.
-- **Profile Slot Workflow** – The A–D profile picker now supports direct **Switch profile** loading plus save-with-auto-apply (dirty staged edits are pushed before save). This makes slot-to-slot gig prep smoother while keeping device/profile state explicit.
+- **Profile Slot Workflow** – The A–D profile picker keeps a browser-side target slot and file backup path available, but current firmware also exposes real device-backed **Switch profile** / **Save profile** / **Reset profile** actions. The manifest still gates those buttons so older firmware builds fail closed instead of pretending support.
 - **Simulator Toggle** – The **Start simulator** switch sits dead-center under transport controls for a reason: it swaps WebSerial for the canned bridge inside `runtime.js` instantly. The log banner flips to “Simulated” and it stays that way until you reconnect a device. Because the simulator obeys the same throttled paint loop documented in [Runtime Contract](#runtime-contract), you can chase layout timing bugs or automation macros without a Teensy on the desk.
 - **Device Monitor Stack** – The telemetry cards (uptime, firmware hash, slot stats) repaint on every animation frame so you can feel live latency. Hover to freeze the ticker when you need to copy numbers into a bug report. Any schema or checksum mismatch slams you back into the [rollback workflow](#quickstart), and the monitor holds onto the last verified frame so you know exactly what state the firmware was in when things went sideways.
 - **Staged Diff Panel** – The right-hand rail wakes up as soon as the staged JSON drifts from the live manifest. Validation errors park directly above the offending field; fix them and **Apply** roars back to life in the same breath. Post-Apply, scroll to the tail to see the runtime commit log—checksum, slot count, and any throttled writes. Tooltips on greyed-out controls punch straight back into the contract notes in [Runtime Contract](#runtime-contract) so you can trace every guardrail.
-- **Schema-driven Forms** – Every control in the right-hand rail is rendered from `config_schema.json` (Filter, ARG, LEDs, EF assignments, and all slot knobs). The `FormRenderer` builds collapsible sections, clamps number fields to the schema’s bounds, and stages each edit immediately; hitting **Apply** batches the staged JSON through `set_config`, while an **Apply Patch** overlay (soon-to-be in the DOM) will allow individual field writes via `set_param`. Keybindings still apply: slot focus follows arrow keys; hold `Shift` for coarse/fine nudging; and the simulator status pill keeps status events in sync even when the board takes a coffee break.
+- **Schema-driven Forms** – Every control in the right-hand rail is rendered from `config_schema.json` (Filter, ARG, LEDs, EF assignments, and all slot knobs). The `FormRenderer` builds collapsible sections, clamps number fields to the schema’s bounds, and stages each edit immediately; hitting **Apply** batches the staged JSON through `set_config`, while field-level writes can still travel through `runtime.applyPatch(...)/set_param` when a control wants an immediate RPC. Profile save/load/reset and macro/scene actions travel on their own native command paths instead of pretending to be config diffs. Keybindings still apply: slot focus follows arrow keys; hold `Shift` for coarse/fine nudging; and the simulator status pill keeps status events in sync even when the board takes a coffee break.
+- **Browser-only Slot Notes** – `Slot label`, the MIDI badge, and `Take Control` now live outside the device schema. They are stored in local browser state so reconnects keep your operator hints and pickup guards without pretending the firmware persisted them.
 - **Basic / Advanced Mode** – New sessions start in **Basic** mode, keeping the panel focused on everyday knob-to-MIDI mapping. Flip to **Advanced** to reveal EF/ARG/filter tuning, scope tools, and debug surfaces. The choice is saved in `localStorage`, and glossary-style info badges explain jargon like EF and ARG in-place.
 
 ## MIDI Monitor Panel
@@ -57,11 +70,16 @@ A new MIDI Monitor panel sits beside the transport controls. Toggle it open, gra
 
 ## Runtime Contract
 
-- The runtime buffers inbound telemetry and paints on `requestAnimationFrame` (~16 ms).
+- Transport handshake is `hello` → `get_manifest` → `get_config`. On simulator transport those travel as JSON-RPC; on native WebSerial and bridge sessions the runtime maps them to `HELLO`, `GET_MANIFEST`, and `GET_CONFIG` before trusting any config payload.
+- The runtime keeps separate `liveConfig` and `stagedConfig` snapshots. The UI only mutates staged state; successful Apply promotes staged state to live state.
+- The diff panel is computed from `liveConfig` vs `stagedConfig`, which is why it can remain truthful even while device patches are streaming in.
+- The runtime buffers inbound telemetry and paints on `requestAnimationFrame` (~16 ms) so frequent state messages do not turn the DOM into soup.
 - Outbound pot changes are debounced to ≥24 ms through a shared utility so every control shares the same cadence.
-- `FormRenderer` now relays staged edits through `runtime.applyPatch`, which stages the field locally and routes a `{rpc:"set_param"}` call through the JSON-RPC kernel to keep the UI and firmware in lockstep.
-- Schema mismatches fire a migration dialog before any live writes. The manifest now includes `fw_version`, `fw_git`, `build_ts`, and `schema_version` so bug reports can pin exact builds.
-- Last-used USB IDs are remembered in `localStorage`; on load the app nudges you to reconnect but never reopens without a user gesture (WebSerial rules).
+- `runtime.applyPatch(path, value)` stages a field locally first, then routes a `{rpc:"set_param"}` call through the same RPC lane. The simulator applies it immediately; native firmware defers those fine-grained writes until the next full Apply because the production contract is config-oriented. If the RPC path fails, the runtime rolls the staged state back.
+- Full Apply sends `set_config` with schema version, manifest metadata, staged config, and a SHA-256 checksum. A mismatched ACK triggers rollback instead of silently pretending success.
+- Browser-only slot metadata (`label`, pickup guard, and the MIDI badge) is stored separately in `localStorage`, merged back into the UI on read, and never included in `Apply` or schema diffing.
+- Schema mismatches fire a migration-required event before any live writes. Migration adapters live in the App layer as a `migrations` map passed to `createRuntime(...)`, keyed like `"5->6"`.
+- Last-used USB IDs and the last staged snapshot are remembered in `localStorage`; on load the app nudges you to reconnect but never reopens without a user gesture (WebSerial rules).
 
 ## Simulator & CI Hooks
 
