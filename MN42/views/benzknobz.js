@@ -12,7 +12,7 @@ const localManifest = createLocalManifest({
 });
 
 const SLOT_ROW_HEIGHT = 76;
-const EF_ROW_HEIGHT = 40;
+const EF_ROW_HEIGHT = 44;
 
 const SLOT_TYPE_ABBREVIATIONS = {
   OFF: 'OFF',
@@ -2298,14 +2298,6 @@ const boot = () => {
     return slots.join(', ');
   }
 
-  // Build the short read-only summary shown beside each follower assignment row.
-  function summarizeFollowerSlots(slots) {
-    if (!Array.isArray(slots) || !slots.length) return 'Unassigned';
-    const labels = slots.slice(0, 4).map((slot) => `S${String(slot + 1).padStart(2, '0')}`);
-    const overflow = slots.length > 4 ? ` +${slots.length - 4}` : '';
-    return `${labels.join(', ')}${overflow}`;
-  }
-
   // Render one row in the EF assignment editor.
   function renderEfRow(el, index, item) {
     el.className = 'ef-row';
@@ -2317,15 +2309,11 @@ const boot = () => {
     label.textContent = `EF ${index + 1}`;
     const input = document.createElement('input');
     input.type = 'text';
-    input.placeholder = '0, 7, 12';
+    input.placeholder = '3, 10, 17';
     input.value = formatFollowerSlots(normalizedSlots);
-    const summary = document.createElement('span');
-    summary.className = 'ef-row-summary';
-    summary.textContent = summarizeFollowerSlots(normalizedSlots);
     input.addEventListener('change', () => {
       const parsed = parseFollowerSlotsInput(input.value, maxSlotIndex);
       input.value = formatFollowerSlots(parsed);
-      summary.textContent = summarizeFollowerSlots(parsed);
       runtime.stage((draft) => {
         draft.efSlots = draft.efSlots || [];
         if (!draft.efSlots[index] || typeof draft.efSlots[index] !== 'object') {
@@ -2336,7 +2324,7 @@ const boot = () => {
         return draft;
       });
     });
-    el.append(label, input, summary);
+    el.append(label, input);
   }
 
   // Push the latest telemetry frame into the slot grid, envelope meters, and detail view.
