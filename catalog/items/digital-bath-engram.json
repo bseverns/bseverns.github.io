@@ -1,0 +1,69 @@
+{
+  "id": "digital-bath-engram",
+  "title": "Digital Bath/Engram",
+  "slug": "digital-bath-engram",
+  "year_start": 2018,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": [
+    "archive",
+    "media",
+    "scenes"
+  ],
+  "themes": [
+    "projection",
+    "memory",
+    "collaboration",
+    "screen",
+    "city",
+    "glitch"
+  ],
+  "summary": "A sculptural projection collaboration installed in downtown Minneapolis, using processed day-in-the-life imagery to make shared memory spatial and unstable.",
+  "medium": [
+    "installation",
+    "projection",
+    "moving-image"
+  ],
+  "materials": [
+    "projection",
+    "sculptural screen",
+    "processed video"
+  ],
+  "stack": [
+    "video",
+    "object",
+    "site installation"
+  ],
+  "core_concepts": [
+    "engram",
+    "shared memory",
+    "projection as body",
+    "image instability"
+  ],
+  "body_relation": "viewer encounters memory as spatialized surface",
+  "ethics": {
+    "pii": "collaborative image work",
+    "consent": "project-specific",
+    "retention": "archive"
+  },
+  "provenance": "Documented in 2023 work samples appendix",
+  "docs": {
+    "site": "/3d/bath.html",
+    "notes": "/docs/legacy/digital-bath-engram.md"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/digital-bath/digital-bath_01.jpg",
+      "/img/lineage/digital-bath/digital-bath_02.jpg"
+    ],
+    "video": [],
+    "audio": []
+  },
+  "related_ids": [
+    "a-madman-wrapped-in-the-clothes-of-a-deadman",
+    "memory-engine"
+  ],
+  "quote": "Memory becomes spatial and unstable.",
+  "sort_order": 80
+}

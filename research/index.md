@@ -10,7 +10,9 @@ archived: true
 # Research
 
 **Methods that make claims legible.**  
-This notebook publishes the scaffolds behind the sampler—Privacy & Ethics, assumption ledgers, latency labs, and other accountable methods. Everything here is reproducible: how I sense, measure, and mitigate is part of the work itself.
+This notebook publishes the scaffolds behind the sampler: Privacy & Ethics, assumption ledgers, latency labs, and other accountable methods. It is a later container for questions first worked through in photographs, installations, sound, and code.
+
+Everything here is reproducible because how I sense, measure, document, and mitigate is part of the work itself. The methods are not separate from the practice. They are one way the practice stays honest, shareable, and repairable.
 
 ## Pages
 - [Privacy & Ethics](/research/privacy-ethics/)

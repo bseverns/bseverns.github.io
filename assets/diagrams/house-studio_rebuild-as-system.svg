@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">House studio rebuild placeholder</title>
+  <desc id="desc">Placeholder export for the house and studio rebuild diagram. Replace with final diagram export when ready.</desc>
+  <rect width="1600" height="900" fill="#f5f1e8"/>
+  <rect x="60" y="60" width="1480" height="780" rx="28" fill="#fbfaf7" stroke="#40372f" stroke-width="4"/>
+  <text x="110" y="180" fill="#1f1a14" font-family="Helvetica, Arial, sans-serif" font-size="70" font-weight="700">House / Studio Rebuild</text>
+  <text x="110" y="280" fill="#5e554a" font-family="Helvetica, Arial, sans-serif" font-size="34">Placeholder export.</text>
+  <text x="110" y="340" fill="#5e554a" font-family="Helvetica, Arial, sans-serif" font-size="34">Final SVG not added yet.</text>
+  <text x="110" y="450" fill="#1f1a14" font-family="Helvetica, Arial, sans-serif" font-size="28">Suggested source draft: docs/site-reset/machine-care-and-rebuild.md</text>
+</svg>

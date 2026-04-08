@@ -19,3 +19,4 @@ related_projects:
     note: "Links the instrument branch to portable pedagogy and kit-based delivery."
 ---
 <p>MOARkNOBS-42 is a flagship because it gathers many of the practice’s values in one object: embodied control, reproducibility, open documentation, and claims about feel that can actually be measured.</p>
+<p>The instrument branch also reaches backward to earlier prototype and flight logic. What once appeared as youthful launch-thinking now returns as a control surface built to survive testing, teaching, and repair.</p>

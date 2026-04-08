@@ -1,0 +1,66 @@
+{
+  "id": "symbolizing-everything",
+  "title": "Symbolizing Everything",
+  "slug": "symbolizing-everything",
+  "year_start": 2016,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": [
+    "archive",
+    "scenes",
+    "systems"
+  ],
+  "themes": [
+    "installation",
+    "code",
+    "light",
+    "network",
+    "symbol",
+    "automation"
+  ],
+  "summary": "An installation combining Java, lights, and a Tumblr bot, treating symbolic overflow and system behavior as one linked field.",
+  "medium": [
+    "installation",
+    "networked system"
+  ],
+  "materials": [
+    "Java",
+    "lights",
+    "screen",
+    "Tumblr bot"
+  ],
+  "stack": [
+    "java",
+    "networked publishing",
+    "light behavior"
+  ],
+  "core_concepts": [
+    "symbolic overload",
+    "system as image",
+    "automation"
+  ],
+  "body_relation": "viewer in relation to live symbolic system",
+  "ethics": {
+    "pii": "none",
+    "consent": "installation",
+    "retention": "archive"
+  },
+  "provenance": "Documented in 2023 work samples appendix",
+  "docs": {
+    "notes": "/docs/legacy/symbolizing-everything.md"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/thesis/java_piece.jpg"
+    ],
+    "video": [],
+    "audio": []
+  },
+  "related_ids": [
+    "two-lefts-and-another-right-out-the-door",
+    "memory-engine"
+  ],
+  "quote": "A symbolic system is still a room you can enter.",
+  "sort_order": 70
+}

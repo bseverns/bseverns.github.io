@@ -1,0 +1,74 @@
+{
+  "id": "machine-docs",
+  "title": "machine-docs",
+  "slug": "machine-docs",
+  "year_start": 2025,
+  "year_end": null,
+  "circa": false,
+  "status": "active",
+  "collections": [
+    "systems",
+    "learning",
+    "maintenance"
+  ],
+  "themes": [
+    "machine-care",
+    "maintenance",
+    "documentation",
+    "repair",
+    "teaching",
+    "safety",
+    "continuation"
+  ],
+  "summary": "A practical field manual for digital fabrication and machine stewardship, treating maintenance, clarity, and repeatable operation as central cultural work rather than background labor.",
+  "medium": [
+    "documentation system",
+    "machine manual",
+    "operational pedagogy"
+  ],
+  "materials": [
+    "Markdown",
+    "checklists",
+    "machine notes",
+    "maintenance logs",
+    "quick-starts"
+  ],
+  "stack": [
+    "documentation",
+    "training pathways",
+    "operator notes",
+    "incident logging"
+  ],
+  "core_concepts": [
+    "maintenance as practice",
+    "machine care as pedagogy",
+    "repair literacy",
+    "operational dignity"
+  ],
+  "body_relation": "hands, habits, routines, startup and shutdown become part of the work's ethics",
+  "ethics": {
+    "pii": "none",
+    "consent": "n/a",
+    "retention": "living documentation"
+  },
+  "provenance": "Current repo and related site framing",
+  "docs": {
+    "repo": "https://github.com/bseverns/machine-docs",
+    "notes": "/docs/legacy/machine-docs.md"
+  },
+  "media": {
+    "images": [
+      "/img/studio/machine-care_hero.jpg"
+    ],
+    "video": [],
+    "audio": []
+  },
+  "related_ids": [
+    "classhub",
+    "house-studio-rebuild",
+    "moarknobs-42",
+    "scar"
+  ],
+  "quote": "Maintenance is not what happens after the work; it is one of the work's forms.",
+  "sort_order": 140
+}

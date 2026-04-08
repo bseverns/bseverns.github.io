@@ -9,4 +9,5 @@ summary: "An overnight data sculpture jam where live sensors drive projection-ma
 featured: true
 tools: "TouchDesigner for live visuals, Python data wrangling scripts, Arduino sensor array, LED sculpture fabrication"
 ethics: "Only used anonymized environmental data; workshop participants opted into interaction and were briefed on data use"
+lineage: "Carries forward the fabrication and sensing branch where unreal forms, environmental traces, and public participation are pushed through material constraint."
 ---

@@ -1,0 +1,71 @@
+{
+  "id": "bs-noise-thread",
+  "title": "B_S. / noise thread",
+  "slug": "bs-noise-thread",
+  "year_start": 2016,
+  "year_end": null,
+  "circa": true,
+  "status": "active",
+  "collections": [
+    "media",
+    "sound"
+  ],
+  "themes": [
+    "noise",
+    "grief",
+    "pressure",
+    "ritual",
+    "catharsis",
+    "embodiment",
+    "repetition"
+  ],
+  "summary": "A long-running sound practice where grief, pressure, repetition, and collapse become bodily and shareable through analog-digital noise ritual.",
+  "medium": [
+    "sound",
+    "performance",
+    "recording"
+  ],
+  "materials": [
+    "circuit-bent devices",
+    "tape decks",
+    "synths",
+    "radios",
+    "effects"
+  ],
+  "stack": [
+    "live performance",
+    "recording",
+    "bandcamp release"
+  ],
+  "core_concepts": [
+    "pressure made bodily",
+    "ritual",
+    "catharsis",
+    "continuation through sound"
+  ],
+  "body_relation": "sound as regulatory and shared bodily field",
+  "ethics": {
+    "pii": "none",
+    "consent": "artist-authored sound work",
+    "retention": "active archive"
+  },
+  "provenance": "Bandcamp releases and artist project",
+  "docs": {
+    "external": "https://bbss.bandcamp.com/"
+  },
+  "media": {
+    "images": [],
+    "video": [],
+    "audio": [
+      "/assets/audio/bs_excerpt_better-days-ahead.mp3",
+      "/assets/audio/bs_excerpt_slow-down.mp3"
+    ]
+  },
+  "related_ids": [
+    "memory-engine",
+    "scar",
+    "moarknobs-42"
+  ],
+  "quote": "Pressure sounded, ritualized, and survived.",
+  "sort_order": 90
+}

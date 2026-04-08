@@ -1,0 +1,70 @@
+{
+  "id": "scar",
+  "title": "Scar",
+  "slug": "scar",
+  "year_start": 2000,
+  "year_end": null,
+  "circa": true,
+  "status": "archived",
+  "collections": [
+    "archive",
+    "media"
+  ],
+  "themes": [
+    "injury",
+    "repair",
+    "embodiment",
+    "bike",
+    "risk",
+    "maintenance",
+    "continuation",
+    "sculpture"
+  ],
+  "summary": "A work made after spinal compression fractures in which a crashed bike is cut up and a body brace is cast as a trophy, turning bodily damage, continuation, and daily return into sculptural form.",
+  "medium": [
+    "sculpture",
+    "documentation photography"
+  ],
+  "materials": [
+    "bike parts",
+    "cast body brace",
+    "wood base"
+  ],
+  "stack": [
+    "found object",
+    "cast",
+    "display"
+  ],
+  "core_concepts": [
+    "injury as memory",
+    "repair culture",
+    "continuation",
+    "risk made material"
+  ],
+  "body_relation": "directly indexed to the artist's injured spine and daily riding practice",
+  "ethics": {
+    "pii": "none",
+    "consent": "artist-authored autobiographical work",
+    "retention": "archive"
+  },
+  "provenance": "User-provided image and description",
+  "docs": {
+    "notes": "/docs/legacy/scar.md"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/scar/scar_hero.jpg",
+      "/img/lineage/scar/scar_detail_01.jpg",
+      "/img/lineage/scar/scar_detail_02.jpg"
+    ],
+    "video": [],
+    "audio": []
+  },
+  "related_ids": [
+    "i-was-young-once",
+    "a-madman-wrapped-in-the-clothes-of-a-deadman",
+    "machine-docs"
+  ],
+  "quote": "Repair, continuation, and risk are part of the work's body.",
+  "sort_order": 30
+}

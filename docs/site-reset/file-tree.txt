@@ -1,0 +1,127 @@
+bseverns.github.io/
+|-- index.html
+|-- art.html
+|-- press-kit.html
+|-- about/
+|   `-- index.html
+|-- css/
+|   `-- site.css
+|-- js/
+|   `-- site.js
+|-- img/
+|   |-- press/
+|   |   |-- headshot.jpg
+|   |   |-- og-banner.jpg
+|   |   `-- studio-portrait.jpg
+|   |-- social/
+|   |   `-- og-home.jpg
+|   |-- studio/
+|   |   |-- mn42_hero.jpg
+|   |   |-- human-buffer_hero.jpg
+|   |   |-- memory-engine_hero.jpg
+|   |   |-- classhub_hero.jpg
+|   |   |-- machine-care_hero.jpg
+|   |   `-- house-studio_rebuild_hero.jpg
+|   |-- lineage/
+|   |   |-- night-stalker/
+|   |   |   |-- night-stalker_01.jpg
+|   |   |   |-- night-stalker_02.jpg
+|   |   |   `-- night-stalker_contactsheet.jpg
+|   |   |-- i-was-young-once/
+|   |   |   |-- rocket_01.jpg
+|   |   |   |-- rocket_02.jpg
+|   |   |   `-- rocket_pair.jpg
+|   |   |-- scar/
+|   |   |   |-- scar_hero.jpg
+|   |   |   |-- scar_detail_01.jpg
+|   |   |   `-- scar_detail_02.jpg
+|   |   |-- deadman/
+|   |   |   |-- deadman_01.jpg
+|   |   |   `-- deadman_02.jpg
+|   |   |-- fly/
+|   |   |   |-- fly_frame.jpg
+|   |   |   |-- fly_install_01.jpg
+|   |   |   `-- fly_install_02.jpg
+|   |   |-- digital-bath/
+|   |   |   |-- digital-bath_01.jpg
+|   |   |   `-- digital-bath_02.jpg
+|   |   `-- thesis/
+|   |       |-- promises_spread.jpg
+|   |       |-- pool_piece.jpg
+|   |       |-- not-evil.jpg
+|   |       |-- java_piece.jpg
+|   |       `-- red-stairs.jpg
+|   `-- archive/
+|       |-- 2d_overview.jpg
+|       |-- 3d_overview.jpg
+|       `-- timeline_strip.jpg
+|-- assets/
+|   |-- video/
+|   |   |-- i-was-young-once_launch_excerpt.mp4
+|   |   |-- vimeo_bus_excerpt.mp4
+|   |   |-- vimeo_poetry_excerpt.mp4
+|   |   |-- fly_doc_excerpt.mp4
+|   |   |-- mn42_demo.mp4
+|   |   |-- human-buffer_demo.mp4
+|   |   `-- memory-engine_demo.mp4
+|   |-- audio/
+|   |   |-- bs_excerpt_better-days-ahead.mp3
+|   |   |-- bs_excerpt_slow-down.mp3
+|   |   `-- room-tone_oral-fragment_01.mp3
+|   |-- transcripts/
+|   |   |-- vimeo_bus_excerpt.vtt
+|   |   |-- vimeo_poetry_excerpt.vtt
+|   |   |-- i-was-young-once_notes.txt
+|   |   `-- scar_notes.txt
+|   `-- diagrams/
+|       |-- media-lineage.svg
+|       |-- practice-arc.svg
+|       |-- mn42_latency-rig.svg
+|       |-- human-buffer_flow.svg
+|       |-- memory-engine_flow.svg
+|       |-- classhub_stack.svg
+|       `-- house-studio_rebuild-as-system.svg
+|-- docs/
+|   |-- site-reset/
+|   |   |-- practice-arc.md
+|   |   |-- homepage-microcopy.md
+|   |   |-- studio-intro.md
+|   |   |-- press-kit-bios.md
+|   |   |-- archive-framing.md
+|   |   |-- machine-care-and-rebuild.md
+|   |   |-- asset-drop-points.md
+|   |   `-- file-tree.txt
+|   `-- legacy/
+|       |-- i-was-young-once.md
+|       |-- scar.md
+|       |-- night-stalker-reruns-on-channel-4.md
+|       |-- a-madman-wrapped-in-the-clothes-of-a-deadman.md
+|       |-- are-you-ready-to-fly.md
+|       `-- digital-bath-engram.md
+|-- catalog/
+|   |-- catalog.json
+|   |-- collections.json
+|   |-- themes.json
+|   `-- items/
+|       |-- night-stalker-reruns-on-channel-4.json
+|       |-- i-was-young-once.json
+|       |-- scar.json
+|       |-- a-madman-wrapped-in-the-clothes-of-a-deadman.json
+|       |-- are-you-ready-to-fly.json
+|       |-- two-lefts-and-another-right-out-the-door.json
+|       |-- symbolizing-everything.json
+|       |-- digital-bath-engram.json
+|       |-- bs-noise-thread.json
+|       |-- moarknobs-42.json
+|       |-- human-buffer.json
+|       |-- memory-engine.json
+|       |-- classhub.json
+|       |-- machine-docs.json
+|       `-- house-studio-rebuild.json
+`-- research/
+    |-- privacy-ethics/
+    |   `-- index.html
+    |-- pedagogy-as-research/
+    |   `-- index.html
+    `-- practice-arc/
+        `-- index.html

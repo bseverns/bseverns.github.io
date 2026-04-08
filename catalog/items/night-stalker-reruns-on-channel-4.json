@@ -1,0 +1,65 @@
+{
+  "id": "night-stalker-reruns-on-channel-4",
+  "title": "Night Stalker Re-Runs on Channel 4",
+  "slug": "night-stalker-reruns-on-channel-4",
+  "year_start": 2000,
+  "year_end": null,
+  "circa": true,
+  "status": "archived",
+  "collections": [
+    "media",
+    "archive"
+  ],
+  "themes": [
+    "photography",
+    "memory",
+    "translation",
+    "threshold",
+    "mediated-seeing"
+  ],
+  "summary": "An early photographic series of lit domestic windows seen from outside, where memory, television afterimage, distance, and unstable access begin to define the practice.",
+  "medium": [
+    "photography"
+  ],
+  "materials": [
+    "camera",
+    "print"
+  ],
+  "stack": [
+    "still image",
+    "serial framing"
+  ],
+  "core_concepts": [
+    "memory as mistranslation",
+    "threshold",
+    "partial access",
+    "broadcast residue"
+  ],
+  "body_relation": "viewer positioned outside, looking in",
+  "ethics": {
+    "pii": "none stated",
+    "consent": "historical image work",
+    "retention": "archive"
+  },
+  "provenance": "Legacy archive / 2D works",
+  "docs": {
+    "site": "/2d/stalker.html",
+    "notes": "/docs/legacy/night-stalker-reruns-on-channel-4.md"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/night-stalker/night-stalker_01.jpg",
+      "/img/lineage/night-stalker/night-stalker_02.jpg",
+      "/img/lineage/night-stalker/night-stalker_contactsheet.jpg"
+    ],
+    "video": [],
+    "audio": []
+  },
+  "related_ids": [
+    "a-madman-wrapped-in-the-clothes-of-a-deadman",
+    "human-buffer",
+    "memory-engine"
+  ],
+  "quote": "The photograph does not preserve. It translates.",
+  "sort_order": 10
+}

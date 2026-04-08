@@ -1,5 +1,7 @@
 title: "Ben Severns"
 description: "Portfolio — studio + teaching"
+url: "https://bseverns.github.io"
+baseurl: ""
 collections:
   projects:
     output: true

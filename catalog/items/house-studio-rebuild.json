@@ -1,0 +1,76 @@
+{
+  "id": "house-studio-rebuild",
+  "title": "House / studio rebuild",
+  "slug": "house-studio-rebuild",
+  "year_start": 2020,
+  "year_end": null,
+  "circa": false,
+  "status": "active",
+  "collections": [
+    "systems",
+    "archive",
+    "maintenance"
+  ],
+  "themes": [
+    "rebuild",
+    "displacement",
+    "flood",
+    "care",
+    "maintenance",
+    "space",
+    "deferred-use",
+    "continuation"
+  ],
+  "summary": "An ongoing lived condition and structural project shaped by flood, displacement, constrained living, deferred studio use, and the long rebuilding of house and workspace, now nearing renewed occupation.",
+  "medium": [
+    "lived infrastructure",
+    "space practice",
+    "maintenance system"
+  ],
+  "materials": [
+    "house",
+    "studio",
+    "machines",
+    "storage",
+    "rebuild labor",
+    "organizational systems"
+  ],
+  "stack": [
+    "repair",
+    "space planning",
+    "machine stewardship",
+    "deferred setup",
+    "continuation under constraint"
+  ],
+  "core_concepts": [
+    "working conditions as form",
+    "repair as worldview",
+    "space as ethical system",
+    "care under partial access"
+  ],
+  "body_relation": "daily life, storage, movement, setup, and withheld access shape the work materially",
+  "ethics": {
+    "pii": "personal / contextual",
+    "consent": "self-authored narrative",
+    "retention": "ongoing"
+  },
+  "provenance": "Artist context and current site reset framing",
+  "docs": {
+    "notes": "/docs/site-reset/machine-care-and-rebuild.md"
+  },
+  "media": {
+    "images": [
+      "/img/studio/house-studio_rebuild_hero.jpg"
+    ],
+    "video": [],
+    "audio": []
+  },
+  "related_ids": [
+    "machine-docs",
+    "classhub",
+    "moarknobs-42",
+    "scar"
+  ],
+  "quote": "Care for a space not yet fully usable became part of the practice's structure.",
+  "sort_order": 150
+}

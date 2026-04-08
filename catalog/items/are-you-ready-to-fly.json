@@ -1,0 +1,74 @@
+{
+  "id": "are-you-ready-to-fly",
+  "title": "Art you ready to fly? (Well it looks like we have our work cut out for us)",
+  "slug": "are-you-ready-to-fly",
+  "year_start": 2016,
+  "year_end": null,
+  "circa": true,
+  "status": "archived",
+  "collections": [
+    "archive",
+    "scenes",
+    "systems"
+  ],
+  "themes": [
+    "interactivity",
+    "flight",
+    "systems",
+    "participation",
+    "processing",
+    "arduino",
+    "threshold"
+  ],
+  "summary": "An early hybrid installation and software stack that stages interaction, sensing, and participation as part of the artwork's actual structure.",
+  "medium": [
+    "installation",
+    "interactive system"
+  ],
+  "materials": [
+    "Processing",
+    "Arduino",
+    "sensor logic",
+    "installation components"
+  ],
+  "stack": [
+    "processing",
+    "arduino",
+    "interactive logic"
+  ],
+  "core_concepts": [
+    "systems as medium",
+    "participation",
+    "hybrid stack",
+    "flight as social metaphor"
+  ],
+  "body_relation": "viewer-state and embodied interaction",
+  "ethics": {
+    "pii": "none known",
+    "consent": "participatory installation",
+    "retention": "archive"
+  },
+  "provenance": "Archive project code and documentation",
+  "docs": {
+    "site": "/3d/fly.html",
+    "notes": "/docs/legacy/are-you-ready-to-fly.md"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/fly/fly_frame.jpg",
+      "/img/lineage/fly/fly_install_01.jpg",
+      "/img/lineage/fly/fly_install_02.jpg"
+    ],
+    "video": [
+      "/assets/video/fly_doc_excerpt.mp4"
+    ],
+    "audio": []
+  },
+  "related_ids": [
+    "i-was-young-once",
+    "two-lefts-and-another-right-out-the-door",
+    "symbolizing-everything"
+  ],
+  "quote": "Early proof that the medium was already a negotiated stack.",
+  "sort_order": 50
+}

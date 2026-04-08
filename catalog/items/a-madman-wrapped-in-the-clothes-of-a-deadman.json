@@ -1,0 +1,69 @@
+{
+  "id": "a-madman-wrapped-in-the-clothes-of-a-deadman",
+  "title": "A madman, wrapped in the clothes of a deadman",
+  "slug": "a-madman-wrapped-in-the-clothes-of-a-deadman",
+  "year_start": 2010,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": [
+    "media",
+    "archive"
+  ],
+  "themes": [
+    "memory",
+    "tbi",
+    "photography",
+    "loss",
+    "bike",
+    "fragment",
+    "embodied-memory"
+  ],
+  "summary": "A post-TBI set of pinhole exposures and related audio recordings treating memory as blurred, smudged, fragmented, and possibly lost.",
+  "medium": [
+    "photography",
+    "audio"
+  ],
+  "materials": [
+    "pinhole camera",
+    "photographic print",
+    "audio recording"
+  ],
+  "stack": [
+    "image",
+    "sound",
+    "journal logic"
+  ],
+  "core_concepts": [
+    "fragmented memory",
+    "trauma",
+    "embodied recollection",
+    "anniversary as structure"
+  ],
+  "body_relation": "directly indexed to injury and bodily aftermath",
+  "ethics": {
+    "pii": "none",
+    "consent": "artist-authored autobiographical work",
+    "retention": "archive"
+  },
+  "provenance": "Documented in 2023 work samples appendix",
+  "docs": {
+    "notes": "/docs/legacy/a-madman-wrapped-in-the-clothes-of-a-deadman.md"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/deadman/deadman_01.jpg",
+      "/img/lineage/deadman/deadman_02.jpg"
+    ],
+    "video": [],
+    "audio": [
+      "/assets/audio/room-tone_oral-fragment_01.mp3"
+    ]
+  },
+  "related_ids": [
+    "night-stalker-reruns-on-channel-4",
+    "scar"
+  ],
+  "quote": "Memory is fragmented, blurred, smudged, and possibly lost.",
+  "sort_order": 40
+}

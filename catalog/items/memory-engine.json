@@ -1,0 +1,80 @@
+{
+  "id": "memory-engine",
+  "title": "Memory Engine",
+  "slug": "memory-engine",
+  "year_start": 2026,
+  "year_end": null,
+  "circa": false,
+  "status": "active",
+  "collections": [
+    "systems",
+    "scenes",
+    "media"
+  ],
+  "themes": [
+    "memory",
+    "decay",
+    "consent",
+    "local-first",
+    "participation",
+    "grief",
+    "archive"
+  ],
+  "summary": "A local-first room memory appliance where invitation, contribution, decay, retrieval, and revocation are part of the artwork's visible structure.",
+  "medium": [
+    "interactive system",
+    "memory environment",
+    "public appliance"
+  ],
+  "materials": [
+    "camera",
+    "microphone",
+    "local storage",
+    "UI",
+    "consent logic",
+    "retrieval flow"
+  ],
+  "stack": [
+    "local-first architecture",
+    "revocation logic",
+    "participant memory flow",
+    "decay-per-access design"
+  ],
+  "core_concepts": [
+    "memory as designed behavior",
+    "forgetting as ethical material",
+    "revocability",
+    "shared recollection"
+  ],
+  "body_relation": "participants contribute, revisit, revoke, and wear memory through use",
+  "ethics": {
+    "pii": "restricted / local",
+    "consent": "explicit / revocable",
+    "retention": "bounded / participant-aware / decay-oriented"
+  },
+  "provenance": "Current repo and Atlas node",
+  "docs": {
+    "repo": "https://github.com/bseverns/memory-engine",
+    "atlas": "/atlas/n/memory-engine/",
+    "notes": "/docs/legacy/memory-engine.md"
+  },
+  "media": {
+    "images": [
+      "/img/studio/memory-engine_hero.jpg"
+    ],
+    "video": [
+      "/assets/video/memory-engine_demo.mp4"
+    ],
+    "audio": [
+      "/assets/audio/room-tone_oral-fragment_01.mp3"
+    ]
+  },
+  "related_ids": [
+    "a-madman-wrapped-in-the-clothes-of-a-deadman",
+    "bs-noise-thread",
+    "human-buffer",
+    "classhub"
+  ],
+  "quote": "Forgetting becomes an ethical material rather than a system failure.",
+  "sort_order": 120
+}

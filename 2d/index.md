@@ -7,9 +7,9 @@ archived: true
 ---
 # Legacy 2D Works
 
-<p>This is the full rack of flat work that fuelled the early web portfolio. Each entry keeps the
-original 2010s write-up intact—copy, image sequence, and any reference ephemera—so you can trace
-the production logic exactly as it shipped.</p>
+<p>These pages remain public not as leftovers, but as earlier strata of the same practice. The flat-work archive holds the photographic and bodily roots of later questions about threshold, mistranslation, surveillance, injury, and public address.</p>
+
+<p>Each entry keeps its older copy and pacing intact so the work can stay historically honest. The current systems work still cites these experiments.</p>
 
 <nav class="legacy-links" aria-label="Legacy 2D works catalog">
   <h2>Projects</h2>
@@ -38,7 +38,7 @@ the production logic exactly as it shipped.</p>
     <li class="legacy-card">
       <a class="legacy-card-link" href="/2d/stalker.html">
         <h4>Nightstalker Re-Runs on Channel 4</h4>
-        <p class="legacy-lede">Surveillance-tinted photographic windows documented frame by frame.</p>
+        <p class="legacy-lede">Lit domestic windows and mediated sight: an early hinge where threshold, distance, and memory-as-mistranslation first become visible.</p>
         <span class="legacy-cta">View the photo set →</span>
       </a>
     </li>
@@ -52,5 +52,4 @@ the production logic exactly as it shipped.</p>
   </ul>
 </nav>
 
-<p class="archive-note">Need the original navigation chrome? Each project link loads the preserved single-page
-experience with its own menu, scripts, and pacing.</p>
+<p class="archive-note">Need the original navigation chrome? Each project link loads the preserved single-page experience with its own menu, scripts, and pacing. Treat these as preserved experiments still in conversation with the current work.</p>

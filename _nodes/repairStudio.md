@@ -19,3 +19,4 @@ related_projects:
     note: "Portable kits need care structures, not just build instructions."
 ---
 <p>repair-studio helps the site represent the practice honestly. It shows that stewardship, maintenance, and recovery are not side chores but structural parts of how the fleet stays usable over time.</p>
+<p>That is not just a professional preference. Years of flood aftermath, displacement, deferred setup, and partial access to tools made machine care, storage discipline, and recovery logic part of the work’s conceptual field.</p>

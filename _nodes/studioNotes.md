@@ -24,3 +24,4 @@ related_projects:
 ---
 <p>Project repos are canonical for project-specific truth. studio-notes is canonical for cross-project truth.</p>
 <p>Use it when the thing you learned needs to survive beyond one repo: a repeatable method, a decision with consequences, a known-good baseline, or a teaching translation. When you need the live build, current setup, or implementation details, go back to the source repo.</p>
+<p>It exists in part because constrained years of rebuilding made legibility and durable memory non-negotiable. When a setup cannot stay continuously available, notes have to carry more of the practice forward.</p>

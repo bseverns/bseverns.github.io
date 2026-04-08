@@ -1,0 +1,78 @@
+{
+  "id": "moarknobs-42",
+  "title": "MOARkNOBS-42",
+  "slug": "moarknobs-42",
+  "year_start": 2025,
+  "year_end": null,
+  "circa": false,
+  "status": "active",
+  "collections": [
+    "tools",
+    "systems",
+    "learning"
+  ],
+  "themes": [
+    "instrument",
+    "control",
+    "documentation",
+    "latency",
+    "embodiment",
+    "teaching",
+    "care"
+  ],
+  "summary": "An open instrument and teaching platform that makes control, feel, mapping, and technical claims legible through auditable documentation and bench-tested design.",
+  "medium": [
+    "instrument",
+    "hardware",
+    "firmware",
+    "documentation"
+  ],
+  "materials": [
+    "Teensy",
+    "encoders",
+    "buttons",
+    "LEDs",
+    "firmware",
+    "docs"
+  ],
+  "stack": [
+    "hardware",
+    "firmware",
+    "bench testing",
+    "documentation"
+  ],
+  "core_concepts": [
+    "control as authorship",
+    "latency as felt claim",
+    "instrument as notebook",
+    "usable rigor"
+  ],
+  "body_relation": "hands-on embodied control interface",
+  "ethics": {
+    "pii": "none",
+    "consent": "n/a",
+    "retention": "active documentation"
+  },
+  "provenance": "Current repo and site project",
+  "docs": {
+    "site": "/projects/mn42/",
+    "atlas": "/atlas/n/moarknobs42/",
+    "repo": "https://github.com/bseverns/MOARkNOBS-42"
+  },
+  "media": {
+    "images": [
+      "/img/studio/mn42_hero.jpg"
+    ],
+    "video": [
+      "/assets/video/mn42_demo.mp4"
+    ],
+    "audio": []
+  },
+  "related_ids": [
+    "i-was-young-once",
+    "scar",
+    "bs-noise-thread"
+  ],
+  "quote": "Feel becomes a claim you can test.",
+  "sort_order": 100
+}

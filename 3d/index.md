@@ -7,9 +7,9 @@ archived: true
 ---
 # Legacy 3D Works
 
-<p>Installations, kinetic actions, and sculptural experiments that leaned hard into interactivity,
-spectatorship, and ritual. The original project pages still carry their full image stacks, videos,
-and material notes.</p>
+<p>Installations, kinetic actions, sculptural experiments, and hybrid stacks that leaned hard into interactivity, spectatorship, grief, pressure, and ritual. These pages stay published because today’s systems, instruments, and care structures did not emerge from nowhere.</p>
+
+<p>The original project pages still carry their full image stacks, videos, and material notes. Read them as earlier layers of the same practice rather than a sealed-off previous phase.</p>
 
 <nav class="legacy-links" aria-label="Legacy 3D works catalog">
   <h2>Projects</h2>
@@ -17,7 +17,7 @@ and material notes.</p>
     <li class="legacy-card">
       <a class="legacy-card-link" href="/3d/bath.html">
         <h4>Digital Bath / Engram</h4>
-        <p class="legacy-lede">Projection-driven sculpture collaboration with N. Knutson mapping memory onto suspended fabric.</p>
+        <p class="legacy-lede">Projection-driven sculpture collaboration with N. Knutson, making shared memory spatial, unstable, and bodily.</p>
         <span class="legacy-cta">Visit Digital Bath / Engram →</span>
       </a>
     </li>
@@ -45,7 +45,7 @@ and material notes.</p>
     <li class="legacy-card">
       <a class="legacy-card-link" href="/3d/fly.html">
         <h4>Are you ready to fly?</h4>
-        <p class="legacy-lede">Immersive installation built with Processing, Max/MSP, and microcontrollers, complete with video doc.</p>
+        <p class="legacy-lede">Immersive installation built with Processing, Max/MSP, and microcontrollers: early proof that systems, stacks, and participation were already part of the work.</p>
         <span class="legacy-cta">Enter the installation →</span>
       </a>
     </li>
@@ -101,5 +101,4 @@ and material notes.</p>
   </ul>
 </nav>
 
-<p class="archive-note">All project pages stay untouched so you can see the original scripts, navigation, and pacing—warts,
-iframes, and neon hum included.</p>
+<p class="archive-note">All project pages stay untouched so you can see the original scripts, navigation, and pacing, warts and all. What looks like infrastructure now began here in rooms, actions, improvised stacks, and public tests.</p>

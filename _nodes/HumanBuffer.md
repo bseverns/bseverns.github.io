@@ -20,3 +20,4 @@ related_projects:
     note: "Keeps ethics notes, diagrams, and operating logic durable enough to reuse."
 ---
 <p>Human-Buffer is one of the clearest public examples of the practice’s ethics stack. It translates privacy, consent, and interface politics into a runnable system instead of leaving them as artist statements.</p>
+<p>It also loops back to much earlier work about mediated sight, threshold, and distance. The camera here does not promise access; it makes the terms of being seen explicit.</p>

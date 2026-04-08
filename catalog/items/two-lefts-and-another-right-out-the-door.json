@@ -1,0 +1,67 @@
+{
+  "id": "two-lefts-and-another-right-out-the-door",
+  "title": "Two lefts and another right out the door",
+  "slug": "two-lefts-and-another-right-out-the-door",
+  "year_start": 2015,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": [
+    "archive",
+    "systems",
+    "media"
+  ],
+  "themes": [
+    "code",
+    "sensor",
+    "translation",
+    "line",
+    "party",
+    "environment",
+    "interaction"
+  ],
+  "summary": "A Java-based line field generated from sensor data, translating environmental movement and sound into abstract visual trace.",
+  "medium": [
+    "generative image",
+    "installation documentation"
+  ],
+  "materials": [
+    "Java",
+    "sensor data",
+    "projection/display"
+  ],
+  "stack": [
+    "java",
+    "sensor input",
+    "visual output"
+  ],
+  "core_concepts": [
+    "translation of environment into image",
+    "abstraction",
+    "room as source"
+  ],
+  "body_relation": "room activity becomes line behavior",
+  "ethics": {
+    "pii": "none",
+    "consent": "environmental installation context",
+    "retention": "archive"
+  },
+  "provenance": "Documented in 2023 work samples appendix",
+  "docs": {
+    "notes": "/docs/legacy/two-lefts-and-another-right-out-the-door.md"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/fly/fly_install_01.jpg"
+    ],
+    "video": [],
+    "audio": []
+  },
+  "related_ids": [
+    "are-you-ready-to-fly",
+    "symbolizing-everything",
+    "human-buffer"
+  ],
+  "quote": "The room becomes a source image.",
+  "sort_order": 60
+}

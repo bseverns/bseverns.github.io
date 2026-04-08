@@ -674,6 +674,15 @@ article.teaching li {
   color: var(--muted);
 }
 
+.card p.lineage-note {
+  margin-top: auto;
+  padding-top: 0.8rem;
+  border-top: 1px dashed var(--border);
+  color: var(--fg);
+  font-size: 0.93rem;
+  line-height: 1.5;
+}
+
 .card-body h2,
 .card-body h3 {
   margin-top: 0;
@@ -711,10 +720,54 @@ article.teaching li {
 }
 
 .whats-new,
+.practice-arc,
 .archive-note,
 .contact-section,
 .press-section {
   padding: 3rem 0;
+}
+
+.practice-arc-list {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.practice-arc-list li {
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--surface);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+  display: grid;
+  gap: 0.4rem;
+}
+
+.practice-arc-list strong {
+  font-size: 1rem;
+}
+
+.practice-arc-list span {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.practice-arc-list.compact {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.origin-callout {
+  margin: 1.5rem 0 0;
+  padding: 1rem 1.1rem;
+  border-left: 4px solid var(--brand);
+  background: var(--surface-muted);
+  border-radius: 0.7rem;
+  color: var(--fg);
+  max-width: 72ch;
 }
 .legacy-links {
   margin-top: 2rem;

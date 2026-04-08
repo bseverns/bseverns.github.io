@@ -19,3 +19,4 @@ related_projects:
     note: "Pairs documentation practice with maintenance and care practice."
 ---
 <p>machine-docs is important because it makes explanation part of the work. It is a support project, but a crucial one: many of the visible projects only become teachable or distributable because this layer exists.</p>
+<p>It also makes explicit what years of repair, constrained setup, and continuation already taught: care that stays abstract is sentiment; care that takes form becomes method.</p>

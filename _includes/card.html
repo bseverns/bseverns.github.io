@@ -6,5 +6,8 @@
     <h3>{{ item.title }}</h3>
     <p class="eyebrow">{{ item.year }}{% if item.context %} • {{ item.context }}{% endif %}</p>
     <p>{{ item.summary | truncate: 140 }}</p>
+    {% if item.lineage %}
+      <p class="lineage-note">{{ item.lineage }}</p>
+    {% endif %}
   </a>
 </article>

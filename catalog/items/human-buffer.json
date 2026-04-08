@@ -1,0 +1,78 @@
+{
+  "id": "human-buffer",
+  "title": "Human-Buffer",
+  "slug": "human-buffer",
+  "year_start": 2025,
+  "year_end": null,
+  "circa": false,
+  "status": "active",
+  "collections": [
+    "systems",
+    "scenes",
+    "learning"
+  ],
+  "themes": [
+    "consent",
+    "privacy",
+    "image-systems",
+    "participation",
+    "teaching",
+    "threshold",
+    "publics"
+  ],
+  "summary": "A consent-forward image system and teaching framework that treats camera behavior, participation, refusal, and retention as visible parts of the work rather than hidden support logic.",
+  "medium": [
+    "interactive system",
+    "teaching kit",
+    "image environment"
+  ],
+  "materials": [
+    "camera",
+    "computer vision",
+    "UI",
+    "facilitation documents",
+    "avatars",
+    "local processing"
+  ],
+  "stack": [
+    "detection-only vision",
+    "local-first processing",
+    "consent UX",
+    "workshop scaffolding"
+  ],
+  "core_concepts": [
+    "seeing without capture",
+    "consent as interface",
+    "thresholded participation",
+    "image ethics made operational"
+  ],
+  "body_relation": "participants control how they are seen, represented, or refused",
+  "ethics": {
+    "pii": "minimized",
+    "consent": "opt-in / revocable",
+    "retention": "local-first / deletion-aware"
+  },
+  "provenance": "Current project, repo, and research framing",
+  "docs": {
+    "repo": "https://github.com/bseverns/Human-Buffer",
+    "research": "/research/Vision_Consent_Image_Sy",
+    "notes": "/docs/legacy/human-buffer.md"
+  },
+  "media": {
+    "images": [
+      "/img/studio/human-buffer_hero.jpg"
+    ],
+    "video": [
+      "/assets/video/human-buffer_demo.mp4"
+    ],
+    "audio": []
+  },
+  "related_ids": [
+    "night-stalker-reruns-on-channel-4",
+    "are-you-ready-to-fly",
+    "memory-engine",
+    "classhub"
+  ],
+  "quote": "Consent is treated here not as policy alone, but as interface behavior.",
+  "sort_order": 110
+}

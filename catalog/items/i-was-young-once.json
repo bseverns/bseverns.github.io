@@ -1,0 +1,73 @@
+{
+  "id": "i-was-young-once",
+  "title": "I was young once",
+  "slug": "i-was-young-once",
+  "year_start": 2000,
+  "year_end": null,
+  "circa": true,
+  "status": "archived",
+  "collections": [
+    "media",
+    "archive"
+  ],
+  "themes": [
+    "flight",
+    "youth",
+    "prototype",
+    "ambition",
+    "risk",
+    "sculpture",
+    "photography"
+  ],
+  "summary": "An early work consisting of handmade model rockets, photographed and filmed, where launch-thinking, aspiration, numbering, and risk emerge as foundational motifs.",
+  "medium": [
+    "sculpture",
+    "photography",
+    "moving-image"
+  ],
+  "materials": [
+    "handmade rocket forms",
+    "paint",
+    "paper/card",
+    "camera"
+  ],
+  "stack": [
+    "object",
+    "still image",
+    "video document"
+  ],
+  "core_concepts": [
+    "flight as promise",
+    "prototype logic",
+    "ambition",
+    "youth as experiment"
+  ],
+  "body_relation": "scaled object standing in for the imagined body in launch",
+  "ethics": {
+    "pii": "none",
+    "consent": "artist-authored object",
+    "retention": "archive"
+  },
+  "provenance": "User-provided early work images and video",
+  "docs": {
+    "notes": "/docs/legacy/i-was-young-once.md"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/i-was-young-once/rocket_01.jpg",
+      "/img/lineage/i-was-young-once/rocket_02.jpg",
+      "/img/lineage/i-was-young-once/rocket_pair.jpg"
+    ],
+    "video": [
+      "/assets/video/i-was-young-once_launch_excerpt.mp4"
+    ],
+    "audio": []
+  },
+  "related_ids": [
+    "scar",
+    "are-you-ready-to-fly",
+    "moarknobs-42"
+  ],
+  "quote": "An early prototype for flight, promise, and failure.",
+  "sort_order": 20
+}

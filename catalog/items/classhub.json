@@ -1,0 +1,76 @@
+{
+  "id": "classhub",
+  "title": "classhub",
+  "slug": "classhub",
+  "year_start": 2025,
+  "year_end": null,
+  "circa": false,
+  "status": "active",
+  "collections": [
+    "systems",
+    "learning",
+    "infrastructure"
+  ],
+  "themes": [
+    "teaching",
+    "infrastructure",
+    "privacy",
+    "self-hosting",
+    "care",
+    "access",
+    "maintenance"
+  ],
+  "summary": "A self-hosted learning platform that treats educational infrastructure as part of the artistic and ethical field: legible, local, maintainable, and built to support real people rather than harvest them.",
+  "medium": [
+    "platform",
+    "educational infrastructure",
+    "software system"
+  ],
+  "materials": [
+    "Django",
+    "Postgres",
+    "Redis",
+    "MinIO",
+    "Caddy",
+    "curriculum structures"
+  ],
+  "stack": [
+    "self-hosted LMS",
+    "privacy-forward defaults",
+    "teacher workflow",
+    "deployment logic"
+  ],
+  "core_concepts": [
+    "teaching as structure",
+    "infrastructure as public form",
+    "maintainability",
+    "access and care"
+  ],
+  "body_relation": "used by learners, teachers, facilitators, and maintainers in real operational contexts",
+  "ethics": {
+    "pii": "restricted",
+    "consent": "platform-level responsibility",
+    "retention": "self-hosted / controlled"
+  },
+  "provenance": "Current repo and Atlas node",
+  "docs": {
+    "repo": "https://github.com/bseverns/selfhosted-classhub",
+    "atlas": "/atlas/n/classhub/",
+    "notes": "/docs/legacy/classhub.md"
+  },
+  "media": {
+    "images": [
+      "/img/studio/classhub_hero.jpg"
+    ],
+    "video": [],
+    "audio": []
+  },
+  "related_ids": [
+    "human-buffer",
+    "memory-engine",
+    "machine-docs",
+    "house-studio-rebuild"
+  ],
+  "quote": "Teaching infrastructure is part of the work, not merely a delivery channel around it.",
+  "sort_order": 130
+}

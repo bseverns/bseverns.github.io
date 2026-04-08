@@ -19,3 +19,4 @@ related_projects:
     note: "Connects the room-facing scene branch to a larger performance and operations topology."
 ---
 <p>Memory Engine sits at the meeting point of scenes, ethics, and systems. It matters because the experience is not just what appears in the room, but how people are invited in, what choices they are offered, and what the piece keeps, forgets, or returns afterward.</p>
+<p>That structure extends older concerns about grief, memory, and unstable image-making into a room system. It also reflects the rebuild years, when continuation, retention, and careful reuse stopped feeling abstract and became daily conditions.</p>
