@@ -11,6 +11,40 @@ archived: true
 
 <p>The original project pages still carry their full image stacks, videos, and material notes. Read them as earlier layers of the same practice rather than a sealed-off previous phase.</p>
 
+<nav class="legacy-links" aria-label="Anchor lineage dossiers">
+  <h2>Anchor lineage dossiers</h2>
+  <ul class="legacy-list">
+    <li class="legacy-card">
+      <a class="legacy-card-link" href="/lineage/i-was-young-once/">
+        <h4>I was young once</h4>
+        <p class="legacy-lede">Flight, iteration, and prototype ambition before those instincts migrated into tools and systems.</p>
+        <span class="legacy-cta">Read the lineage note →</span>
+      </a>
+    </li>
+    <li class="legacy-card">
+      <a class="legacy-card-link" href="/lineage/fly/">
+        <h4>Art you ready to fly?</h4>
+        <p class="legacy-lede">An early hybrid stack proving that participation, software, hardware, and room logic were already one problem.</p>
+        <span class="legacy-cta">Read the lineage note →</span>
+      </a>
+    </li>
+    <li class="legacy-card">
+      <a class="legacy-card-link" href="/lineage/digital-bath-engram/">
+        <h4>Digital Bath / Engram</h4>
+        <p class="legacy-lede">Projection and sculpture used to turn collaborative memory into unstable public space.</p>
+        <span class="legacy-cta">Read the lineage note →</span>
+      </a>
+    </li>
+    <li class="legacy-card">
+      <a class="legacy-card-link" href="/lineage/symbolizing-everything/">
+        <h4>Symbolizing Everything</h4>
+        <p class="legacy-lede">Code, light, language, and network behavior gathered into one symbolic field.</p>
+        <span class="legacy-cta">Read the lineage note →</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
 <nav class="legacy-links" aria-label="Legacy 3D works catalog">
   <h2>Projects</h2>
   <ul class="legacy-list">
@@ -101,4 +135,4 @@ archived: true
   </ul>
 </nav>
 
-<p class="archive-note">All project pages stay untouched so you can see the original scripts, navigation, and pacing, warts and all. What looks like infrastructure now began here in rooms, actions, improvised stacks, and public tests.</p>
+<p class="archive-note">All project pages stay untouched so you can see the original scripts, navigation, and pacing, warts and all. What looks like infrastructure now began here in rooms, actions, improvised stacks, and public tests. For the record layer beneath this archive, start with <a href="/catalog/catalog.json">/catalog/catalog.json</a>.</p>

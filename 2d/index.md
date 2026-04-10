@@ -11,6 +11,33 @@ archived: true
 
 <p>Each entry keeps its older copy and pacing intact so the work can stay historically honest. The current systems work still cites these experiments.</p>
 
+<nav class="legacy-links" aria-label="Anchor lineage dossiers">
+  <h2>Anchor lineage dossiers</h2>
+  <ul class="legacy-list">
+    <li class="legacy-card">
+      <a class="legacy-card-link" href="/lineage/night-stalker/">
+        <h4>Night Stalker Re-Runs on Channel 4</h4>
+        <p class="legacy-lede">The clearest photographic hinge into the later work on mediated seeing, consent, threshold, and memory.</p>
+        <span class="legacy-cta">Read the lineage note →</span>
+      </a>
+    </li>
+    <li class="legacy-card">
+      <a class="legacy-card-link" href="/lineage/scar/">
+        <h4>Scar</h4>
+        <p class="legacy-lede">A bodily and material bridge from crash, damage, and continuation toward repair culture and machine care.</p>
+        <span class="legacy-cta">Read the lineage note →</span>
+      </a>
+    </li>
+    <li class="legacy-card">
+      <a class="legacy-card-link" href="/lineage/deadman/">
+        <h4>A madman, wrapped in the clothes of a deadman</h4>
+        <p class="legacy-lede">Fragmented memory after injury, now legible as one root of later translation and retention questions.</p>
+        <span class="legacy-cta">Read the lineage note →</span>
+      </a>
+    </li>
+  </ul>
+</nav>
+
 <nav class="legacy-links" aria-label="Legacy 2D works catalog">
   <h2>Projects</h2>
   <ul class="legacy-list">
@@ -52,4 +79,4 @@ archived: true
   </ul>
 </nav>
 
-<p class="archive-note">Need the original navigation chrome? Each project link loads the preserved single-page experience with its own menu, scripts, and pacing. Treat these as preserved experiments still in conversation with the current work.</p>
+<p class="archive-note">Need the original navigation chrome? Each project link loads the preserved single-page experience with its own menu, scripts, and pacing. Treat these as preserved experiments still in conversation with the current work. For machine-readable records, start with <a href="/catalog/catalog.json">/catalog/catalog.json</a>.</p>
