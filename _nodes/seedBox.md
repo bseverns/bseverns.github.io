@@ -2,7 +2,7 @@
 title: "seedBox"
 permalink: /atlas/n/seedbox/
 summary: "Community seed kit for hands-on making, residency installs, and portable learning environments."
-repo: "https://github.com/bseverns/seedBox"
+repo: "https://github.com/bseverns/seedbox"
 artifacts:
   - "Hardware / simulator / pedagogy diagram"
   - "BOM + sourcing sheet"

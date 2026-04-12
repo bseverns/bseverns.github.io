@@ -1,4 +1,29 @@
 (() => {
+  const NON_REPO_NODE_IDS = new Set([
+    'thesis',
+    'toolsPillar',
+    'toolsAudio',
+    'toolsControl',
+    'toolsAnalysis',
+    'scenesPillar',
+    'scenesWorks',
+    'scenesStage',
+    'learningPillar',
+    'learnCurricula',
+    'learnFactory',
+    'learnDocs',
+    'learnOps',
+    'infraPillar',
+    'infraLMS',
+    'infraFleet',
+    'infraArchive',
+    'infraLab',
+    'infraGov',
+    'agencyHub',
+    'opennessHub',
+    'resilienceHub'
+  ]);
+
   const mermaidContainer = document.querySelector('.atlas-diagram .mermaid');
   if (!mermaidContainer) {
     return;
@@ -33,13 +58,19 @@
 
     nodeMap.forEach((node, nodeId) => {
       node.setAttribute('data-node-id', nodeId);
-      node.setAttribute('tabindex', '0');
-      node.setAttribute('role', 'link');
-      node.setAttribute('aria-label', `Open ${nodeId} node`);
       node.addEventListener('mouseenter', () => setActive(svg, nodeMap, adjacency, nodeId));
       node.addEventListener('mouseleave', () => clearActive(svg, nodeMap));
       node.addEventListener('focus', () => setActive(svg, nodeMap, adjacency, nodeId));
       node.addEventListener('blur', () => clearActive(svg, nodeMap));
+
+      if (NON_REPO_NODE_IDS.has(nodeId)) {
+        node.classList.add('atlas-node-static');
+        return;
+      }
+
+      node.setAttribute('tabindex', '0');
+      node.setAttribute('role', 'link');
+      node.setAttribute('aria-label', `Open ${nodeId} node`);
       node.addEventListener('click', () => navigateToNode(nodeId));
       node.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {

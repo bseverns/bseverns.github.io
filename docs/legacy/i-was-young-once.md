@@ -7,7 +7,7 @@ permalink: /lineage/i-was-young-once/
 
 # I was young once
 
-This early work matters because it makes ambition, flight, numbering, and risk visible before those concerns had newer names. Handmade rocket forms and launch-thinking appear here not as side anecdotes, but as a way of testing whether an idea can survive contact with gravity, failure, and repetition.
+This early work makes ambition, flight, numbering, and risk visible before those concerns had newer names. Handmade rocket forms and launch-thinking appear here not as side anecdotes, but as a way of testing whether an idea can survive contact with gravity, failure, and repetition.
 
 That prototype logic continues later in instruments, fabrication, classroom systems, and public tools. Numbering, iteration, and the willingness to test an unstable build all show up early here.
 

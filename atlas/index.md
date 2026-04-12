@@ -8,14 +8,14 @@ seo_description: "Atlas of tools, scenes, learning environments, and systems tie
   <div class="container">
     <p class="eyebrow">Portfolio diagram</p>
     <h1>Atlas</h1>
-    <p class="atlas-lede">A living topology of the lab: tools, scenes, learning environments, and the systems that distribute them. studio-notes sits across the map as the distilled layer for cross-project patterns, decisions, reference, and teaching cards. Hover to spotlight a node, click to jump into its node page.</p>
+    <p class="atlas-lede">A living topology of the lab: tools, scenes, learning environments, and the systems that distribute them. studio-notes sits across the map as the distilled layer for cross-project patterns, decisions, reference, and teaching cards. Hover to spotlight the map; click only the repo-backed nodes to open their pages.</p>
   </div>
 </section>
 
 <section class="atlas-diagram" aria-labelledby="atlas-diagram-title">
   <div class="container">
     <h2 id="atlas-diagram-title">Portfolio diagram</h2>
-    <p class="atlas-diagram-note">The diagram mirrors the current repository map. It stays legible, auditable, linked to node stubs, and explicit about the cross-project role of studio-notes.</p>
+    <p class="atlas-diagram-note">The diagram mirrors the current repository map. Concrete repos open to node pages; grouping labels stay in the diagram as structure, not destinations.</p>
   </div>
   <div class="container">
     <div class="atlas-diagram-frame">
@@ -50,13 +50,12 @@ graph TD
     privacyMedia --> learnFactory["Learning: course factory + templates"]
     learnFactory --> SyllabusRepo["Syllabus"] --> ART215["ART215_SP22"]
     ART215 --> learnDocs["Learning: docs + public site"]
-    learnDocs --> repairStudio["repair-studio"] --> machineDocs["machine-docs"] --> personalSite["bseverns.github.io"]
-    personalSite --> learnOps["Learning: teacher workflow"]
+    learnDocs --> repairStudio["repair-studio"] --> machineDocs["machine-docs"] --> learnOps["Learning: teacher workflow"]
     learnOps --> teacherOps["make → deploy → assess"]
 
     %% SYSTEMS (one tall chain + hubs at the bottom)
     infraPillar --> infraLMS["Systems: classroom doorways"]
-    infraLMS --> tailoredu["TailorEDU"] --> tailoreduRepo["Tailoredu repo"] --> djangoLMS["LMS redesign (Django)"] --> classhub["Class Hub"] --> infraStack["Infra stack (PG/Redis/MinIO/Caddy)"]
+    infraLMS --> djangoLMS["LMS redesign (Django)"] --> classhub["Class Hub"] --> infraStack["Infra stack (PG/Redis/MinIO/Caddy)"]
     infraStack --> infraFleet["Systems: deployment + device fleet"]
     infraFleet --> piImaging["Pi imaging kit"] --> docker["Docker/compose"] --> server["Ubuntu server"] --> openvpn["OpenVPN"]
     openvpn --> infraArchive["Systems: indexing + publishing"]
@@ -89,8 +88,8 @@ graph TD
 
     class thesis,toolsPillar,toolsAudio,tmsLib,seedBox,Horizon,DustPress,lofiSampler,PdRepo,VCVpatch,toolsControl,MOARkNOBS42,MN42Configurator,arduinoSketches,microGranny2,x0xb0x,toolsAnalysis,frZone,teensyDSP tools;
     class scenesPillar,scenesWorks,perceptualDrift,pointyClumps,droneChorus,roomLens,StringFieldNode,DiceLoopNode,hallwayReactor,ArduinoSculpture,HumanBuffer,memory_engine,scenesStage,liveRig,liveRigCtrl,interstream,maelstrom,scVideoMixer,clipFoundry,deskCam scenes;
-    class learningPillar,learnCurricula,cMCurricula,scratch,printing,lego,piper,dronesEd,privacyMedia,learnFactory,SyllabusRepo,ART215,learnDocs,repairStudio,machineDocs,personalSite,learnOps,teacherOps learning;
-    class infraPillar,infraLMS,tailoredu,tailoreduRepo,djangoLMS,classhub,infraStack,infraFleet,piImaging,docker,server,openvpn,infraArchive,llfs,studio1,ghPages,infraLab,homeauto,turingpi2,printServer,infraGov,governance infra;
+    class learningPillar,learnCurricula,cMCurricula,scratch,printing,lego,piper,dronesEd,privacyMedia,learnFactory,SyllabusRepo,ART215,learnDocs,repairStudio,machineDocs,learnOps,teacherOps learning;
+    class infraPillar,infraLMS,djangoLMS,classhub,infraStack,infraFleet,piImaging,docker,server,openvpn,infraArchive,llfs,studio1,ghPages,infraLab,homeauto,turingpi2,printServer,infraGov,governance infra;
     class studioNotes cross;
     class agencyHub,opennessHub,resilienceHub hub;
       </div>
