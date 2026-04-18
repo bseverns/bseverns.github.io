@@ -6,7 +6,9 @@ async function openRecoveryDrawer(page) {
   });
 }
 
-test('native transport adapter speaks HELLO/GET_*/SET_ALL instead of JSON-RPC', async ({ page }) => {
+test('native transport adapter speaks HELLO/GET_*/SET_ALL instead of JSON-RPC', async ({
+  page
+}) => {
   await page.addInitScript(() => {
     window.localStorage?.clear?.();
     window.localStorage?.setItem?.('moarknobs:ui-mode', 'advanced');
@@ -47,6 +49,17 @@ test('native transport adapter speaks HELLO/GET_*/SET_ALL instead of JSON-RPC', 
             profile_reset: false,
             macro_snapshot: false,
             scenes: false
+          }
+        };
+        const schema = {
+          type: 'object',
+          required: ['slots', 'efSlots', 'filter', 'arg', 'led'],
+          properties: {
+            slots: { type: 'array', items: { type: 'object' } },
+            efSlots: { type: 'array', items: { type: 'object' } },
+            filter: { type: 'object' },
+            arg: { type: 'object' },
+            led: { type: 'object' }
           }
         };
         let config = {
@@ -109,7 +122,10 @@ test('native transport adapter speaks HELLO/GET_*/SET_ALL instead of JSON-RPC', 
             slots: [idx]
           })),
           envelopes: {
-            routing: Array.from({ length: manifest.pot_count }, (_, idx) => idx % manifest.envelope_count),
+            routing: Array.from(
+              { length: manifest.pot_count },
+              (_, idx) => idx % manifest.envelope_count
+            ),
             followers: Array.from({ length: manifest.envelope_count }, (_, idx) => ({
               index: idx,
               active: true,
@@ -145,6 +161,10 @@ test('native transport adapter speaks HELLO/GET_*/SET_ALL instead of JSON-RPC', 
             pushLine(JSON.stringify(manifest));
             return;
           }
+          if (trimmed === 'GET_SCHEMA') {
+            pushLine(JSON.stringify(schema));
+            return;
+          }
           if (trimmed === 'GET_CONFIG') {
             pushLine(JSON.stringify(config));
             return;
@@ -156,7 +176,9 @@ test('native transport adapter speaks HELLO/GET_*/SET_ALL instead of JSON-RPC', 
               window.__nativeSetAllPayload = payload;
               config = payload.config;
               setAllBuffer = '';
-              pushLine(JSON.stringify({ type: 'ack', seq: payload.seq, checksum: payload.checksum }));
+              pushLine(
+                JSON.stringify({ type: 'ack', seq: payload.seq, checksum: payload.checksum })
+              );
             } catch (_) {
               // wait for more chunks
             }
@@ -185,12 +207,14 @@ test('native transport adapter speaks HELLO/GET_*/SET_ALL instead of JSON-RPC', 
   const manifest = await page.evaluate(() => window.__MN42_RUNTIME.getState().manifest);
   expect(manifest.device_name).toBe('MOARkNOBS-42');
   expect(manifest.fw_version).toBe('native-fw');
+  const schemaSource = await page.evaluate(() => window.__MN42_RUNTIME.getState().schemaSource);
+  expect(schemaSource).toBe('device');
 
-  const freqInput = page.locator('[data-schema-target="filter"] input[type="number"]').first();
-  await freqInput.waitFor({ state: 'visible' });
-  await freqInput.fill('321');
-  await freqInput.dispatchEvent('change');
   const applyResult = await page.evaluate(async () => {
+    window.__MN42_RUNTIME.stage((draft) => {
+      draft.filter = { ...(draft.filter ?? {}), freq: 321 };
+      return draft;
+    });
     try {
       return { ok: true, result: await window.__MN42_RUNTIME.apply() };
     } catch (err) {
@@ -210,6 +234,7 @@ test('native transport adapter speaks HELLO/GET_*/SET_ALL instead of JSON-RPC', 
   }));
   expect(result.writes).toContain('HELLO');
   expect(result.writes).toContain('GET_MANIFEST');
+  expect(result.writes).toContain('GET_SCHEMA');
   expect(result.writes).toContain('GET_CONFIG');
   expect(result.writes.some((line) => line.startsWith('SET_ALL '))).toBe(true);
   expect(result.payload?.config?.filter?.freq).toBe(321);
@@ -243,6 +268,17 @@ test('native transport disables unsupported profile and recovery controls', asyn
             profile_reset: false,
             macro_snapshot: false,
             scenes: false
+          }
+        };
+        const schema = {
+          type: 'object',
+          required: ['slots', 'efSlots', 'filter', 'arg', 'led'],
+          properties: {
+            slots: { type: 'array', items: { type: 'object' } },
+            efSlots: { type: 'array', items: { type: 'object' } },
+            filter: { type: 'object' },
+            arg: { type: 'object' },
+            led: { type: 'object' }
           }
         };
         const config = {
@@ -284,6 +320,10 @@ test('native transport disables unsupported profile and recovery controls', asyn
             pushLine(JSON.stringify(manifest));
             return;
           }
+          if (trimmed === 'GET_SCHEMA') {
+            pushLine(JSON.stringify(schema));
+            return;
+          }
           if (trimmed === 'GET_CONFIG') {
             pushLine(JSON.stringify(config));
             return;
@@ -320,7 +360,119 @@ test('native transport disables unsupported profile and recovery controls', asyn
   await expect(page.locator('#scene-status')).toContainText('unavailable on this firmware');
 });
 
-test('native transport supports profile, macro, and scene actions when firmware advertises them', async ({ page }) => {
+test('native transport falls back to bundled schema when device schema is incompatible', async ({
+  page
+}) => {
+  await page.addInitScript(() => {
+    window.localStorage?.clear?.();
+    window.localStorage?.setItem?.('moarknobs:ui-mode', 'advanced');
+    window.__MN42_RUNTIME_OPTIONS = { useSimulator: true };
+    window.__MN42_TEST_HOOKS = {
+      mutateTransport(transport) {
+        transport.protocol = 'native';
+        const manifest = {
+          device_name: 'MOARkNOBS-42',
+          fw_version: 'native-fw',
+          git_sha: 'abc12345',
+          build_time: '2026-03-28T12:00:00Z',
+          schema_version: 6,
+          slot_count: 42,
+          pot_count: 42,
+          envelope_count: 6,
+          arg_method_count: 14,
+          led_count: 12,
+          free_ram: 48000,
+          free_flash: 512000,
+          capabilities: {
+            profile_save: false,
+            profile_load: false,
+            profile_reset: false,
+            macro_snapshot: false,
+            scenes: false
+          }
+        };
+        const incompatibleSchema = {
+          type: 'object',
+          properties: {
+            pots: {
+              type: 'array',
+              items: { type: 'number' }
+            }
+          }
+        };
+        const config = {
+          schema_version: 6,
+          pots: Array.from({ length: 42 }, (_, idx) => ({ index: idx, channel: 1, cc: idx })),
+          slots: Array.from({ length: 42 }, (_, idx) => ({
+            index: idx,
+            type_name: 'CC',
+            channel: 1,
+            data1: idx,
+            ef_index: -1,
+            ef: { index: -1, filter_name: 'LINEAR', filter_index: 0, frequency: 1000, q: 0.707 }
+          })),
+          efSlots: Array.from({ length: 6 }, () => ({ slots: [] })),
+          envelopes: {
+            routing: Array.from({ length: 42 }, () => -1),
+            followers: Array.from({ length: 6 }, (_, idx) => ({ index: idx }))
+          },
+          led: { brightness: 0, rgb: { r: 0, g: 0, b: 0 }, hex: '#000000', mode: 'STATIC' }
+        };
+        const queue = [];
+        let resolver = null;
+        const pushLine = (line) => {
+          if (resolver) {
+            const pending = resolver;
+            resolver = null;
+            pending(line);
+            return;
+          }
+          queue.push(line);
+        };
+        transport.writeLine = async (line) => {
+          const trimmed = String(line ?? '').trim();
+          if (trimmed === 'HELLO') {
+            pushLine(JSON.stringify({ hello: 'mn42' }));
+            return;
+          }
+          if (trimmed === 'GET_MANIFEST') {
+            pushLine(JSON.stringify(manifest));
+            return;
+          }
+          if (trimmed === 'GET_SCHEMA') {
+            pushLine(JSON.stringify(incompatibleSchema));
+            return;
+          }
+          if (trimmed === 'GET_CONFIG') {
+            pushLine(JSON.stringify(config));
+            return;
+          }
+          throw new Error(`Unexpected line: ${trimmed}`);
+        };
+        transport.nextLine = async () => {
+          if (queue.length) return queue.shift();
+          return new Promise((resolve) => {
+            resolver = resolve;
+          });
+        };
+      }
+    };
+  });
+
+  await page.goto('/benzknobz.html');
+  await page.getByRole('button', { name: /simulator/i }).click();
+  await page.getByRole('button', { name: 'Connect' }).click();
+  await expect(page.locator('#connection-pill')).toContainText('Connected');
+
+  const state = await page.evaluate(() => window.__MN42_RUNTIME.getState());
+  expect(state.schemaSource).toBe('bundled');
+  expect(state.schema?.properties?.slots).toBeTruthy();
+  expect(state.schema?.properties?.efSlots).toBeTruthy();
+});
+
+test('native transport supports profile, macro, and scene actions when firmware advertises them', async ({
+  page
+}) => {
   await page.addInitScript(() => {
     window.localStorage?.clear?.();
     window.localStorage?.setItem?.('moarknobs:ui-mode', 'advanced');
@@ -360,6 +512,17 @@ test('native transport supports profile, macro, and scene actions when firmware 
             profile_reset: true,
             macro_snapshot: true,
             scenes: true
+          }
+        };
+        const schema = {
+          type: 'object',
+          required: ['slots', 'efSlots', 'filter', 'arg', 'led'],
+          properties: {
+            slots: { type: 'array', items: { type: 'object' } },
+            efSlots: { type: 'array', items: { type: 'object' } },
+            filter: { type: 'object' },
+            arg: { type: 'object' },
+            led: { type: 'object' }
           }
         };
         const baseConfig = {
@@ -450,6 +613,10 @@ test('native transport supports profile, macro, and scene actions when firmware 
             pushLine(JSON.stringify(manifest));
             return;
           }
+          if (trimmed === 'GET_SCHEMA') {
+            pushLine(JSON.stringify(schema));
+            return;
+          }
           if (trimmed === 'GET_CONFIG') {
             pushLine(JSON.stringify(config));
             return;
@@ -481,7 +648,13 @@ test('native transport supports profile, macro, and scene actions when firmware 
               config = clone(macroSnapshot);
               pushLine(JSON.stringify({ macro_recalled: true, macro_available: true }));
             } else {
-              pushLine(JSON.stringify({ macro_recalled: false, macro_available: false, error: 'No macro stored' }));
+              pushLine(
+                JSON.stringify({
+                  macro_recalled: false,
+                  macro_available: false,
+                  error: 'No macro stored'
+                })
+              );
             }
             return;
           }
@@ -499,7 +672,7 @@ test('native transport supports profile, macro, and scene actions when firmware 
                   scene_slot: payload.slot,
                   scene_name: payload.name ?? '',
                   scene_available: true
-                }),
+                })
               );
               return;
             }
@@ -512,7 +685,7 @@ test('native transport supports profile, macro, and scene actions when firmware 
                     name: entry?.name ?? '',
                     available: Boolean(entry)
                   }))
-                }),
+                })
               );
               return;
             }
@@ -527,7 +700,7 @@ test('native transport supports profile, macro, and scene actions when firmware 
                     scene_name: '',
                     scene_available: false,
                     scene_error: 'No snapshot stored in this slot'
-                  }),
+                  })
                 );
                 return;
               }
@@ -539,7 +712,7 @@ test('native transport supports profile, macro, and scene actions when firmware 
                   scene_slot: payload.slot,
                   scene_name: entry.name,
                   scene_available: true
-                }),
+                })
               );
               return;
             }
