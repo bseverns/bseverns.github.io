@@ -196,9 +196,11 @@ export function createRuntime({
   const { emit, on } = makeEmitter();
 
   let transport = null;
-  let readTimer = null;
+  let rpcThrottleTimer = null;
   let readLoopActive = false;
   let queuedTelemetry = null;
+  let telemetryTraceId = null;
+  let telemetryTimer = null;
   let remoteManifest = null;
   let schema = null;
   let schemaSource = 'bundled';
@@ -578,25 +580,17 @@ export function createRuntime({
     if (readLoopActive) return;
     readLoopActive = true;
     const pump = async () => {
-      readTimer = null;
-      if (!transport) {
-        readLoopActive = false;
-        return;
-      }
-      try {
-        const line = await transport.nextLine();
-        handleLine(line);
-      } catch (err) {
-        emit('error', err);
-        await disconnect();
-        return;
-      } finally {
-        if (transport) {
-          readTimer = setTimeout(pump, TELEMETRY_FRAME_MS);
-        } else {
-          readLoopActive = false;
+      while (transport) {
+        try {
+          const line = await transport.nextLine();
+          if (line) handleLine(line);
+        } catch (err) {
+          emit('error', err);
+          await disconnect();
+          break;
         }
       }
+      readLoopActive = false;
     };
     pump();
   }
@@ -649,12 +643,44 @@ export function createRuntime({
     return true;
   }
 
+  function mergeTelemetryChunk(current, msg) {
+    const next = { ...(current || {}), ...msg };
+
+    if (Array.isArray(msg.slotArgs)) {
+      const byIndex = new Map();
+
+      for (const arg of current?.slotArgs || []) {
+        if (Number.isInteger(arg.index)) byIndex.set(arg.index, arg);
+      }
+
+      for (const arg of msg.slotArgs) {
+        if (Number.isInteger(arg.index)) byIndex.set(arg.index, arg);
+      }
+
+      next.slotArgs = [...byIndex.entries()].sort(([a], [b]) => a - b).map(([, arg]) => arg);
+    }
+
+    next.scopes = [...(current?.scopes || []), msg.scope].filter(Boolean);
+    return next;
+  }
+
   function queueTelemetryFrame(msg) {
-    queuedTelemetry = { ...(queuedTelemetry || {}), ...msg };
-    if (typeof requestAnimationFrame === 'function') {
-      requestAnimationFrame(flushTelemetry);
-    } else {
+    if (!msg || typeof msg !== 'object') return;
+
+    const traceId = msg.traceId || null;
+
+    if (telemetryTraceId && traceId && traceId !== telemetryTraceId) {
       flushTelemetry();
+    }
+
+    if (traceId) {
+      telemetryTraceId = traceId;
+    }
+
+    queuedTelemetry = mergeTelemetryChunk(queuedTelemetry, msg);
+
+    if (!telemetryTimer) {
+      telemetryTimer = setTimeout(flushTelemetry, 50);
     }
   }
 
@@ -672,7 +698,13 @@ export function createRuntime({
   });
 
   function flushTelemetry() {
+    if (telemetryTimer) {
+      clearTimeout(telemetryTimer);
+      telemetryTimer = null;
+    }
+    telemetryTraceId = null;
     if (!queuedTelemetry) return;
+
     const frame = clone(queuedTelemetry);
     emit('telemetry', frame);
     notifyStatus({ type: 'telemetry', ...frame });
@@ -813,10 +845,6 @@ export function createRuntime({
       await transport.close();
     } finally {
       transport = null;
-      if (readTimer) {
-        clearTimeout(readTimer);
-        readTimer = null;
-      }
       readLoopActive = false;
       flushRpcPending(new Error('Disconnected'));
       emit('disconnected');
