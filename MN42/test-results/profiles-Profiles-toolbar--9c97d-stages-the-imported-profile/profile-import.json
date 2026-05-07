@@ -1,0 +1,11 @@
+{
+  "slot": 0,
+  "config": {
+    "slots": [
+      {
+        "data1": 56,
+        "midiChannel": 6
+      }
+    ]
+  }
+}
