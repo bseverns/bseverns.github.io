@@ -778,10 +778,51 @@ article.teaching li {
 
 .whats-new,
 .practice-arc,
+.entry-pools,
+.featured-strip,
 .archive-note,
 .contact-section,
 .press-section {
   padding: 3rem 0;
+}
+
+.pool-grid,
+.feature-grid {
+  margin-top: 1.75rem;
+}
+
+.pool-card .card-body,
+.feature-card .card-body {
+  display: grid;
+  gap: 0.85rem;
+  height: 100%;
+}
+
+.pool-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.pool-links a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  text-underline-offset: 0.18em;
+}
+
+.pool-links a:hover,
+.pool-links a:focus-visible {
+  text-decoration: underline;
+}
+
+.pool-links a:focus-visible,
+.archive-roots a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 0.3rem;
 }
 
 .practice-arc-list {
@@ -859,6 +900,22 @@ article.teaching li {
   border-radius: 0.7rem;
   color: var(--fg);
   max-width: 72ch;
+}
+
+.lineage-prose {
+  display: grid;
+  gap: 1rem;
+  max-width: 76ch;
+  margin-top: 1.75rem;
+}
+
+.lineage-prose p {
+  margin: 0;
+  color: var(--fg);
+}
+
+.archive-roots p {
+  max-width: 62ch;
 }
 .legacy-links {
   margin-top: 2rem;
