@@ -1,12 +1,32 @@
 ---
 title: "machine-docs"
 permalink: /atlas/n/machinedocs/
-summary: "Documentation framework for turning setup notes, diagrams, maintenance habits, and operating knowledge into durable artifacts."
+pillar: "Learning / Systems"
+status: "active documentation system"
+summary: "Runbook and field-manual layer for shared fabrication tools, written so maintenance becomes teachable rather than hidden."
 repo: "https://github.com/bseverns/machine-docs"
-artifacts:
-  - "Template set"
-  - "Diagram examples"
-  - "Operating note format"
+what_it_is: "machine-docs is a documentation system for machine stewardship, safe operation, maintenance habits, and training pathways. It treats operational literacy as cultural and pedagogical work rather than background labor."
+lets_people_do: "It lets operators, learners, and maintainers enter shared fabrication tools through repeatable runbooks instead of rumor, memory, or gatekeeping."
+public_now:
+  - title: "Project repo"
+    url: "https://github.com/bseverns/machine-docs"
+    external: true
+    note: "Current README, safety notes, fabrication pipelines, and audit playbooks."
+  - title: "Source evidence already surfaced"
+    note: "The public repo already supports runbook and machine-care claims."
+evidence_status: "Status: active documentation system. Public source material is already strong, but the page still needs one current machine-care photo or calibration proof paired with the relevant runbook excerpt."
+next_proof: "One redacted machine-care photo paired with the exact runbook or maintenance flow it belongs to."
+unresolved:
+  - "The page should not imply full coverage of every machine or institutional approval."
+  - "A current public example would make the maintenance-as-curriculum claim more concrete."
+  - "Safety language should stay tied to documented procedure, not broad compliance claims."
+methods:
+  - title: "Documentation as Interface"
+    url: "/atlas/methods/documentation-as-interface/"
+    note: "This project is one of the clearest embodiments of the method."
+  - title: "Evidence Before Polish"
+    url: "/atlas/methods/evidence-before-polish/"
+    note: "A maintenance photo plus runbook excerpt can do more than a polished summary."
 related_projects:
   - title: "Syllabus"
     url: "/atlas/n/syllabusrepo/"
@@ -17,6 +37,20 @@ related_projects:
   - title: "repair-studio"
     url: "/atlas/n/repairstudio/"
     note: "Pairs documentation practice with maintenance and care practice."
+source_trail:
+  - title: "Project repo"
+    url: "https://github.com/bseverns/machine-docs"
+    external: true
+    note: "Implementation truth."
+  - title: "Legacy note"
+    url: "/docs/legacy/machine-docs.md"
+    note: "Short lineage marker."
+last_reviewed: 2026-05-15
+reader_path:
+  - title: "Open Syllabus"
+    url: "/atlas/n/syllabusrepo/"
+    note: "See the curriculum archive layer that shares its transfer goals."
+  - title: "Open systems-atlas"
+    url: "/atlas/n/systems-atlas/"
+    note: "See how documentation practice becomes infrastructure method."
 ---
-<p>machine-docs is important because it makes explanation part of the work. It is a support project, but a crucial one: many of the visible projects only become teachable or distributable because this layer exists.</p>
-<p>It also makes explicit what years of repair, constrained setup, and continuation already taught: care that stays abstract is sentiment; care that takes form becomes method.</p>

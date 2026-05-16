@@ -1,22 +1,69 @@
 ---
 title: "MOARkNOBS-42"
 permalink: /atlas/n/moarknobs42/
-summary: "Open control instrument and teaching platform pairing embodied interface design with bench-tested documentation."
+pillar: "Tools"
+status: "prototype platform"
+summary: "Teensy-based MIDI controller platform that treats mappings, latency, feedback, and validation as part of the instrument rather than invisible engineering residue."
 repo: "https://github.com/bseverns/MOARkNOBS-42"
-artifacts:
-  - "Hardware / firmware stack diagram"
-  - "Latency characterization notes"
-  - "Panel and bench photos"
+what_it_is: "MOARkNOBS-42 is a control-instrument research platform built around a deliberate 42-control grammar, visible mappings, mode feedback, and bench-tested documentation. It is public as a promising platform, not as a finished production controller."
+lets_people_do: "It lets performers and learners test how physical controls, mapping manifests, LED feedback, and measurable latency shape authorship in a live control system."
+public_now:
+  - title: "Project repo"
+    url: "https://github.com/bseverns/MOARkNOBS-42"
+    external: true
+    note: "Current firmware, hardware notes, validation tooling, and build direction."
+  - title: "MN42 project page"
+    url: "/projects/mn42/"
+    note: "Public site context for the controller branch."
+  - title: "Latency rig diagram"
+    url: "/assets/diagrams/mn42_latency-rig.svg"
+    note: "Public-safe diagram of the measurement framing around the instrument."
+  - title: "Latency characterization lab"
+    url: "/research/mn42-latency-lab/"
+    note: "Method note for measuring feel instead of mythologizing it."
+evidence_status: "Status: prototype platform. Public source and method notes exist, but stronger public proof still needs a current validation capture, a manifest example, and a bench photo of the present hardware state."
+next_proof: "30-second MIDI validation capture showing stable CC output, visible mode LED changes, and either a MIDI monitor or latency log in frame."
+unresolved:
+  - "The current public page should not imply enclosure maturity, operator-independence, or production readiness."
+  - "A public BOM, calibration path, and current hardware photo are still missing."
+  - "Live-rig integration proof should stay modest until a concrete capture is linked."
+methods:
+  - title: "Evidence Before Polish"
+    url: "/atlas/methods/evidence-before-polish/"
+    note: "Bench captures and latency evidence come before enclosure polish."
+  - title: "Assumption Ledger"
+    url: "/atlas/methods/assumption-ledger/"
+    note: "Sensor noise, VREF drift, and control claims should stay named."
+  - title: "Documentation as Interface"
+    url: "/atlas/methods/documentation-as-interface/"
+    note: "Mappings and validation notes are part of the instrument surface."
 related_projects:
   - title: "live-rig"
     url: "/atlas/n/liverig/"
-    note: "Shows how the instrument can move outward into a larger scene system."
+    note: "Shows how the controller can move outward into a larger scene system."
   - title: "StringField"
     url: "/atlas/n/stringfieldnode/"
     note: "A neighboring embodied-interface line that pushes beyond knobs and panel logic."
   - title: "seedBox"
     url: "/atlas/n/seedbox/"
-    note: "Links the instrument branch to portable pedagogy and kit-based delivery."
+    note: "Connects the control surface to portable instrument and teaching contexts."
+source_trail:
+  - title: "Project repo"
+    url: "https://github.com/bseverns/MOARkNOBS-42"
+    external: true
+    note: "Implementation truth."
+  - title: "MN42 latency lab"
+    url: "/research/mn42-latency-lab/"
+    note: "Public measurement framing."
+last_reviewed: 2026-05-15
+reader_path:
+  - title: "Open live-rig"
+    url: "/atlas/n/liverig/"
+    note: "See where the controller becomes part of a larger scene topology."
+  - title: "Open frZone"
+    url: "/atlas/n/frzone/"
+    note: "Follow the branch from control into analysis and triggering."
+  - title: "Open Horizon"
+    url: "/atlas/n/horizon/"
+    note: "Follow the branch from control into DSP and listening evidence."
 ---
-<p>MOARkNOBS-42 is a flagship because it gathers many of the practice’s values in one object: embodied control, reproducibility, open documentation, and claims about feel that can actually be measured.</p>
-<p>The instrument branch also reaches backward to earlier prototype and flight logic. What once appeared as youthful launch-thinking now returns as a control surface built to survive testing, teaching, and repair.</p>

@@ -121,9 +121,25 @@
   padding: 3rem 0;
 }
 
+.atlas-node-header .eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: var(--muted);
+}
+
 .atlas-node-header h1 {
   margin: 0 0 0.75rem;
   font-size: clamp(2rem, 3vw + 1rem, 3rem);
+}
+
+.atlas-node-lede {
+  margin: 0 0 1rem;
+  max-width: 64ch;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
 }
 
 .atlas-node-meta {
@@ -175,6 +191,11 @@
 .atlas-related-list span {
   color: var(--muted);
   line-height: 1.45;
+}
+
+.atlas-list-title {
+  font-weight: 700;
+  color: inherit;
 }
 
 @media (max-width: 720px) {

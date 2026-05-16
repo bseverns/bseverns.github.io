@@ -139,3 +139,16 @@ graph TD
     </div>
   </div>
 </section>
+
+<section class="atlas-section">
+  <div class="container">
+    <p class="eyebrow">Reading rules</p>
+    <h2>How to read the fleet without overreading it</h2>
+    <p>The portfolio carries public claims and selected proof objects. Repositories carry live implementation truth. Atlas carries the relationships between those things. Method notes explain the reusable patterns that keep the claims legible.</p>
+    <ul class="atlas-todo">
+      <li><a href="/atlas/methods/">Methods</a> names the cross-project patterns: evidence, documentation, assumption ledgers, and consent-forward systems.</li>
+      <li><a href="/privacy-ethics/">Privacy &amp; Ethics</a> explains why some work remains redacted, staged, or private.</li>
+      <li>Projects marked <strong>needs proof</strong> or <strong>public-safe excerpt</strong> are intentionally constrained until stronger evidence is surfaced.</li>
+    </ul>
+  </div>
+</section>

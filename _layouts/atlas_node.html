@@ -28,20 +28,97 @@
     <div class="content-area">
       <article class="atlas-node">
         <header class="atlas-node-header">
-          <p class="eyebrow">Atlas node</p>
+          <p class="eyebrow">
+            Atlas node
+            {% if page.pillar %} · {{ page.pillar }}{% endif %}
+            {% if page.status %} · {{ page.status }}{% endif %}
+          </p>
           <h1>{{ page.title }}</h1>
+          {% if page.summary %}
+          <p class="atlas-node-lede">{{ page.summary }}</p>
+          {% endif %}
           {% if page.repo %}
           <p class="atlas-node-meta"><a href="{{ page.repo }}" target="_blank" rel="noopener">Repository &rarr;</a></p>
           {% endif %}
         </header>
-        <section class="atlas-node-section" aria-labelledby="node-summary">
-          <h2 id="node-summary">Summary</h2>
-          <p>{{ page.summary | default: "Summary coming soon." }}</p>
+        {% if page.what_it_is %}
+        <section class="atlas-node-section" aria-labelledby="node-what">
+          <h2 id="node-what">What it is</h2>
+          <p>{{ page.what_it_is }}</p>
         </section>
-        <section class="atlas-node-section" aria-labelledby="node-truth">
-          <h2 id="node-truth">Where Truth Lives</h2>
-          <p>The Atlas is the relationship layer. Use the repository for current project-specific truth, and use <a href="/atlas/n/studio-notes/">studio-notes</a> when methods, decisions, or teaching material need to travel across the fleet.</p>
+        {% endif %}
+        {% if page.lets_people_do %}
+        <section class="atlas-node-section" aria-labelledby="node-does">
+          <h2 id="node-does">What it lets people do</h2>
+          <p>{{ page.lets_people_do }}</p>
         </section>
+        {% endif %}
+        {% assign public_items = page.public_now | default: page.artifacts %}
+        {% if public_items %}
+        <section class="atlas-node-section" aria-labelledby="node-public">
+          <h2 id="node-public">What is public now</h2>
+          <ul class="atlas-related-list">
+            {% for item in public_items %}
+            <li>
+              {% if item.url %}
+              <a href="{{ item.url }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.title | default: item.url }}</a>
+              {% elsif item.title %}
+              <strong>{{ item.title }}</strong>
+              {% else %}
+              <span class="atlas-list-title">{{ item }}</span>
+              {% endif %}
+              {% if item.note %}
+              <span>{{ item.note }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+        {% if page.evidence_status or page.status or page.next_proof %}
+        <section class="atlas-node-section" aria-labelledby="node-evidence">
+          <h2 id="node-evidence">Evidence status</h2>
+          {% if page.evidence_status %}
+          <p>{{ page.evidence_status }}</p>
+          {% elsif page.status %}
+          <p><strong>Status:</strong> {{ page.status }}.</p>
+          {% endif %}
+          {% if page.next_proof %}
+          <p><strong>Next proof object:</strong> {{ page.next_proof }}</p>
+          {% endif %}
+        </section>
+        {% endif %}
+        {% if page.boundary_note %}
+        <section class="atlas-node-section" aria-labelledby="node-boundary">
+          <h2 id="node-boundary">Boundary note</h2>
+          <p>{{ page.boundary_note }}</p>
+        </section>
+        {% endif %}
+        {% if page.unresolved %}
+        <section class="atlas-node-section" aria-labelledby="node-unresolved">
+          <h2 id="node-unresolved">What remains unresolved</h2>
+          <ul class="atlas-todo">
+            {% for item in page.unresolved %}
+            <li>{{ item }}</li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+        {% if page.methods %}
+        <section class="atlas-node-section" aria-labelledby="node-methods">
+          <h2 id="node-methods">Methods surfaced</h2>
+          <ul class="atlas-related-list">
+            {% for item in page.methods %}
+            <li>
+              <a href="{{ item.url }}">{{ item.title }}</a>
+              {% if item.note %}
+              <span>{{ item.note }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
         {% if page.related_projects %}
         <section class="atlas-node-section" aria-labelledby="node-related">
           <h2 id="node-related">Related Fleet Projects</h2>
@@ -57,24 +134,56 @@
           </ul>
         </section>
         {% endif %}
-        <section class="atlas-node-section" aria-labelledby="node-artifacts">
-          <h2 id="node-artifacts">Artifacts</h2>
+        {% if page.source_trail or page.last_reviewed or page.repo %}
+        <section class="atlas-node-section" aria-labelledby="node-source">
+          <h2 id="node-source">Source trail</h2>
           <ul class="atlas-todo">
-            <li>Demo video - TODO</li>
-            {% if page.artifacts %}
-            {% for item in page.artifacts %}
-            <li>{{ item }}</li>
+            {% if page.source_trail %}
+            {% for item in page.source_trail %}
+            <li>
+              {% if item.url %}
+              <a href="{{ item.url }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.title | default: item.url }}</a>
+              {% else %}
+              {{ item.title }}
+              {% endif %}
+              {% if item.note %} — {{ item.note }}{% endif %}
+            </li>
             {% endfor %}
-            {% else %}
-            <li>Photos - TODO</li>
-            <li>Build notes - TODO</li>
+            {% endif %}
+            {% if page.repo and page.source_trail == nil %}
+            <li><a href="{{ page.repo }}" target="_blank" rel="noopener">Project repo</a></li>
+            {% endif %}
+            {% if page.last_reviewed %}
+            <li>Last reviewed: {{ page.last_reviewed }}</li>
             {% endif %}
           </ul>
+          <p>The Atlas is the relationship layer. Use the repository for current project-specific truth, and use <a href="/atlas/n/studio-notes/">studio-notes</a> when methods, decisions, or teaching material need to travel across the fleet.</p>
         </section>
-        <section class="atlas-node-section" aria-labelledby="node-code">
-          <h2 id="node-code">Code</h2>
+        {% endif %}
+        {% if page.reader_path %}
+        <section class="atlas-node-section" aria-labelledby="node-next">
+          <h2 id="node-next">Where to go next</h2>
+          <ul class="atlas-todo">
+            {% for item in page.reader_path %}
+            <li>
+              {% if item.url %}
+              <a href="{{ item.url }}">{{ item.title }}</a>
+              {% else %}
+              {{ item.title }}
+              {% endif %}
+              {% if item.note %} — {{ item.note }}{% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+        {% assign trimmed_content = content | strip %}
+        {% if trimmed_content != "" %}
+        <section class="atlas-node-section" aria-labelledby="node-notes">
+          <h2 id="node-notes">Notes</h2>
           {{ content }}
         </section>
+        {% endif %}
       </article>
     </div>
   </main>
@@ -90,6 +199,8 @@
             </a>
           </li>
           {% endfor %}
+          <li><a href="/atlas/methods/" {% if page.url == "/atlas/methods/" %}aria-current="page"{% endif %}>Methods</a></li>
+          <li><a href="/privacy-ethics/" {% if page.url == "/privacy-ethics/" %}aria-current="page"{% endif %}>Privacy &amp; Ethics</a></li>
           <li><a href="/sitemap.xml">Sitemap</a></li>
         </ul>
       </nav>
