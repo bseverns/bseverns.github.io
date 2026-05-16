@@ -23,6 +23,19 @@ public_now:
     note: "Longer public principles for projects involving people and sensing."
 evidence_status: "Status: teaching-ready system. Public source materials already support careful claims about consent architecture and workshop framing, but public proof should continue to rely on diagrams, staged screenshots, and redacted materials rather than participant imagery."
 next_proof: "Redacted workshop screenshots or staged interface captures that show the participant flow without exposing identifiable people."
+proof_objects:
+  - title: "Human-Buffer flow diagram"
+    status: "public"
+    url: "/assets/diagrams/human-buffer_flow.svg"
+    note: "Public-safe interaction and data-flow framing."
+  - title: "Project repo documentation"
+    status: "public"
+    url: "https://github.com/bseverns/Human-Buffer"
+    external: true
+    note: "README, privacy note, ethics note, workshop playbook, and assumption ledger."
+  - title: "Redacted workshop screenshots"
+    status: "needed"
+    note: "If added, they should remain staged or redacted rather than participant-facing."
 unresolved:
   - "The page should not imply workshop outcomes or participant impact beyond what the public materials can show."
   - "Any future media proof needs explicit public-safe clearance or staged stand-ins."

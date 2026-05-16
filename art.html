@@ -59,7 +59,35 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
         <p class="origin-callout">The current scene systems are not separate from the earlier work. They are one later container for the same questions: how people enter a work, what a medium withholds, what it remembers, and how care appears in structure.</p>
         <div class="cta">
           <a class="btn secondary" href="/atlas/">Open the fleet map</a>
+          <a class="btn secondary" href="/atlas/methods/">Open methods</a>
+          <a class="btn secondary" href="/privacy-ethics/">Open privacy &amp; ethics</a>
           <a class="btn secondary" href="/atlas/n/studio-notes/">Open studio-notes</a>
+        </div>
+      </div>
+    </section>
+    <section class="portfolio-list" aria-labelledby="selected-works-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Selected Works</p>
+          <h2 id="selected-works-title">A quick entry into the current public project set</h2>
+          <p>This compact grid keeps the newer project pages and the broader Studio narrative in one place. For cross-project patterns and public boundary notes, use the Methods and Privacy &amp; Ethics layers directly.</p>
+        </div>
+        <div class="cards selected-grid">
+          {% assign featured_projects = site.projects | where: "featured", true | sort: "year" | reverse %}
+          {% for item in featured_projects %}
+          <article class="card selected-card">
+            <a href="{{ item.url | relative_url }}">
+              {% if item.hero %}
+              <div class="card-thumb">
+                <img src="{{ item.hero | relative_url }}" alt="{{ item.hero_alt | default: item.title }}">
+              </div>
+              {% endif %}
+              <h3>{{ item.title }}</h3>
+              <p class="eyebrow">{{ item.year }}{% if item.media %} • {{ item.media }}{% elsif item.context %} • {{ item.context }}{% endif %}</p>
+              <p>{{ item.summary }}</p>
+            </a>
+          </article>
+          {% endfor %}
         </div>
       </div>
     </section>
@@ -145,6 +173,7 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
       <div class="container">
         <h2>Where truth lives</h2>
         <p>Project repos hold the live scene- and tool-specific truth. <a href="/atlas/n/studio-notes/">studio-notes</a> holds the cross-project patterns, decisions, reference, and teaching cards harvested from that work. Atlas shows how those systems relate across the fleet. The archive stays public because current scene logic still depends on those earlier experiments.</p>
+        <p><a href="/atlas/methods/">Methods</a> and <a href="/privacy-ethics/">Privacy &amp; Ethics</a> explain how evidence, documentation, assumptions, and public boundaries are being handled across this branch.</p>
       </div>
     </section>
     <section class="portfolio-list" aria-label="Studio projects">

@@ -119,6 +119,27 @@
           </ul>
         </section>
         {% endif %}
+        {% if page.proof_objects %}
+        <section class="atlas-node-section" aria-labelledby="node-proof">
+          <h2 id="node-proof">Proof objects</h2>
+          <ul class="atlas-related-list">
+            {% for item in page.proof_objects %}
+            <li>
+              {% if item.url %}
+              <a href="{{ item.url }}"{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.title | default: item.url }}</a>
+              {% elsif item.title %}
+              <strong>{{ item.title }}</strong>
+              {% endif %}
+              {% if item.status %}
+              <span><strong>Status:</strong> {{ item.status }}{% if item.note %}. {{ item.note }}{% endif %}</span>
+              {% elsif item.note %}
+              <span>{{ item.note }}</span>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </section>
+        {% endif %}
         {% if page.related_projects %}
         <section class="atlas-node-section" aria-labelledby="node-related">
           <h2 id="node-related">Related Fleet Projects</h2>

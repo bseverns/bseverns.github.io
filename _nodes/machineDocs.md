@@ -16,6 +16,15 @@ public_now:
     note: "The public repo already supports runbook and machine-care claims."
 evidence_status: "Status: active documentation system. Public source material is already strong, but the page still needs one current machine-care photo or calibration proof paired with the relevant runbook excerpt."
 next_proof: "One redacted machine-care photo paired with the exact runbook or maintenance flow it belongs to."
+proof_objects:
+  - title: "Project repo documentation"
+    status: "public"
+    url: "https://github.com/bseverns/machine-docs"
+    external: true
+    note: "README, safety notes, fabrication pipelines, and audit playbooks are already public."
+  - title: "Machine-care photo + runbook excerpt"
+    status: "needed"
+    note: "Still needed to show one current public example of maintenance-as-curriculum."
 unresolved:
   - "The page should not imply full coverage of every machine or institutional approval."
   - "A current public example would make the maintenance-as-curriculum claim more concrete."

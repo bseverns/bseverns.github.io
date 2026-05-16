@@ -23,6 +23,18 @@ public_now:
     note: "Method note for measuring feel instead of mythologizing it."
 evidence_status: "Status: prototype platform. Public source and method notes exist, but stronger public proof still needs a current validation capture, a manifest example, and a bench photo of the present hardware state."
 next_proof: "30-second MIDI validation capture showing stable CC output, visible mode LED changes, and either a MIDI monitor or latency log in frame."
+proof_objects:
+  - title: "Latency rig diagram"
+    status: "public"
+    url: "/assets/diagrams/mn42_latency-rig.svg"
+    note: "Public-safe diagram of the measurement framing around the instrument."
+  - title: "Latency characterization lab"
+    status: "public"
+    url: "/research/mn42-latency-lab/"
+    note: "Public method note for measuring latency and feel."
+  - title: "MIDI validation capture"
+    status: "needed"
+    note: "Current public proof still needs a short capture showing stable CC output and visible mode feedback."
 unresolved:
   - "The current public page should not imply enclosure maturity, operator-independence, or production readiness."
   - "A public BOM, calibration path, and current hardware photo are still missing."

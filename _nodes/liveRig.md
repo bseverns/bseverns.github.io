@@ -16,6 +16,15 @@ public_now:
     note: "Repo docs support cautious architecture and runbook claims while the public-safe routing capture is still missing."
 evidence_status: "Status: working prototype. The public repo supports field-manual and validation claims, but a public-safe routing diagram or setup capture is still needed before the page should sound more field-tested than it is."
 next_proof: "Redacted routing diagram or short setup tour using generic endpoint names instead of venue-specific or private infrastructure details."
+proof_objects:
+  - title: "Project repo documentation"
+    status: "public"
+    url: "https://github.com/bseverns/live-rig"
+    external: true
+    note: "Runbooks, preflight notes, scenes, and validation tooling are public now."
+  - title: "Public-safe routing diagram or setup tour"
+    status: "needed"
+    note: "Still needed before the page should imply stronger field use than the current public proof supports."
 boundary_note: "This project should be shown as a documented performance method without exposing private machine names, network details, venues, or personnel."
 unresolved:
   - "The page should not imply every configuration is reproducible from public material alone."

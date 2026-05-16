@@ -16,6 +16,15 @@ public_now:
     note: "README- and pathway-level evidence already support careful archive claims."
 evidence_status: "Status: curriculum archive. The repo already supports the archive and pathway framing, but the public page still needs one redacted curriculum-to-workshop trace before stronger reuse language belongs here."
 next_proof: "One redacted pathway or lesson trace that clearly connects the archive to a workshop, course module, or delivery system."
+proof_objects:
+  - title: "Project repo documentation"
+    status: "public"
+    url: "https://github.com/bseverns/Syllabus"
+    external: true
+    note: "README- and pathway-level evidence already support careful curriculum-archive claims."
+  - title: "Redacted pathway or lesson trace"
+    status: "needed"
+    note: "Still needed before the page should imply stronger reuse beyond the archive structure itself."
 unresolved:
   - "The page should not imply student outcomes or institutional adoption without public evidence."
   - "A stronger visible bridge to Class Hub or a public workshop artifact would clarify how the archive moves outward."

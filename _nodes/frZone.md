@@ -16,6 +16,15 @@ public_now:
     note: "Public repo documentation supports cautious architecture and trigger claims even before a demo capture exists."
 evidence_status: "Status: working study. Source documentation supports the architecture, but the public page still needs a short capture where audio input, threshold state, and MIDI or OSC output are all visible at once."
 next_proof: "30-second screen recording showing frequency analysis, threshold adjustment, and MIDI or OSC output changing in real time."
+proof_objects:
+  - title: "Project repo documentation"
+    status: "public"
+    url: "https://github.com/bseverns/frZone"
+    external: true
+    note: "Public architecture, mapping, and quickstart material already support cautious structure claims."
+  - title: "Threshold + trigger screen capture"
+    status: "needed"
+    note: "Still needed: one short recording where audio input, threshold state, and MIDI or OSC output are visible together."
 unresolved:
   - "The current public page should not claim classroom outcomes or live-rig reliability yet."
   - "A public-safe trigger log or CSV example would strengthen the teaching and testing story."

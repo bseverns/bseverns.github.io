@@ -1,29 +1,24 @@
 ---
-layout: default
+layout: null
 title: "Studio Portfolio"
-seo_description: "Selected studio projects by Ben Severns"
+seo_description: "Studio route alias redirecting to the canonical Studio page."
 permalink: /studio/
-archived: true
 ---
-# Studio Portfolio
-<p>Hover or tap a card to get the gist; click through for the full noise.</p>
-
-<div class="cards selected-grid">
-{% assign featured_projects = site.projects | where: "featured", true | sort: "year" | reverse %}
-{% for item in featured_projects %}
-  <article class="card selected-card">
-    <a href="{{ item.url | relative_url }}">
-      {% if item.hero %}
-      <div class="card-thumb">
-        <img src="{{ item.hero | relative_url }}" alt="{{ item.hero_alt | default: item.title }}">
-      </div>
-      {% endif %}
-      <h3>{{ item.title }}</h3>
-      <p class="eyebrow">{{ item.year }}{% if item.media %} • {{ item.media }}{% elsif item.context %} • {{ item.context }}{% endif %}</p>
-      <p>{{ item.summary }}</p>
-    </a>
-  </article>
-{% endfor %}
-</div>
-
-<p class="archive-link-note">If you prefer the deep stacks, <a href="/#archive-note-title">dig through the archive ↗</a>.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="refresh" content="0; url={{ '/art.html' | relative_url }}">
+  <link rel="canonical" href="{{ '/art.html' | absolute_url }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }} · {{ site.title }}</title>
+  <meta name="description" content="{{ page.seo_description }}">
+  <link rel="stylesheet" href="{{ '/css/site.css' | relative_url }}">
+</head>
+<body>
+  <main class="content-area">
+    <h1>Studio moved</h1>
+    <p>The canonical Studio page lives at <a href="{{ '/art.html' | relative_url }}">/art.html</a>.</p>
+  </main>
+</body>
+</html>

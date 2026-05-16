@@ -20,6 +20,18 @@ public_now:
     note: "Machine-readable project summary and related themes."
 evidence_status: "Status: public-safe excerpt. The project has a clear public thesis and a source trail, but stronger public proof should remain diagrammatic and redacted until retention, retrieval, and participant-flow artifacts can be shown safely."
 next_proof: "Redacted interface or kiosk capture paired with a short note on retention, retrieval, and revocation behavior."
+proof_objects:
+  - title: "Memory Engine flow diagram"
+    status: "public"
+    url: "/assets/diagrams/memory-engine_flow.svg"
+    note: "Public-safe diagram of contribution, response, and return logic."
+  - title: "Catalog item"
+    status: "public"
+    url: "/catalog/items/memory-engine.json"
+    note: "Machine-readable public summary and relationship context."
+  - title: "Redacted interface or kiosk capture"
+    status: "needed"
+    note: "Still needed to show retention, retrieval, and revocation behavior without exposing participants."
 boundary_note: "This page intentionally avoids participant imagery, room-specific details, and any retention example that would overexpose the work's private or personal dimensions."
 unresolved:
   - "The page should not imply public deployment or participant outcomes beyond the current source trail."

@@ -9,6 +9,10 @@ seo_description: "Atlas of tools, scenes, learning environments, and systems tie
     <p class="eyebrow">Portfolio diagram</p>
     <h1>Atlas</h1>
     <p class="atlas-lede">A living topology of the lab: tools, scenes, learning environments, and the systems that distribute them. studio-notes sits across the map as the distilled layer for cross-project patterns, decisions, reference, and teaching cards. Hover to spotlight the map; click only the repo-backed nodes to open their pages.</p>
+    <div class="cta">
+      <a class="btn secondary" href="/atlas/methods/">Open methods</a>
+      <a class="btn secondary" href="/privacy-ethics/">Open privacy &amp; ethics</a>
+    </div>
   </div>
 </section>
 
