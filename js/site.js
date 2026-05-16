@@ -1,4 +1,6 @@
 (function () {
+  document.documentElement.classList.add('js');
+
   /*
    * Hey future weirdo (compliment): this file is the tiny brainstem for the site.
    * It wires up progressive image loading, asset health badges, the audio easter egg,
@@ -41,6 +43,23 @@
         main.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     });
+  }
+
+  /**
+   * Give the sticky header a stronger edge once the page is no longer at rest.
+   */
+  function syncStickyHeader() {
+    const header = document.querySelector('.site-header');
+    if (!header) {
+      return;
+    }
+
+    const update = function () {
+      header.classList.toggle('is-scrolled', window.scrollY > 12);
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
   }
 
   /**
@@ -279,6 +298,79 @@
     if (placeholder) {
       placeholder.hidden = presentCount !== 0;
     }
+  }
+
+  /**
+   * Apply gentle staggered reveal-ins to cards, sections, and diagrams so long pages read in chunks.
+   */
+  function initScrollReveal() {
+    const selectors = [
+      '.hero-copy',
+      '.hero-visual',
+      '.practice-arc-list li',
+      '.legacy-card',
+      '.card-grid .card',
+      '.cards .card',
+      '.diagram-panel',
+      '.fleet-band',
+      '.updates-grid > section',
+      '.atlas-hero .container > *',
+      '.atlas-diagram-frame',
+      '.atlas-section .container > *',
+      '.atlas-doors .card',
+      '.atlas-node-section',
+      '.page-intro .container > *',
+      '.press-section .container > *',
+      '.contact-section .container > *',
+      '.teaching-note .container > *'
+    ];
+
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const seen = new Set();
+    const elements = [];
+
+    selectors.forEach(function (selector) {
+      document.querySelectorAll(selector).forEach(function (element) {
+        if (seen.has(element)) {
+          return;
+        }
+        seen.add(element);
+        elements.push(element);
+      });
+    });
+
+    if (!elements.length) {
+      return;
+    }
+
+    elements.forEach(function (element, index) {
+      element.classList.add('reveal-on-scroll');
+      element.style.setProperty('--reveal-delay', String(Math.min((index % 6) * 70, 280)) + 'ms');
+    });
+
+    if (motionQuery.matches || typeof window.IntersectionObserver !== 'function') {
+      elements.forEach(function (element) {
+        element.classList.add('is-visible');
+      });
+      return;
+    }
+
+    const observer = new window.IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) {
+          return;
+        }
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      });
+    }, {
+      threshold: 0.16,
+      rootMargin: '0px 0px -8% 0px'
+    });
+
+    elements.forEach(function (element) {
+      observer.observe(element);
+    });
   }
 
   // Cache the current hero sketch so we don't initialize multiple instances.
@@ -700,6 +792,8 @@
   function init() {
     setCurrentYear();
     bindSkipLinkFocus();
+    syncStickyHeader();
+    initScrollReveal();
     activateHeroBanner();
     mountHeroImage();
     mountOtherImages();
