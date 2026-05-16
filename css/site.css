@@ -806,6 +806,10 @@ article.teaching li {
   transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
 }
 
+.arc-card {
+  align-content: start;
+}
+
 .practice-arc-list strong {
   font-size: 1rem;
 }
@@ -814,6 +818,33 @@ article.teaching li {
   color: var(--muted);
   font-size: 0.95rem;
   line-height: 1.5;
+}
+
+.arc-card-proof {
+  margin: 0.15rem 0 0;
+  color: var(--fg);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.arc-card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.9rem;
+  margin-top: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.arc-card-actions a {
+  color: var(--accent);
+  font-weight: 700;
+  text-decoration: none;
+  text-underline-offset: 0.18em;
+}
+
+.arc-card-actions a:hover,
+.arc-card-actions a:focus-visible {
+  text-decoration: underline;
 }
 
 .practice-arc-list.compact {
