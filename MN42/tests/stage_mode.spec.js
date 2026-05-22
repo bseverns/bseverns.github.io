@@ -143,8 +143,6 @@ test.describe('Stage mode', () => {
 
     await expect(page.locator('#status-label')).toHaveText('Panic baseline');
     await expect(page.locator('.status-message')).toContainText('Ctrl0 + Ctrl1 + Ctrl2');
-    await expect
-      .poll(() => page.evaluate(() => window.__nativeWrites.length))
-      .toBe(writesBefore);
+    await expect.poll(() => page.evaluate(() => window.__nativeWrites.length)).toBe(writesBefore);
   });
 });
