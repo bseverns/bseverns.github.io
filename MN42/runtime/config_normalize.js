@@ -153,11 +153,7 @@ function normalizeSlotConfig(slot, efLimit = 6) {
   if (Number.isFinite(topLevelEfIndex)) {
     efIndex = clamp(Math.round(topLevelEfIndex), -1, Math.max(-1, efMax));
   }
-  if (
-    efIndex < 0 &&
-    Number.isFinite(nestedEfIndex) &&
-    Math.round(nestedEfIndex) >= 0
-  ) {
+  if (efIndex < 0 && Number.isFinite(nestedEfIndex) && Math.round(nestedEfIndex) >= 0) {
     efIndex = clamp(Math.round(nestedEfIndex), -1, Math.max(-1, efMax));
   }
 

@@ -527,7 +527,8 @@ export function createProfileMacroScenePanel({
         removeBtn.type = 'button';
         removeBtn.className = 'lfo-route-remove';
         removeBtn.textContent = 'Remove';
-        removeBtn.disabled = !profileInteractable || profileRpcLocked || profileWizardBusy || lfoBusy;
+        removeBtn.disabled =
+          !profileInteractable || profileRpcLocked || profileWizardBusy || lfoBusy;
         removeBtn.addEventListener('click', () => removeLfoRoute(routeIndex));
         header.append(title, removeBtn);
         card.appendChild(header);
