@@ -1,5 +1,10 @@
 const PROFILE_SLOT_LABELS = ['A', 'B', 'C', 'D'];
 
+function slotTypeCssToken(type) {
+  if (typeof type !== 'string' || !type.trim()) return 'off';
+  return type.toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
 function initializeMeters(container, count, labelPrefix) {
   if (!container) return [];
   container.innerHTML = '';
@@ -37,6 +42,8 @@ export function createPerformerPanelController({
   setActiveProfileSlot = () => {},
   loadProfile = () => {},
   recallScene = () => {},
+  getSelectedSlot = () => 0,
+  selectSlot = () => {},
   setStatus = () => {}
 } = {}) {
   const {
@@ -59,6 +66,15 @@ export function createPerformerPanelController({
 
   let slotCells = [];
   let envMeters = [];
+
+  function highlightSelectedSlot() {
+    const selected = Math.max(0, Number(getSelectedSlot()) || 0);
+    slotCells.forEach((cell, index) => {
+      const isSelected = index === selected;
+      cell.classList.toggle('selected', isSelected);
+      cell.setAttribute('aria-pressed', isSelected ? 'true' : 'false');
+    });
+  }
 
   function bind() {
     connectBtn?.addEventListener('click', () => connect());
@@ -94,15 +110,21 @@ export function createPerformerPanelController({
         const slot = source[index];
         const state = cell.querySelector('.stage-slot-type');
         if (state) state.textContent = slotTypeAbbreviations[slot?.type] ?? slot?.type ?? '-';
+        cell.dataset.slotType = slotTypeCssToken(slot?.type);
       });
+      highlightSelectedSlot();
       return;
     }
 
     slotGrid.innerHTML = '';
     slotCells = source.map((slot, index) => {
-      const cell = document.createElement('div');
+      const cell = document.createElement('button');
+      cell.type = 'button';
       cell.className = 'stage-slot-cell';
       cell.dataset.index = String(index);
+      cell.dataset.slotType = slotTypeCssToken(slot?.type);
+      cell.setAttribute('aria-pressed', 'false');
+      cell.addEventListener('click', () => selectSlot(index));
 
       const label = document.createElement('span');
       label.className = 'stage-slot-label';
@@ -120,6 +142,7 @@ export function createPerformerPanelController({
       slotGrid.appendChild(cell);
       return cell;
     });
+    highlightSelectedSlot();
   }
 
   function paintTelemetry(frame) {
@@ -190,6 +213,7 @@ export function createPerformerPanelController({
     renderSlots,
     paintTelemetry,
     refresh,
+    highlightSelectedSlot,
     slotLabel
   };
 }
