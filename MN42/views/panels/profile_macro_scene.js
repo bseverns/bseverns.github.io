@@ -461,7 +461,10 @@ export function createProfileMacroScenePanel({
         { rpc: 'set_profile', slot: activeProfileSlot, profile: { arp: arpDraft } },
         { timeoutMs: PROFILE_RPC_TIMEOUT_MS }
       );
-      setArpStatus('ok', `${describeSlot()} saved. If this slot is active, the runtime updates now.`);
+      setArpStatus(
+        'ok',
+        `${describeSlot()} saved. If this slot is active, the runtime updates now.`
+      );
       setStatus('ok', 'Arp profile saved', describeSlot());
     } catch (err) {
       setArpStatus('err', `Arp save failed: ${err.message || String(err)}`);
