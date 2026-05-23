@@ -145,9 +145,12 @@ export function createTransportToolbarController({
     updateUsbMidiControls();
     setUsbMidiStatus('busy', 'Reading USB MIDI output state…');
     try {
-      const response = await runtime.sendRpc({ rpc: 'get_usb_midi' });
+      const response = await runtime.sendRpc({ rpc: 'get_usb_midi' }, { rollbackOnError: false });
       usbMidiOutEnabled = Boolean(response?.usb_midi_out);
-      setUsbMidiStatus('ok', usbMidiOutEnabled ? 'USB MIDI output is enabled.' : 'USB MIDI output is disabled.');
+      setUsbMidiStatus(
+        'ok',
+        usbMidiOutEnabled ? 'USB MIDI output is enabled.' : 'USB MIDI output is disabled.'
+      );
     } catch (err) {
       setUsbMidiStatus('err', `USB MIDI read failed: ${err.message || String(err)}`);
     } finally {
@@ -160,12 +163,22 @@ export function createTransportToolbarController({
     if (!usbMidiToggleSupported || usbMidiBusy) return;
     usbMidiBusy = true;
     updateUsbMidiControls();
-    setUsbMidiStatus('busy', usbMidiOutEnabled ? 'Disabling USB MIDI output…' : 'Enabling USB MIDI output…');
+    setUsbMidiStatus(
+      'busy',
+      usbMidiOutEnabled ? 'Disabling USB MIDI output…' : 'Enabling USB MIDI output…'
+    );
     try {
       const response = await runtime.sendRpc({ rpc: 'set_usb_midi', enabled: !usbMidiOutEnabled });
       usbMidiOutEnabled = Boolean(response?.usb_midi_out);
-      setUsbMidiStatus('ok', usbMidiOutEnabled ? 'USB MIDI output enabled.' : 'USB MIDI output disabled.');
-      setStatus('ok', 'USB MIDI updated', usbMidiOutEnabled ? 'USB MIDI output enabled.' : 'USB MIDI output disabled.');
+      setUsbMidiStatus(
+        'ok',
+        usbMidiOutEnabled ? 'USB MIDI output enabled.' : 'USB MIDI output disabled.'
+      );
+      setStatus(
+        'ok',
+        'USB MIDI updated',
+        usbMidiOutEnabled ? 'USB MIDI output enabled.' : 'USB MIDI output disabled.'
+      );
     } catch (err) {
       setUsbMidiStatus('err', `USB MIDI update failed: ${err.message || String(err)}`);
       setStatus('err', 'USB MIDI update failed', err.message || String(err));
