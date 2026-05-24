@@ -910,15 +910,17 @@ main {
 
 #stage-panel {
   display: grid;
-  grid-template-columns: minmax(420px, 0.92fr) minmax(360px, 0.88fr);
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 0.88fr);
   gap: 18px;
   align-items: start;
+  min-width: 0;
 }
 
 #live-panel {
   display: flex;
   flex-direction: column;
   gap: 18px;
+  min-width: 0;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
@@ -1236,6 +1238,7 @@ main {
 #editor-panel {
   display: grid;
   gap: 12px;
+  min-width: 0;
 }
 
 #slot-detail-panel {
@@ -1267,6 +1270,7 @@ main {
 
 .editor-shell-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: end;
   gap: 16px;
@@ -1289,6 +1293,14 @@ main {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.editor-shell-header > * {
+  min-width: 0;
+}
+
+.editor-tabbar {
+  max-width: 100%;
 }
 
 .editor-tab,
@@ -1576,10 +1588,6 @@ button:not(:disabled):focus-visible {
   display: none !important;
 }
 
-html:not([data-connected='true']) #stage-panel {
-  display: none;
-}
-
 html:not([data-connected='true']) #slot-detail-panel {
   display: none;
 }
@@ -1604,28 +1612,6 @@ html[data-ui-mode='advanced'] main {
   grid-template-columns:
     minmax(620px, 1.45fr)
     minmax(320px, 0.95fr);
-}
-
-html[data-ui-mode='advanced'][data-connected='true'] #stage-panel {
-  display: contents;
-}
-
-html[data-ui-mode='basic'][data-connected='true'] #stage-panel {
-  display: contents;
-}
-
-html[data-ui-mode='basic'] #live-panel,
-html[data-ui-mode='advanced'] #live-panel {
-  display: none;
-}
-
-html[data-ui-mode='advanced'] #editor-panel {
-  grid-column: 1;
-}
-
-html[data-ui-mode='advanced'] #connect-card {
-  grid-column: 2;
-  min-width: 0;
 }
 
 html[data-ui-mode='stage'] #stage-panel,
