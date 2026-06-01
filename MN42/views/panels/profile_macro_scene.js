@@ -14,7 +14,7 @@ const SCENE_SLOT_COUNT = 6;
 const ARP_SHAPE_OPTIONS = ['Up', 'Down', 'Up/Down', 'Random', 'Drunk', 'Euclidean'];
 const LFO_SHAPE_OPTIONS = ['Sine', 'Triangle', 'Saw', 'Square', 'Sample & Hold', 'Random Slew'];
 const LFO_SYNC_RATIO_OPTIONS = ['1/1', '1/2', '1/4', '1/8', '1/16', '1/32', 'x2', 'x4'];
-const LFO_ROUTE_TYPE_OPTIONS = ['Internal', 'MIDI CC 7-bit', 'MIDI CC 14-bit', 'OSC'];
+const LFO_ROUTE_TYPE_OPTIONS = ['Internal', 'MIDI CC 7-bit', 'MIDI CC 14-bit', 'OSC', 'Slot'];
 const LFO_INTERNAL_TARGET_OPTIONS = [
   'EF Gain Trim',
   'Arp Swing',
@@ -26,6 +26,7 @@ const LFO_INTERNAL_TARGET_OPTIONS = [
 ];
 const PROFILE_LFO_COUNT = 2;
 const PROFILE_MAX_ROUTES = 8;
+const SLOT_COUNT = 42;
 
 function createDefaultArpDraft() {
   return {
@@ -107,11 +108,20 @@ function normalizeLfoEntry(entry, index) {
 }
 
 function normalizeRouteEntry(entry = {}) {
+  const type = clampInteger(entry.type, 0, LFO_ROUTE_TYPE_OPTIONS.length - 1, 0);
+  const slot = clampInteger(entry.slot ?? entry.target, 0, SLOT_COUNT - 1, 0);
+  const minValue = clampInteger(entry.min ?? entry.minValue, 0, 127, 0);
+  const maxValue = clampInteger(entry.max ?? entry.maxValue, 0, 127, 127);
   return {
-    type: clampInteger(entry.type, 0, LFO_ROUTE_TYPE_OPTIONS.length - 1, 0),
+    type,
     lfo: clampInteger(entry.lfo, 0, PROFILE_LFO_COUNT - 1, 0),
     depth: clampFloat(entry.depth, 0, 1, 1, 3),
-    target: clampInteger(entry.target, 0, LFO_INTERNAL_TARGET_OPTIONS.length - 1, 0),
+    amount: clampInteger(entry.amount, -100, 100, 100),
+    min: Math.min(minValue, maxValue),
+    max: Math.max(minValue, maxValue),
+    target:
+      type === 4 ? slot : clampInteger(entry.target, 0, LFO_INTERNAL_TARGET_OPTIONS.length - 1, 0),
+    slot,
     channel: clampInteger(entry.channel, 1, 16, 1),
     cc_msb: clampInteger(entry.cc_msb, 0, 127, 0),
     cc_lsb: clampInteger(entry.cc_lsb, 0, 127, 32)
@@ -159,6 +169,9 @@ export function createProfileMacroScenePanel({
     lfoRefreshBtn = null,
     lfoSaveBtn = null,
     lfoStatusEl = null,
+    modMatrixRefreshBtn = null,
+    modMatrixBody = null,
+    modMatrixStatusEl = null,
     sceneGrid = null,
     sceneStatusEl = null
   } = elements;
@@ -170,6 +183,8 @@ export function createProfileMacroScenePanel({
   let macroAvailable = false;
   let arpBusy = false;
   let lfoBusy = false;
+  let modMatrixBusy = false;
+  let modMatrixReport = null;
   let arpDraft = createDefaultArpDraft();
   let lfoDraft = createDefaultLfoDraft();
   let activeProfileSlot = readProfileSlotPreference({ slotCount: PROFILE_LABELS.length });
@@ -266,6 +281,102 @@ export function createProfileMacroScenePanel({
     if (!lfoStatusEl) return;
     lfoStatusEl.dataset.state = state;
     lfoStatusEl.textContent = message;
+  }
+
+  function setModMatrixStatus(state, message) {
+    if (!modMatrixStatusEl) return;
+    modMatrixStatusEl.dataset.state = state;
+    modMatrixStatusEl.textContent = message;
+  }
+
+  function formatRouteRange(route) {
+    const min = route?.range?.min;
+    const max = route?.range?.max;
+    if (Number.isFinite(Number(min)) && Number.isFinite(Number(max))) {
+      return `${min}-${max}`;
+    }
+    return '-';
+  }
+
+  function formatRouteDepth(route) {
+    if (Number.isFinite(Number(route?.depth))) return Number(route.depth).toFixed(2);
+    if (Number.isFinite(Number(route?.amount))) return Number(route.amount).toFixed(2);
+    return '-';
+  }
+
+  function formatRouteLastValue(route) {
+    if (Number.isFinite(Number(route?.last_value))) return String(route.last_value);
+    return '-';
+  }
+
+  function renderModMatrix(report = modMatrixReport) {
+    if (!modMatrixBody) return;
+    modMatrixBody.innerHTML = '';
+    const routes = Array.isArray(report?.routes) ? report.routes : [];
+    const conflicts = Array.isArray(report?.conflicts) ? report.conflicts : [];
+    if (!report) {
+      const empty = document.createElement('p');
+      empty.className = 'lfo-empty';
+      empty.textContent = 'No modulation matrix loaded.';
+      modMatrixBody.appendChild(empty);
+      return;
+    }
+
+    const summary = document.createElement('div');
+    summary.className = 'mod-matrix-summary';
+    [`Routes ${routes.length}`, `Conflicts ${conflicts.length}`].forEach((text) => {
+      const item = document.createElement('span');
+      item.textContent = text;
+      summary.appendChild(item);
+    });
+    modMatrixBody.appendChild(summary);
+
+    if (conflicts.length) {
+      const list = document.createElement('ul');
+      list.className = 'mod-matrix-conflicts';
+      conflicts.forEach((conflict) => {
+        const item = document.createElement('li');
+        item.textContent = conflict.message ?? `${conflict.target ?? 'target'} collision`;
+        list.appendChild(item);
+      });
+      modMatrixBody.appendChild(list);
+    }
+
+    const tableWrap = document.createElement('div');
+    tableWrap.className = 'mod-matrix-table-wrap';
+    const table = document.createElement('table');
+    table.className = 'mod-matrix-table';
+    const thead = document.createElement('thead');
+    const headRow = document.createElement('tr');
+    ['Source', 'Transform', 'Destination', 'Depth', 'Range', 'Active', 'Last'].forEach((label) => {
+      const th = document.createElement('th');
+      th.textContent = label;
+      headRow.appendChild(th);
+    });
+    thead.appendChild(headRow);
+    table.appendChild(thead);
+
+    const tbody = document.createElement('tbody');
+    routes.slice(0, 80).forEach((route) => {
+      const row = document.createElement('tr');
+      [
+        route.source ?? '-',
+        route.transform ?? route.mode ?? '-',
+        route.destination ?? '-',
+        formatRouteDepth(route),
+        formatRouteRange(route),
+        route.active === false ? 'No' : 'Yes',
+        formatRouteLastValue(route)
+      ].forEach((value) => {
+        const td = document.createElement('td');
+        td.textContent = String(value);
+        row.appendChild(td);
+      });
+      tbody.appendChild(row);
+    });
+    table.appendChild(tbody);
+    tableWrap.appendChild(table);
+    modMatrixBody.appendChild(tableWrap);
   }
 
   function syncArpForm() {
@@ -511,7 +622,7 @@ export function createProfileMacroScenePanel({
       const empty = document.createElement('p');
       empty.className = 'lfo-empty';
       empty.textContent =
-        'No routes saved. Add one to assign an LFO to an internal target, MIDI CC, or OSC.';
+        'No routes saved. Add one to assign an LFO to an internal target, slot, MIDI CC, or OSC.';
       routeSection.appendChild(empty);
     } else {
       const routeList = document.createElement('div');
@@ -544,6 +655,10 @@ export function createProfileMacroScenePanel({
                 {
                   type: value,
                   target: 0,
+                  slot: 0,
+                  amount: 100,
+                  min: 0,
+                  max: 127,
                   channel: 1,
                   cc_msb: 0,
                   cc_lsb: 32
@@ -572,6 +687,42 @@ export function createProfileMacroScenePanel({
               max: 1,
               step: 0.01,
               onChange: (value) => updateRouteEntry(routeIndex, { depth: value })
+            })
+          )
+        );
+        grid.appendChild(
+          createLfoControl(
+            'Amount',
+            createNumberInput({
+              value: route.amount,
+              min: -100,
+              max: 100,
+              step: 1,
+              onChange: (value) => updateRouteEntry(routeIndex, { amount: value })
+            })
+          )
+        );
+        grid.appendChild(
+          createLfoControl(
+            'Min',
+            createNumberInput({
+              value: route.min,
+              min: 0,
+              max: 127,
+              step: 1,
+              onChange: (value) => updateRouteEntry(routeIndex, { min: value })
+            })
+          )
+        );
+        grid.appendChild(
+          createLfoControl(
+            'Max',
+            createNumberInput({
+              value: route.max,
+              min: 0,
+              max: 127,
+              step: 1,
+              onChange: (value) => updateRouteEntry(routeIndex, { max: value })
             })
           )
         );
@@ -621,6 +772,23 @@ export function createProfileMacroScenePanel({
                 max: 127,
                 step: 1,
                 onChange: (value) => updateRouteEntry(routeIndex, { cc_lsb: value })
+              })
+            )
+          );
+        }
+        if (route.type === 4) {
+          grid.appendChild(
+            createLfoControl(
+              'Slot',
+              createNumberInput({
+                value: route.slot + 1,
+                min: 1,
+                max: SLOT_COUNT,
+                step: 1,
+                onChange: (value) => {
+                  const slotIndex = clampInteger(value, 1, SLOT_COUNT, 1) - 1;
+                  updateRouteEntry(routeIndex, { slot: slotIndex, target: slotIndex });
+                }
               })
             )
           );
@@ -723,6 +891,7 @@ export function createProfileMacroScenePanel({
     updateMacroControls();
     updateArpControls();
     updateLfoControls();
+    updateModMatrixControls();
     sceneControls.updateControls();
     updateProfileHint();
   }
@@ -752,6 +921,11 @@ export function createProfileMacroScenePanel({
     if (lfoCard) {
       lfoCard.dataset.state = canInteract ? 'ready' : 'muted';
     }
+  }
+
+  function updateModMatrixControls() {
+    const canInteract = profileInteractable && !profileRpcLocked && !modMatrixBusy;
+    if (modMatrixRefreshBtn) modMatrixRefreshBtn.disabled = !canInteract;
   }
 
   // Single sink for the guided profile wizard status line.
@@ -982,7 +1156,11 @@ export function createProfileMacroScenePanel({
               type: route.type,
               lfo: route.lfo,
               depth: route.depth,
-              target: route.target,
+              amount: route.amount,
+              min: route.min,
+              max: route.max,
+              target: route.type === 4 ? route.slot : route.target,
+              ...(route.type === 4 ? { slot: route.slot } : {}),
               channel: route.channel,
               cc_msb: route.cc_msb,
               cc_lsb: route.cc_lsb
@@ -1000,6 +1178,34 @@ export function createProfileMacroScenePanel({
       lfoBusy = false;
       refreshProfileControls();
       renderLfoEditor();
+    }
+  }
+
+  async function refreshModMatrix() {
+    if (!profileInteractable || profileRpcLocked || modMatrixBusy) return;
+    modMatrixBusy = true;
+    updateModMatrixControls();
+    setModMatrixStatus('busy', 'Reading modulation matrix…');
+    try {
+      modMatrixReport = await runtime.sendRpc(
+        { rpc: 'get_mod_matrix' },
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackOnError: false }
+      );
+      renderModMatrix(modMatrixReport);
+      const conflictCount = Array.isArray(modMatrixReport?.conflicts)
+        ? modMatrixReport.conflicts.length
+        : 0;
+      setModMatrixStatus(
+        conflictCount ? 'busy' : 'ok',
+        conflictCount
+          ? `${conflictCount} modulation collision${conflictCount === 1 ? '' : 's'} reported.`
+          : 'Modulation matrix loaded.'
+      );
+    } catch (err) {
+      setModMatrixStatus('err', `Matrix read failed: ${err.message || String(err)}`);
+    } finally {
+      modMatrixBusy = false;
+      updateModMatrixControls();
     }
   }
 
@@ -1203,6 +1409,9 @@ export function createProfileMacroScenePanel({
     lfoRoutesClearBtn?.addEventListener('click', () => clearLfoRoutes());
     lfoRefreshBtn?.addEventListener('click', () => refreshProfileUtilities({ focus: 'lfo' }));
     lfoSaveBtn?.addEventListener('click', () => saveLfoProfile());
+    modMatrixRefreshBtn?.addEventListener('click', () => refreshModMatrix());
+    renderModMatrix();
+    setModMatrixStatus('muted', 'Connect to inspect modulation routes.');
 
     profileSaveBtn?.addEventListener('click', () =>
       runProfileRpc('save_profile', {
@@ -1269,12 +1478,16 @@ export function createProfileMacroScenePanel({
     macroAvailable = false;
     arpBusy = false;
     lfoBusy = false;
+    modMatrixBusy = false;
+    modMatrixReport = null;
     setActiveProfileSlot(activeProfileSlot, { persist: false });
     refreshProfileControls();
     renderLfoEditor();
+    renderModMatrix();
     syncRecoverySupportCopy();
     setArpStatus('muted', 'Connect to inspect the selected profile slot.');
     setLfoStatus('muted', 'Connect to inspect the selected profile slot.');
+    setModMatrixStatus('muted', 'Connect to inspect modulation routes.');
   }
 
   function onRuntimeError() {
@@ -1284,12 +1497,16 @@ export function createProfileMacroScenePanel({
     macroAvailable = false;
     arpBusy = false;
     lfoBusy = false;
+    modMatrixBusy = false;
+    modMatrixReport = null;
     setActiveProfileSlot(activeProfileSlot, { persist: false });
     refreshProfileControls();
     renderLfoEditor();
+    renderModMatrix();
     syncRecoverySupportCopy();
     setArpStatus('muted', 'Reconnect to inspect or save arp settings.');
     setLfoStatus('muted', 'Reconnect to inspect or save LFO settings.');
+    setModMatrixStatus('muted', 'Reconnect to inspect modulation routes.');
   }
 
   function onMacro({ available } = {}) {
