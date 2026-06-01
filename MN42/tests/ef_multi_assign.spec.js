@@ -19,20 +19,38 @@ test('ef assignment editor stages multi-slot follower routes', async ({ page }) 
   await page.evaluate(() => {
     const runtime = window.__MN42_RUNTIME;
     runtime?.stage?.((draft) => {
-      draft.efSlots = draft.efSlots || [];
-      draft.efSlots[0] = { slots: [] };
+      const followerCount =
+        runtime?.getState?.().manifest?.envelope_count ??
+        (Array.isArray(draft.efSlots) && draft.efSlots.length > 0 ? draft.efSlots.length : 6);
+      draft.slots = Array.isArray(draft.slots)
+        ? draft.slots.map((slot) => ({
+            ...(slot ?? {}),
+            ef_index: -1,
+            ef: { ...(slot?.ef ?? {}), index: -1 }
+          }))
+        : [];
+      draft.efSlots = Array.from({ length: followerCount }, () => ({ slots: [] }));
+      if (draft.envelopes && typeof draft.envelopes === 'object') {
+        draft.envelopes = {
+          ...draft.envelopes,
+          routing: Array.isArray(draft.envelopes.routing)
+            ? draft.envelopes.routing.map(() => -1)
+            : draft.envelopes.routing
+        };
+      }
       return draft;
     });
   });
   await page.waitForFunction(() => {
     const runtime = window.__MN42_RUNTIME;
-    const slots = runtime?.getState?.().staged?.efSlots?.[0]?.slots;
-    return Array.isArray(slots) && slots.length === 0;
+    const efSlots = runtime?.getState?.().staged?.efSlots;
+    return Array.isArray(efSlots) && efSlots.length > 0 && Array.isArray(efSlots[0]?.slots);
   });
   await page.getByRole('button', { name: 'Envelope' }).click();
 
   const efRow = page.locator('#ef-assignment-card .ef-row').first();
   await expect(efRow).toBeVisible();
+  await expect(efRow.locator('.ef-row-summary')).toHaveText('Unassigned');
   const slot08 = efRow.getByRole('button', { name: 'S08' });
   const slot42 = efRow.getByRole('button', { name: 'S42' });
   const slot01 = efRow.getByRole('button', { name: 'S01' });
