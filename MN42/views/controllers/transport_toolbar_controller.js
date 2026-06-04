@@ -295,7 +295,9 @@ export function createTransportToolbarController({
       usbMidiOutEnabled = Boolean(response?.usb_midi_out);
       setUsbMidiStatus(
         'ok',
-        `${usbMidiOutEnabled ? 'USB MIDI output is enabled.' : 'USB MIDI output is disabled.'}${formatUsbMidiCounters(response)}`
+        `${
+          usbMidiOutEnabled ? 'USB MIDI output is enabled.' : 'USB MIDI output is disabled.'
+        }${formatUsbMidiCounters(response)}`
       );
     } catch (err) {
       setUsbMidiStatus('err', `USB MIDI read failed: ${err.message || String(err)}`);
@@ -439,7 +441,9 @@ export function createTransportToolbarController({
       usbMidiOutEnabled = Boolean(response?.usb_midi_out);
       setUsbMidiStatus(
         'ok',
-        `${usbMidiOutEnabled ? 'USB MIDI output enabled.' : 'USB MIDI output disabled.'}${formatUsbMidiCounters(response)}`
+        `${
+          usbMidiOutEnabled ? 'USB MIDI output enabled.' : 'USB MIDI output disabled.'
+        }${formatUsbMidiCounters(response)}`
       );
       setStatus(
         'ok',
@@ -467,10 +471,7 @@ export function createTransportToolbarController({
     try {
       const response = await runtime.sendRpc({ rpc: 'midi_test' }, { rollbackOnError: false });
       usbMidiOutEnabled = Boolean(response?.usb_midi_out);
-      setUsbMidiStatus(
-        'ok',
-        `MIDI test sent.${formatUsbMidiCounters(response)}`
-      );
+      setUsbMidiStatus('ok', `MIDI test sent.${formatUsbMidiCounters(response)}`);
       setStatus('ok', 'MIDI test sent', formatUsbMidiCounters(response).trim());
     } catch (err) {
       setUsbMidiStatus('err', `MIDI test failed: ${err.message || String(err)}`);
