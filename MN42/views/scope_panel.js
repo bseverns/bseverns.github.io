@@ -205,7 +205,9 @@ export class ScopePanel {
           color: efColor
         },
         ...this.lastLfoValues.map((value, idx) => ({
-          label: `LFO ${idx + 1} ${this.formatLfoConfig(this.lastLfoConfigs[idx], { compact: true })}`,
+          label: `LFO ${idx + 1} ${this.formatLfoConfig(this.lastLfoConfigs[idx], {
+            compact: true
+          })}`,
           value,
           color: lfoColors[idx % lfoColors.length]
         }))
@@ -303,7 +305,9 @@ export class ScopePanel {
     const rate = sync
       ? String(config.sync_ratio_name || '')
       : Number.isFinite(Number(config.frequency_hz))
-        ? `${Number(config.frequency_hz).toFixed(2).replace(/\.?0+$/, '')}Hz`
+        ? `${Number(config.frequency_hz)
+            .toFixed(2)
+            .replace(/\.?0+$/, '')}Hz`
         : '';
     return [shape, depthLabel, rate].filter(Boolean).join(compact ? ' ' : ' · ');
   }
@@ -313,11 +317,15 @@ export class ScopePanel {
     if (!legend) return;
     const descriptor = this.formatLfoConfig(config, { compact: true });
     const prefix = descriptor ? `LFO ${idx + 1} ${descriptor} ` : `LFO ${idx + 1} `;
-    const firstNode = Array.from(legend.childNodes).find((node) => node.nodeType === Node.TEXT_NODE);
+    const firstNode = Array.from(legend.childNodes).find(
+      (node) => node.nodeType === Node.TEXT_NODE
+    );
     if (firstNode) {
       firstNode.nodeValue = prefix;
     }
-    legend.title = descriptor ? `LFO ${idx + 1}: ${this.formatLfoConfig(config)}` : `LFO ${idx + 1}`;
+    legend.title = descriptor
+      ? `LFO ${idx + 1}: ${this.formatLfoConfig(config)}`
+      : `LFO ${idx + 1}`;
   }
 
   // Keep the scope status line truthful about streaming vs stale telemetry.
