@@ -1,0 +1,281 @@
+- id: banners
+  title: Banners
+  branch: 2d
+  order: 10
+  medium: Prints / banners
+  status: preserved
+  archive_url: /2d/banners.html
+  thumbnail: /2d/full2d/post.jpg
+  images:
+    - /2d/full2d/post.jpg
+    - /2d/full2d/so_what.jpg
+  summary: Large-format protest signage prints wrestling with mediated doubles and public spectacle.
+
+- id: jacskass
+  title: Jacskass
+  branch: 2d
+  order: 20
+  medium: Drawing / collage / paint
+  status: preserved
+  archive_url: /2d/divine.html
+  thumbnail: /2d/full2d/ex1.jpg
+  images:
+    - /2d/full2d/ex1.jpg
+    - /2d/full2d/ex2.jpg
+    - /2d/full2d/ex3.jpg
+  summary: Drawing, collage, and paint drills chasing something bigger than the studio could hold.
+
+- id: the-truth-is-i-hate-to-tell-you
+  title: The truth is, I hate to tell you
+  branch: 2d
+  order: 30
+  medium: Durational drawing
+  status: preserved
+  archive_url: /2d/hate.html
+  thumbnail: /2d/full2d/hate1.jpg
+  images:
+    - /2d/full2d/hate1.jpg
+    - /2d/full2d/hate2.jpg
+    - /2d/full2d/hate3.jpg
+  summary: Durational drawing series made with an arm locked at 70 degrees, pushing endurance into mark-making.
+
+- id: night-stalker-reruns-on-channel-4
+  title: Night Stalker Re-Runs on Channel 4
+  branch: 2d
+  order: 40
+  medium: Photographs
+  status: distilled
+  archive_url: /2d/stalker.html
+  lineage_note: /lineage/night-stalker/
+  catalog_record: /catalog/items/night-stalker-reruns-on-channel-4.json
+  thumbnail: /2d/full2d/win1.jpg
+  images:
+    - /2d/full2d/win1.jpg
+    - /2d/full2d/win2.jpg
+    - /2d/full2d/win3.jpg
+    - /2d/full2d/win4.jpg
+    - /2d/full2d/win5.jpg
+    - /2d/full2d/win6.jpg
+    - /2d/full2d/win7.jpg
+    - /2d/full2d/win8.jpg
+    - /2d/full2d/win9.jpg
+    - /2d/full2d/win10.jpg
+  summary: "Lit domestic windows and mediated sight: an early hinge where threshold, distance, and memory-as-mistranslation first become visible."
+
+- id: untitled-act-of-war
+  title: Untitled (an act of war)
+  branch: 2d
+  order: 50
+  medium: Text / memorial image
+  status: preserved
+  archive_url: /2d/untitled.html
+  thumbnail: /2d/full2d/untitled.jpg
+  images:
+    - /2d/full2d/untitled.jpg
+  summary: Names of children killed by U.S. drone strikes rendered as a field of typography.
+
+- id: digital-bath-engram
+  title: Digital Bath / Engram
+  branch: 3d
+  order: 10
+  medium: Sculpture / projection / installation
+  status: distilled
+  archive_url: /3d/bath.html
+  lineage_note: /lineage/digital-bath-engram/
+  catalog_record: /catalog/items/digital-bath-engram.json
+  thumbnail: /3d/full3d/bath1.jpg
+  images:
+    - /3d/full3d/bath1.jpg
+    - /3d/full3d/bath2.jpg
+  summary: Projection-driven sculpture collaboration with N. Knutson, making shared memory spatial, unstable, and bodily.
+
+- id: delay-hasnt-cost-me-a-thing
+  title: Delay hasn't cost me a thing
+  branch: 3d
+  order: 20
+  medium: Sculpture / audio / light
+  status: preserved
+  archive_url: /3d/call.html
+  thumbnail: /3d/full3d/delay.jpg
+  images:
+    - /3d/full3d/delay.jpg
+  summary: Aluminum and copper light sculpture wired with sound, chasing the feeling of a held transmission.
+
+- id: i-hope-you-choke
+  title: I hope you choke
+  branch: 3d
+  order: 30
+  medium: Installation / action
+  status: preserved
+  archive_url: /3d/choke.html
+  thumbnail: /3d/full3d/choke-full.jpg
+  images:
+    - /3d/full3d/choke-full.jpg
+  summary: Ceiling fan, steel cable, and performative tension about memory's ghosts.
+
+- id: construct-obstruct
+  title: Construct / Obstruct
+  branch: 3d
+  order: 40
+  medium: Sculpture / projection / installation
+  status: preserved
+  archive_url: /3d/con.html
+  thumbnail: /3d/full3d/conob.jpeg
+  images:
+    - /3d/full3d/conob.jpeg
+  summary: Collaborative projection installation with N. Knutson and N. Smith on layered light and interference.
+
+- id: are-you-ready-to-fly
+  title: Art you ready to fly?
+  branch: 3d
+  order: 50
+  medium: Installation / software / microcontrollers
+  status: distilled
+  archive_url: /3d/fly.html
+  lineage_note: /lineage/fly/
+  catalog_record: /catalog/items/are-you-ready-to-fly.json
+  thumbnail: /3d/full3d/Fly1.jpg
+  images:
+    - /3d/full3d/Fly1.jpg
+    - /3d/full3d/Fly2.jpg
+    - /3d/full3d/Fly3.jpg
+    - /3d/full3d/Fly4.jpg
+  video:
+    - https://player.vimeo.com/video/23238092
+  summary: Immersive installation built with Processing, Max/MSP, and microcontrollers; early proof that systems, stacks, and participation were already part of the work.
+
+- id: generative-fabrication-techniques
+  title: Generative Fabrication Techniques
+  branch: 3d
+  order: 60
+  medium: Code / fabrication
+  status: preserved
+  archive_url: /3d/genfab.html
+  thumbnail: /img/portfolio/3d/genF1.jpg
+  images:
+    - /img/portfolio/3d/genF1.jpg
+    - /img/portfolio/3d/genF2.jpg
+    - /img/portfolio/3d/genF3.jpg
+  summary: Structure Synth and Processing studies that pushed field math into PETG prints.
+
+- id: id-never-lie-to-you
+  title: I'd never lie to you
+  branch: 3d
+  order: 70
+  medium: Action
+  status: preserved
+  archive_url: /3d/lie.html
+  thumbnail: /3d/full3d/double.jpg
+  images:
+    - /3d/full3d/double.jpg
+  summary: Action piece with wood, sheetrock, and arrows documenting an uneasy promise.
+
+- id: i-cant-tell-where-to-begin
+  title: I can't tell where to begin
+  branch: 3d
+  order: 80
+  medium: Action / audio trace
+  status: preserved
+  archive_url: /3d/party.html
+  thumbnail: /3d/full3d/where.jpg
+  images:
+    - /3d/full3d/where.jpg
+  summary: Action artifact preserving the scraps and audio of one crowded planning session.
+
+- id: red-stairs
+  title: Red Stairs / Somebody please save us
+  branch: 3d
+  order: 90
+  medium: Stage installation / action
+  status: preserved
+  archive_url: /3d/redstairs.html
+  thumbnail: /3d/full3d/redstairs.jpg
+  images:
+    - /3d/full3d/redstairs.jpg
+    - /3d/full3d/redstairs_2.jpg
+  summary: Stage installation triggering applause and a spotlight the moment anyone climbed aboard.
+
+- id: we-hold-these-truths
+  title: We hold these truths
+  branch: 3d
+  order: 100
+  medium: Installation
+  status: preserved
+  archive_url: /3d/truth.html
+  thumbnail: /3d/full3d/weholdthesetruths.jpg
+  images:
+    - /3d/full3d/weholdthesetruths.jpg
+  summary: One-at-a-time church service installation that splits sight and sound into separate discomforts.
+
+- id: theyre-preparing-for-war
+  title: They're preparing for war
+  branch: 3d
+  order: 110
+  medium: Installation / performance materials
+  status: preserved
+  archive_url: /3d/war.html
+  thumbnail: /3d/full3d/prepare.jpg
+  images:
+    - /3d/full3d/prepare.jpg
+  summary: Installation staging performance materials for a looming conflict.
+
+- id: id-never-lie-to-you-warning
+  title: I'd never lie to you (warning)
+  branch: 3d
+  order: 120
+  medium: Neon / Java / installation
+  status: distilled
+  archive_url: /3d/warning.html
+  lineage_note: /lineage/symbolizing-everything/
+  catalog_record: /catalog/items/symbolizing-everything.json
+  thumbnail: /3d/full3d/lie2.jpg
+  images:
+    - /3d/full3d/lie2.jpg
+    - /3d/full3d/lie_big.jpg
+  summary: Neon and Java hybrid installation, now linked into the Symbolizing Everything lineage note.
+
+- id: i-was-young-once
+  title: I was young once
+  branch: lineage
+  order: 10
+  medium: Object / prototype / launch logic
+  status: needs-media
+  lineage_note: /lineage/i-was-young-once/
+  catalog_record: /catalog/items/i-was-young-once.json
+  summary: Flight, iteration, and prototype ambition before those instincts migrated into tools and systems.
+
+- id: scar
+  title: Scar
+  branch: lineage
+  order: 20
+  medium: Object / injury / repair
+  status: needs-media
+  lineage_note: /lineage/scar/
+  catalog_record: /catalog/items/scar.json
+  summary: Injury, repair, survival, and continuation made material before machine care became a named public theme.
+
+- id: a-madman-wrapped-in-the-clothes-of-a-deadman
+  title: A madman, wrapped in the clothes of a deadman
+  branch: lineage
+  order: 30
+  medium: Pinhole photograph / image journal
+  status: distilled
+  lineage_note: /lineage/deadman/
+  catalog_record: /catalog/items/a-madman-wrapped-in-the-clothes-of-a-deadman.json
+  thumbnail: /img/lineage/deadman/deadman_01.jpg
+  images:
+    - /img/lineage/deadman/deadman_01.jpg
+  summary: Fragmented memory after injury, now legible as one root of later translation and retention questions.
+
+- id: two-lefts-and-another-right-out-the-door
+  title: Two lefts and another right out the door
+  branch: lineage
+  order: 40
+  medium: Sensing / code / installation
+  status: distilled
+  lineage_note: /lineage/two-lefts-and-another-right-out-the-door/
+  catalog_record: /catalog/items/two-lefts-and-another-right-out-the-door.json
+  thumbnail: /3d/full3d/Fly2.jpg
+  images:
+    - /3d/full3d/Fly2.jpg
+  summary: Sensors, code, and room activity translated into trace; an early source for later participation systems.

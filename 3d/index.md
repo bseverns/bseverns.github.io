@@ -13,125 +13,24 @@ archived: true
 
 <nav class="legacy-links" aria-label="Anchor lineage dossiers">
   <h2>Anchor lineage dossiers</h2>
-  <ul class="legacy-list">
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/lineage/i-was-young-once/">
-        <h4>I was young once</h4>
-        <p class="legacy-lede">Flight, iteration, and prototype ambition before those instincts migrated into tools and systems.</p>
-        <span class="legacy-cta">Read the lineage note →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/lineage/fly/">
-        <h4>Art you ready to fly?</h4>
-        <p class="legacy-lede">An early hybrid stack proving that participation, software, hardware, and room logic were already one problem.</p>
-        <span class="legacy-cta">Read the lineage note →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/lineage/digital-bath-engram/">
-        <h4>Digital Bath / Engram</h4>
-        <p class="legacy-lede">Projection and sculpture used to turn collaborative memory into unstable public space.</p>
-        <span class="legacy-cta">Read the lineage note →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/lineage/symbolizing-everything/">
-        <h4>Symbolizing Everything</h4>
-        <p class="legacy-lede">Code, light, language, and network behavior gathered into one symbolic field.</p>
-        <span class="legacy-cta">Read the lineage note →</span>
-      </a>
-    </li>
+  <ul class="legacy-work-grid compact">
+    {% assign anchor_ids = "i-was-young-once,are-you-ready-to-fly,digital-bath-engram,id-never-lie-to-you-warning,two-lefts-and-another-right-out-the-door" | split: "," %}
+    {% for id in anchor_ids %}
+      {% assign work = site.data.legacy_works | where: "id", id | first %}
+      {% if work %}
+        {% include legacy-work-card.html work=work %}
+      {% endif %}
+    {% endfor %}
   </ul>
 </nav>
 
 <nav class="legacy-links" aria-label="Legacy 3D works catalog">
   <h2>Projects</h2>
-  <ul class="legacy-list">
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/bath.html">
-        <h4>Digital Bath / Engram</h4>
-        <p class="legacy-lede">Projection-driven sculpture collaboration with N. Knutson, making shared memory spatial, unstable, and bodily.</p>
-        <span class="legacy-cta">Visit Digital Bath / Engram →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/call.html">
-        <h4>Delay hasn't cost me a thing</h4>
-        <p class="legacy-lede">Aluminum and copper light sculpture wired with sound, chasing the feeling of a held transmission.</p>
-        <span class="legacy-cta">See the sculpture →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/choke.html">
-        <h4>I hope you choke</h4>
-        <p class="legacy-lede">Ceiling fan, steel cable, and performative tension about memory's ghosts.</p>
-        <span class="legacy-cta">Read the installation notes →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/con.html">
-        <h4>Construct / Obstruct</h4>
-        <p class="legacy-lede">Collaborative projection installation with N. Knutson &amp; N. Smith on layered light and interference.</p>
-        <span class="legacy-cta">Open Construct / Obstruct →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/fly.html">
-        <h4>Are you ready to fly?</h4>
-        <p class="legacy-lede">Immersive installation built with Processing, Max/MSP, and microcontrollers: early proof that systems, stacks, and participation were already part of the work.</p>
-        <span class="legacy-cta">Enter the installation →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/genfab.html">
-        <h4>Generative Fabrication Techniques</h4>
-        <p class="legacy-lede">Structure Synth + Processing studies that marched SDF math straight into PETG prints.</p>
-        <span class="legacy-cta">Read the fabrication log →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/lie.html">
-        <h4>I'd never lie to you</h4>
-        <p class="legacy-lede">Action piece with wood, sheetrock, and arrows documenting an uneasy promise.</p>
-        <span class="legacy-cta">View the action →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/party.html">
-        <h4>I can't tell where to begin</h4>
-        <p class="legacy-lede">Action artifact preserving the scraps and audio of one crowded planning session.</p>
-        <span class="legacy-cta">Visit the archive →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/redstairs.html">
-        <h4>Red Stairs / Somebody please save us</h4>
-        <p class="legacy-lede">Stage installation triggering applause and a spotlight the moment anyone climbed aboard.</p>
-        <span class="legacy-cta">Step onto Red Stairs →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/truth.html">
-        <h4>We hold these truths</h4>
-        <p class="legacy-lede">One-at-a-time church service installation that splits sight and sound into separate discomforts.</p>
-        <span class="legacy-cta">See the installation →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/war.html">
-        <h4>They're preparing for war</h4>
-        <p class="legacy-lede">Installation staging performance materials for a looming conflict.</p>
-        <span class="legacy-cta">View the documentation →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/3d/warning.html">
-        <h4>I'd never lie to you (warning)</h4>
-        <p class="legacy-lede">Neon + Java hybrid installation; documentation is preserved here as-is.</p>
-        <span class="legacy-cta">Open the warning set →</span>
-      </a>
-    </li>
+  <ul class="legacy-work-grid">
+    {% assign works_3d = site.data.legacy_works | where: "branch", "3d" | sort: "order" %}
+    {% for work in works_3d %}
+      {% include legacy-work-card.html work=work %}
+    {% endfor %}
   </ul>
 </nav>
 

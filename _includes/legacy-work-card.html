@@ -1,0 +1,13 @@
+{% assign work = include.work %}
+<li class="legacy-work-card" data-status="{{ work.status }}">
+  <a class="legacy-work-card-link" href="{{ work.archive_url | default: work.lineage_note | default: work.catalog_record | relative_url }}" aria-label="{{ work.title | escape }}{% if work.medium %}, {{ work.medium | escape }}{% endif %}" title="{{ work.title | escape }}">
+    {% if work.thumbnail %}
+    <img src="{{ work.thumbnail | relative_url }}" alt="{{ work.title | escape }} documentation image" loading="lazy" decoding="async">
+    {% else %}
+    <span class="legacy-work-missing" aria-hidden="true">{{ work.title | slice: 0, 1 }}</span>
+    {% endif %}
+    <span class="legacy-work-body" aria-hidden="true">
+      <strong>{{ work.title }}</strong>
+    </span>
+  </a>
+</li>

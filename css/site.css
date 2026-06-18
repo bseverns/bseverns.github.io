@@ -1267,43 +1267,92 @@ article.teaching li {
   margin-top: clamp(36px, 7vw, 72px);
 }
 
-.legacy-image-list {
+.legacy-work-grid {
   list-style: none;
   margin: clamp(18px, 3vw, 28px) 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
-  gap: clamp(14px, 2vw, 20px);
+  grid-template-columns: repeat(auto-fill, minmax(144px, 1fr));
+  gap: clamp(10px, 1.6vw, 16px);
 }
 
-.legacy-image-list a {
-  display: grid;
-  gap: 0.65rem;
+.legacy-work-grid.compact {
+  grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+}
+
+.legacy-work-card {
+  min-width: 0;
+}
+
+.legacy-work-card-link {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
   color: var(--fg);
   text-decoration: none;
-}
-
-.legacy-image-list img {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  border-radius: 0.75rem;
   border: 1px solid var(--border);
-  background: var(--surface-muted);
+  border-radius: 0.65rem;
+  overflow: hidden;
+  background: var(--surface);
   box-shadow: var(--shadow-soft);
   transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
 }
 
-.legacy-image-list span {
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-.legacy-image-list a:hover img,
-.legacy-image-list a:focus-visible img {
+.legacy-work-card-link:hover,
+.legacy-work-card-link:focus-visible {
   transform: translateY(-2px);
   border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
   box-shadow: var(--shadow-lift);
+}
+
+.legacy-work-card img,
+.legacy-work-missing {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1;
+  display: block;
+  background: var(--surface-muted);
+}
+
+.legacy-work-card img {
+  object-fit: cover;
+}
+
+.legacy-work-missing {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+  font-family: var(--font-family-display);
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+.legacy-work-body {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  align-content: end;
+  padding: 0.7rem;
+  opacity: 0;
+  background:
+    linear-gradient(180deg, transparent 0%, hsl(222 36% 6% / 0.52) 42%, hsl(222 36% 6% / 0.92) 100%);
+  color: white;
+  transition: opacity 0.22s ease;
+}
+
+.legacy-work-card-link:hover .legacy-work-body,
+.legacy-work-card-link:focus-visible .legacy-work-body {
+  opacity: 1;
+}
+
+.legacy-work-body strong {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  font-family: var(--font-family-display);
+  font-size: 0.95rem;
+  line-height: 1.16;
 }
 
 .archive-roots p {

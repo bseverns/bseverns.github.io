@@ -13,69 +13,24 @@ archived: true
 
 <nav class="legacy-links" aria-label="Anchor lineage dossiers">
   <h2>Anchor lineage dossiers</h2>
-  <ul class="legacy-list">
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/lineage/night-stalker/">
-        <h4>Night Stalker Re-Runs on Channel 4</h4>
-        <p class="legacy-lede">The clearest photographic hinge into the later work on mediated seeing, consent, threshold, and memory.</p>
-        <span class="legacy-cta">Read the lineage note →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/lineage/scar/">
-        <h4>Scar</h4>
-        <p class="legacy-lede">A bodily and material bridge from crash, damage, and continuation toward repair culture and machine care.</p>
-        <span class="legacy-cta">Read the lineage note →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/lineage/deadman/">
-        <h4>A madman, wrapped in the clothes of a deadman</h4>
-        <p class="legacy-lede">Fragmented memory after injury, now legible as one root of later translation and retention questions.</p>
-        <span class="legacy-cta">Read the lineage note →</span>
-      </a>
-    </li>
+  <ul class="legacy-work-grid compact">
+    {% assign anchor_ids = "night-stalker-reruns-on-channel-4,scar,a-madman-wrapped-in-the-clothes-of-a-deadman" | split: "," %}
+    {% for id in anchor_ids %}
+      {% assign work = site.data.legacy_works | where: "id", id | first %}
+      {% if work %}
+        {% include legacy-work-card.html work=work %}
+      {% endif %}
+    {% endfor %}
   </ul>
 </nav>
 
 <nav class="legacy-links" aria-label="Legacy 2D works catalog">
   <h2>Projects</h2>
-  <ul class="legacy-list">
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/2d/banners.html">
-        <h4>Banners</h4>
-        <p class="legacy-lede">Large-format protest signage prints wrestling with mediated doubles and public spectacle.</p>
-        <span class="legacy-cta">View Banners →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/2d/divine.html">
-        <h4>Jacskass</h4>
-        <p class="legacy-lede">Drawing, collage, and paint drills chasing something bigger than the studio could hold.</p>
-        <span class="legacy-cta">View Jacskass →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/2d/hate.html">
-        <h4>The truth is, I hate to tell you</h4>
-        <p class="legacy-lede">Durational drawing series made with an arm locked at 70°, pushing endurance into mark-making.</p>
-        <span class="legacy-cta">View the series →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/2d/stalker.html">
-        <h4>Nightstalker Re-Runs on Channel 4</h4>
-        <p class="legacy-lede">Lit domestic windows and mediated sight: an early hinge where threshold, distance, and memory-as-mistranslation first become visible.</p>
-        <span class="legacy-cta">View the photo set →</span>
-      </a>
-    </li>
-    <li class="legacy-card">
-      <a class="legacy-card-link" href="/2d/untitled.html">
-        <h4>Untitled (an act of war)</h4>
-        <p class="legacy-lede">Names of children killed by U.S. drone strikes rendered as a field of typography.</p>
-        <span class="legacy-cta">Read the memorial →</span>
-      </a>
-    </li>
+  <ul class="legacy-work-grid">
+    {% assign works_2d = site.data.legacy_works | where: "branch", "2d" | sort: "order" %}
+    {% for work in works_2d %}
+      {% include legacy-work-card.html work=work %}
+    {% endfor %}
   </ul>
 </nav>
 
