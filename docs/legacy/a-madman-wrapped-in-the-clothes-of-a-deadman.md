@@ -3,6 +3,11 @@ layout: default
 title: "A madman, wrapped in the clothes of a deadman"
 seo_description: "Lineage note for A madman, wrapped in the clothes of a deadman, a post-TBI image journal in Ben Severns's practice."
 permalink: /lineage/deadman/
+lineage_images:
+  - src: /img/lineage/deadman/deadman_01.jpg
+    intended: /img/lineage/deadman/deadman_01.jpg
+    caption: Pinhole photograph, 2007
+    alt: Pinhole photograph from A madman, wrapped in the clothes of a deadman.
 ---
 
 # A madman, wrapped in the clothes of a deadman
@@ -13,10 +18,7 @@ That instability becomes important later. Questions of mistranslation, partial r
 
 <p class="origin-callout">Long before memory tools and consent-forward systems became named projects, this work was already dealing with retrieval under loss.</p>
 
-## Expected images
-
-- `/img/lineage/deadman/deadman_01.jpg`
-- `/img/lineage/deadman/deadman_02.jpg`
+{% include lineage-gallery.html %}
 
 ## Reference routes
 
