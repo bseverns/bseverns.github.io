@@ -3,6 +3,19 @@ layout: default
 title: "Night Stalker Re-Runs on Channel 4"
 seo_description: "Lineage note for Night Stalker Re-Runs on Channel 4, an early photographic hinge in Ben Severns's practice."
 permalink: /lineage/night-stalker/
+lineage_images:
+  - src: /2d/full2d/win1.jpg
+    intended: /img/lineage/night-stalker/night-stalker_01.jpg
+    caption: Night Stalker image 01
+    alt: Lit domestic window photographed from outside at night.
+  - src: /2d/full2d/win2.jpg
+    intended: /img/lineage/night-stalker/night-stalker_02.jpg
+    caption: Night Stalker image 02
+    alt: Domestic window photographed at night through distance and framing.
+  - src: /2d/full2d/win3.jpg
+    intended: /img/lineage/night-stalker/night-stalker_contactsheet.jpg
+    caption: Night Stalker sequence image
+    alt: Another night-window photograph from the Night Stalker series.
 ---
 
 # Night Stalker Re-Runs on Channel 4
@@ -13,11 +26,7 @@ Those questions continue forward into later work on consent, participation, memo
 
 <p class="origin-callout">This lineage note sits between the preserved archive page and the current studio framing. It is here to keep the photographic root legible without rewriting the original project page.</p>
 
-## Expected images
-
-- `/img/lineage/night-stalker/night-stalker_01.jpg`
-- `/img/lineage/night-stalker/night-stalker_02.jpg`
-- `/img/lineage/night-stalker/night-stalker_contactsheet.jpg`
+{% include lineage-gallery.html %}
 
 ## Reference routes
 

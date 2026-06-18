@@ -3,6 +3,15 @@ layout: default
 title: "Digital Bath / Engram"
 seo_description: "Lineage note for Digital Bath / Engram, a projection and sculptural memory work in Ben Severns's practice."
 permalink: /lineage/digital-bath-engram/
+lineage_images:
+  - src: /3d/full3d/bath1.jpg
+    intended: /img/lineage/digital-bath/digital-bath_01.jpg
+    caption: Digital Bath installation view 01
+    alt: Projection and sculptural installation documentation from Digital Bath / Engram.
+  - src: /3d/full3d/bath2.jpg
+    intended: /img/lineage/digital-bath/digital-bath_02.jpg
+    caption: Digital Bath installation view 02
+    alt: Second installation documentation image from Digital Bath / Engram.
 ---
 
 # Digital Bath / Engram
@@ -13,10 +22,7 @@ That line continues later in memory appliances, image systems, and public partic
 
 <p class="origin-callout">The move from installation to system is not a rejection of this work. It is a later attempt to make the same instability more durable, shareable, and ethically explicit.</p>
 
-## Expected images
-
-- `/img/lineage/digital-bath/digital-bath_01.jpg`
-- `/img/lineage/digital-bath/digital-bath_02.jpg`
+{% include lineage-gallery.html %}
 
 ## Reference routes
 

@@ -1216,6 +1216,96 @@ article.teaching li {
   color: var(--fg);
 }
 
+.lineage-gallery {
+  margin-top: clamp(42px, 8vw, 84px);
+}
+
+.lineage-gallery h2 {
+  margin: 0 0 1rem;
+}
+
+.lineage-image-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: clamp(16px, 3vw, 28px);
+  max-width: 1100px;
+}
+
+.lineage-image-card {
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.lineage-image-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 0.9rem;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  box-shadow: var(--shadow-soft);
+}
+
+.lineage-image-card figcaption {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.lineage-image-card figcaption strong {
+  color: var(--fg);
+}
+
+.lineage-image-card figcaption code {
+  white-space: normal;
+}
+
+.archive-image-intro {
+  margin-top: clamp(36px, 7vw, 72px);
+}
+
+.legacy-image-list {
+  list-style: none;
+  margin: clamp(18px, 3vw, 28px) 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  gap: clamp(14px, 2vw, 20px);
+}
+
+.legacy-image-list a {
+  display: grid;
+  gap: 0.65rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.legacy-image-list img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.24s ease, border-color 0.24s ease, box-shadow 0.24s ease;
+}
+
+.legacy-image-list span {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.legacy-image-list a:hover img,
+.legacy-image-list a:focus-visible img {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+  box-shadow: var(--shadow-lift);
+}
+
 .archive-roots p {
   max-width: 62ch;
 }

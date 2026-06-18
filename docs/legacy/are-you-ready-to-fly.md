@@ -3,6 +3,19 @@ layout: default
 title: "Art you ready to fly? (Well it looks like we have our work cut out for us)"
 seo_description: "Lineage note for Art you ready to fly?, an early hybrid interaction stack in Ben Severns's practice."
 permalink: /lineage/fly/
+lineage_images:
+  - src: /3d/full3d/Fly1.jpg
+    intended: /img/lineage/fly/fly_frame.jpg
+    caption: Fly installation frame
+    alt: Installation documentation from Art you ready to fly.
+  - src: /3d/full3d/Fly2.jpg
+    intended: /img/lineage/fly/fly_install_01.jpg
+    caption: Fly installation view 01
+    alt: Room-scale installation view from Art you ready to fly.
+  - src: /3d/full3d/Fly3.jpg
+    intended: /img/lineage/fly/fly_install_02.jpg
+    caption: Fly installation view 02
+    alt: Projection and installation documentation from Art you ready to fly.
 ---
 
 # Art you ready to fly? (Well it looks like we have our work cut out for us)
@@ -13,11 +26,7 @@ That matters now because it keeps the current systems work from being misread as
 
 <p class="origin-callout">If the present-day work looks infrastructural, this piece shows the infrastructure instinct was already there, just in a rawer room-scale form.</p>
 
-## Expected images
-
-- `/img/lineage/fly/fly_frame.jpg`
-- `/img/lineage/fly/fly_install_01.jpg`
-- `/img/lineage/fly/fly_install_02.jpg`
+{% include lineage-gallery.html %}
 
 ## Reference routes
 

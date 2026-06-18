@@ -1,0 +1,22 @@
+{% if page.lineage_images %}
+<section class="lineage-gallery" aria-labelledby="lineage-gallery-title">
+  <h2 id="lineage-gallery-title">Documentation images</h2>
+  <div class="lineage-image-grid">
+    {% for image in page.lineage_images %}
+    <figure class="lineage-image-card">
+      <img
+        src="{{ image.src | relative_url }}"
+        alt="{{ image.alt | escape }}"
+        loading="lazy"
+        decoding="async">
+      <figcaption>
+        <strong>{{ image.caption | default: image.alt | escape }}</strong>
+        {% if image.intended %}
+        <span>Canonical path: <code>{{ image.intended }}</code></span>
+        {% endif %}
+      </figcaption>
+    </figure>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}

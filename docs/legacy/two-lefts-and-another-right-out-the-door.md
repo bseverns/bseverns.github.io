@@ -3,6 +3,11 @@ layout: default
 title: "Two lefts and another right out the door"
 seo_description: "Lineage note for Two lefts and another right out the door, an early sensor-driven visual trace work."
 permalink: /lineage/two-lefts-and-another-right-out-the-door/
+lineage_images:
+  - src: /3d/full3d/Fly2.jpg
+    intended: /img/lineage/fly/fly_install_01.jpg
+    caption: Room trace / installation context
+    alt: Installation documentation image used as the visual reference for Two lefts and another right out the door.
 ---
 
 # Two lefts and another right out the door
@@ -12,6 +17,8 @@ This work matters because it turns room activity into trace. Sensors, code, and 
 What changes later is the surrounding ethics, documentation, and operational clarity. The basic impulse is already here: a system watches, translates, and renders motion into form.
 
 <p class="origin-callout">Even in earlier experimental stacks, the practice is already asking how bodies become signals and how signals become public form.</p>
+
+{% include lineage-gallery.html %}
 
 ## Reference routes
 
