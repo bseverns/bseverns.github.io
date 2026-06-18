@@ -41,6 +41,25 @@
           <p class="atlas-node-meta"><a href="{{ page.repo }}" target="_blank" rel="noopener">Repository &rarr;</a></p>
           {% endif %}
         </header>
+        {% if page.reading %}
+        <section class="atlas-node-reading" aria-labelledby="node-reading">
+          <h2 id="node-reading">{{ page.reading.title | default: "What this makes visible" }}</h2>
+          <div class="atlas-reading-prose">
+            {% if page.reading.body %}
+            <p class="atlas-reading-lede">{{ page.reading.body }}</p>
+            {% endif %}
+            {% if page.reading.stakes %}
+            <p>{{ page.reading.stakes }}</p>
+            {% endif %}
+            {% if page.reading.evidence %}
+            <p>{{ page.reading.evidence }}</p>
+            {% endif %}
+            {% if page.reading.boundary %}
+            <p class="atlas-reading-boundary">{{ page.reading.boundary }}</p>
+            {% endif %}
+          </div>
+        </section>
+        {% endif %}
         {% if page.what_it_is %}
         <section class="atlas-node-section" aria-labelledby="node-what">
           <h2 id="node-what">What it is</h2>

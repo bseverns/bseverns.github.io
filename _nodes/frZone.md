@@ -5,6 +5,24 @@ pillar: "Tools"
 status: "working study"
 summary: "Frequency-zone trigger instrument for turning sound analysis into visible thresholds and downstream MIDI or OSC events in performance and teaching contexts."
 repo: "https://github.com/bseverns/frZone"
+reading:
+  title: "Where sound becomes a switch"
+  body: >
+    frZone listens for the moment when sound stops being atmosphere and starts
+    becoming action. Bands, thresholds, and triggers make an event stream out
+    of pressure in the air.
+  stakes: >
+    The work matters because analysis can disappear into the machine. frZone
+    keeps the threshold visible, so a performer or learner can see how a sound
+    becomes a message, a change, or a cue.
+  evidence: >
+    The architecture notes, MIDI map, OSC addresses, and quickstart material
+    show the grammar of the tool. The next proof is a short capture where the
+    input, threshold, and output move together in public.
+  boundary: >
+    The public claim should stay with legible trigger behavior. Classroom
+    outcomes, scene reliability, and larger rig integration need direct
+    evidence before they become stronger claims.
 what_it_is: "frZone is a frequency-analysis tool that divides audio into playable or teachable zones. It belongs in the Atlas as both a DSP study and a classroom-friendly way to make audio behavior legible."
 lets_people_do: "It lets people hear and see how bands, thresholds, and trigger logic turn sound into event streams instead of treating analysis as a hidden background process."
 public_now:

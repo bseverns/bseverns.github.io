@@ -5,6 +5,23 @@ pillar: "Tools"
 status: "prototype platform"
 summary: "Teensy-based MIDI controller platform that treats mappings, latency, feedback, and validation as part of the instrument rather than invisible engineering residue."
 repo: "https://github.com/bseverns/MOARkNOBS-42"
+reading:
+  title: "What this makes visible"
+  body: >
+    MOARkNOBS-42 is not only a box of controls. It is a way of making timing,
+    mapping, feedback, and bodily decision visible enough to be played,
+    taught, tested, and repaired.
+  stakes: >
+    The instrument matters because control is never neutral. A knob is a
+    promise about what can be changed, when it can be changed, and who can
+    understand the change while the room is moving.
+  evidence: >
+    The latency rig, mapping manifests, validation tools, and mode feedback
+    keep that promise inspectable. The work asks the controller to show its
+    behavior before it asks anyone to trust it.
+  boundary: >
+    The public claim stays with behavior, method, and legibility. It does not
+    ask the prototype to pretend it is already a finished product.
 what_it_is: "MOARkNOBS-42 is a control-instrument research platform built around a deliberate 42-control grammar, visible mappings, mode feedback, and bench-tested documentation. It is public as a promising platform, not as a finished production controller."
 lets_people_do: "It lets performers and learners test how physical controls, mapping manifests, LED feedback, and measurable latency shape authorship in a live control system."
 public_now:

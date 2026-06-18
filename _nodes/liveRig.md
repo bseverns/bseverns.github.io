@@ -5,6 +5,23 @@ pillar: "Scenes / Systems"
 status: "working prototype"
 summary: "Performance system that coordinates audio, control, and video as one rig with explicit setup, recovery, and validation logic."
 repo: "https://github.com/bseverns/live-rig"
+reading:
+  title: "What keeps the scene recoverable"
+  body: >
+    live-rig treats performance as a system that must survive contact with the
+    room. Audio, control, and video become one scene only when setup, recovery,
+    and validation are visible enough to be rehearsed.
+  stakes: >
+    A rig is not just what works when everything is calm. It is also the map of
+    what can be checked, restarted, rerouted, and trusted when the room is
+    already moving.
+  evidence: >
+    Runbooks, preflight notes, scene files, and validation tooling turn the rig
+    from private operator memory into a shared operating surface.
+  boundary: >
+    The public page should stay redacted and method-facing. It can show the
+    recovery logic without exposing private machines, venues, networks, or
+    people.
 what_it_is: "live-rig is a documented hybrid scene system for audio, video, MIDI, and OSC. It matters publicly as a field manual and operational topology, not only as a one-off performance setup."
 lets_people_do: "It lets performers and maintainers coordinate media lanes, preflight a setup, and recover from failure without treating the rig as private operator folklore."
 public_now:

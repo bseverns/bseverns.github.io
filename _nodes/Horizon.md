@@ -5,6 +5,23 @@ pillar: "Tools"
 status: "prototype DSP study"
 summary: "Mid/side DSP processor for spatial and dynamics experiments where dry/wet comparison and listening become the evidence."
 repo: "https://github.com/bseverns/horizon"
+reading:
+  title: "Where listening becomes evidence"
+  body: >
+    Horizon treats spatial processing as something that has to be heard against
+    itself. Dry and wet, center and side, pressure and release become the terms
+    of the argument.
+  stakes: >
+    A processor can hide behind taste words too easily. This work asks the
+    chain to show what it changes, how the controls move, and whether the
+    listening proof can carry the claim.
+  evidence: >
+    DSP math, control maps, and preset direction show the intended shape of the
+    tool. The missing public proof is audible: a short before-and-after trace
+    tied to the settings that made it.
+  boundary: >
+    The page should stay with prototype listening evidence, not mastering-grade
+    generality, enclosure maturity, or live reliability that has not been shown.
 what_it_is: "Horizon is a mid/side processing study with hardware and plugin directions. It matters publicly because it exposes spatial shaping and dynamics as a readable chain rather than a black-box finishing move."
 lets_people_do: "It lets people compare dry and processed audio, trace control mappings, and reason about what the processor is actually changing."
 public_now:

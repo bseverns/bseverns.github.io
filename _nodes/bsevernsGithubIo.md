@@ -5,6 +5,24 @@ pillar: "Systems / Distribution"
 status: "active publishing system"
 summary: "The public portfolio itself as a distribution, distillation, and evidence layer linking projects, methods, archives, and source trails."
 repo: "https://github.com/bseverns/bseverns.github.io"
+reading:
+  title: "What the site is doing"
+  body: >
+    This site is a public instrument for reading the work. It does not try to
+    mirror every private source; it distills what can be shown, what should be
+    bounded, and where a reader can follow the evidence.
+  stakes: >
+    A portfolio can become a surface of polish that hides the labor beneath it.
+    This one is being shaped as a map of claims, proofs, methods, archives, and
+    withheld details.
+  evidence: >
+    The Atlas, method pages, catalog data, source trails, and archive roots
+    make the public layer navigable without flattening the projects into a
+    single style of proof.
+  boundary: >
+    The site should keep improving the public route from claim to artifact
+    while refusing to expose private topology, participants, classroom data, or
+    unfinished work beyond what can be responsibly shown.
 what_it_is: "This site is not just a brochure. It is the public distillation layer that connects current project pages, method notes, archive roots, and source repositories without mirroring the private source layer behind them."
 lets_people_do: "It lets readers move from public claim to public artifact to source trail, while keeping evidence status and archive lineage visible."
 public_now:

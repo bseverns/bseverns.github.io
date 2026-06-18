@@ -5,6 +5,23 @@ pillar: "Tools"
 status: "prototype"
 summary: "Seed-driven DSP instrument core for performable sound generation, control, and documented sonic variation."
 repo: "https://github.com/bseverns/seedbox"
+reading:
+  title: "What a seed can carry"
+  body: >
+    SeedBox treats repeatability as a musical material. A seed is not only a
+    number; it is a way for a sound, a setup, and a lesson to return without
+    becoming fixed.
+  stakes: >
+    The instrument sits between performance and teaching because variation has
+    to be playable and explainable at the same time. The kit matters when a
+    learner can hear a change, reproduce it, and still make it their own.
+  evidence: >
+    Source material and Atlas relationships already place SeedBox between
+    tool, kit, and curriculum. The next public proof needs sound and setup in
+    the same frame.
+  boundary: >
+    The page should stay at prototype scale until an audio render, control
+    image, or portable setup artifact makes the claim audible and inspectable.
 what_it_is: "SeedBox is an instrument study that links seeded sound generation to portable setup and teaching structure. It sits between tool, kit, and curriculum without pretending those are separate concerns."
 lets_people_do: "It lets performers and learners explore repeatable sonic variation, control mapping, and kit-based setup in a form that can move between rehearsal, workshop, and small public installation contexts."
 public_now:

@@ -5,6 +5,23 @@ pillar: "Learning"
 status: "curriculum archive"
 summary: "Curriculum archive tying course families, shared policies, prompts, and teaching infrastructure into one public repository."
 repo: "https://github.com/bseverns/Syllabus"
+reading:
+  title: "What teaching leaves reusable"
+  body: >
+    Syllabus treats curriculum as accumulated practice instead of disposable
+    paperwork. Prompts, policies, pathways, and course language become
+    materials that can be revised, carried, and questioned.
+  stakes: >
+    A course disappears quickly when its structure lives only inside a semester.
+    The archive keeps teaching from restarting at zero while still making room
+    for each workshop, class, and cohort to change the path.
+  evidence: >
+    The public repository already shows the archive and pathway logic. A
+    redacted lesson trace would make the movement from archive to live teaching
+    more visible.
+  boundary: >
+    The page should claim structure and transfer, not student outcomes or
+    institutional adoption without public evidence.
 what_it_is: "Syllabus is the archive and pathway layer for courses, policies, prompts, and teaching structures. It matters publicly because it shows how classroom language and delivery practices stay cumulative instead of restarting from zero."
 lets_people_do: "It lets teaching structures travel across courses, workshops, and related systems while keeping policy, prompt, and pathway logic inspectable."
 public_now:

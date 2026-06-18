@@ -5,6 +5,23 @@ pillar: "Scenes / Systems"
 status: "public-safe excerpt"
 summary: "Participant-facing memory environment tying invitation, retention, retrieval, decay, and revocation into one local-first room system."
 repo: "https://github.com/bseverns/memory-engine"
+reading:
+  title: "What remains in the room"
+  body: >
+    Memory Engine treats memory as behavior, not storage. Invitation, return,
+    forgetting, and revocation become parts of the room instead of policies
+    hidden behind it.
+  stakes: >
+    The work sits in the fragile space between offering a trace and keeping
+    that trace from becoming extraction. A memory system has to explain what it
+    keeps, what it releases, and how a participant can still refuse.
+  evidence: >
+    The flow diagram, catalog record, and source trail let the public page show
+    structure without making participant material carry the proof.
+  boundary: >
+    The strongest public version stays partial, redacted, and careful. The page
+    should make retention and revocation legible without exposing the people
+    whose traces give the work its weight.
 what_it_is: "Memory Engine is a room-facing memory system where contribution, retrieval, forgetting, and revocation are part of the artwork's visible behavior. Publicly, it should read as a bounded systems and ethics stub until stronger proof objects are surfaced safely."
 lets_people_do: "It lets a reader understand memory as designed system behavior rather than as passive storage, while keeping the public framing careful about participation, retention, and room context."
 public_now:

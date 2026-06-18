@@ -5,6 +5,24 @@ pillar: "Scenes / Learning"
 status: "teaching-ready system"
 summary: "Consent-forward computer-vision and sensing workshop structure where participants can learn what a system perceives, what it ignores, and how consent changes the room."
 repo: "https://github.com/bseverns/Human-Buffer"
+reading:
+  title: "What the room is holding"
+  body: >
+    Human-Buffer treats vision as a social condition before it treats vision
+    as a technical feature. The system is built around the moment when people
+    can see what is being seen, what is being refused, and what is allowed to
+    remain.
+  stakes: >
+    A camera changes a room even when it behaves politely. This work keeps
+    perception, consent, refusal, and retention close to the surface so the
+    workshop can be entered without pretending the apparatus is neutral.
+  evidence: >
+    The flow diagram, workshop playbook, privacy notes, and assumption ledger
+    make the sensing logic public without depending on participant exposure.
+  boundary: >
+    The page should stay careful with proof. Staged and redacted materials can
+    carry the claim; participant imagery should not be treated as the price of
+    making the work legible.
 what_it_is: "Human-Buffer is a workshop and image-system framework that treats perception, privacy, refusal, and retention as part of the visible interface rather than as hidden support policy."
 lets_people_do: "It lets participants and learners inspect how a vision system sees, what it does not keep, and how consent can be made actionable through interface behavior and workshop structure."
 public_now:

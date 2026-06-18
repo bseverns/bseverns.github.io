@@ -5,6 +5,24 @@ pillar: "Learning / Systems"
 status: "active documentation system"
 summary: "Runbook and field-manual layer for shared fabrication tools, written so maintenance becomes teachable rather than hidden."
 repo: "https://github.com/bseverns/machine-docs"
+reading:
+  title: "What care leaves behind"
+  body: >
+    machine-docs is a way of making maintenance visible after the person who
+    knows the trick has left the room. It turns repair, setup, calibration,
+    and caution into shared material instead of private memory.
+  stakes: >
+    A machine culture is shaped by what it writes down and what it lets stay
+    unsaid. The runbook becomes a form of care when it lowers the cost of
+    entering the tool, asking for help, and noticing risk before damage arrives.
+  evidence: >
+    Safety notes, fabrication pipelines, audit playbooks, and machine-care
+    procedures make the work transferable. The documentation is not a wrapper
+    around the practice; it is one of the practice's surfaces.
+  boundary: >
+    The claim is not full institutional coverage. It is a working argument for
+    maintenance as curriculum, tied to the procedures and examples that can be
+    publicly shown.
 what_it_is: "machine-docs is a documentation system for machine stewardship, safe operation, maintenance habits, and training pathways. It treats operational literacy as cultural and pedagogical work rather than background labor."
 lets_people_do: "It lets operators, learners, and maintainers enter shared fabrication tools through repeatable runbooks instead of rumor, memory, or gatekeeping."
 public_now:

@@ -5,6 +5,22 @@ pillar: "Learning / Systems"
 status: "prototype / public-safe excerpt"
 summary: "Workshop-oriented learning infrastructure for educator-operated modules, classroom pacing, and privacy-forward teaching workflows."
 repo: "https://github.com/bseverns/selfhosted-classhub"
+reading:
+  title: "What a class doorway can protect"
+  body: >
+    Class Hub treats teaching infrastructure as a doorway with obligations. It
+    gathers pacing, links, assignments, and access without asking the classroom
+    to disappear into a platform it cannot inspect.
+  stakes: >
+    A learning system shapes attention before any lesson begins. The question
+    is who can see the structure, who can repair it, and what student or
+    workshop data is asked to travel farther than it needs to.
+  evidence: >
+    The source trail and stack diagram make the workflow legible while keeping
+    deployment detail and classroom data out of public view.
+  boundary: >
+    The public claim is about privacy-forward teaching infrastructure, not
+    institutional adoption or a universal LMS replacement.
 what_it_is: "Class Hub is a self-hosted learning doorway where access, pacing, links, assignments, and operational visibility stay in the hands of the educator or maintainer. Publicly, it should be read as a privacy-forward infrastructure prototype rather than as a generalized LMS replacement."
 lets_people_do: "It lets teachers assemble course-facing modules and workflows without surrendering the whole teaching environment to opaque platform defaults."
 public_now:

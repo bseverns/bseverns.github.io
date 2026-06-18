@@ -5,6 +5,24 @@ pillar: "Systems"
 status: "public-safe method excerpt"
 summary: "Redacted topology, inventory, and runbook method for infrastructure documentation without exposing the underlying private systems."
 repo: "https://github.com/bseverns/systems-atlas"
+reading:
+  title: "What redaction can still teach"
+  body: >
+    systems-atlas treats infrastructure documentation as a public method with a
+    private core. The work is to show how a system can be known, maintained,
+    and recovered without giving away the system itself.
+  stakes: >
+    Operational detail is powerful material. Publishing too much can make a
+    system vulnerable; publishing nothing can make the labor invisible and
+    unteachable.
+  evidence: >
+    README-level method, field cards, supporting scripts, and source trails can
+    show the discipline of legible operations while leaving topology, hosts,
+    endpoints, and contracts out of view.
+  boundary: >
+    The public page should stay high-level and redacted. Its job is to carry
+    the practice of documentation, not the reconstructable details of the
+    infrastructure.
 what_it_is: "systems-atlas is the inventory and runbook layer for infrastructure. Publicly, it should be read as a method page about legible operations and redaction rather than as a machine list."
 lets_people_do: "It lets readers see how infrastructure can be documented as a maintainable system while withholding the sensitive contents of that system."
 public_now:
