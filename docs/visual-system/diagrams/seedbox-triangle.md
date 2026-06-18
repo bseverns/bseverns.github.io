@@ -6,7 +6,7 @@
 - Status: `source draft`
 
 ```mermaid
-flowchart LR
+flowchart TD
     hardware["hardware kit<br/>parts / enclosure / setup ritual"]
     simulator["simulator<br/>preview / rehearsal / remote debugging"]
     pedagogy["pedagogy<br/>lesson arc / station card / residency use"]

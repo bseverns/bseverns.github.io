@@ -461,6 +461,9 @@ article.teaching li {
 }
 
 .diagram-panel {
+  display: grid;
+  align-content: start;
+  gap: clamp(14px, 2vw, 20px);
   background: linear-gradient(180deg, var(--surface) 0%, var(--surface-muted) 100%);
   border: 1px solid var(--border);
   border-radius: 1rem;
@@ -504,7 +507,7 @@ article.teaching li {
 }
 
 .diagram-disclosure {
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 .diagram-disclosure summary {
@@ -519,24 +522,24 @@ article.teaching li {
 }
 
 .diagram-disclosure summary::before {
-  content: "+ ";
+  content: "Show ";
 }
 
 .diagram-disclosure[open] summary::before {
-  content: "- ";
+  content: "Hide ";
 }
 
 .diagram-frame {
-  margin-top: 1rem;
+  margin-top: 0.85rem;
   background: var(--surface-muted);
   border: 1px dashed var(--border);
   border-radius: 0.9rem;
-  padding: clamp(14px, 2vw, 18px);
-  overflow: hidden;
+  padding: clamp(10px, 1.8vw, 16px);
+  overflow: auto;
 }
 
 .diagram-render {
-  min-height: 220px;
+  min-height: 0;
   overflow-x: auto;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -546,17 +549,36 @@ article.teaching li {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  min-width: 100%;
   width: 100%;
 }
 
 .diagram-render svg {
   display: block;
-  width: 100% !important;
+  width: max(100%, 760px) !important;
   height: auto !important;
-  max-width: 100% !important;
+  max-width: none !important;
   margin-inline: auto;
   overflow: visible;
+}
+
+.diagram-render svg.diagram-svg-tall {
+  width: clamp(680px, 82%, 840px) !important;
+}
+
+.diagram-render svg .nodeLabel,
+.diagram-render svg .edgeLabel {
+  font-size: 15px !important;
+  line-height: 1.25 !important;
+}
+
+.diagram-render svg .edgeLabel {
+  font-size: 13px !important;
+}
+
+.diagram-render svg .node rect,
+.diagram-render svg .node polygon,
+.diagram-render svg .node path {
+  stroke-width: 1.8px !important;
 }
 
 .diagram-placeholder {
@@ -1936,7 +1958,7 @@ article.teaching li {
 
 @media (min-width: 900px) {
   .diagram-grid.two-up {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .diagram-grid.two-up > :only-child {

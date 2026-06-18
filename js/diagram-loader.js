@@ -13,13 +13,23 @@
   }
 
   const selector = '.diagram-render .mermaid';
+  openDiagramDisclosures();
 
   window.mermaid.initialize({
     startOnLoad: false,
+    theme: 'base',
     securityLevel: 'strict',
     flowchart: {
       htmlLabels: true,
-      useMaxWidth: false
+      useMaxWidth: true,
+      nodeSpacing: 48,
+      rankSpacing: 58
+    },
+    themeVariables: {
+      fontFamily: 'Instrument Sans, Inter, system-ui, sans-serif',
+      fontSize: '16px',
+      primaryTextColor: '#1f1a14',
+      lineColor: '#7a6d5b'
     }
   });
 
@@ -85,6 +95,15 @@
     mount.appendChild(placeholder);
   }
 
+  function openDiagramDisclosures() {
+    Array.prototype.forEach.call(mounts, function (mount) {
+      const disclosure = mount.closest('details.diagram-disclosure');
+      if (disclosure) {
+        disclosure.open = true;
+      }
+    });
+  }
+
   function normalizeRenderedSvg(mount) {
     if (!mount) {
       return;
@@ -102,6 +121,28 @@
       svg.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
     }
 
+    try {
+      const box = svg.getBBox();
+      if (box && Number.isFinite(box.width) && Number.isFinite(box.height) && box.width > 0 && box.height > 0) {
+        const pad = 16;
+        const viewWidth = box.width + pad * 2;
+        const viewHeight = box.height + pad * 2;
+        svg.setAttribute('viewBox', [
+          box.x - pad,
+          box.y - pad,
+          viewWidth,
+          viewHeight
+        ].join(' '));
+        if (viewWidth / viewHeight < 1.6) {
+          svg.classList.add('diagram-svg-tall');
+        }
+      }
+    } catch (error) {
+      // Some browsers refuse getBBox on SVGs that are not fully painted yet.
+    }
+
+    svg.removeAttribute('width');
+    svg.removeAttribute('height');
     svg.setAttribute('preserveAspectRatio', 'xMidYMin meet');
     svg.classList.add('diagram-svg');
   }

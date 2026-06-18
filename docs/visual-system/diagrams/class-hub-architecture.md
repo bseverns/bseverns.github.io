@@ -6,7 +6,7 @@
 - Status: `source draft`
 
 ```mermaid
-flowchart LR
+flowchart TD
     teacher["teacher"]
     learner["learner"]
     admin["steward / admin"]
