@@ -764,36 +764,12 @@ article.teaching li {
   object-position: 50% 54%;
 }
 
-.system-card .thumb-mn42 {
-  background:
-    radial-gradient(circle at 18% 34%, hsl(190 86% 66%) 0 5px, transparent 6px),
-    radial-gradient(circle at 38% 62%, hsl(18 88% 60%) 0 5px, transparent 6px),
-    radial-gradient(circle at 62% 36%, hsl(190 86% 66%) 0 5px, transparent 6px),
-    radial-gradient(circle at 82% 64%, hsl(18 88% 60%) 0 5px, transparent 6px),
-    linear-gradient(90deg, transparent 0 14%, hsl(190 86% 66% / 0.34) 14.5% 16%, transparent 16.5% 32%, hsl(18 88% 60% / 0.34) 32.5% 34%, transparent 34.5%),
-    linear-gradient(0deg, transparent 0 45%, hsl(190 86% 66% / 0.28) 45.5% 47%, transparent 47.5%),
-    linear-gradient(135deg, hsl(202 58% 17%), hsl(222 31% 10%));
+.thumb-mn42 img {
+  object-position: 50% 48%;
 }
 
-.system-card .thumb-human-buffer {
-  background:
-    linear-gradient(90deg, hsl(190 86% 66%) 0 2px, transparent 2px 28%, hsl(18 88% 60%) 28% 30%, transparent 30%),
-    linear-gradient(0deg, transparent 0 34%, hsl(190 86% 66% / 0.5) 34.5% 36%, transparent 36.5% 70%, hsl(18 88% 60% / 0.48) 70.5% 72%, transparent 72.5%),
-    radial-gradient(circle at 24% 32%, hsl(190 86% 66%) 0 3px, transparent 4px),
-    radial-gradient(circle at 68% 58%, hsl(18 88% 60%) 0 3px, transparent 4px),
-    linear-gradient(135deg, hsl(222 31% 9%), hsl(194 72% 18%) 58%, hsl(18 72% 22%));
-}
-
-.thumb-mn42::after,
-.thumb-human-buffer::after {
-  content: "";
-  position: absolute;
-  inset: 16% 12%;
-  border: 1px solid hsl(0 0% 100% / 0.42);
-  border-radius: 0.5rem;
-  box-shadow:
-    24px 18px 0 -1px hsl(0 0% 100% / 0.22),
-    -18px 34px 0 -1px hsl(0 0% 100% / 0.18);
+.thumb-human-buffer img {
+  object-position: 50% 38%;
 }
 
 .media-card .card-body,
@@ -1137,20 +1113,32 @@ article.teaching li {
 }
 
 .practice-arc-list li {
-  padding: 1rem 1.1rem;
   border: 1px solid var(--border);
   border-radius: 0.85rem;
   background: var(--surface);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  display: grid;
-  gap: 0.4rem;
+  overflow: hidden;
   transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
 }
 
 .arc-card {
   align-content: start;
+}
+
+.arc-card-link {
+  display: grid;
+  gap: 0.4rem;
+  height: 100%;
+  padding: 1rem 1.1rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.arc-card-link:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
 }
 
 .practice-arc-list strong {
@@ -1904,6 +1892,7 @@ article.teaching li {
   .fleet-band:hover,
   .card:hover,
   .practice-arc-list li:hover,
+  .practice-arc-list li:focus-within,
   .legacy-list li:hover,
   .download-list li:hover {
     transform: translateY(-6px);

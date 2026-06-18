@@ -20,32 +20,46 @@ seo_description: "Lineage notes and practice arc connecting the archive to the c
 
     <ol class="practice-arc-list compact">
       <li class="arc-card">
-        <strong>Photography</strong>
-        <span>memory translated through framing, chemistry, distance, and loss</span>
+        <a class="arc-card-link" href="/lineage/night-stalker/">
+          <strong>Photography</strong>
+          <span>memory translated through framing, chemistry, distance, and loss</span>
+        </a>
       </li>
       <li class="arc-card">
-        <strong>Early objects and prototypes</strong>
-        <span>ambition, flight, injury, and proof</span>
+        <a class="arc-card-link" href="/lineage/i-was-young-once/">
+          <strong>Early objects and prototypes</strong>
+          <span>ambition, flight, injury, and proof</span>
+        </a>
       </li>
       <li class="arc-card">
-        <strong>Installations and thesis work</strong>
-        <span>grief staged, contradiction made public, many points of entry</span>
+        <a class="arc-card-link" href="/lineage/fly/">
+          <strong>Installations and thesis work</strong>
+          <span>grief staged, contradiction made public, many points of entry</span>
+        </a>
       </li>
       <li class="arc-card">
-        <strong>Moving image and glitch</strong>
-        <span>pressure sequenced in time, unstable seeing made explicit</span>
+        <a class="arc-card-link" href="/lineage/digital-bath-engram/">
+          <strong>Moving image and glitch</strong>
+          <span>pressure sequenced in time, unstable seeing made explicit</span>
+        </a>
       </li>
       <li class="arc-card">
-        <strong>B_S.</strong>
-        <span>pressure sounded, ritualized, and shared through repetition and collapse</span>
+        <a class="arc-card-link" href="https://bbss.bandcamp.com/" target="_blank" rel="noopener">
+          <strong>B_S.</strong>
+          <span>pressure sounded, ritualized, and shared through repetition and collapse</span>
+        </a>
       </li>
       <li class="arc-card">
-        <strong>Code, sensing, and fabrication</strong>
-        <span>invisible relations made legible and material constraint made part of the form</span>
+        <a class="arc-card-link" href="/3d/genfab.html">
+          <strong>Code, sensing, and fabrication</strong>
+          <span>invisible relations made legible and material constraint made part of the form</span>
+        </a>
       </li>
       <li class="arc-card">
-        <strong>Tools, platforms, and machine care</strong>
-        <span>care, legibility, participation, maintenance, and continuation operationalized</span>
+        <a class="arc-card-link" href="/atlas/systems/">
+          <strong>Tools, platforms, and machine care</strong>
+          <span>care, legibility, participation, maintenance, and continuation operationalized</span>
+        </a>
       </li>
     </ol>
   </div>
