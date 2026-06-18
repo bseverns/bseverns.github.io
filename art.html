@@ -36,18 +36,7 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
       <div class="brand">
         <a href="/" class="brand-link" aria-label="{{ site.title }} home">{{ site.title }}</a>
       </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          {% for link in site.data.navigation %}
-            {% assign nav_href = link.url | relative_url %}
-            {% if page.url == link.url %}
-              <li><a href="{{ nav_href }}" aria-current="page">{{ link.title }}</a></li>
-            {% else %}
-              <li><a href="{{ nav_href }}">{{ link.title }}</a></li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </nav>
+      {% include primary-nav.html %}
     </div>
   </header>
   <main id="main" class="site-main" tabindex="-1">
@@ -55,8 +44,8 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
       <div class="container">
         <p class="eyebrow">Scene branch of a longer practice</p>
         <h1>{{ page.title }}</h1>
-        <p>This is the scene-facing branch of a practice that began in photography and darkroom process, where threshold, translation, memory, and technical limitation first became central. What now appears here as control, participation, room logic, or recovery path grows out of a much longer line of windows, prototypes, wounds, glitched images, sound pressure, and public experiments.</p>
-        <p class="origin-callout">The current scene systems are not separate from the earlier work. They are one later container for the same questions: how people enter a work, what a medium withholds, what it remembers, and how care appears in structure.</p>
+        <p>This page is the quickest read of the studio work now in public view: instruments, rooms, images, teaching systems, and recovery paths that can be entered, tested, and traced back to earlier materials. Photography and darkroom process still sit underneath it, especially the questions of threshold, memory, limitation, and translation.</p>
+        <p class="origin-callout">The current scene systems are not separate from the earlier work. They keep asking how people enter a work, what a medium withholds, what it remembers, and how care appears in structure.</p>
         <div class="cta">
           <a class="btn secondary" href="/atlas/">Open the fleet map</a>
           <a class="btn secondary" href="/atlas/methods/">Open methods</a>
@@ -79,7 +68,7 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
             <a href="{{ item.url | relative_url }}">
               {% if item.hero %}
               <div class="card-thumb">
-                <img src="{{ item.hero | relative_url }}" alt="{{ item.hero_alt | default: item.title }}">
+                <img src="{{ item.hero | relative_url }}" alt="{{ item.hero_alt | default: item.title }}" loading="lazy" decoding="async">
               </div>
               {% endif %}
               <h3>{{ item.title }}</h3>
@@ -128,7 +117,7 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
             <details class="diagram-disclosure">
               <summary>Show Memory Engine flow</summary>
               <div class="diagram-frame">
-                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/memory-engine-flow.md" data-diagram-fallback="Memory Engine flow source not available yet."></div>
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/memory-engine-flow.md" data-diagram-fallback="Diagram renderer unavailable."></div>
               </div>
             </details>
           </article>
@@ -145,7 +134,7 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
             <details class="diagram-disclosure">
               <summary>Show MOARkNOBS-42 stack</summary>
               <div class="diagram-frame">
-                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/mn42-stack.md" data-diagram-fallback="MOARkNOBS-42 stack source not available yet."></div>
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/mn42-stack.md" data-diagram-fallback="Diagram renderer unavailable."></div>
               </div>
             </details>
           </article>
@@ -162,7 +151,7 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
             <details class="diagram-disclosure">
               <summary>Show live-rig topology</summary>
               <div class="diagram-frame">
-                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/live-rig-topology.md" data-diagram-fallback="live-rig topology source not available yet."></div>
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/live-rig-topology.md" data-diagram-fallback="Diagram renderer unavailable."></div>
               </div>
             </details>
           </article>
@@ -195,16 +184,7 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div>© <span id="yr"></span> {{ site.title }} — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/atlas/">Atlas</a></li>
-          <li><a href="/atlas/methods/">Methods</a></li>
-          <li><a href="/privacy-ethics/">Privacy &amp; Ethics</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
+      {% include footer-nav.html %}
     </div>
   </footer>
 </body>

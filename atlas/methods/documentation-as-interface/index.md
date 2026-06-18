@@ -3,6 +3,7 @@ layout: atlas_page
 title: "Documentation as Interface"
 permalink: /atlas/methods/documentation-as-interface/
 seo_description: "Public method note on documentation as operation, maintenance, consent, and transfer."
+method_key: "Documentation as Interface"
 ---
 <section class="atlas-section">
   <div class="container">
@@ -30,3 +31,5 @@ seo_description: "Public method note on documentation as operation, maintenance,
     <p>When an Atlas page says a repo is the source of truth, that is part of the interface too. The public site carries claims and proof objects. The repo carries the live build details.</p>
   </div>
 </section>
+
+{% include method-harvest.html %}

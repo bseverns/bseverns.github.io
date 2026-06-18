@@ -7,6 +7,8 @@ assets/.DS_Store
 .DS_Store
 MN42/.DS_Store
 .venv/
+.bundle/
+vendor/bundle/
 .jekyll-cache/
 _site/
 MN42/node_modules/

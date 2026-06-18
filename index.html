@@ -25,6 +25,7 @@
   <script defer src="https://cdn.jsdelivr.net/npm/p5@1.9.3/lib/p5.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
   <script defer src="/js/site.js"></script>
+  <script defer src="/js/status-hook.js"></script>
   <script defer src="/js/diagram-loader.js"></script>
   <script type="application/ld+json">
   {
@@ -45,15 +46,7 @@
       <div class="brand">
         <a href="/" class="brand-link" aria-label="Ben Severns home">Ben Severns</a>
       </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          <li><a href="/atlas/">Atlas</a></li>
-          <li><a href="/art.html">Studio</a></li>
-          <li><a href="/courses.html">Teaching</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-        </ul>
-      </nav>
+      {% include primary-nav.html %}
     </div>
   </header>
   <main id="main" class="site-main" tabindex="-1">
@@ -64,12 +57,37 @@
           <h1 id="hero-title">One practice, still learning new containers</h1>
           <p class="tagline">A long-running practice moving from photography and installation through sound, code, teaching, and public systems without dropping its questions about memory, threshold, loss, and care.</p>
           <div class="cta">
-            <a class="btn" href="/art.html">Explore Studio</a>
-            <a class="btn secondary" href="/courses.html">Explore Teaching</a>
-            <a class="btn secondary" href="/atlas/">Explore Atlas</a>
+            <a class="btn" href="#overview">Get the overview</a>
+            <a class="btn secondary" href="#featured-strip-title">See top work</a>
+            <a class="btn secondary" href="/atlas/">Dive into the Atlas</a>
           </div>
         </div>
         <div class="hero-visual" data-hero="true" data-src="/img/front/context.jpg" data-alt="Analog synth setup with projection work in progress"></div>
+      </div>
+    </section>
+
+    <section class="overview-strip" id="overview" aria-labelledby="overview-title">
+      <div class="container">
+        <div class="overview-panel">
+          <div>
+            <p class="eyebrow">Fast path</p>
+            <h2 id="overview-title">Start with the work that carries the current system</h2>
+          </div>
+          <div class="overview-actions" aria-label="Recommended starting points">
+            <a href="/atlas/n/moarknobs42/">
+              <strong>MOARkNOBS-42</strong>
+              <span>Custom controller platform for visible mappings, latency, and instrument behavior.</span>
+            </a>
+            <a href="/atlas/n/humanbuffer/">
+              <strong>Human-Buffer</strong>
+              <span>Computer-vision workshop structure centered on consent, perception, and refusal.</span>
+            </a>
+            <a href="/atlas/n/liverig/">
+              <strong>live-rig</strong>
+              <span>Audio, control, and video rig documented as a recoverable performance system.</span>
+            </a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -85,7 +103,7 @@
         <div class="card-grid pool-grid">
           <article class="card pool-card media-card">
             <div class="card-thumb">
-              <img src="/img/portfolio/3d/fly.jpg" alt="" decoding="async">
+              <img src="/img/portfolio/3d/fly.jpg" alt="" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <h3>Studio</h3>
@@ -99,7 +117,7 @@
           </article>
           <article class="card pool-card media-card">
             <div class="card-thumb">
-              <img src="/assets/images/cds/criticalMaking.jpg" alt="" decoding="async">
+              <img src="/assets/images/cds/criticalMaking.jpg" alt="" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <h3>Teaching / Learning</h3>
@@ -114,7 +132,7 @@
           </article>
           <article class="card pool-card media-card">
             <div class="card-thumb">
-              <img src="/assets/diagrams/mn42_latency-rig.svg" alt="" decoding="async">
+              <img src="/assets/diagrams/mn42_latency-rig.svg" alt="" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <h3>Atlas / Systems</h3>
@@ -129,7 +147,7 @@
           </article>
           <article class="card pool-card media-card">
             <div class="card-thumb">
-              <img src="/img/portfolio/flat/windows.jpg" alt="" decoding="async">
+              <img src="/img/portfolio/flat/windows.jpg" alt="" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <h3>Archive / Lineage</h3>
@@ -156,54 +174,58 @@
           </div>
         </div>
         <div class="card-grid feature-grid">
-          <article class="card feature-card system-card">
-            <div class="card-thumb thumb-mn42">
-              <img src="/img/front/context.jpg" alt="" decoding="async">
-            </div>
+          <article class="card feature-card system-card" data-proof-repo="bseverns/MOARkNOBS-42">
+            <div class="card-thumb thumb-mn42" aria-hidden="true"></div>
             <div class="card-body">
               <p class="system-status">active instrument</p>
               <h3>MOARkNOBS-42</h3>
               <p>Controller platform work centered on mappings, latency, and legible instrument behavior.</p>
+              <p class="plain-summary">Plainly: a custom MIDI controller whose behavior can be tested, read, and taught.</p>
               <p class="proof-line">Proof line: controller mappings, schema, and latency-lab documentation.</p>
+              <p class="proof-status" data-proof-status>Proof status: checking source trail.</p>
               <div class="system-mini-map" aria-hidden="true"></div>
               <a class="card-link" href="/atlas/n/moarknobs42/">Open node</a>
             </div>
           </article>
-          <article class="card feature-card system-card">
-            <div class="card-thumb thumb-human-buffer">
-              <img src="/assets/images/cds/glitch-geometry-still.png" alt="" decoding="async">
-            </div>
+          <article class="card feature-card system-card" data-proof-repo="bseverns/Human-Buffer">
+            <div class="card-thumb thumb-human-buffer" aria-hidden="true"></div>
             <div class="card-body">
               <p class="system-status">workshop system</p>
               <h3>Human-Buffer</h3>
               <p>Workshop structure for computer vision, consent, and public understanding of what a system perceives.</p>
+              <p class="plain-summary">Plainly: a workshop that helps people see what a camera system notices and what it should not keep.</p>
               <p class="proof-line">Proof line: vision exercises, consent framing, and public-facing explanation.</p>
+              <p class="proof-status" data-proof-status>Proof status: checking source trail.</p>
               <div class="system-mini-map" aria-hidden="true"></div>
               <a class="card-link" href="/atlas/n/humanbuffer/">Open node</a>
             </div>
           </article>
-          <article class="card feature-card system-card">
+          <article class="card feature-card system-card" data-proof-repo="bseverns/machine-docs">
             <div class="card-thumb thumb-machine-docs">
-              <img src="/img/studio/studio-1.jpg" alt="" decoding="async">
+              <img src="/img/studio/studio-1.jpg" alt="" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <p class="system-status">runbook layer</p>
               <h3>machine-docs</h3>
               <p>Runbook and field-manual layer where machine maintenance becomes shared curriculum.</p>
+              <p class="plain-summary">Plainly: practical machine notes that turn maintenance into something others can learn.</p>
               <p class="proof-line">Proof line: repair notes, operating context, and shared maintenance language.</p>
+              <p class="proof-status" data-proof-status>Proof status: checking source trail.</p>
               <div class="system-mini-map" aria-hidden="true"></div>
               <a class="card-link" href="/atlas/n/machinedocs/">Open node</a>
             </div>
           </article>
-          <article class="card feature-card system-card">
+          <article class="card feature-card system-card" data-proof-repo="bseverns/frZone">
             <div class="card-thumb">
-              <img src="/img/front/banner.gif" alt="" decoding="async">
+              <img src="/img/front/banner.gif" alt="" loading="lazy" decoding="async">
             </div>
             <div class="card-body">
               <p class="system-status">signal study</p>
               <h3>frZone</h3>
               <p>Frequency-zone trigger study connecting sound analysis to MIDI and OSC events.</p>
+              <p class="plain-summary">Plainly: a tool that turns parts of a sound into visible triggers and control messages.</p>
               <p class="proof-line">Proof line: analysis thresholds, triggers, and routing behavior.</p>
+              <p class="proof-status" data-proof-status>Proof status: checking source trail.</p>
               <div class="system-mini-map" aria-hidden="true"></div>
               <a class="card-link" href="/atlas/n/frzone/">Open node</a>
             </div>
@@ -233,7 +255,7 @@
             <details class="diagram-disclosure">
               <summary>Show diagram</summary>
               <div class="diagram-frame">
-                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/fleet-map.md" data-diagram-fallback="Fleet map source not available yet."></div>
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/fleet-map.md" data-diagram-fallback="Diagram renderer unavailable."></div>
               </div>
             </details>
           </article>
@@ -247,7 +269,7 @@
             <details class="diagram-disclosure">
               <summary>Show diagram</summary>
               <div class="diagram-frame">
-                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/core-project-relationships.md" data-diagram-fallback="Core project relationship source not available yet."></div>
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/core-project-relationships.md" data-diagram-fallback="Diagram renderer unavailable."></div>
               </div>
             </details>
           </article>
@@ -270,16 +292,7 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/atlas/">Atlas</a></li>
-          <li><a href="/atlas/methods/">Methods</a></li>
-          <li><a href="/privacy-ethics/">Privacy &amp; Ethics</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
+      {% include footer-nav.html %}
     </div>
   </footer>
 </body>

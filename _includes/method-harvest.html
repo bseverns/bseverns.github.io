@@ -1,0 +1,27 @@
+{% assign method_title = include.method | default: page.method_key | default: page.title %}
+{% capture harvested_nodes %}
+{% for node in site.nodes %}
+{% assign method_matches = node.methods | where: "title", method_title %}
+{% if method_matches.size > 0 %}
+<li>
+  <a href="{{ node.url | relative_url }}">{{ node.title }}</a>
+  {% if node.status %}<span>{{ node.status }}</span>{% endif %}
+  {% for method in method_matches %}
+  {% if method.note %}<span>{{ method.note }}</span>{% endif %}
+  {% endfor %}
+</li>
+{% endif %}
+{% endfor %}
+{% endcapture %}
+{% assign harvested_nodes = harvested_nodes | strip %}
+{% if harvested_nodes != "" %}
+<section class="atlas-section method-harvest" aria-labelledby="method-harvest-title">
+  <div class="container">
+    <h2 id="method-harvest-title">Harvested from</h2>
+    <p>These Atlas nodes cite this method directly in their public framing. The notes below are pulled from node front matter, so the method page stays tied to live project claims.</p>
+    <ul class="atlas-related-list">
+      {{ harvested_nodes }}
+    </ul>
+  </div>
+</section>
+{% endif %}

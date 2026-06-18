@@ -13,6 +13,31 @@ seo_description: "Atlas pillar covering consent-forward tools and instruments."
   </div>
 </section>
 
+<section class="atlas-section">
+  <div class="container">
+    <p class="eyebrow">Primary path</p>
+    <h2>Read the tool stack as a chain of control, signal, and proof</h2>
+    <ul class="atlas-related-list">
+      <li>
+        <a href="/atlas/n/moarknobs42/">MOARkNOBS-42</a>
+        <span>Start here for the flagship control-instrument branch: mappings, latency, mode feedback, and validation as part of the instrument.</span>
+      </li>
+      <li>
+        <a href="/atlas/n/frzone/">frZone</a>
+        <span>Move into analysis: sound becomes thresholds, triggers, and downstream MIDI or OSC events.</span>
+      </li>
+      <li>
+        <a href="/atlas/n/horizon/">Horizon</a>
+        <span>Then listen to the DSP line: dry/wet comparison and control maps become the evidence.</span>
+      </li>
+      <li>
+        <a href="/atlas/n/seedbox/">SeedBox</a>
+        <span>End with the portable instrument question: repeatable variation as kit, lesson, and performance material.</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
 <section class="atlas-doors">
   <div class="container">
     <h2>Featured nodes</h2>

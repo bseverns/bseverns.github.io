@@ -3,6 +3,7 @@ layout: atlas_page
 title: "Consent-Forward Systems"
 permalink: /atlas/methods/consent-forward-systems/
 seo_description: "Public method note on consent, transparency, and participant autonomy as system defaults."
+method_key: "Consent-Forward Systems"
 ---
 <section class="atlas-section">
   <div class="container">
@@ -29,3 +30,5 @@ seo_description: "Public method note on consent, transparency, and participant a
     <p>For the broader public boundary statement, read <a href="/privacy-ethics/">Privacy &amp; Ethics</a>. For project-specific proof levels, go back to the related Atlas nodes and their source trails.</p>
   </div>
 </section>
+
+{% include method-harvest.html %}

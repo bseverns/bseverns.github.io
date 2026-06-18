@@ -1,0 +1,10 @@
+<nav aria-label="Footer">
+  <ul>
+    {% assign current_url = page.url | default: "/" %}
+    {% for item in site.data.footer_navigation %}
+      <li>
+        <a href="{{ item.url | relative_url }}"{% if current_url == item.url %} aria-current="page"{% endif %}>{{ item.title | escape }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+</nav>

@@ -4,7 +4,7 @@ layout: default
 <article class="project">
   <h1>{{ page.title }}</h1>
   <p class="meta">{{ page.year }}{% if page.media %} • {{ page.media }}{% endif %}{% if page.duration %} • {{ page.duration }}{% endif %}</p>
-  {% if page.hero %}<img class="hero" src="{{ page.hero | relative_url }}" alt="{{ page.hero_alt | default: 'Project image' }}">{% endif %}
+  {% if page.hero %}<img class="hero" src="{{ page.hero | relative_url }}" alt="{{ page.hero_alt | default: 'Project image' }}" decoding="async">{% endif %}
   {% if page.lineage %}<p class="origin-callout">{{ page.lineage }}</p>{% endif %}
   <h2>Summary</h2>
   <p>{{ page.summary }}</p>
@@ -20,7 +20,7 @@ layout: default
   {% if page.gallery %}
     <h2>Gallery</h2>
     {% for img in page.gallery %}
-      <img src="{{ img.src | relative_url }}" alt="{{ img.alt | default: 'Documentation image' }}">
+      <img src="{{ img.src | relative_url }}" alt="{{ img.alt | default: 'Documentation image' }}" loading="lazy" decoding="async">
     {% endfor %}
   {% endif %}
   {% if page.links %}

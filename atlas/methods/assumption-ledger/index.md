@@ -3,6 +3,7 @@ layout: atlas_page
 title: "Assumption Ledger"
 permalink: /atlas/methods/assumption-ledger/
 seo_description: "Public method note on naming uncertainties before they become hidden dependencies."
+method_key: "Assumption Ledger"
 ---
 <section class="atlas-section">
   <div class="container">
@@ -29,3 +30,5 @@ seo_description: "Public method note on naming uncertainties before they become 
     <p>When uncertainty matters, name it. Hidden dependencies make projects look stronger than they are and harder for others to learn from safely.</p>
   </div>
 </section>
+
+{% include method-harvest.html %}

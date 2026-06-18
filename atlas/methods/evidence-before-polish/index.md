@@ -3,6 +3,7 @@ layout: atlas_page
 title: "Evidence Before Polish"
 permalink: /atlas/methods/evidence-before-polish/
 seo_description: "Public method note on using proof objects, status language, and next captures before polish."
+method_key: "Evidence Before Polish"
 ---
 <section class="atlas-section">
   <div class="container">
@@ -25,3 +26,5 @@ seo_description: "Public method note on using proof objects, status language, an
     <p>If the proof is partial, the page should say so directly. If the repo contains deeper implementation truth, the page should link there and narrow the public claim.</p>
   </div>
 </section>
+
+{% include method-harvest.html %}

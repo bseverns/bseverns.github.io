@@ -36,18 +36,7 @@ seo_description: "Systems-first teaching that ties digital literacy to justice, 
       <div class="brand">
         <a href="/" class="brand-link" aria-label="{{ site.title }} home">{{ site.title }}</a>
       </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          {% for link in site.data.navigation %}
-            {% assign nav_href = link.url | relative_url %}
-            {% if page.url == link.url %}
-              <li><a href="{{ nav_href }}" aria-current="page">{{ link.title }}</a></li>
-            {% else %}
-              <li><a href="{{ nav_href }}">{{ link.title }}</a></li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-      </nav>
+      {% include primary-nav.html %}
     </div>
   </header>
   <main id="main" class="site-main" tabindex="-1">
@@ -80,7 +69,7 @@ seo_description: "Systems-first teaching that ties digital literacy to justice, 
             <details class="diagram-disclosure">
               <summary>Show diagram</summary>
               <div class="diagram-frame">
-                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/seedbox-triangle.md" data-diagram-fallback="seedBox triangle source not available yet."></div>
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/seedbox-triangle.md" data-diagram-fallback="Diagram renderer unavailable."></div>
               </div>
             </details>
           </article>
@@ -94,7 +83,7 @@ seo_description: "Systems-first teaching that ties digital literacy to justice, 
             <details class="diagram-disclosure">
               <summary>Show diagram</summary>
               <div class="diagram-frame">
-                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/class-hub-architecture.md" data-diagram-fallback="Class Hub architecture source not available yet."></div>
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/class-hub-architecture.md" data-diagram-fallback="Diagram renderer unavailable."></div>
               </div>
             </details>
           </article>
@@ -108,7 +97,7 @@ seo_description: "Systems-first teaching that ties digital literacy to justice, 
             <details class="diagram-disclosure">
               <summary>Show diagram</summary>
               <div class="diagram-frame">
-                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/syllabus-constellation.md" data-diagram-fallback="Syllabus constellation source not available yet."></div>
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/syllabus-constellation.md" data-diagram-fallback="Diagram renderer unavailable."></div>
               </div>
             </details>
           </article>
@@ -136,16 +125,7 @@ seo_description: "Systems-first teaching that ties digital literacy to justice, 
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div>© <span id="yr"></span> {{ site.title }} — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/atlas/">Atlas</a></li>
-          <li><a href="/atlas/methods/">Methods</a></li>
-          <li><a href="/privacy-ethics/">Privacy &amp; Ethics</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
+      {% include footer-nav.html %}
     </div>
   </footer>
 </body>

@@ -39,15 +39,7 @@
       <div class="brand">
         <a href="/" class="brand-link" aria-label="Ben Severns home">Ben Severns</a>
       </div>
-      <nav aria-label="Primary" class="primary-nav">
-        <ul>
-          <li><a href="/atlas/">Atlas</a></li>
-          <li><a href="/art.html">Studio</a></li>
-          <li><a href="/courses.html">Teaching</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html" aria-current="page">Contact</a></li>
-        </ul>
-      </nav>
+      {% include primary-nav.html %}
     </div>
   </header>
   <main id="main" class="site-main" tabindex="-1">
@@ -83,16 +75,7 @@
   <footer class="site-footer" role="contentinfo">
     <div class="container footer-inner">
       <div>© <span id="yr"></span> Ben Severns — <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.</div>
-      <nav aria-label="Footer">
-        <ul>
-          <li><a href="/atlas/">Atlas</a></li>
-          <li><a href="/atlas/methods/">Methods</a></li>
-          <li><a href="/privacy-ethics/">Privacy &amp; Ethics</a></li>
-          <li><a href="/press-kit.html">Press kit</a></li>
-          <li><a href="/contact.html" aria-current="page">Contact</a></li>
-          <li><a href="/sitemap.xml">Sitemap</a></li>
-        </ul>
-      </nav>
+      {% include footer-nav.html %}
     </div>
   </footer>
 </body>
