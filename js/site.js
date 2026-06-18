@@ -364,13 +364,20 @@
         observer.unobserve(entry.target);
       });
     }, {
-      threshold: 0.16,
-      rootMargin: '0px 0px -8% 0px'
+      threshold: 0.08,
+      rootMargin: '0px 0px 12% 0px'
     });
 
     elements.forEach(function (element) {
       observer.observe(element);
     });
+
+    window.setTimeout(function () {
+      elements.forEach(function (element) {
+        element.classList.add('is-visible');
+        observer.unobserve(element);
+      });
+    }, 900);
   }
 
   // Cache the current hero sketch so we don't initialize multiple instances.

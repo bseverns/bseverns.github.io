@@ -682,6 +682,12 @@ article.teaching li {
   transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease, background 0.28s ease;
 }
 
+.card:focus-within {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lift);
+  border-color: color-mix(in srgb, var(--accent), var(--border) 45%);
+}
+
 .card > a {
   display: flex;
   flex-direction: column;
@@ -700,6 +706,98 @@ article.teaching li {
   border-radius: 0.55rem;
   border: 1px solid var(--border);
   transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.media-card,
+.system-card {
+  padding: 0;
+  position: relative;
+  isolation: isolate;
+}
+
+.media-card .card-thumb,
+.system-card .card-thumb {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, hsl(190 86% 66% / 0.18), hsl(18 88% 60% / 0.12)),
+    var(--surface-muted);
+}
+
+.media-card .card-thumb img,
+.system-card .card-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  filter: saturate(1.08) contrast(1.05);
+  transition: transform 0.7s ease, filter 0.7s ease;
+}
+
+.thumb-mn42 img {
+  opacity: 0;
+}
+
+.thumb-human-buffer img {
+  opacity: 0;
+}
+
+.thumb-machine-docs img {
+  object-position: 50% 54%;
+}
+
+.system-card .thumb-mn42 {
+  background:
+    radial-gradient(circle at 18% 34%, hsl(190 86% 66%) 0 5px, transparent 6px),
+    radial-gradient(circle at 38% 62%, hsl(18 88% 60%) 0 5px, transparent 6px),
+    radial-gradient(circle at 62% 36%, hsl(190 86% 66%) 0 5px, transparent 6px),
+    radial-gradient(circle at 82% 64%, hsl(18 88% 60%) 0 5px, transparent 6px),
+    linear-gradient(90deg, transparent 0 14%, hsl(190 86% 66% / 0.34) 14.5% 16%, transparent 16.5% 32%, hsl(18 88% 60% / 0.34) 32.5% 34%, transparent 34.5%),
+    linear-gradient(0deg, transparent 0 45%, hsl(190 86% 66% / 0.28) 45.5% 47%, transparent 47.5%),
+    linear-gradient(135deg, hsl(202 58% 17%), hsl(222 31% 10%));
+}
+
+.system-card .thumb-human-buffer {
+  background:
+    linear-gradient(90deg, hsl(190 86% 66%) 0 2px, transparent 2px 28%, hsl(18 88% 60%) 28% 30%, transparent 30%),
+    linear-gradient(0deg, transparent 0 34%, hsl(190 86% 66% / 0.5) 34.5% 36%, transparent 36.5% 70%, hsl(18 88% 60% / 0.48) 70.5% 72%, transparent 72.5%),
+    radial-gradient(circle at 24% 32%, hsl(190 86% 66%) 0 3px, transparent 4px),
+    radial-gradient(circle at 68% 58%, hsl(18 88% 60%) 0 3px, transparent 4px),
+    linear-gradient(135deg, hsl(222 31% 9%), hsl(194 72% 18%) 58%, hsl(18 72% 22%));
+}
+
+.thumb-mn42::after,
+.thumb-human-buffer::after {
+  content: "";
+  position: absolute;
+  inset: 16% 12%;
+  border: 1px solid hsl(0 0% 100% / 0.42);
+  border-radius: 0.5rem;
+  box-shadow:
+    24px 18px 0 -1px hsl(0 0% 100% / 0.22),
+    -18px 34px 0 -1px hsl(0 0% 100% / 0.18);
+}
+
+.media-card .card-body,
+.system-card .card-body {
+  padding: 1.45rem;
+}
+
+.media-card::after,
+.system-card::after {
+  content: "";
+  position: absolute;
+  inset: auto -24% -34% 18%;
+  height: 180px;
+  background:
+    radial-gradient(circle, color-mix(in srgb, var(--accent), transparent 18%), transparent 66%);
+  opacity: 0.13;
+  z-index: -1;
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .selected-card .card-thumb {
@@ -786,9 +884,68 @@ article.teaching li {
   padding: 3rem 0;
 }
 
+.entry-pools,
+.featured-strip {
+  position: relative;
+  overflow: hidden;
+}
+
+.entry-pools::before,
+.featured-strip::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px),
+    radial-gradient(circle at 14% 28%, color-mix(in srgb, var(--accent), transparent 35%) 0 2px, transparent 3px),
+    radial-gradient(circle at 78% 62%, color-mix(in srgb, var(--brand), transparent 28%) 0 2px, transparent 3px);
+  background-size: 48px 48px, 48px 48px, 220px 180px, 260px 210px;
+  mask-image: radial-gradient(circle at 50% 32%, black, transparent 72%);
+}
+
+.entry-pools .container,
+.featured-strip .container,
+.archive-note .container {
+  position: relative;
+  z-index: 1;
+}
+
 .pool-grid,
 .feature-grid {
   margin-top: 1.75rem;
+}
+
+.feature-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.chapter-intro {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1.15rem;
+  align-items: start;
+}
+
+.chapter-intro h2,
+.chapter-intro p {
+  margin-top: 0;
+}
+
+.chapter-number {
+  font-family: var(--font-family-display);
+  font-size: clamp(3rem, 8vw, 6.8rem);
+  font-weight: 700;
+  line-height: 0.82;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--accent), transparent 18%);
+  opacity: 0.56;
+}
+
+.archive-intro {
+  max-width: 76ch;
 }
 
 .pool-card .card-body,
@@ -796,6 +953,53 @@ article.teaching li {
   display: grid;
   gap: 0.85rem;
   height: 100%;
+}
+
+.system-status {
+  width: fit-content;
+  margin: 0;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.24rem 0.62rem;
+  color: var(--accent);
+  background: hsl(0 0% 100% / 0.04);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.proof-line {
+  padding-top: 0.75rem;
+  border-top: 1px dashed var(--border);
+  color: var(--fg);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.system-mini-map {
+  position: relative;
+  min-height: 58px;
+  border: 1px solid color-mix(in srgb, var(--border), transparent 18%);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 14% 62%, var(--accent) 0 3px, transparent 4px),
+    radial-gradient(circle at 48% 32%, var(--brand) 0 3px, transparent 4px),
+    radial-gradient(circle at 82% 70%, var(--accent) 0 3px, transparent 4px),
+    linear-gradient(110deg, transparent 0 18%, color-mix(in srgb, var(--accent), transparent 72%) 18.4% 50%, transparent 50.4%),
+    linear-gradient(25deg, transparent 0 44%, color-mix(in srgb, var(--brand), transparent 72%) 44.4% 78%, transparent 78.4%),
+    var(--surface-muted);
+}
+
+.system-mini-map::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, hsl(0 0% 100% / 0.18), transparent);
+  opacity: 0;
 }
 
 .pool-links {
@@ -1465,7 +1669,7 @@ article.teaching li {
   .download-list li:hover {
     transform: translateY(-6px);
     box-shadow: var(--shadow-lift);
-    border-color: var(--brand);
+    border-color: color-mix(in srgb, var(--accent), var(--brand) 44%);
   }
 
   .card:hover img,
@@ -1474,6 +1678,26 @@ article.teaching li {
   .asset-preview:hover img {
     transform: scale(1.035);
     filter: saturate(1.04);
+  }
+
+  .media-card:hover .card-thumb img,
+  .system-card:hover .card-thumb img {
+    transform: scale(1.06);
+    filter: saturate(1.22) contrast(1.12);
+  }
+
+  .media-card:hover::after,
+  .system-card:hover::after,
+  .media-card:focus-within::after,
+  .system-card:focus-within::after {
+    opacity: 0.27;
+    transform: translateY(-16px) scale(1.08);
+  }
+
+  .system-card:hover .system-mini-map::after,
+  .system-card:focus-within .system-mini-map::after {
+    opacity: 1;
+    animation: system-scan 1.2s ease;
   }
 }
 
@@ -1487,6 +1711,16 @@ article.teaching li {
 @keyframes drift {
   0% { background-position: 0 0, 0 0; }
   100% { background-position: 0 0, 1600px 0; }
+}
+
+@keyframes grid-drift {
+  from { background-position: 0 0, 0 0, 0 0, 0 0; }
+  to { background-position: 48px 48px, 48px 48px, 220px 180px, 260px 210px; }
+}
+
+@keyframes system-scan {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
 }
 
 .updates {
@@ -1607,6 +1841,15 @@ article.teaching li {
   .hero-grid {
     grid-template-columns: 1fr;
   }
+
+  .chapter-intro {
+    grid-template-columns: 1fr;
+    gap: 0.55rem;
+  }
+
+  .chapter-number {
+    font-size: clamp(2.5rem, 18vw, 4.5rem);
+  }
 }
 
 @media (min-width: 900px) {
@@ -1675,6 +1918,13 @@ article.teaching li {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .entry-pools::before,
+  .featured-strip::before {
+    animation: grid-drift 18s linear infinite;
   }
 }
 .content-area > .cards,

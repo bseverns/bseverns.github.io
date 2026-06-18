@@ -75,12 +75,18 @@
 
     <section class="entry-pools" aria-labelledby="entry-pools-title">
       <div class="container">
-        <div class="section-intro">
-          <p class="eyebrow">Choose a doorway</p>
-          <h2 id="entry-pools-title">Start with the pool that matches how you want to read the work</h2>
+        <div class="section-intro chapter-intro">
+          <span class="chapter-number" aria-hidden="true">01</span>
+          <div>
+            <p class="eyebrow">Choose a doorway</p>
+            <h2 id="entry-pools-title">Start with the pool that matches how you want to read the work</h2>
+          </div>
         </div>
         <div class="card-grid pool-grid">
-          <article class="card pool-card">
+          <article class="card pool-card media-card">
+            <div class="card-thumb">
+              <img src="/img/portfolio/3d/fly.jpg" alt="" decoding="async">
+            </div>
             <div class="card-body">
               <h3>Studio</h3>
               <p>Artworks, scenes, and selected lineage notes from photography through installation, moving image, and sound.</p>
@@ -91,7 +97,10 @@
               </ul>
             </div>
           </article>
-          <article class="card pool-card">
+          <article class="card pool-card media-card">
+            <div class="card-thumb">
+              <img src="/assets/images/cds/criticalMaking.jpg" alt="" decoding="async">
+            </div>
             <div class="card-body">
               <h3>Teaching / Learning</h3>
               <p>Courses, workshop structures, and teaching systems where tool literacy and documentation are part of the practice.</p>
@@ -103,7 +112,10 @@
               </ul>
             </div>
           </article>
-          <article class="card pool-card">
+          <article class="card pool-card media-card">
+            <div class="card-thumb">
+              <img src="/assets/diagrams/mn42_latency-rig.svg" alt="" decoding="async">
+            </div>
             <div class="card-body">
               <h3>Atlas / Systems</h3>
               <p>The current fleet of tools, scenes, methods, and support systems, with public claims tied to routes and proof objects.</p>
@@ -115,7 +127,10 @@
               </ul>
             </div>
           </article>
-          <article class="card pool-card">
+          <article class="card pool-card media-card">
+            <div class="card-thumb">
+              <img src="/img/portfolio/flat/windows.jpg" alt="" decoding="async">
+            </div>
             <div class="card-body">
               <h3>Archive / Lineage</h3>
               <p>Preserved archives and bridge notes that keep the earlier photographs, objects, and installations readable in the present tense.</p>
@@ -133,36 +148,63 @@
 
     <section class="featured-strip" aria-labelledby="featured-strip-title">
       <div class="container">
-        <div class="section-intro">
-          <p class="eyebrow">Current anchors</p>
-          <h2 id="featured-strip-title">A few active routes into the current work</h2>
+        <div class="section-intro chapter-intro">
+          <span class="chapter-number" aria-hidden="true">02</span>
+          <div>
+            <p class="eyebrow">Current anchors</p>
+            <h2 id="featured-strip-title">A few active routes into the current work</h2>
+          </div>
         </div>
         <div class="card-grid feature-grid">
-          <article class="card feature-card">
+          <article class="card feature-card system-card">
+            <div class="card-thumb thumb-mn42">
+              <img src="/img/front/context.jpg" alt="" decoding="async">
+            </div>
             <div class="card-body">
+              <p class="system-status">active instrument</p>
               <h3>MOARkNOBS-42</h3>
               <p>Controller platform work centered on mappings, latency, and legible instrument behavior.</p>
+              <p class="proof-line">Proof line: controller mappings, schema, and latency-lab documentation.</p>
+              <div class="system-mini-map" aria-hidden="true"></div>
               <a class="card-link" href="/atlas/n/moarknobs42/">Open node</a>
             </div>
           </article>
-          <article class="card feature-card">
+          <article class="card feature-card system-card">
+            <div class="card-thumb thumb-human-buffer">
+              <img src="/assets/images/cds/glitch-geometry-still.png" alt="" decoding="async">
+            </div>
             <div class="card-body">
+              <p class="system-status">workshop system</p>
               <h3>Human-Buffer</h3>
               <p>Workshop structure for computer vision, consent, and public understanding of what a system perceives.</p>
+              <p class="proof-line">Proof line: vision exercises, consent framing, and public-facing explanation.</p>
+              <div class="system-mini-map" aria-hidden="true"></div>
               <a class="card-link" href="/atlas/n/humanbuffer/">Open node</a>
             </div>
           </article>
-          <article class="card feature-card">
+          <article class="card feature-card system-card">
+            <div class="card-thumb thumb-machine-docs">
+              <img src="/img/studio/studio-1.jpg" alt="" decoding="async">
+            </div>
             <div class="card-body">
+              <p class="system-status">runbook layer</p>
               <h3>machine-docs</h3>
               <p>Runbook and field-manual layer where machine maintenance becomes shared curriculum.</p>
+              <p class="proof-line">Proof line: repair notes, operating context, and shared maintenance language.</p>
+              <div class="system-mini-map" aria-hidden="true"></div>
               <a class="card-link" href="/atlas/n/machinedocs/">Open node</a>
             </div>
           </article>
-          <article class="card feature-card">
+          <article class="card feature-card system-card">
+            <div class="card-thumb">
+              <img src="/img/front/banner.gif" alt="" decoding="async">
+            </div>
             <div class="card-body">
+              <p class="system-status">signal study</p>
               <h3>frZone</h3>
               <p>Frequency-zone trigger study connecting sound analysis to MIDI and OSC events.</p>
+              <p class="proof-line">Proof line: analysis thresholds, triggers, and routing behavior.</p>
+              <div class="system-mini-map" aria-hidden="true"></div>
               <a class="card-link" href="/atlas/n/frzone/">Open node</a>
             </div>
           </article>
@@ -170,10 +212,58 @@
       </div>
     </section>
 
+    <section class="diagram-section route-map-section" aria-labelledby="route-map-title">
+      <div class="container">
+        <div class="section-intro chapter-intro">
+          <span class="chapter-number" aria-hidden="true">03</span>
+          <div>
+            <p class="eyebrow">Route map</p>
+            <h2 id="route-map-title">How the current systems feed one another</h2>
+            <p>These field diagrams make the homepage behave more like an atlas: the work stays readable as connected tools, scenes, learning structures, and public support systems.</p>
+          </div>
+        </div>
+        <div class="diagram-grid two-up route-map-grid">
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Homepage-level</p>
+              <h3>Fleet Map</h3>
+              <p class="diagram-summary">The operating structure of the practice across tools, scenes, learning, systems, distribution, and maintenance.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/fleet-map.md">Open source draft</a>
+            </div>
+            <details class="diagram-disclosure">
+              <summary>Show diagram</summary>
+              <div class="diagram-frame">
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/fleet-map.md" data-diagram-fallback="Fleet map source not available yet."></div>
+              </div>
+            </details>
+          </article>
+          <article class="diagram-panel">
+            <div class="diagram-meta">
+              <p class="diagram-kicker">Homepage-level</p>
+              <h3>Core Project Relationships</h3>
+              <p class="diagram-summary">A relationship map showing how the core projects feed one another as a fleet instead of standing alone.</p>
+              <a class="diagram-link" href="/docs/visual-system/diagrams/core-project-relationships.md">Open source draft</a>
+            </div>
+            <details class="diagram-disclosure">
+              <summary>Show diagram</summary>
+              <div class="diagram-frame">
+                <div class="diagram-render" data-diagram-src="/docs/visual-system/diagrams/core-project-relationships.md" data-diagram-fallback="Core project relationship source not available yet."></div>
+              </div>
+            </details>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section class="archive-note archive-roots" aria-labelledby="archive-note-title">
       <div class="container">
-        <h2 id="archive-note-title">Why the archive stays visible</h2>
-        <p>The archive remains public because the current work still cites it. Browse the <a href="/2d/">2D archive</a>, the <a href="/3d/">3D archive</a>, or the <a href="/lineage/">lineage notes</a> when you want the longer bridge into the present.</p>
+        <div class="chapter-intro archive-intro">
+          <span class="chapter-number" aria-hidden="true">04</span>
+          <div>
+            <h2 id="archive-note-title">Why the archive stays visible</h2>
+            <p>The archive remains public because the current work still cites it. Browse the <a href="/2d/">2D archive</a>, the <a href="/3d/">3D archive</a>, or the <a href="/lineage/">lineage notes</a> when you want the longer bridge into the present.</p>
+          </div>
+        </div>
       </div>
     </section>
   </main>
