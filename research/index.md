@@ -53,6 +53,94 @@ Research is not a back room separate from the studio. It is how the work stays a
   </div>
 </section>
 
+<section class="portfolio-list" aria-labelledby="under-current-title">
+  <div class="container">
+    <p class="eyebrow">Public-safe BenLab threads</p>
+    <h2 id="under-current-title">Under-current research threads worth foregrounding</h2>
+    <p>These ideas are already present in the public repo, but they deserve a clearer research doorway. Read them as representations of BenLab thought that can travel publicly without exposing private notes, identities, or operational detail.</p>
+    <div class="card-grid">
+      <article class="card">
+        <div class="card-body">
+          <h3>Redacted Systems as Research</h3>
+          <p>Infrastructure can be made legible without making it reconstructable. The research question is how much structure can be shown while keeping topology, access, and risk out of public view.</p>
+          <ul class="pool-links" aria-label="Redacted systems research links">
+            <li><a href="/atlas/n/systems-atlas/">systems-atlas</a></li>
+            <li><a href="/atlas/n/lab-mind/">lab-mind</a></li>
+            <li><a href="/atlas/n/homeauto/">homeauto</a></li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <h3>Care, Repair, and Rebuild</h3>
+          <p>Maintenance is not background labor here. It is a way of thinking through survival, machine culture, storage, access, and continuation under constraint.</p>
+          <ul class="pool-links" aria-label="Care repair and rebuild research links">
+            <li><a href="/atlas/n/repairstudio/">repair-studio</a></li>
+            <li><a href="/atlas/n/machinedocs/">machine-docs</a></li>
+            <li><a href="/docs/site-reset/machine-care-and-rebuild.md">machine care note</a></li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <h3>Memory, Retention, and Afterlife</h3>
+          <p>Memory is treated as a system behavior: what enters, what decays, what can be retrieved, what must be erased, and what older work keeps asking of the present.</p>
+          <ul class="pool-links" aria-label="Memory retention and afterlife research links">
+            <li><a href="/atlas/n/memory-engine/">Memory Engine</a></li>
+            <li><a href="/lineage/digital-bath-engram/">Digital Bath / Engram</a></li>
+            <li><a href="/lineage/night-stalker/">Night Stalker lineage</a></li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <h3>Telemetry and Environmental Sensing</h3>
+          <p>Environmental signal becomes composition, evidence, object, and classroom material when telemetry is treated as more than data exhaust.</p>
+          <ul class="pool-links" aria-label="Telemetry and environmental sensing research links">
+            <li><a href="/atlas/n/dronechorus/">drone-chorus</a></li>
+            <li><a href="/atlas/n/pointyclumps/">pointy-clumps</a></li>
+            <li><a href="/atlas/n/roomlens/">roomLens</a></li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <h3>Pedagogical Operations</h3>
+          <p>Courses, station cards, platforms, and feedback loops are research methods when teaching is treated as a live system, not a delivery wrapper.</p>
+          <ul class="pool-links" aria-label="Pedagogical operations research links">
+            <li><a href="/atlas/n/teacherops/">make -&gt; deploy -&gt; assess</a></li>
+            <li><a href="/atlas/n/syllabusrepo/">Syllabus</a></li>
+            <li><a href="/atlas/n/classhub/">Class Hub</a></li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <h3>Publication as Infrastructure</h3>
+          <p>The site, catalog, source trails, and note systems are not just presentation. They are part of how the work becomes inspectable, citable, and revisable.</p>
+          <ul class="pool-links" aria-label="Publication as infrastructure research links">
+            <li><a href="/atlas/n/dustpress/">DustPress</a></li>
+            <li><a href="/atlas/n/bseverns-github-io/">bseverns.github.io</a></li>
+            <li><a href="/atlas/n/studio-notes/">studio-notes</a></li>
+          </ul>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-body">
+          <h3>Sound as Research</h3>
+          <p>Sound is analysis, pressure, threshold, proof, and embodied state. The research question is how listening can become evidence without flattening experience.</p>
+          <ul class="pool-links" aria-label="Sound as research links">
+            <li><a href="/atlas/n/frzone/">frZone</a></li>
+            <li><a href="/atlas/n/horizon/">Horizon</a></li>
+            <li><a href="/atlas/n/seedbox/">SeedBox</a></li>
+            <li><a href="/atlas/n/diceloopnode/">DiceLoop</a></li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
 ## Research Nodes
 
 ### Instruments, Signal, and Control
