@@ -24,7 +24,7 @@ REQUIRED_DIAGRAMS = {
 }
 
 PAGE_REFERENCES = {
-    "index.html": [
+    "how-to-read-this-site.md": [
         "/docs/visual-system/diagrams/fleet-map.md",
         "/docs/visual-system/diagrams/core-project-relationships.md",
     ],
