@@ -8,7 +8,7 @@ seo_description: "A compact guide to reading Ben Severns' portfolio, Atlas, repo
   <div class="container">
     <p class="eyebrow">Reading guide</p>
     <h1>How to read this site</h1>
-    <p>This site is a threshold into one practice, not a single exhaustive explanation. The homepage gives doorways. Studio, Teaching, Atlas, Archive, Research, and the Press kit carry different kinds of truth.</p>
+    <p>This site is a threshold into one practice, not a single exhaustive explanation. The homepage gives doorways. Studio / Current Work, Learning / Teaching, Systems / Distribution, Atlas / Maps, Archive / Research Nodes, and the Press kit carry different kinds of truth.</p>
   </div>
 </section>
 
@@ -16,12 +16,13 @@ seo_description: "A compact guide to reading Ben Severns' portfolio, Atlas, repo
   <div class="container">
     <h2>Where truth lives</h2>
     <ul class="atlas-todo">
-      <li><a href="/art.html">Studio</a> is the quickest visual and material route into current work and preserved archive roots.</li>
-      <li><a href="/courses.html">Teaching</a> holds courses, workshop structures, and learning systems.</li>
-      <li><a href="/atlas/">Atlas</a> is the relationship layer: tools, scenes, learning environments, systems, methods, and the fleet map.</li>
+      <li><a href="/art.html">Studio / Current Work</a> is the quickest visual and material route into instruments, rooms, image systems, sound work, fabrication, and care as material.</li>
+      <li><a href="/courses.html">Learning / Teaching</a> holds courses, workshop structures, and teaching systems.</li>
+      <li><a href="/atlas/systems/">Systems / Distribution</a> holds publishing, machine care, documentation, classroom infrastructure, and maintenance as public structure.</li>
+      <li><a href="/atlas/">Atlas / Maps</a> is the relationship layer: tools, scenes, learning environments, systems, methods, and the fleet map.</li>
       <li>Project repositories carry live implementation truth when a project is public and repo-backed.</li>
       <li><a href="/atlas/n/studio-notes/">studio-notes</a> carries cross-project patterns, decisions, references, and teaching cards harvested from working repos.</li>
-      <li><a href="/lineage/">Archive and lineage</a> keep earlier photographs, rooms, objects, and media stacks readable as active roots.</li>
+      <li><a href="/lineage/">Archive / Research Nodes</a> keep earlier photographs, rooms, objects, and media stacks active as research material feeding the current practice.</li>
       <li><a href="/research/">Research</a>, <a href="/atlas/methods/">Methods</a>, and <a href="/privacy-ethics/">Privacy &amp; Ethics</a> explain how claims, evidence, consent, and public boundaries are handled.</li>
     </ul>
   </div>
@@ -43,7 +44,7 @@ seo_description: "A compact guide to reading Ben Severns' portfolio, Atlas, repo
       <li>A public page is not always a finished project. Some pages are prototypes, studies, public-safe excerpts, or evidence stubs.</li>
       <li>Some claims stay quiet until a public proof object exists.</li>
       <li>Some work remains redacted because students, participants, private infrastructure, or home-studio details should not become portfolio material.</li>
-      <li>The archive is not a separate former identity. It is the earlier material that the current systems still cite.</li>
+      <li>The archive is not a separate former identity or passive history. It is earlier research material that the current systems still cite.</li>
     </ul>
   </div>
 </section>
@@ -51,6 +52,6 @@ seo_description: "A compact guide to reading Ben Severns' portfolio, Atlas, repo
 <section class="atlas-section">
   <div class="container">
     <h2>Good starting points</h2>
-    <p><a href="/art.html">Open Studio</a> for the work, <a href="/courses.html">Teaching</a> for the learning practice, <a href="/atlas/">Atlas</a> for relationships, <a href="/lineage/">Lineage</a> for archive roots, and <a href="/press-kit.html">Press kit</a> for quote-ready framing.</p>
+    <p><a href="/art.html">Open Studio</a> for the work, <a href="/courses.html">Learning / Teaching</a> for the teaching practice, <a href="/atlas/systems/">Systems / Distribution</a> for infrastructure and maintenance, <a href="/atlas/">Atlas / Maps</a> for relationships, <a href="/lineage/">Archive / Research Nodes</a> for active source material, and <a href="/press-kit.html">Press kit</a> for quote-ready framing.</p>
   </div>
 </section>
