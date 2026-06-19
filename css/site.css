@@ -804,6 +804,120 @@ article.teaching li {
   border: 0;
 }
 
+.sound-flow-section {
+  padding: clamp(28px, 7vw, 72px) 0;
+}
+
+.sound-flow-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(220px, 0.75fr);
+  gap: clamp(18px, 4vw, 42px);
+  align-items: stretch;
+  padding: clamp(20px, 4vw, 36px);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background:
+    linear-gradient(135deg, hsl(222 28% 10% / 0.92), hsl(194 34% 13% / 0.84) 58%, hsl(18 30% 14% / 0.78)),
+    var(--surface);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.sound-flow-copy {
+  display: grid;
+  gap: 1rem;
+  align-content: center;
+}
+
+.sound-flow-copy h2,
+.sound-flow-copy p {
+  margin: 0;
+}
+
+.sound-flow-copy p:not(.eyebrow) {
+  color: hsl(0 0% 100% / 0.78);
+  max-width: 68ch;
+}
+
+.sound-flow-visual {
+  min-height: 240px;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(10px, 1fr));
+  gap: 0.55rem;
+  align-items: end;
+  padding: clamp(14px, 3vw, 24px);
+  border: 1px solid hsl(0 0% 100% / 0.14);
+  border-radius: 0.85rem;
+  background:
+    linear-gradient(180deg, hsl(0 0% 100% / 0.07), hsl(0 0% 100% / 0.02)),
+    hsl(222 36% 7% / 0.42);
+}
+
+.sound-flow-visual span {
+  display: block;
+  min-height: 22%;
+  border-radius: 0.35rem 0.35rem 0.1rem 0.1rem;
+  background: linear-gradient(180deg, var(--accent), var(--brand));
+  opacity: 0.84;
+}
+
+.sound-flow-visual span:nth-child(1) { height: 44%; }
+.sound-flow-visual span:nth-child(2) { height: 72%; }
+.sound-flow-visual span:nth-child(3) { height: 58%; }
+.sound-flow-visual span:nth-child(4) { height: 90%; }
+.sound-flow-visual span:nth-child(5) { height: 36%; }
+.sound-flow-visual span:nth-child(6) { height: 66%; }
+.sound-flow-visual span:nth-child(7) { height: 80%; }
+.sound-flow-visual span:nth-child(8) { height: 48%; }
+
+.sound-flow-grid {
+  margin-top: clamp(16px, 3vw, 24px);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.sound-flow-card {
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.sound-flow-card a {
+  display: grid;
+  gap: 0.45rem;
+  height: 100%;
+  padding: 1rem;
+  color: inherit;
+  text-decoration: none;
+}
+
+.sound-flow-card a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.sound-flow-card strong {
+  font-family: var(--font-family-display);
+  font-size: 1.08rem;
+}
+
+.sound-flow-card span:last-child {
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.sound-flow-kicker {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
 .card h3 {
   margin: 0;
   font-size: 1.35rem;
@@ -1891,6 +2005,8 @@ article.teaching li {
   .diagram-panel:hover,
   .fleet-band:hover,
   .card:hover,
+  .sound-flow-card:hover,
+  .sound-flow-card:focus-within,
   .practice-arc-list li:hover,
   .practice-arc-list li:focus-within,
   .legacy-list li:hover,
@@ -2072,6 +2188,14 @@ article.teaching li {
 
   .overview-panel {
     grid-template-columns: 1fr;
+  }
+
+  .sound-flow-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .sound-flow-visual {
+    min-height: 160px;
   }
 
   .chapter-intro {
