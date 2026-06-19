@@ -21,6 +21,8 @@ REQUIRED_DIAGRAMS = {
     "class-hub-architecture.md",
     "syllabus-constellation.md",
     "live-rig-topology.md",
+    "research-node-orbit.md",
+    "research-proof-loop.md",
 }
 
 PAGE_REFERENCES = {
@@ -37,6 +39,10 @@ PAGE_REFERENCES = {
         "/docs/visual-system/diagrams/seedbox-triangle.md",
         "/docs/visual-system/diagrams/class-hub-architecture.md",
         "/docs/visual-system/diagrams/syllabus-constellation.md",
+    ],
+    "research/index.md": [
+        "/docs/visual-system/diagrams/research-node-orbit.md",
+        "/docs/visual-system/diagrams/research-proof-loop.md",
     ],
 }
 

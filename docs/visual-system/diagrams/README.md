@@ -34,6 +34,12 @@ These diagrams make the portfolio legible as a connected practice rather than a 
 - `live-rig-topology.md`
   Purpose: three-lane performance topology for live-rig.
   Suggested placement: `art.html` or a future live-rig detail page
+- `research-node-orbit.md`
+  Purpose: public-safe map of research nodes feeding Studio, Learning, Systems, and Atlas.
+  Suggested placement: `research/index.md`
+- `research-proof-loop.md`
+  Purpose: evidence loop showing how observation moves through assumptions, methods, proof objects, Atlas claims, public routes, and revision.
+  Suggested placement: `research/index.md`
 
 ## Editing Notes
 
