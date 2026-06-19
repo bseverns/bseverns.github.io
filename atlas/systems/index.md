@@ -14,16 +14,17 @@ seo_description: "Atlas pillar covering systems, deployment, indexing, and gover
   </div>
 </section>
 
-<section class="atlas-doors">
+<section class="atlas-section">
   <div class="container">
-    <h2>Featured nodes</h2>
-    <div class="card-grid">
-      <article class="card"><div class="card-body"><h3>bseverns.github.io</h3><p>Public publishing system. The site itself is part of the distribution and evidence layer.</p><a class="card-link" href="/atlas/n/bseverns-github-io/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>systems-atlas</h3><p>Public-safe method stub. Redacted topology, runbooks, and inventory logic without sensitive infrastructure detail.</p><a class="card-link" href="/atlas/n/systems-atlas/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>machine-docs</h3><p>Active documentation system. Shared operating knowledge made transferable and maintainable.</p><a class="card-link" href="/atlas/n/machinedocs/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>lab-mind</h3><p>Private topology / public-safe method only. A systems-thinking stub focused on recovery and legible operations.</p><a class="card-link" href="/atlas/n/lab-mind/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>homeauto</h3><p>Private topology / public-safe method only. Local-first automation and household-studio operations with aggressive redaction.</p><a class="card-link" href="/atlas/n/homeauto/">Open node</a></div></article>
-    </div>
+    <p class="eyebrow">Routes</p>
+    <h2>Publication, operations, and redacted infrastructure</h2>
+    <ul class="atlas-related-list">
+      <li><a href="/atlas/n/bseverns-github-io/">bseverns.github.io</a><span>The site itself as distribution and evidence layer.</span></li>
+      <li><a href="/atlas/n/machinedocs/">machine-docs</a><span>Shared operating knowledge made transferable and maintainable.</span></li>
+      <li><a href="/atlas/n/systems-atlas/">systems-atlas</a><span>Redacted topology, runbooks, and inventory logic without sensitive detail.</span></li>
+      <li><a href="/atlas/n/lab-mind/">lab-mind</a><span>Private topology / public-safe method only; recovery and legible operations.</span></li>
+      <li><a href="/atlas/n/homeauto/">homeauto</a><span>Local-first household-studio operations with aggressive redaction.</span></li>
+    </ul>
   </div>
 </section>
 
@@ -35,8 +36,5 @@ seo_description: "Atlas pillar covering systems, deployment, indexing, and gover
       <li><a href="/atlas/methods/assumption-ledger/">Assumption Ledger</a> matters because undocumented operational assumptions are where brittle systems hide.</li>
       <li><a href="/atlas/methods/evidence-before-polish/">Evidence Before Polish</a> keeps this pillar from overclaiming beyond what can be shown safely.</li>
     </ul>
-
-    <h2>Reader path</h2>
-    <p>Start with <a href="/atlas/n/machinedocs/">machine-docs</a> for the most public-facing documentation layer, then read <a href="/atlas/n/systems-atlas/">systems-atlas</a> and <a href="/atlas/n/homeauto/">homeauto</a> as boundary-aware method pages. Use this pillar to understand how the fleet stays legible, not to reconstruct private infrastructure.</p>
   </div>
 </section>

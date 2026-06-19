@@ -15,39 +15,30 @@ seo_description: "Atlas pillar covering consent-forward tools and instruments."
 
 <section class="atlas-section">
   <div class="container">
-    <p class="eyebrow">Primary path</p>
-    <h2>Read the tool stack as a chain of control, signal, and proof</h2>
+    <p class="eyebrow">Routes</p>
+    <h2>Control, signal, and proof</h2>
     <ul class="atlas-related-list">
       <li>
         <a href="/atlas/n/moarknobs42/">MOARkNOBS-42</a>
-        <span>Start here for the flagship control-instrument branch: mappings, latency, mode feedback, and validation as part of the instrument.</span>
+        <span>Flagship control-instrument branch: mappings, latency, mode feedback, and validation as part of the instrument.</span>
       </li>
       <li>
         <a href="/atlas/n/frzone/">frZone</a>
-        <span>Move into analysis: sound becomes thresholds, triggers, and downstream MIDI or OSC events.</span>
+        <span>Sound becomes thresholds, triggers, and downstream MIDI or OSC events.</span>
       </li>
       <li>
         <a href="/atlas/n/horizon/">Horizon</a>
-        <span>Then listen to the DSP line: dry/wet comparison and control maps become the evidence.</span>
+        <span>Dry/wet comparison and control maps become the evidence.</span>
       </li>
       <li>
         <a href="/atlas/n/seedbox/">SeedBox</a>
-        <span>End with the portable instrument question: repeatable variation as kit, lesson, and performance material.</span>
+        <span>Repeatable variation as kit, lesson, and performance material.</span>
+      </li>
+      <li>
+        <a href="/atlas/n/diceloopnode/">DiceLoop</a>
+        <span>Simple rules and playable rigor, held as a study until stronger proof exists.</span>
       </li>
     </ul>
-  </div>
-</section>
-
-<section class="atlas-doors">
-  <div class="container">
-    <h2>Featured nodes</h2>
-    <div class="card-grid">
-      <article class="card"><div class="card-body"><h3>MOARkNOBS-42</h3><p>Prototype platform. Teensy-based control instrument with visible mappings, validation logic, and a teaching path.</p><a class="card-link" href="/atlas/n/moarknobs42/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>frZone</h3><p>Working study. Frequency-zone analysis instrument for turning audio behavior into visible events and teachable thresholds.</p><a class="card-link" href="/atlas/n/frzone/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>SeedBox</h3><p>Prototype. Seed-driven DSP instrument core that links sound generation, control, and portable workshop structure.</p><a class="card-link" href="/atlas/n/seedbox/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>Horizon</h3><p>DSP study. Mid/side processor where listening, comparison, and control mapping are part of the evidence.</p><a class="card-link" href="/atlas/n/horizon/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>DiceLoop</h3><p>Study / needs proof. A useful example of simple rules and playable rigor before broader claims.</p><a class="card-link" href="/atlas/n/diceloopnode/">Open node</a></div></article>
-    </div>
   </div>
 </section>
 
@@ -59,8 +50,5 @@ seo_description: "Atlas pillar covering consent-forward tools and instruments."
       <li><a href="/atlas/methods/assumption-ledger/">Assumption Ledger</a> names the hidden dependencies in hardware, sensing, and DSP.</li>
       <li><a href="/atlas/methods/documentation-as-interface/">Documentation as Interface</a> explains why runbooks, mappings, and quickstarts belong inside the instrument.</li>
     </ul>
-
-    <h2>Reader path</h2>
-    <p>Start with <a href="/atlas/n/moarknobs42/">MOARkNOBS-42</a> if you want the flagship instrument branch. Open <a href="/atlas/n/frzone/">frZone</a> or <a href="/atlas/n/horizon/">Horizon</a> next if you want the analysis and DSP line. Expect several tools here to remain prototypes or studies until more proof objects are surfaced.</p>
   </div>
 </section>

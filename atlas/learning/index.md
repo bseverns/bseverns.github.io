@@ -14,16 +14,17 @@ seo_description: "Atlas pillar covering curricula and learning environments."
   </div>
 </section>
 
-<section class="atlas-doors">
+<section class="atlas-section">
   <div class="container">
-    <h2>Featured nodes</h2>
-    <div class="card-grid">
-      <article class="card"><div class="card-body"><h3>Syllabus</h3><p>Curriculum archive. Shared policies, prompts, and pathway structure that can travel across courses and workshops.</p><a class="card-link" href="/atlas/n/syllabusrepo/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>Class Hub</h3><p>Prototype / public-safe excerpt. Self-hosted learning doorway where privacy and maintenance stay visible.</p><a class="card-link" href="/atlas/n/classhub/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>Human-Buffer</h3><p>Teaching-ready system. Workshop structure where perception, refusal, and consent become hands-on material.</p><a class="card-link" href="/atlas/n/humanbuffer/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>machine-docs</h3><p>Active documentation system. Machine runbooks and maintenance habits treated as teachable infrastructure.</p><a class="card-link" href="/atlas/n/machinedocs/">Open node</a></div></article>
-      <article class="card"><div class="card-body"><h3>Piper / LEGO / printing</h3><p>Curriculum line. Public course materials that show hardware as curriculum across different learner entry points.</p><a class="card-link" href="/courses.html">Open teaching layer</a></div></article>
-    </div>
+    <p class="eyebrow">Routes</p>
+    <h2>Curriculum, delivery, and maintenance as teaching surface</h2>
+    <ul class="atlas-related-list">
+      <li><a href="/atlas/n/syllabusrepo/">Syllabus</a><span>Shared policies, prompts, and pathway structure that can travel across courses and workshops.</span></li>
+      <li><a href="/atlas/n/classhub/">Class Hub</a><span>Self-hosted learning doorway where privacy and maintenance stay visible.</span></li>
+      <li><a href="/atlas/n/humanbuffer/">Human-Buffer</a><span>Workshop structure where perception, refusal, and consent become hands-on material.</span></li>
+      <li><a href="/atlas/n/machinedocs/">machine-docs</a><span>Machine runbooks and maintenance habits treated as teachable infrastructure.</span></li>
+      <li><a href="/courses.html">Piper / LEGO / printing</a><span>Course materials that show hardware as curriculum across different learner entry points.</span></li>
+    </ul>
   </div>
 </section>
 
@@ -35,8 +36,5 @@ seo_description: "Atlas pillar covering curricula and learning environments."
       <li><a href="/atlas/methods/consent-forward-systems/">Consent-Forward Systems</a> matters whenever classroom tools involve sensing, accounts, or participant data.</li>
       <li><a href="/atlas/methods/evidence-before-polish/">Evidence Before Polish</a> keeps teaching claims tied to visible structures instead of generic impact language.</li>
     </ul>
-
-    <h2>Reader path</h2>
-    <p>Start with <a href="/atlas/n/syllabusrepo/">Syllabus</a> for the archive layer, then <a href="/atlas/n/classhub/">Class Hub</a> for delivery infrastructure, and <a href="/atlas/n/machinedocs/">machine-docs</a> for maintenance-as-curriculum. Use <a href="/courses.html">Teaching</a> for the broader course layer already published on the site.</p>
   </div>
 </section>
