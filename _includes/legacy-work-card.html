@@ -1,6 +1,10 @@
 {% assign work = include.work %}
+{% assign href = work.archive_url | default: work.lineage_note | default: work.catalog_record %}
+{% if include.prefer == "lineage" and work.lineage_note %}
+  {% assign href = work.lineage_note %}
+{% endif %}
 <li class="legacy-work-card" data-status="{{ work.status }}">
-  <a class="legacy-work-card-link" href="{{ work.archive_url | default: work.lineage_note | default: work.catalog_record | relative_url }}" aria-label="{{ work.title | escape }}{% if work.medium %}, {{ work.medium | escape }}{% endif %}" title="{{ work.title | escape }}">
+  <a class="legacy-work-card-link" href="{{ href | relative_url }}" aria-label="{{ work.title | escape }}{% if work.medium %}, {{ work.medium | escape }}{% endif %}" title="{{ work.title | escape }}">
     {% if work.thumbnail %}
     <img src="{{ work.thumbnail | relative_url }}" alt="{{ work.title | escape }} documentation image" loading="lazy" decoding="async">
     {% else %}

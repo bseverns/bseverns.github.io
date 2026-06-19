@@ -47,37 +47,67 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
         <p>This page is the quickest read of the studio work now in public view: instruments, rooms, images, sound, teaching systems, and recovery paths that can be entered, tested, and traced back to earlier materials. Photography and darkroom process still sit underneath it, especially the questions of threshold, memory, limitation, and translation.</p>
         <p class="origin-callout">The current scene systems are not separate from the earlier work. They keep asking how people enter a work, what a medium withholds, what it remembers, and how care appears in structure.</p>
         <div class="cta">
-          <a class="btn secondary" href="/atlas/">Open the fleet map</a>
+          <a class="btn secondary" href="#current-work">Current work</a>
+          <a class="btn secondary" href="#archive-work">Archive</a>
           <a class="btn secondary" href="/atlas/methods/">Open methods</a>
           <a class="btn secondary" href="/privacy-ethics/">Open privacy &amp; ethics</a>
-          <a class="btn secondary" href="/atlas/n/studio-notes/">Open studio-notes</a>
           <a class="btn secondary" href="#sound-flow">Open sound flow</a>
         </div>
       </div>
     </section>
-    <section class="portfolio-list" aria-labelledby="selected-works-title">
+    <section class="portfolio-list studio-access-section" id="current-work" aria-labelledby="current-work-title">
       <div class="container">
         <div class="section-intro">
-          <p class="eyebrow">Selected Works</p>
-          <h2 id="selected-works-title">A quick entry into the current public project set</h2>
-          <p>This compact grid keeps the newer project pages and the broader Studio narrative in one place. For cross-project patterns and public boundary notes, use the Methods and Privacy &amp; Ethics layers directly.</p>
+          <p class="eyebrow">Current work</p>
+          <h2 id="current-work-title">Open the current studio practice one work at a time</h2>
+          <p>This is the direct-access layer for the public studio now: instruments, sound work, image systems, performance stacks, fabrication, and maintenance culture. Atlas explains the relationships; these cards get you into the work.</p>
         </div>
-        <div class="cards selected-grid">
-          {% assign featured_projects = site.projects | where: "featured", true | sort: "year" | reverse %}
-          {% for item in featured_projects %}
-          <article class="card selected-card">
-            <a href="{{ item.url | relative_url }}">
-              {% if item.hero %}
-              <div class="card-thumb">
-                <img src="{{ item.hero | relative_url }}" alt="{{ item.hero_alt | default: item.title }}" loading="lazy" decoding="async">
-              </div>
-              {% endif %}
-              <h3>{{ item.title }}</h3>
-              <p class="eyebrow">{{ item.year }}{% if item.media %} • {{ item.media }}{% elsif item.context %} • {{ item.context }}{% endif %}</p>
-              <p>{{ item.summary }}</p>
-            </a>
-          </article>
+        <div class="studio-route-grid">
+          {% for route in site.data.studio_routes %}
+            {% include studio-route-card.html route=route %}
           {% endfor %}
+        </div>
+      </div>
+    </section>
+    <section class="portfolio-list studio-access-section" id="archive-work" aria-labelledby="archive-work-title">
+      <div class="container">
+        <div class="section-intro">
+          <p class="eyebrow">Archive</p>
+          <h2 id="archive-work-title">Open the preserved work directly</h2>
+          <p>The archive stays public as evidence and lineage. These compact entries open preserved project pages where they exist, with source images cropped into small entry points.</p>
+        </div>
+        {% assign works_2d = site.data.legacy_works | where: "branch", "2d" | sort: "order" %}
+        {% if works_2d.size > 0 %}
+        <div class="archive-access-group">
+          <h3>2D archive</h3>
+          <ul class="legacy-work-grid">
+            {% for work in works_2d %}
+              {% include legacy-work-card.html work=work %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        {% assign works_3d = site.data.legacy_works | where: "branch", "3d" | sort: "order" %}
+        {% if works_3d.size > 0 %}
+        <div class="archive-access-group">
+          <h3>3D archive</h3>
+          <ul class="legacy-work-grid">
+            {% for work in works_3d %}
+              {% include legacy-work-card.html work=work %}
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+        {% assign sorted_legacy_works = site.data.legacy_works | sort: "title" %}
+        <div class="archive-access-group">
+          <h3>Lineage notes</h3>
+          <ul class="legacy-work-grid compact">
+            {% for work in sorted_legacy_works %}
+              {% if work.lineage_note %}
+                {% include legacy-work-card.html work=work prefer="lineage" %}
+              {% endif %}
+            {% endfor %}
+          </ul>
         </div>
       </div>
     </section>
@@ -246,21 +276,6 @@ seo_description: "Studio works and systems by Ben Severns, framed as one continu
         <h2>Where truth lives</h2>
         <p>Project repos hold the live scene- and tool-specific truth. <a href="/atlas/n/studio-notes/">studio-notes</a> holds the cross-project patterns, decisions, reference, and teaching cards harvested from that work. Atlas shows how those systems relate across the fleet. The archive stays public because current scene logic still depends on those earlier experiments.</p>
         <p><a href="/atlas/methods/">Methods</a> and <a href="/privacy-ethics/">Privacy &amp; Ethics</a> explain how evidence, documentation, assumptions, and public boundaries are being handled across this branch.</p>
-      </div>
-    </section>
-    <section class="portfolio-list" aria-label="Studio projects">
-      <div class="container">
-        <div class="section-intro">
-          <p class="eyebrow">Project Catalog</p>
-          <h2>More studio projects</h2>
-          <p>The broader studio catalog stays here. The featured systems above are starting points, not the whole scene branch. Read the lineage notes on each card as quiet reminders that today’s public systems grew out of much older experiments in image, pressure, risk, and maintenance.</p>
-        </div>
-        <div class="card-grid">
-          {% assign items = site.projects | sort: "year" | reverse %}
-          {% for item in items %}
-          {% include card.html item=item %}
-          {% endfor %}
-        </div>
       </div>
     </section>
   </main>

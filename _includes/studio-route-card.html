@@ -1,0 +1,20 @@
+{% assign route = include.route %}
+{% assign is_ext = route.url | downcase | slice: 0, 4 %}
+{% assign href = route.url | relative_url %}
+{% if route.external or is_ext == "http" %}
+  {% assign href = route.url %}
+{% endif %}
+<article class="studio-route-card">
+  <a href="{{ href }}"{% if route.external or is_ext == "http" %} target="_blank" rel="noopener"{% endif %}>
+    {% if route.image %}
+    <span class="studio-route-thumb">
+      <img src="{{ route.image | relative_url }}" alt="{{ route.image_alt | default: route.title | escape }}" loading="lazy" decoding="async">
+    </span>
+    {% endif %}
+    <span class="studio-route-body">
+      <span class="studio-route-kicker">{{ route.eyebrow }}</span>
+      <strong>{{ route.title }}</strong>
+      <span>{{ route.summary }}</span>
+    </span>
+  </a>
+</article>

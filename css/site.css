@@ -804,6 +804,93 @@ article.teaching li {
   border: 0;
 }
 
+.studio-access-section {
+  padding-block: clamp(28px, 6vw, 64px);
+}
+
+.studio-route-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(14px, 2vw, 22px);
+  margin-top: clamp(18px, 3vw, 28px);
+}
+
+.studio-route-card {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, border-color 0.28s ease;
+}
+
+.studio-route-card a {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.studio-route-card a:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.studio-route-thumb {
+  display: block;
+  aspect-ratio: 4 / 3;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-muted);
+  overflow: hidden;
+}
+
+.studio-route-thumb img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  border: 0;
+  transition: transform 0.7s ease, filter 0.7s ease;
+}
+
+.studio-route-body {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem;
+}
+
+.studio-route-body strong {
+  font-family: var(--font-family-display);
+  font-size: 1.12rem;
+  line-height: 1.15;
+}
+
+.studio-route-body span:last-child {
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.studio-route-kicker {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.archive-access-group {
+  margin-top: clamp(26px, 5vw, 48px);
+}
+
+.archive-access-group h3 {
+  margin: 0;
+  font-family: var(--font-family-display);
+  font-size: 1.25rem;
+}
+
 .sound-flow-section {
   padding: clamp(28px, 7vw, 72px) 0;
 }
@@ -2005,6 +2092,8 @@ article.teaching li {
   .diagram-panel:hover,
   .fleet-band:hover,
   .card:hover,
+  .studio-route-card:hover,
+  .studio-route-card:focus-within,
   .sound-flow-card:hover,
   .sound-flow-card:focus-within,
   .practice-arc-list li:hover,
@@ -2018,6 +2107,8 @@ article.teaching li {
 
   .card:hover img,
   .card:hover .card-thumb img,
+  .studio-route-card:hover img,
+  .studio-route-card:focus-within img,
   .hero-visual:hover img,
   .asset-preview:hover img {
     transform: scale(1.035);

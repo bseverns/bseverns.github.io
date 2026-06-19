@@ -1,0 +1,96 @@
+- id: moarknobs-42
+  title: "MOARkNOBS-42"
+  eyebrow: "Instrument / control"
+  url: /projects/mn42/
+  image: /assets/images/cds/mn42-panel.png
+  image_alt: "MOARkNOBS-42 panel top-down with labeled controls"
+  summary: "Open-source MIDI controller and teaching platform where mappings, latency, and feedback stay visible."
+
+- id: human-buffer
+  title: "Human-Buffer"
+  eyebrow: "Vision / consent"
+  url: /atlas/n/humanbuffer/
+  image: /assets/images/cds/humandetect.png
+  image_alt: "Human-Buffer consent-forward detection interface"
+  summary: "Computer-vision workshop structure centered on consent, refusal, perception, and public understanding."
+
+- id: memory-engine
+  title: "Memory Engine"
+  eyebrow: "Room / memory"
+  url: /atlas/n/memory-engine/
+  image: /assets/diagrams/memory-engine_flow.svg
+  image_alt: "Memory Engine flow diagram"
+  summary: "Participant-facing memory environment where contribution, decay, retrieval, and revocation are part of the form."
+
+- id: live-rig
+  title: "live-rig"
+  eyebrow: "Performance system"
+  url: /atlas/n/liverig/
+  image: /img/front/banner.gif
+  image_alt: "Abstract signal image used as live-rig route marker"
+  summary: "Audio, control, and video performance stack documented as a recoverable scene system."
+
+- id: bs-sound
+  title: "B_S."
+  eyebrow: "Sound / release practice"
+  url: https://bbss.bandcamp.com/
+  external: true
+  image: /img/front/banner.gif
+  image_alt: "Abstract signal image used as B_S. sound route marker"
+  summary: "Longform noise where pressure, grief, repetition, and ritual become audible form."
+
+- id: frzone
+  title: "frZone"
+  eyebrow: "Sound analysis"
+  url: /atlas/n/frzone/
+  image: /img/front/banner.gif
+  image_alt: "Abstract signal image used as frZone route marker"
+  summary: "Frequency-zone trigger study turning sound into thresholds, MIDI, OSC, and visible events."
+
+- id: horizon
+  title: "Horizon"
+  eyebrow: "DSP / listening"
+  url: /atlas/n/horizon/
+  image: /img/front/banner.gif
+  image_alt: "Abstract signal image used as Horizon route marker"
+  summary: "Mid/side processor study where dry/wet comparison and listening become the evidence."
+
+- id: seedbox
+  title: "SeedBox"
+  eyebrow: "DSP instrument"
+  url: /atlas/n/seedbox/
+  image: /img/front/banner.gif
+  image_alt: "Abstract signal image used as SeedBox route marker"
+  summary: "Seed-driven sound generation as repeatable variation for performance, teaching, and portable kits."
+
+- id: glitch-geometry
+  title: "Glitch Geometry"
+  eyebrow: "Image / geometry"
+  url: /projects/glitch-geometry/
+  image: /assets/images/cds/glitch-geometry-still.png
+  image_alt: "Parametric mesh rendered mid-glitch"
+  summary: "Procedural glitch and CAD experiments where moving-image instability becomes buildable form."
+
+- id: data-weird
+  title: "Data Weird"
+  eyebrow: "Workshop installation"
+  url: /projects/dataweird/
+  image: /img/portfolio/3d/genF2.jpg
+  image_alt: "Generative fabrication render used as Data Weird route marker"
+  summary: "Overnight data sculpture jam with live sensing, projection mapping, acrylic forms, and walk-up debugging."
+
+- id: generative-fabrication
+  title: "Generative Fabrication Techniques"
+  eyebrow: "Fabrication"
+  url: /3d/genfab.html
+  image: /img/portfolio/3d/genF1.jpg
+  image_alt: "genF1 PETG print with ribboned cellular structure"
+  summary: "Code-to-form studies moving SDF fields, remeshing, and print constraints into physical proof."
+
+- id: machine-docs
+  title: "machine-docs"
+  eyebrow: "Care / maintenance"
+  url: /atlas/n/machinedocs/
+  image: /img/studio/studio-1.jpg
+  image_alt: "Studio machine area and maintenance context"
+  summary: "Machine stewardship and operational literacy treated as cultural, pedagogical, and studio work."
