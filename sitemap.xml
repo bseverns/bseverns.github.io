@@ -5,12 +5,14 @@ sitemap: false
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {% assign sitemap_docs = site.pages | concat: site.projects | concat: site.teaching | concat: site.nodes %}
-{% assign sitemap_docs = sitemap_docs | where_exp: "doc", "doc.url and doc.sitemap != false" | sort: "url" %}
+{% assign sitemap_docs = sitemap_docs | sort: "url" %}
 {% for doc in sitemap_docs %}
+  {% if doc.url and doc.sitemap != false %}
   <url>
     <loc>{{ doc.url | absolute_url | xml_escape }}</loc>
     {% assign lastmod = doc.last_modified_at | default: doc.updated | default: doc.date | default: site.time %}
     <lastmod>{{ lastmod | date_to_xmlschema }}</lastmod>
   </url>
+  {% endif %}
 {% endfor %}
 </urlset>

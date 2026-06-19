@@ -74,9 +74,11 @@ seo_description: "Lineage notes and practice arc connecting the archive to the c
     </div>
 
     <ul class="legacy-work-grid compact">
-      {% assign lineage_works = site.data.legacy_works | where_exp: "work", "work.lineage_note" | sort: "title" %}
-      {% for work in lineage_works %}
+      {% assign sorted_legacy_works = site.data.legacy_works | sort: "title" %}
+      {% for work in sorted_legacy_works %}
+        {% if work.lineage_note %}
         {% include legacy-work-card.html work=work %}
+        {% endif %}
       {% endfor %}
     </ul>
 
@@ -87,9 +89,10 @@ seo_description: "Lineage notes and practice arc connecting the archive to the c
     </div>
 
     <ul class="legacy-work-grid">
-      {% assign archive_works = site.data.legacy_works | where_exp: "work", "work.archive_url and work.thumbnail" | sort: "title" %}
-      {% for work in archive_works %}
+      {% for work in sorted_legacy_works %}
+        {% if work.archive_url and work.thumbnail %}
         {% include legacy-work-card.html work=work %}
+        {% endif %}
       {% endfor %}
     </ul>
 
