@@ -317,3 +317,15 @@
     - /img/lineage/there-was-blood/tbh_04.jpg
     - /img/lineage/there-was-blood/tbh_05.jpg
   summary: 2009 cast-plastic forms and solar prints using RNA as a structure for thinking about possibility, failure, and translation between systems.
+
+- id: iykywhgi
+  title: IYKYWHGI
+  branch: lineage
+  order: 70
+  medium: Camera / sensors / MIDI / feedback
+  status: preserved
+  lineage_note: /lineage/iykywhgi/
+  thumbnail: /img/lineage/iykywhgi/iykywhgi_01.jpg
+  images:
+    - /img/lineage/iykywhgi/iykywhgi_01.jpg
+  summary: 2019 camera-and-sensor feedback system mapping image difference and floor input into MIDI and audiovisual instability.

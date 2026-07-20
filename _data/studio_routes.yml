@@ -6,6 +6,14 @@
   image_alt: "MOARkNOBS-42 panel top-down with labeled controls"
   summary: "Open-source MIDI controller and teaching platform where mappings, latency, and feedback stay visible."
 
+- id: lofi-sampler
+  title: "NeoTrellis M4 Lo-Fi Sampler"
+  eyebrow: "Instrument / sampling"
+  url: /atlas/n/lofisampler/
+  image: /img/studio/lofi-sampler/neotrellis.jpg
+  image_alt: "Black NeoTrellis sampler with a four-by-eight grid of white pads, exposed audio components, and colored wires on a wood workbench"
+  summary: "Working four-voice hardware sampler built around MIDI clock, live capture, and equal-slice playback."
+
 - id: human-buffer
   title: "Human-Buffer"
   eyebrow: "Vision / consent"

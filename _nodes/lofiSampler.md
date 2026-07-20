@@ -1,5 +1,5 @@
 ---
-title: "lofi-sampler"
+title: "NeoTrellis M4 Lo-Fi Sampler"
 permalink: /atlas/n/lofisampler/
 summary: "NeoTrellis M4 hardware sampler built around USB MIDI clock, live capture, and equal-slice playback across four lockstep voices."
 repo: "https://github.com/bseverns/lofi-sampler"

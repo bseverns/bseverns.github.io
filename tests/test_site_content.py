@@ -52,6 +52,9 @@ class SiteContentTests(unittest.TestCase):
                 f"img/lineage/there-was-blood/tbh_0{index}.jpg"
                 for index in range(1, 6)
             ],
+            "docs/legacy/iykywhgi.md": [
+                "img/lineage/iykywhgi/iykywhgi_01.jpg"
+            ],
         }
         for page_path, assets in expected.items():
             page = self.read(page_path)
@@ -61,7 +64,11 @@ class SiteContentTests(unittest.TestCase):
 
     def test_new_archive_records_and_crowd_organ_are_public(self):
         legacy = self.read("_data/legacy_works.yml")
-        for slug in ("everything-was-beautiful", "there-was-blood-on-my-hands"):
+        for slug in (
+            "everything-was-beautiful",
+            "there-was-blood-on-my-hands",
+            "iykywhgi",
+        ):
             self.assertIn(f"- id: {slug}", legacy)
             self.assertTrue((ROOT / "docs" / "legacy" / f"{slug}.md").is_file())
         node = ROOT / "_nodes" / "crowdOrgan.md"
@@ -72,6 +79,14 @@ class SiteContentTests(unittest.TestCase):
 
     def test_proxy_only_data_weird_is_not_a_studio_route(self):
         self.assertNotIn("id: data-weird", self.read("_data/studio_routes.yml"))
+
+    def test_lofi_sampler_is_a_studio_route_with_real_hardware_image(self):
+        routes = self.read("_data/studio_routes.yml")
+        self.assertIn("- id: lofi-sampler", routes)
+        self.assertIn("url: /atlas/n/lofisampler/", routes)
+        image = "img/studio/lofi-sampler/neotrellis.jpg"
+        self.assertIn("/" + image, routes)
+        self.assertTrue((ROOT / image).is_file())
 
     def test_i_was_young_catalog_only_lists_public_media(self):
         catalog = json.loads(self.read("catalog/items/i-was-young-once.json"))
