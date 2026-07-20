@@ -11,6 +11,8 @@ MN42/.DS_Store
 vendor/bundle/
 .jekyll-cache/
 _site/
+__pycache__/
+*.py[cod]
 MN42/node_modules/
 MN42/playwright-report/
 MN42/test-results/

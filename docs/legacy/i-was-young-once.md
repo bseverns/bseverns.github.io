@@ -20,7 +20,7 @@ That prototype logic continues later in instruments, fabrication, classroom syst
 
 <p class="origin-callout">What reads now as careful systems design once looked more openly like launch-thinking: build it, risk it, number it, try again.</p>
 
-The title comes from the recovered launch transcript, when a security guard tells the group, “I was young once too. I know what it's like.” The failed launch, lost onboard camera, numbered builds, and improvised recovery remain part of the work rather than cleanup around it.
+The recovered transcript documents the failed launch, lost onboard camera, and encounter that gave the work its title. The numbered builds and improvised recovery remain part of the work rather than cleanup around it.
 
 {% include lineage-gallery.html %}
 

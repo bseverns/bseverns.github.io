@@ -12,9 +12,13 @@ class SiteContentTests(unittest.TestCase):
 
     def test_teaching_pages_expose_content_and_one_canonical_entry(self):
         self.assertIn("{{ content }}", self.read("_layouts/teaching.html"))
-        redirect = self.read("teaching.md")
+        self.assertFalse((ROOT / "teaching.md").exists())
+        redirect = self.read("teaching.html")
         self.assertIn('http-equiv="refresh"', redirect)
         self.assertIn('/courses.html', redirect)
+        rendered = ROOT / "_site" / "teaching" / "index.html"
+        if rendered.exists():
+            self.assertTrue(rendered.read_text(encoding="utf-8").startswith("<!doctype html>"))
 
     def test_selected_programs_precede_infrastructure_diagrams(self):
         page = self.read("courses.html")
@@ -75,6 +79,10 @@ class SiteContentTests(unittest.TestCase):
             for asset in catalog["media"][media_type]:
                 self.assertTrue((ROOT / asset.lstrip("/")).is_file(), asset)
         self.assertIn("withheld", catalog["ethics"]["consent"])
+        self.assertNotIn("I was young once too", self.read("docs/legacy/i-was-young-once.md"))
+
+    def test_bundle_uses_supported_ruby_line(self):
+        self.assertIn('ruby "~> 3.3"', self.read("Gemfile"))
 
 
 if __name__ == "__main__":
