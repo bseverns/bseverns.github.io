@@ -3,6 +3,13 @@ layout: default
 title: "I was young once"
 seo_description: "Lineage note for I was young once, an early flight and prototype work in Ben Severns's practice."
 permalink: /lineage/i-was-young-once/
+lineage_images:
+  - src: /img/lineage/i-was-young-once/rocket_01.jpg
+    caption: Rocket 1
+    alt: Tall red model rocket marked with a handwritten 1, mounted upright against a white wall.
+  - src: /img/lineage/i-was-young-once/rocket_02.jpg
+    caption: Rocket 2
+    alt: White model rocket marked with a handwritten 2, with a taped nose cone and small fins, mounted against a white wall.
 ---
 
 # I was young once
@@ -13,11 +20,9 @@ That prototype logic continues later in instruments, fabrication, classroom syst
 
 <p class="origin-callout">What reads now as careful systems design once looked more openly like launch-thinking: build it, risk it, number it, try again.</p>
 
-## Expected images
+The title comes from the recovered launch transcript, when a security guard tells the group, “I was young once too. I know what it's like.” The failed launch, lost onboard camera, numbered builds, and improvised recovery remain part of the work rather than cleanup around it.
 
-- `/img/lineage/i-was-young-once/rocket_01.jpg`
-- `/img/lineage/i-was-young-once/rocket_02.jpg`
-- `/img/lineage/i-was-young-once/rocket_pair.jpg`
+{% include lineage-gallery.html %}
 
 ## Reference routes
 

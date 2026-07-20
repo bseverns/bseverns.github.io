@@ -1,7 +1,8 @@
-# I Was Young Once Image Drop
+# I Was Young Once Images
 
-Place the imported image set for *I was young once* here.
+Public stills imported from the artist archive:
 
 - `rocket_01.jpg`
 - `rocket_02.jpg`
-- `rocket_pair.jpg`
+
+The source launch video remains private pending participant review.

@@ -71,14 +71,6 @@
   image_alt: "Parametric mesh rendered mid-glitch"
   summary: "Procedural glitch and CAD experiments where moving-image instability becomes buildable form."
 
-- id: data-weird
-  title: "Data Weird"
-  eyebrow: "Workshop installation"
-  url: /projects/dataweird/
-  image: /img/portfolio/3d/genF2.jpg
-  image_alt: "Generative fabrication render used as Data Weird route marker"
-  summary: "Overnight data sculpture jam with live sensing, projection mapping, acrylic forms, and walk-up debugging."
-
 - id: generative-fabrication
   title: "Generative Fabrication Techniques"
   eyebrow: "Fabrication"

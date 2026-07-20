@@ -239,9 +239,13 @@
   branch: lineage
   order: 10
   medium: Object / prototype / launch logic
-  status: needs-media
+  status: distilled
   lineage_note: /lineage/i-was-young-once/
   catalog_record: /catalog/items/i-was-young-once.json
+  thumbnail: /img/lineage/i-was-young-once/rocket_01.jpg
+  images:
+    - /img/lineage/i-was-young-once/rocket_01.jpg
+    - /img/lineage/i-was-young-once/rocket_02.jpg
   summary: Flight, iteration, and prototype ambition before those instincts migrated into tools and systems.
 
 - id: scar
@@ -249,9 +253,12 @@
   branch: lineage
   order: 20
   medium: Object / injury / repair
-  status: needs-media
+  status: distilled
   lineage_note: /lineage/scar/
   catalog_record: /catalog/items/scar.json
+  thumbnail: /img/lineage/scar/scar_hero.jpg
+  images:
+    - /img/lineage/scar/scar_hero.jpg
   summary: Injury, repair, survival, and continuation made material before machine care became a named public theme.
 
 - id: a-madman-wrapped-in-the-clothes-of-a-deadman
@@ -279,3 +286,34 @@
   images:
     - /3d/full3d/Fly2.jpg
   summary: Sensors, code, and room activity translated into trace; an early source for later participation systems.
+
+- id: everything-was-beautiful
+  title: Everything Was Beautiful and Nothing Hurt
+  branch: lineage
+  order: 50
+  medium: Installation / mixed media
+  status: preserved
+  lineage_note: /lineage/everything-was-beautiful/
+  thumbnail: /img/lineage/everything-was-beautiful/beautiful_01.jpg
+  images:
+    - /img/lineage/everything-was-beautiful/beautiful_01.jpg
+    - /img/lineage/everything-was-beautiful/beautiful_02.jpg
+    - /img/lineage/everything-was-beautiful/beautiful_03.jpg
+    - /img/lineage/everything-was-beautiful/beautiful_04.jpg
+  summary: Recovered room-scale installation documentation showing perforated panels, wood, wall-mounted components, floor elements, and visible cabling occupying a shared passage.
+
+- id: there-was-blood-on-my-hands
+  title: There Was Blood on My Hands
+  branch: lineage
+  order: 60
+  medium: Cast plastic / solar prints
+  status: preserved
+  lineage_note: /lineage/there-was-blood-on-my-hands/
+  thumbnail: /img/lineage/there-was-blood/tbh_01.jpg
+  images:
+    - /img/lineage/there-was-blood/tbh_01.jpg
+    - /img/lineage/there-was-blood/tbh_02.jpg
+    - /img/lineage/there-was-blood/tbh_03.jpg
+    - /img/lineage/there-was-blood/tbh_04.jpg
+    - /img/lineage/there-was-blood/tbh_05.jpg
+  summary: 2009 cast-plastic forms and solar prints using RNA as a structure for thinking about possibility, failure, and translation between systems.

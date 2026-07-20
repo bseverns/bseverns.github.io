@@ -3,6 +3,10 @@ layout: default
 title: "Scar"
 seo_description: "Lineage note for Scar, an early work on injury, repair, and continuation in Ben Severns's practice."
 permalink: /lineage/scar/
+lineage_images:
+  - src: /img/lineage/scar/scar_hero.jpg
+    caption: Scar
+    alt: Rough silver-colored cast form resembling a torso, mounted above a wood block with detached fragments below.
 ---
 
 # Scar
@@ -13,11 +17,7 @@ What later becomes machine care, rebuild logic, startup ritual, and continuation
 
 <p class="origin-callout">Repair is not a softened afterthought in this practice. It begins as continuation under damage.</p>
 
-## Expected images
-
-- `/img/lineage/scar/scar_hero.jpg`
-- `/img/lineage/scar/scar_detail_01.jpg`
-- `/img/lineage/scar/scar_detail_02.jpg`
+{% include lineage-gallery.html %}
 
 ## Reference routes
 

@@ -6,6 +6,7 @@ layout: default
   <p class="meta">{{ page.level | default: 'Level: mixed' }}{% if page.delivery %} • {{ page.delivery }}{% endif %}</p>
   <h2>Why</h2>
   <p>{{ page.why | default: 'Links to syllabi and content from the field and my head' }}</p>
-  <h2>Syllabus hole</h2>
-  <a href="http://github.com/bseverns/Syllabus">My syllabus repo</a>
+  {{ content }}
+  <h2>Full materials</h2>
+  <p><a href="https://github.com/bseverns/Syllabus">Browse the Syllabus repository</a></p>
 </article>

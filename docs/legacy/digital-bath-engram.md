@@ -5,13 +5,17 @@ seo_description: "Lineage note for Digital Bath / Engram, a projection and sculp
 permalink: /lineage/digital-bath-engram/
 lineage_images:
   - src: /3d/full3d/bath1.jpg
-    intended: /img/lineage/digital-bath/digital-bath_01.jpg
     caption: Digital Bath installation view 01
     alt: Projection and sculptural installation documentation from Digital Bath / Engram.
   - src: /3d/full3d/bath2.jpg
-    intended: /img/lineage/digital-bath/digital-bath_02.jpg
     caption: Digital Bath installation view 02
     alt: Second installation documentation image from Digital Bath / Engram.
+  - src: /img/lineage/digital-bath/digital-bath_03.jpg
+    caption: Projection structure in the storefront
+    alt: Faceted white projection structure installed in a storefront, with a pale moving image cast across its folded surfaces.
+  - src: /img/lineage/digital-bath/digital-bath_04.jpg
+    caption: Projection surface detail
+    alt: Close view of a pale yellow and pink image projected across the translucent faceted surface.
 ---
 
 # Digital Bath / Engram

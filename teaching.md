@@ -1,19 +1,19 @@
 ---
-layout: default
-title: "Academic Portfolio"
-seo_description: "Teaching portfolio and course briefs"
+layout: null
+title: "Teaching"
 permalink: /teaching/
-archived: true
+sitemap: false
 ---
-# Academic Portfolio
-<p>Syllabi and assorted classroom experiments are simmering here. Check back while the dust settles.</p>
-<p>Sample syllabi, briefs, and outcomes. Full materials live at <a href="https://github.com/bseverns/Syllabus">github.com/bseverns/Syllabus</a>.</p>
-<div class="cta">
-  <a class="btn secondary" href="https://github.com/bseverns/Syllabus">
-    Raid the full syllabus repo ↗
-  </a>
-</div>
-<div class="cards">
-{% assign items = site.teaching | sort: "updated" | reverse %}
-{% for item in items %}{% include card.html item=item %}{% endfor %}
-</div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="0; url=/courses.html">
+  <link rel="canonical" href="{{ '/courses.html' | absolute_url }}">
+  <title>Teaching · {{ site.title }}</title>
+</head>
+<body>
+  <p>This teaching portfolio has moved to <a href="/courses.html">Teaching</a>.</p>
+</body>
+</html>

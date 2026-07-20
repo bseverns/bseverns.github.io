@@ -18,6 +18,7 @@ seo_description: "Atlas pillar covering installations, performances, and scene s
     <p class="eyebrow">Routes</p>
     <h2>Rooms, scenes, and recoverable situations</h2>
     <ul class="atlas-related-list">
+      <li><a href="/atlas/n/crowdorgan/">Crowd Organ</a><span>Kinect, webcam, OSC, and synthesis stack held to a repo-backed claim until a consent-forward room capture exists.</span></li>
       <li><a href="/atlas/n/humanbuffer/">Human-Buffer</a><span>Consent-forward vision workshop structure with public-safe diagrams and source docs.</span></li>
       <li><a href="/atlas/n/liverig/">live-rig</a><span>Audio, video, MIDI, and OSC with setup, recovery logic, and redaction boundaries.</span></li>
       <li><a href="/atlas/n/memory-engine/">Memory Engine</a><span>Room memory system where invitation, decay, retrieval, and revocation are part of the form.</span></li>

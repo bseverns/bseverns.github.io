@@ -44,23 +44,20 @@
   ],
   "body_relation": "scaled object standing in for the imagined body in launch",
   "ethics": {
-    "pii": "none",
-    "consent": "artist-authored object",
-    "retention": "archive"
+    "pii": "named participants and voices in the source video",
+    "consent": "public stills only; source video withheld pending participant review",
+    "retention": "public archive for stills; private archive for source video"
   },
-  "provenance": "User-provided early work images and video",
+  "provenance": "Artist-provided early work images; private participant video reviewed but withheld",
   "docs": {
     "notes": "/lineage/i-was-young-once/"
   },
   "media": {
     "images": [
       "/img/lineage/i-was-young-once/rocket_01.jpg",
-      "/img/lineage/i-was-young-once/rocket_02.jpg",
-      "/img/lineage/i-was-young-once/rocket_pair.jpg"
+      "/img/lineage/i-was-young-once/rocket_02.jpg"
     ],
-    "video": [
-      "/assets/video/i-was-young-once_launch_excerpt.mp4"
-    ],
+    "video": [],
     "audio": []
   },
   "related_ids": [
