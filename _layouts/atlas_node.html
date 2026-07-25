@@ -149,6 +149,24 @@
           </ul>
         </section>
         {% endif %}
+        {% if page.proof_gallery %}
+        <section class="atlas-node-section" aria-labelledby="node-gallery">
+          <h2 id="node-gallery">Staged interface proof</h2>
+          <div class="lineage-image-grid atlas-proof-gallery">
+            {% for item in page.proof_gallery %}
+            <figure class="lineage-image-card">
+              <a href="{{ item.image }}">
+                <img src="{{ item.image }}" alt="{{ item.alt }}" loading="lazy" decoding="async">
+              </a>
+              <figcaption>
+                <strong>{{ item.title }}</strong>
+                <span>{{ item.note }}</span>
+              </figcaption>
+            </figure>
+            {% endfor %}
+          </div>
+        </section>
+        {% endif %}
         {% if page.related_projects %}
         <section class="atlas-node-section" aria-labelledby="node-related">
           <h2 id="node-related">Related Fleet Projects</h2>

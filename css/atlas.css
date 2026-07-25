@@ -247,6 +247,11 @@
   color: inherit;
 }
 
+.atlas-proof-gallery .lineage-image-card img {
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
 @media (max-width: 720px) {
   .atlas-diagram-frame .mermaid {
     min-width: 720px;

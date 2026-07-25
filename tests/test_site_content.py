@@ -88,6 +88,20 @@ class SiteContentTests(unittest.TestCase):
         self.assertIn("/" + image, routes)
         self.assertTrue((ROOT / image).is_file())
 
+    def test_classhub_node_publishes_only_staged_interface_proof(self):
+        node = self.read("_nodes/classhub.md")
+        self.assertIn("atlas-proof-gallery", self.read("_layouts/atlas_node.html"))
+        self.assertIn('status: "workshop prototype / staged proof"', node)
+        self.assertIn("No real student identities", node)
+        self.assertIn("They do not establish live deployment", node)
+        for image in (
+            "img/studio/classhub/teacher-dashboard.png",
+            "img/studio/classhub/student-standard-view.png",
+            "img/studio/classhub/data-lifespan-dashboard.png",
+        ):
+            self.assertTrue((ROOT / image).is_file(), image)
+            self.assertIn("/" + image, node)
+
     def test_i_was_young_catalog_only_lists_public_media(self):
         catalog = json.loads(self.read("catalog/items/i-was-young-once.json"))
         for media_type in ("images", "video"):
