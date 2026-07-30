@@ -10,6 +10,44 @@ export function createTransportPort(port, options = {}, transportDeps = {}) {
   let active = true;
   const lineQueue = [];
   const waiters = [];
+  const maxQueuedLines = 512;
+  const maxQueuedBytes = 1024 * 1024;
+  let queuedBytes = 0;
+  let droppedLines = 0;
+
+  function isDroppableTelemetry(line) {
+    try {
+      const message = JSON.parse(line);
+      return message?.type === 'telemetry' || message?.telemetry !== undefined;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function enqueueLine(line) {
+    const bytes = new TextEncoder().encode(line).byteLength;
+    while (
+      lineQueue.length >= maxQueuedLines || queuedBytes + bytes > maxQueuedBytes
+    ) {
+      const index = lineQueue.findIndex(isDroppableTelemetry);
+      if (index < 0) break; // Never discard ACK/error/contract traffic.
+      const [dropped] = lineQueue.splice(index, 1);
+      queuedBytes -= new TextEncoder().encode(dropped).byteLength;
+      droppedLines += 1;
+    }
+    if (lineQueue.length >= maxQueuedLines || queuedBytes + bytes > maxQueuedBytes) {
+      if (isDroppableTelemetry(line)) {
+        droppedLines += 1;
+        return;
+      }
+      // Critical messages have a reserved place only while the bounded queue
+      // can hold them. Do not turn a malfunctioning device into unbounded
+      // browser memory growth: fail the transport visibly instead.
+      throw new Error('Native transport critical receive queue exhausted');
+    }
+    lineQueue.push(line);
+    queuedBytes += bytes;
+  }
 
   async function open() {
     if (port.readable || port.writable) {
@@ -39,7 +77,7 @@ export function createTransportPort(port, options = {}, transportDeps = {}) {
           buffer = buffer.slice(idx + 1);
           if (!line) continue;
           if (waiters.length) waiters.shift().resolve(line);
-          else lineQueue.push(line);
+          else enqueueLine(line);
         }
       }
     } catch (err) {
@@ -57,7 +95,11 @@ export function createTransportPort(port, options = {}, transportDeps = {}) {
 
   function nextLine() {
     if (!active) return Promise.reject(new Error('Native port closed'));
-    if (lineQueue.length) return Promise.resolve(lineQueue.shift());
+    if (lineQueue.length) {
+      const line = lineQueue.shift();
+      queuedBytes -= new TextEncoder().encode(line).byteLength;
+      return Promise.resolve(line);
+    }
     return new Promise((resolve, reject) => waiters.push({ resolve, reject }));
   }
 
@@ -104,5 +146,8 @@ export function createTransportPort(port, options = {}, transportDeps = {}) {
     }
   }
 
-  return { open, writeLine, nextLine, close, rawPort: port, protocol: 'native', textDecoder };
+  return {
+    open, writeLine, nextLine, close, rawPort: port, protocol: 'native', textDecoder,
+    getDropStats: () => ({ droppedLines, queuedLines: lineQueue.length, queuedBytes })
+  };
 }

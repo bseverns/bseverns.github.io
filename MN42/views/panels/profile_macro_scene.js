@@ -41,7 +41,8 @@ function createDefaultArpDraft() {
     shape: 0,
     swing_percent: 0,
     gate_percent: 50,
-    octave_range: 0
+    octave_range: 0,
+    pattern_length: 4
   };
 }
 
@@ -170,12 +171,14 @@ export function createProfileMacroScenePanel({
     arpSwingInput = null,
     arpGateInput = null,
     arpOctaveInput = null,
+    arpPatternLengthInput = null,
     liveArpSlotInput = null,
     liveArpLengthInput = null,
     liveArpShapeSelect = null,
     liveArpSwingInput = null,
     liveArpGateInput = null,
     liveArpOctaveInput = null,
+    liveArpPatternLengthInput = null,
     liveArpRefreshBtn = null,
     liveArpApplyBtn = null,
     liveArpStartBtn = null,
@@ -720,6 +723,7 @@ export function createProfileMacroScenePanel({
     if (arpSwingInput) arpSwingInput.value = String(arpDraft.swing_percent);
     if (arpGateInput) arpGateInput.value = String(arpDraft.gate_percent);
     if (arpOctaveInput) arpOctaveInput.value = String(arpDraft.octave_range);
+    if (arpPatternLengthInput) arpPatternLengthInput.value = String(arpDraft.pattern_length);
   }
 
   function setArpDraft(nextDraft = {}) {
@@ -728,7 +732,8 @@ export function createProfileMacroScenePanel({
       shape: clampInteger(nextDraft.shape, 0, ARP_SHAPE_OPTIONS.length - 1, arpDraft.shape),
       swing_percent: clampInteger(nextDraft.swing_percent, 0, 80, arpDraft.swing_percent),
       gate_percent: clampInteger(nextDraft.gate_percent, 5, 100, arpDraft.gate_percent),
-      octave_range: clampInteger(nextDraft.octave_range, 0, 3, arpDraft.octave_range)
+      octave_range: clampInteger(nextDraft.octave_range, 0, 3, arpDraft.octave_range),
+      pattern_length: clampInteger(nextDraft.pattern_length, 2, 16, arpDraft.pattern_length)
     };
     syncArpForm();
   }
@@ -739,7 +744,8 @@ export function createProfileMacroScenePanel({
       shape: arpShapeSelect?.value ?? arpDraft.shape,
       swing_percent: arpSwingInput?.value ?? arpDraft.swing_percent,
       gate_percent: arpGateInput?.value ?? arpDraft.gate_percent,
-      octave_range: arpOctaveInput?.value ?? arpDraft.octave_range
+      octave_range: arpOctaveInput?.value ?? arpDraft.octave_range,
+      pattern_length: arpPatternLengthInput?.value ?? arpDraft.pattern_length
     });
   }
 
@@ -750,6 +756,9 @@ export function createProfileMacroScenePanel({
     if (liveArpSwingInput) liveArpSwingInput.value = String(liveArpDraft.swing_percent);
     if (liveArpGateInput) liveArpGateInput.value = String(liveArpDraft.gate_percent);
     if (liveArpOctaveInput) liveArpOctaveInput.value = String(liveArpDraft.octave_range);
+    if (liveArpPatternLengthInput) {
+      liveArpPatternLengthInput.value = String(liveArpDraft.pattern_length);
+    }
   }
 
   function setLiveArpDraft(nextDraft = {}) {
@@ -798,7 +807,8 @@ export function createProfileMacroScenePanel({
       shape: liveArpShapeSelect?.value ?? liveArpDraft.shape,
       swing_percent: liveArpSwingInput?.value ?? liveArpDraft.swing_percent,
       gate_percent: liveArpGateInput?.value ?? liveArpDraft.gate_percent,
-      octave_range: liveArpOctaveInput?.value ?? liveArpDraft.octave_range
+      octave_range: liveArpOctaveInput?.value ?? liveArpDraft.octave_range,
+      pattern_length: liveArpPatternLengthInput?.value ?? liveArpDraft.pattern_length
     });
   }
 
@@ -1329,11 +1339,16 @@ export function createProfileMacroScenePanel({
       profileInteractable && !profileWorkflow.isLocked() && !profileWizardBusy && !arpBusy;
     if (arpRefreshBtn) arpRefreshBtn.disabled = !canInteract;
     if (arpSaveBtn) arpSaveBtn.disabled = !canInteract;
-    [arpLengthInput, arpShapeSelect, arpSwingInput, arpGateInput, arpOctaveInput].forEach(
-      (control) => {
-        if (control) control.disabled = !canInteract;
-      }
-    );
+    [
+      arpLengthInput,
+      arpShapeSelect,
+      arpSwingInput,
+      arpGateInput,
+      arpOctaveInput,
+      arpPatternLengthInput
+    ].forEach((control) => {
+      if (control) control.disabled = !canInteract;
+    });
     if (arpCard) {
       arpCard.dataset.state = canInteract ? 'ready' : 'muted';
     }
@@ -1352,7 +1367,8 @@ export function createProfileMacroScenePanel({
       liveArpShapeSelect,
       liveArpSwingInput,
       liveArpGateInput,
-      liveArpOctaveInput
+      liveArpOctaveInput,
+      liveArpPatternLengthInput
     ].forEach((control) => {
       if (control) control.disabled = !canInteract;
     });
@@ -1517,7 +1533,7 @@ export function createProfileMacroScenePanel({
           const configPayload = await runtime.sendRpc({ rpc: 'get_config' });
           const configData = configPayload?.config ?? configPayload;
           if (configData && typeof configData === 'object') {
-            runtime.replaceConfig(configData);
+            runtime.hydrateAuthoritativeConfig(configData);
           }
         } catch (refreshErr) {
           setStatus('warn', 'Config refresh failed', refreshErr.message || String(refreshErr));
@@ -1564,7 +1580,7 @@ export function createProfileMacroScenePanel({
     try {
       const response = await runtime.sendRpc(
         { rpc: 'get_profile', slot: activeProfileSlot, scope: 'modulation' },
-        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackOnError: false }
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackPolicy: 'none' }
       );
       syncDeviceActiveProfile(response);
       applyProfileUtilityDrafts(response);
@@ -1598,7 +1614,7 @@ export function createProfileMacroScenePanel({
     try {
       await runtime.sendRpc(
         { rpc: 'set_profile', slot: activeProfileSlot, profile: { arp: arpDraft } },
-        { timeoutMs: PROFILE_RPC_TIMEOUT_MS }
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackPolicy: 'none' }
       );
       setArpStatus(
         'ok',
@@ -1628,7 +1644,7 @@ export function createProfileMacroScenePanel({
     try {
       const response = await runtime.sendRpc(
         { rpc: 'get_arp' },
-        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackOnError: false }
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackPolicy: 'none' }
       );
       setLiveArpDraft({
         ...response,
@@ -1661,9 +1677,10 @@ export function createProfileMacroScenePanel({
           shape: liveArpDraft.shape,
           swingPercent: liveArpDraft.swing_percent,
           gatePercent: liveArpDraft.gate_percent,
-          octaveRange: liveArpDraft.octave_range
+          octaveRange: liveArpDraft.octave_range,
+          patternLength: liveArpDraft.pattern_length
         },
-        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackOnError: false }
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackPolicy: 'none' }
       );
       setLiveArpDraft({ ...response, slot: liveArpDraft.slot });
       setLiveArpStatus('ok', summarizeLiveArp());
@@ -1686,7 +1703,7 @@ export function createProfileMacroScenePanel({
     try {
       await runtime.sendRpc(
         { rpc: 'arp_start', slot: liveArpDraft.slot },
-        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackOnError: false }
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackPolicy: 'none' }
       );
       setLiveArpDraft({ ...liveArpDraft, active: true });
       setLiveArpStatus('ok', summarizeLiveArp());
@@ -1707,7 +1724,7 @@ export function createProfileMacroScenePanel({
     try {
       await runtime.sendRpc(
         { rpc: 'arp_stop' },
-        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackOnError: false }
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackPolicy: 'none' }
       );
       setLiveArpDraft({
         ...liveArpDraft,
@@ -1760,7 +1777,7 @@ export function createProfileMacroScenePanel({
             }))
           }
         },
-        { timeoutMs: PROFILE_RPC_TIMEOUT_MS }
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackPolicy: 'none' }
       );
       const responseActiveSlot = readActiveProfileIndex(response);
       syncDeviceActiveProfile(response);
@@ -1814,7 +1831,7 @@ export function createProfileMacroScenePanel({
     try {
       modMatrixReport = await runtime.sendRpc(
         { rpc: 'get_mod_matrix' },
-        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackOnError: false }
+        { timeoutMs: PROFILE_RPC_TIMEOUT_MS, rollbackPolicy: 'none' }
       );
       renderModMatrix(modMatrixReport);
       const { routes, conflicts, filteredRoutes, filteredConflicts } =
@@ -1958,16 +1975,22 @@ export function createProfileMacroScenePanel({
     setLiveArpDraft(liveArpDraft);
     setLiveArpStatus('muted', 'Connect to inspect live arpeggiator state.');
     setLfoStatus('muted', 'Connect to inspect the selected profile slot.');
-    [arpLengthInput, arpShapeSelect, arpSwingInput, arpGateInput, arpOctaveInput].forEach(
-      (control) => control?.addEventListener('change', () => readArpFormIntoDraft())
-    );
+    [
+      arpLengthInput,
+      arpShapeSelect,
+      arpSwingInput,
+      arpGateInput,
+      arpOctaveInput,
+      arpPatternLengthInput
+    ].forEach((control) => control?.addEventListener('change', () => readArpFormIntoDraft()));
     [
       liveArpSlotInput,
       liveArpLengthInput,
       liveArpShapeSelect,
       liveArpSwingInput,
       liveArpGateInput,
-      liveArpOctaveInput
+      liveArpOctaveInput,
+      liveArpPatternLengthInput
     ].forEach((control) => control?.addEventListener('change', () => readLiveArpFormIntoDraft()));
     arpRefreshBtn?.addEventListener('click', () => refreshProfileUtilities({ focus: 'arp' }));
     arpSaveBtn?.addEventListener('click', () => saveArpProfile());

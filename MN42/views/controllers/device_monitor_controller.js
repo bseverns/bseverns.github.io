@@ -36,6 +36,7 @@ function formatEepromLoadSource(value) {
 export function createDeviceMonitorController({ container, resolveDeviceName } = {}) {
   let lastManifest = {};
   let lastTelemetry = {};
+  let telemetryHealth = { freshness: 'stale', receivedAt: null, ageMs: null };
 
   function render() {
     if (!container) return;
@@ -54,9 +55,17 @@ export function createDeviceMonitorController({ container, resolveDeviceName } =
       'Git SHA': lastManifest?.git_sha ? lastManifest.git_sha.slice(0, 8) : '-',
       'Build time': lastManifest?.build_time || '-',
       'Schema version': lastManifest?.schema_version ?? '-',
+      Telemetry: telemetryHealth?.freshness ?? 'stale',
+      'Telemetry age': Number.isFinite(Number(telemetryHealth?.ageMs))
+        ? `${Math.round(Number(telemetryHealth.ageMs))} ms`
+        : '-',
       'Power profile': lastManifest?.power_profile || '-',
       'LED cap': formatBrightnessCap(lastManifest?.led_brightness_cap),
       'Rail verified': formatBoolean(lastManifest?.rail_topology_verified),
+      'OLED present': formatBoolean(lastManifest?.display_present),
+      'OLED ready': formatBoolean(lastManifest?.display_ok),
+      'OLED status': lastManifest?.display_status || '-',
+      'OLED init failures': lastManifest?.display_init_failures ?? '-',
       'Free RAM': formatKiB(lastManifest?.free_ram),
       'Free Flash': formatKiB(lastManifest?.free_flash),
       Brownouts: lastManifest?.brownout_count ?? '-',
@@ -103,5 +112,10 @@ export function createDeviceMonitorController({ container, resolveDeviceName } =
     render();
   }
 
-  return { renderManifest, renderTelemetry };
+  function renderTelemetryHealth(next = {}) {
+    telemetryHealth = { ...telemetryHealth, ...next };
+    render();
+  }
+
+  return { renderManifest, renderTelemetry, renderTelemetryHealth };
 }

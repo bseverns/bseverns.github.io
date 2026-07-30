@@ -1,4 +1,50 @@
 // Simulator transport used by tests and hardware-free UI rehearsal.
+// Keep this mapping in lockstep with the firmware dispatcher. The companion
+// protocol guard verifies every declared native command exists in firmware and
+// every simulator RPC case is intentionally mapped or marked simulator-only.
+export const SIMULATOR_FIRMWARE_COMMANDS = Object.freeze({
+  hello: 'HELLO',
+  get_manifest: 'GET_MANIFEST',
+  get_config: 'GET_CONFIG',
+  get_mod_matrix: 'GET_MOD_MATRIX',
+  get_profile: 'GET_PROFILE',
+  get_clock: 'GET_CLOCK',
+  get_arp: 'GET_ARP',
+  get_jitter: 'GET_JITTER',
+  get_note_dynamics: 'GET_NOTE_DYNAMICS',
+  get_usb_midi: 'GET_USB_MIDI',
+  set_config: 'SET_ALL',
+  set_profile: 'SET_PROFILE',
+  set_clock: 'SET_CLOCK',
+  set_arp: 'SET_ARP',
+  set_jitter: 'SET_JITTER',
+  set_note_dynamics: 'SET_NOTE_DYNAMICS',
+  set_usb_midi: 'SET_USB_MIDI',
+  save_profile: 'SAVE_PROFILE',
+  load_profile: 'LOAD_PROFILE',
+  reset_profile: 'RESET_PROFILE',
+  arp_start: 'ARP_START',
+  arp_stop: 'ARP_STOP'
+});
+
+export const SIMULATOR_MACRO_COMMANDS = Object.freeze([
+  'SAVE_MACRO_SLOT',
+  'RECALL_MACRO_SLOT'
+]);
+
+export const SIMULATOR_SCENE_COMMANDS = Object.freeze([
+  'GET_SCENES',
+  'SAVE_SCENE',
+  'RECALL_SCENE'
+]);
+
+export const SIMULATOR_ONLY_RPCS = Object.freeze([
+  'macro_command',
+  'scene_command',
+  'set_param',
+  'hang'
+]);
+
 export function createSimulator(simDeps = {}) {
   const {
     createManifest,
@@ -33,6 +79,10 @@ export function createSimulator(simDeps = {}) {
     power_profile: 'POWER_CHOKED_V1',
     led_brightness_cap: 26,
     rail_topology_verified: false,
+    display_present: true,
+    display_ok: true,
+    display_init_failures: 0,
+    display_status: 'ok',
     free_ram: 48000,
     free_flash: 512000,
     brownout_count: 2,
@@ -131,7 +181,8 @@ export function createSimulator(simDeps = {}) {
       shape: 0,
       swing_percent: 0,
       gate_percent: 50,
-      octave_range: 0
+      octave_range: 0,
+      pattern_length: 4
     },
     lfos: [
       {
@@ -456,6 +507,28 @@ export function createSimulator(simDeps = {}) {
       return Math.max(0, Math.min(profileSlots.length - 1, Math.floor(idx)));
     };
     switch (rpc) {
+      case 'macro_command': {
+        const command = String(request.command ?? '');
+        if (command === 'SAVE_MACRO_SLOT') {
+          macroSnapshot = cloneValue(config);
+          respond({ macro_saved: true, macro_available: true });
+        } else if (command === 'RECALL_MACRO_SLOT') {
+          const hasSnapshot = Boolean(macroSnapshot);
+          if (hasSnapshot) config = cloneValue(macroSnapshot);
+          respond({ macro_recalled: hasSnapshot, macro_available: hasSnapshot });
+        } else {
+          respond({ error: 'Unknown macro command' });
+        }
+        break;
+      }
+      case 'scene_command': {
+        const command = request.payload?.cmd;
+        if (command === 'GET_SCENES') respond({ scenes: [] });
+        else if (command === 'SAVE_SCENE') respond({ scene_saved: true, scene_slot: request.payload?.slot ?? 0 });
+        else if (command === 'RECALL_SCENE') respond({ scene_recalled: true, scene_slot: request.payload?.slot ?? 0 });
+        else respond({ scene_error: 'Unknown scene command' });
+        break;
+      }
       case 'hello':
         respond({ message: 'hello' });
         break;
@@ -560,7 +633,13 @@ export function createSimulator(simDeps = {}) {
           shape: Math.max(0, Math.min(5, Math.round(Number(request.shape) || 0))),
           swing_percent: Math.max(0, Math.min(80, Math.round(Number(request.swingPercent) || 0))),
           gate_percent: Math.max(5, Math.min(100, Math.round(Number(request.gatePercent) || 50))),
-          octave_range: Math.max(0, Math.min(3, Math.round(Number(request.octaveRange) || 0)))
+          octave_range: Math.max(0, Math.min(3, Math.round(Number(request.octaveRange) || 0))),
+          pattern_length:
+            Number.isFinite(Number(request.patternLength)) &&
+            Number(request.patternLength) >= 2 &&
+            Number(request.patternLength) <= 16
+              ? Math.round(Number(request.patternLength))
+              : liveArp.pattern_length
         };
         liveArp.shape_name = shapeNames[liveArp.shape] ?? 'up';
         respond({ command: 'SET_ARP', status: 'ok', ...liveArp });

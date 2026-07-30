@@ -71,3 +71,69 @@ test('native set_profile uses chunked serial lines under firmware buffer limit',
   });
   await expect(result).resolves.toMatchObject({ status: 'ok', command: 'SET_PROFILE' });
 });
+
+test('native SET_ARP adds a valid pattern length but keeps the legacy form optional', async () => {
+  const writes = [];
+  const transport = {
+    writeLine: async (line) => writes.push(String(line))
+  };
+  const kernel = createRpcKernel({
+    getTransport: () => transport,
+    isJsonRpcTransport: () => false,
+    chunkString,
+    nativeSetAllChunkSize: 80,
+    rpcTimeoutMs: 1000,
+    rpcThrottleIntervalMs: 0
+  });
+  const arp = {
+    rpc: 'set_arp',
+    lengthTicks: 6,
+    shape: 4,
+    swingPercent: 30,
+    gatePercent: 75,
+    octaveRange: 2
+  };
+
+  const extended = kernel.sendRpc({ ...arp, patternLength: 8 });
+  await expect.poll(() => writes.length).toBe(1);
+  expect(writes[0]).toBe('SET_ARP,6,4,30,75,2,8');
+  kernel.handleRpcResponse({ id: kernel.getActivePendingRpc().id, result: { status: 'ok' } });
+  await extended;
+
+  const legacy = kernel.sendRpc(arp);
+  await expect.poll(() => writes.length).toBe(2);
+  expect(writes[1]).toBe('SET_ARP,6,4,30,75,2');
+  kernel.handleRpcResponse({ id: kernel.getActivePendingRpc().id, result: { status: 'ok' } });
+  await legacy;
+});
+
+test('native SET_ALL write failure attempts to abort the partial firmware frame', async () => {
+  const writes = [];
+  const transport = {
+    writeLine: async (line) => {
+      writes.push(String(line));
+      if (String(line).startsWith('SET_ALL ') && writes.filter((value) => value.startsWith('SET_ALL ')).length === 2) {
+        throw new Error('serial write failed');
+      }
+    }
+  };
+  const kernel = createRpcKernel({
+    getTransport: () => transport,
+    isJsonRpcTransport: () => false,
+    chunkString,
+    nativeSetAllChunkSize: 24,
+    nativeSetAllLinePaceMs: 0,
+    rpcTimeoutMs: 1000,
+    rpcThrottleIntervalMs: 0
+  });
+
+  const request = kernel.sendRpc({
+    rpc: 'set_config',
+    seq: 9,
+    checksum: 'candidate',
+    config: { slots: [{ type: 'OFF' }, { type: 'CC' }] }
+  });
+
+  await expect(request).rejects.toThrow('serial write failed');
+  expect(writes.at(-1)).toBe('ABORT_SET_ALL');
+});

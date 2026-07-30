@@ -25,6 +25,8 @@ import {
 } from '../lib/constants.js';
 import { createLocalManifest } from '../manifest_contract.js';
 
+// BenzKnobz skin over the shared runtime. Runtime owns the protocol; this file
+// owns the stage props: slots, profiles, LEDs, logs, and the workshop simulator.
 const localManifest = createLocalManifest({
   uiVersion: '2026.03.09',
   argMethodCount: ARG_METHOD_NAMES.length
@@ -64,7 +66,8 @@ if (typeof window !== 'undefined') {
 }
 
 // Page bootstrap owns the full operator shell: transport controls, staged/live
-// config rendering, recovery affordances, and telemetry.
+// config rendering, recovery affordances, and telemetry. Start here, then jump
+// to runtime.js when a button crosses the serial line.
 const boot = () => {
   if (typeof document === 'undefined') return;
   const docRoot = document.documentElement;
@@ -78,6 +81,7 @@ const boot = () => {
   const configModeBtn = document.getElementById('config-mode');
   const applyBtn = document.getElementById('apply');
   const rollbackBtn = document.getElementById('rollback');
+  const retryReadbackBtn = document.getElementById('retry-readback');
   const slotContainer = document.getElementById('slots');
   const envContainer = document.getElementById('envelopes');
   const diffPanel = document.getElementById('diff-panel');
@@ -86,6 +90,7 @@ const boot = () => {
   const connectionPill = document.getElementById('connection-pill');
   const connectionBanner = document.getElementById('connection-banner');
   const transportLaneChip = document.getElementById('transport-lane-chip');
+  const contractQualityChip = document.getElementById('contract-quality-chip');
   const connectFailHelp = document.getElementById('connect-fail-help');
   const headerStatus = document.getElementById('header-status');
   const exportPresetBtn = document.getElementById('export-preset');
@@ -190,12 +195,14 @@ const boot = () => {
   const arpSwingInput = document.getElementById('arp-swing');
   const arpGateInput = document.getElementById('arp-gate');
   const arpOctaveInput = document.getElementById('arp-octave');
+  const arpPatternLengthInput = document.getElementById('arp-pattern-length');
   const liveArpSlotInput = document.getElementById('live-arp-slot');
   const liveArpLengthInput = document.getElementById('live-arp-length');
   const liveArpShapeSelect = document.getElementById('live-arp-shape');
   const liveArpSwingInput = document.getElementById('live-arp-swing');
   const liveArpGateInput = document.getElementById('live-arp-gate');
   const liveArpOctaveInput = document.getElementById('live-arp-octave');
+  const liveArpPatternLengthInput = document.getElementById('live-arp-pattern-length');
   const liveArpRefreshBtn = document.getElementById('live-arp-refresh');
   const liveArpApplyBtn = document.getElementById('live-arp-apply');
   const liveArpStartBtn = document.getElementById('live-arp-start');
@@ -422,6 +429,7 @@ const boot = () => {
       connectionPill,
       connectionBanner,
       transportLaneChip,
+      contractQualityChip,
       connectFailHelp,
       usbMidiToggleBtn,
       usbMidiTestBtn,
@@ -626,12 +634,14 @@ const boot = () => {
       arpSwingInput,
       arpGateInput,
       arpOctaveInput,
+      arpPatternLengthInput,
       liveArpSlotInput,
       liveArpLengthInput,
       liveArpShapeSelect,
       liveArpSwingInput,
       liveArpGateInput,
       liveArpOctaveInput,
+      liveArpPatternLengthInput,
       liveArpRefreshBtn,
       liveArpApplyBtn,
       liveArpStartBtn,
@@ -732,6 +742,9 @@ const boot = () => {
     deviceMonitorController.renderTelemetry(frame);
     profileMacroScenePanel.onTelemetry(frame);
   });
+  runtime.on('telemetry-health', (health) => {
+    deviceMonitorController.renderTelemetryHealth(health);
+  });
   runtime.on('config', ({ staged, config, dirty }) => {
     // `staged` is the single source of truth for editor controls; keep all derived UI panes in
     // sync from this one event to avoid mixed snapshots.
@@ -761,6 +774,13 @@ const boot = () => {
     updateStagePanel();
     panicHelpController.render();
   });
+  runtime.on('contract-quality', ({ quality, applyAllowed }) => {
+    transportToolbarController.onContractQuality();
+    if (!applyAllowed && applyBtn) applyBtn.disabled = true;
+    if (!applyAllowed) {
+      setStatus('warn', 'Degraded device contract', `Apply is blocked: ${quality}.`);
+    }
+  });
   runtime.on('log', (line) => {
     sessionLogController.recordEvent('RUNTIME', 'Raw line', line, 'info');
     panicHelpController.render();
@@ -776,7 +796,15 @@ const boot = () => {
     panicHelpController.render();
   });
   runtime.on('applied', ({ checksum }) => {
-    diffStatusController.clearApplied(checksum);
+    if (runtime.getState().dirty) {
+      diffStatusController.setStatus(
+        'ok',
+        'Applied',
+        'Applied the captured configuration. Newer edits remain staged.'
+      );
+    } else {
+      diffStatusController.clearApplied(checksum);
+    }
     sessionLogController.recordEvent(
       'APPLY',
       'Device acknowledged staged edits',
@@ -784,6 +812,41 @@ const boot = () => {
       'ok'
     );
     panicHelpController.render();
+  });
+  runtime.on('apply-uncertain', ({ reason }) => {
+    retryReadbackBtn?.removeAttribute('hidden');
+    setStatus('warn', 'Apply outcome uncertain', 'Waiting for authoritative device configuration readback.');
+    sessionLogController.recordEvent('APPLY', 'Outcome uncertain', String(reason ?? 'unknown'), 'warn');
+    panicHelpController.render();
+  });
+  runtime.on('resynchronized', () => {
+    retryReadbackBtn?.setAttribute('hidden', '');
+    setStatus('ok', 'Resynchronized', 'Browser state now matches the controller readback.');
+    sessionLogController.recordEvent('APPLY', 'Resynchronized from device', '', 'ok');
+    panicHelpController.render();
+  });
+  runtime.on('config-conflict', ({ conflicts }) => {
+    const count = Array.isArray(conflicts) ? conflicts.length : 0;
+    setStatus(
+      'warn',
+      'Device edit conflicts with staged work',
+      `${count} field${count === 1 ? '' : 's'} kept as staged; review before Apply.`
+    );
+    sessionLogController.recordEvent('CONFIG', 'Device/staged conflict', `${count} leaf field(s)`, 'warn');
+    panicHelpController.render();
+  });
+  retryReadbackBtn?.addEventListener('click', async () => {
+    retryReadbackBtn.disabled = true;
+    try {
+      const result = await runtime.resynchronize();
+      if (!result) throw new Error('Device readback is still unavailable. Reconnect and retry.');
+      setStatus('ok', 'Resynchronized', 'Browser state now matches the controller readback.');
+      retryReadbackBtn.setAttribute('hidden', '');
+    } catch (err) {
+      setStatus('warn', 'Readback still unresolved', err.message || String(err));
+    } finally {
+      retryReadbackBtn.disabled = false;
+    }
   });
   runtime.on('migration-required', ({ from, to, canAdapt }) => {
     sessionLogController.recordEvent(
@@ -796,10 +859,25 @@ const boot = () => {
     if (!migrationDialog || !migrationPreview) return;
     migrationPreview.textContent = `Firmware schema ${from} vs UI ${to}. ${
       canAdapt
-        ? 'An adapter is available; stage edits then apply.'
+        ? 'An adapter is registered, but automatic migration is not yet implemented. Export the preset and use a matching App/firmware pair.'
         : 'Export your preset and update firmware/UI to continue.'
     }`;
+    if (migrationApply) migrationApply.disabled = true;
     migrationDialog.showModal();
+  });
+  runtime.on('snapshot-restore-required', ({ snapshot }) => {
+    const savedAt = snapshot?.saved_at || (snapshot?.timestamp ? new Date(snapshot.timestamp).toISOString() : 'unknown time');
+    const firmware = snapshot?.device?.firmware_git_sha || 'unknown firmware';
+    const restore = window.confirm(
+      `A staged workspace from ${savedAt} targets ${firmware}, not this firmware. Restore it for review? It will remain staged and will not be applied automatically.`
+    );
+    if (restore) {
+      runtime.restoreLocalState({ allowDifferentFirmware: true });
+      setStatus('warn', 'Workspace restored for review', `Origin: ${firmware} • saved ${savedAt}`);
+    } else {
+      runtime.discardSavedWorkspace();
+      setStatus('warn', 'Old workspace discarded', `Origin: ${firmware} • saved ${savedAt}`);
+    }
   });
   runtime.on('connected', ({ manifest }) => {
     // Connection flips the entire toolbar/profile surface into interactive mode.
@@ -895,10 +973,13 @@ const boot = () => {
     ].join(' • ');
   }
 
-  // Promote the latest manifest into the header and connection chrome.
+  // A manifest establishes device identity, not a write-ready session. Only
+  // the final connected event may promote the UI to live.
   function updateHeaderManifest(manifest) {
-    setConnectionPill('live', 'Connected');
-    setConnectionBanner('live', manifest);
+    if (connectionPill?.dataset.stage !== 'live') {
+      setConnectionPill('handshake', 'Manifest received');
+      setConnectionBanner('handshake', manifest);
+    }
     updatePowerSafetySummary(manifest);
     updateHeader(runtime.getState().live);
     updateStagePanel();

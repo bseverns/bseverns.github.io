@@ -18,6 +18,11 @@ test('state snapshot store persists and restores staged config for matching sche
     storage,
     storageKey: 'state',
     getSchemaVersion: () => 6,
+    getDeviceIdentity: () => ({
+      device_name: 'MOARkNOBS-42',
+      firmware_git_sha: 'test-sha',
+      slot_count: 42
+    }),
     now: () => 1000
   });
 
@@ -25,10 +30,32 @@ test('state snapshot store persists and restores staged config for matching sche
 
   expect(JSON.parse(storage.snapshot().state)).toEqual({
     schema_version: 6,
+    device: { device_name: 'MOARkNOBS-42', firmware_git_sha: 'test-sha', slot_count: 42 },
     staged: { slots: [{ value: 64 }] },
-    timestamp: 1000
+    timestamp: 1000,
+    saved_at: '1970-01-01T00:00:01.000Z'
   });
   expect(store.readStagedConfig()).toEqual({ slots: [{ value: 64 }] });
+});
+
+test('state snapshot does not auto-restore across firmware identities', () => {
+  const storage = createMemoryStorage({
+    state: JSON.stringify({
+      schema_version: 6,
+      device: { device_name: 'MOARkNOBS-42', firmware_git_sha: 'old-sha', slot_count: 42 },
+      staged: { slots: [{ value: 64 }] },
+      timestamp: 1000
+    })
+  });
+  const store = createStateSnapshotStore({
+    storage,
+    storageKey: 'state',
+    getSchemaVersion: () => 6,
+    getDeviceIdentity: () => ({ firmware_git_sha: 'new-sha' })
+  });
+
+  expect(store.identityDecision(store.read())).toBe('different-firmware');
+  expect(store.readStagedConfig()).toBeNull();
 });
 
 test('state snapshot store ignores corrupt snapshots', () => {
@@ -103,6 +130,29 @@ test('state snapshot store clears snapshots when persisting null staged config',
   expect(storage.snapshot()).toEqual({});
 });
 
+test('state snapshot persistence coalesces rapid staged edits until explicitly flushed', () => {
+  const storage = createMemoryStorage();
+  let scheduled = null;
+  const store = createStateSnapshotStore({
+    storage,
+    storageKey: 'state',
+    getSchemaVersion: () => 6,
+    setTimeoutFn: (callback) => {
+      scheduled = callback;
+      return 1;
+    },
+    clearTimeoutFn: () => {
+      scheduled = null;
+    }
+  });
+
+  store.schedulePersist({ slots: [{ value: 1 }] });
+  store.schedulePersist({ slots: [{ value: 2 }] });
+  expect(storage.snapshot().state).toBeUndefined();
+  store.flushPersist();
+  expect(JSON.parse(storage.snapshot().state).staged).toEqual({ slots: [{ value: 2 }] });
+});
+
 test('config session restores only validated staged snapshots', () => {
   const emitted = [];
   const liveConfig = { slots: [{ value: 12 }], pots: [], led: {} };
@@ -149,4 +199,39 @@ test('config session restores only validated staged snapshots', () => {
   } finally {
     console.debug = originalDebug;
   }
+});
+
+test('config session does not request review when no saved workspace exists', () => {
+  const emitted = [];
+  const session = createConfigSession({
+    normalizeConfig: (config) => config,
+    clone: (value) => JSON.parse(JSON.stringify(value)),
+    shallowDiff: () => [],
+    digest: async () => 'checksum',
+    emit: (event, payload) => emitted.push({ event, payload }),
+    sendRpc: async () => ({}),
+    nextSeq: () => 1,
+    applyRpcTimeoutMs: 1000,
+    slotTypeNames: [],
+    localSlotMetaManager: {
+      extractFromConfig: () => {},
+      mergeIntoConfig: (config) => config,
+      updateEntry: () => false
+    },
+    stateSnapshotStore: {
+      read: () => null,
+      identityDecision: () => 'unknown-identity',
+      readStagedConfig: () => null
+    },
+    getManifest: () => ({}),
+    getRemoteManifest: () => ({}),
+    getSchema: () => ({}),
+    getSchemaSource: () => 'test',
+    getValidator: () => () => true
+  });
+
+  expect(session.restoreLocalState()).toBe(false);
+  expect(emitted).not.toContainEqual(
+    expect.objectContaining({ event: 'snapshot-restore-required' })
+  );
 });

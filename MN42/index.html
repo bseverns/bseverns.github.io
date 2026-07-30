@@ -29,6 +29,7 @@
             <button id="config-mode" type="button" data-ui-modes="advanced">Config boot</button>
             <button id="apply" type="button" disabled>Apply</button>
             <button id="rollback" type="button" disabled data-ui-modes="advanced">Rollback</button>
+            <button id="retry-readback" type="button" hidden>Retry device readback</button>
           </div>
           <span class="connection-banner" id="connection-banner" role="status">Connected to: —</span>
           <div class="power-safety-pill" id="power-safety-pill" role="status" aria-live="polite" data-ui-modes="basic">
@@ -45,6 +46,7 @@
       </div>
       <div class="runtime-lane-strip" aria-label="Runtime lanes">
         <span class="runtime-lane-chip" id="transport-lane-chip" role="status">Transport · Direct USB</span>
+        <span class="runtime-lane-chip" id="contract-quality-chip" role="status">Contract · Unknown</span>
         <span class="runtime-lane-chip" data-runtime-lane="staged">Staged config · Apply required</span>
         <span class="runtime-lane-chip" data-runtime-lane="live">Live firmware · Writes now</span>
         <span class="runtime-lane-chip" data-runtime-lane="browser">Browser only · Local hints</span>
@@ -140,6 +142,7 @@
           <div>
             <p class="workspace-kicker">Stage Mode</p>
             <h2 id="performer-title">Performance Dashboard</h2>
+            <p class="microcopy">Performance-safe status and recovery. No staged editors or Apply controls here.</p>
           </div>
           <div class="performer-header-controls">
             <div class="performer-mode-switch" role="group" aria-label="Stage mode switch">
@@ -538,6 +541,10 @@
                 <span>Octaves</span>
                 <input id="arp-octave" type="number" min="0" max="3" step="1" />
               </label>
+              <label>
+                <span>Pattern length</span>
+                <input id="arp-pattern-length" type="number" min="2" max="16" step="1" />
+              </label>
             </div>
             <section class="live-toggle-card" aria-labelledby="live-arp-title">
               <header class="live-toggle-card-header">
@@ -578,6 +585,10 @@
                 <label>
                   <span>Octaves</span>
                   <input id="live-arp-octave" type="number" min="0" max="3" step="1" disabled />
+                </label>
+                <label>
+                  <span>Pattern length</span>
+                  <input id="live-arp-pattern-length" type="number" min="2" max="16" step="1" disabled />
                 </label>
               </div>
               <div class="live-toggle-actions">
@@ -685,7 +696,7 @@
         </div>
       </aside>
 
-      <section id="slot-detail-panel" aria-labelledby="slot-detail-heading">
+      <section id="slot-detail-panel" aria-labelledby="slot-detail-heading" data-ui-modes="advanced">
         <header class="slot-detail-panel-header">
           <div>
             <h2 id="slot-detail-heading">Slot Details</h2>

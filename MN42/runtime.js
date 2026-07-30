@@ -39,6 +39,8 @@ import {
   shallowEqual
 } from './runtime/runtime_utils.js';
 
+// Browser-side firmware translator. It keeps three stories in tune: live device
+// state, staged editor state, and the simulator state learners can abuse safely.
 const TELEMETRY_FRAME_MS = 16;
 const RPC_THROTTLE_INTERVAL_MS = 1000 / 120;
 const RPC_TIMEOUT_MS = 3000;
@@ -60,7 +62,8 @@ const STORAGE_KEY = 'moarknobs:last-port';
 const STATE_STORAGE_KEY = 'moarknobs:last-state';
 const LOCAL_SLOT_META_STORAGE_KEY = 'moarknobs:slot-meta';
 
-// Native serial transport wrapper that exposes the same API as the simulator and WS bridge.
+// Runtime shell. Views call this, then mostly listen for events instead of
+// poking transport guts directly.
 export function createRuntime({
   schemaUrl = './config_schema.json',
   localManifest,
@@ -80,6 +83,7 @@ export function createRuntime({
   let remoteManifest = null;
   let schema = null;
   let schemaSource = 'bundled';
+  let contractQuality = useSimulator ? 'simulator' : 'incompatible';
   let validator = null;
   let seq = 0;
   const statusListeners = new Set();
@@ -98,7 +102,7 @@ export function createRuntime({
     typeof window !== 'undefined' && typeof window.location === 'object'
       ? window.location.href
       : undefined;
-  const { structuredBridgePreference, resolvedBridgeApiBaseUrl, websocketUrl, bridgeEventsUrl } =
+  const { structuredBridgePreference, resolvedBridgeApiBaseUrl, websocketUrl, bridgeEventsUrl, bridgeControlToken } =
     resolveTransportModeOptions({
       locationHref,
       bridgeApiBaseUrl,
@@ -121,6 +125,17 @@ export function createRuntime({
     );
   }
 
+  function schemaMigrationRequired() {
+    if (useSimulator) return false;
+    const deviceVersion = remoteManifest?.schema_version;
+    const appVersion = localManifest?.schema_version;
+    return (
+      deviceVersion !== null && deviceVersion !== undefined &&
+      appVersion !== null && appVersion !== undefined &&
+      String(deviceVersion) !== String(appVersion)
+    );
+  }
+
   const localSlotMetaManager = createLocalSlotMetaManager({
     storageKey: LOCAL_SLOT_META_STORAGE_KEY,
     initialSlotCount: localManifest?.slot_count ?? 0,
@@ -133,8 +148,18 @@ export function createRuntime({
     storage: typeof localStorage === 'undefined' ? null : localStorage,
     storageKey: STATE_STORAGE_KEY,
     getSchemaVersion: () => remoteManifest?.schema_version ?? localManifest?.schema_version,
+    getDeviceIdentity: () => ({
+      device_name: remoteManifest?.device_name ?? null,
+      firmware_git_sha: remoteManifest?.git_sha ?? null,
+      slot_count: remoteManifest?.slot_count ?? null
+    }),
     now: () => Date.now()
   });
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') stateSnapshotStore.flushPersist();
+    });
+  }
 
   function createSimulatorTransport() {
     return createSimulator({
@@ -152,7 +177,10 @@ export function createRuntime({
             clock_live: true,
             usb_midi_toggle: true,
             note_dynamics_live: true,
-            jitter_live: true
+            jitter_live: true,
+            device_schema: true,
+            bulk_config: true,
+            one_shot_config_boot: false
           }
         }),
       argMethodNames: ARG_METHOD_NAMES,
@@ -163,12 +191,20 @@ export function createRuntime({
     });
   }
 
-  async function requestPort() {
+  async function requestPort({ ignorePreference = false } = {}) {
     if (useSimulator) return createSimulatorTransport();
     if (!navigator.serial?.requestPort) throw new Error('WebSerial unavailable');
-    const remembered = portPreferenceStore.read();
+    const remembered = ignorePreference ? null : portPreferenceStore.read();
     const filters = remembered ? [remembered] : undefined;
-    const port = await navigator.serial.requestPort(filters ? { filters } : {});
+    let port;
+    try {
+      port = await navigator.serial.requestPort(filters ? { filters } : {});
+    } catch (err) {
+      if (!filters) throw err;
+      // A remembered VID/PID may be stale after a boot-mode or firmware identity change.
+      portPreferenceStore.clear();
+      port = await navigator.serial.requestPort();
+    }
     portPreferenceStore.persist(port);
     return createTransportPort(port, {}, { makeEncoder: encoder, makeDecoder: decoder });
   }
@@ -237,13 +273,14 @@ export function createRuntime({
     }
   });
 
-  function sendRpc(payload, { timeoutMs, rollbackOnError = true } = {}) {
-    const request = rpcKernel.sendRpc(payload, { timeoutMs });
-    if (!rollbackOnError) {
-      return request;
+  function sendRpc(payload, { timeoutMs, rollbackPolicy = 'none' } = {}) {
+    if (!['none', 'staged-config'].includes(rollbackPolicy)) {
+      throw new Error(`Unsupported RPC rollback policy: ${rollbackPolicy}`);
     }
-    // Any failed RPC rolls staged edits back to the last known-good live config so the UI does
-    // not stay in a half-applied state.
+    const request = rpcKernel.sendRpc(payload, { timeoutMs });
+    if (rollbackPolicy === 'none') return request;
+    // Staged-config rollback is deliberately opt-in. Profile, live-control, and read RPCs
+    // must not discard unrelated configuration edits when they fail.
     return request.catch(async (err) => {
       try {
         await configSession?.rollback();
@@ -277,11 +314,65 @@ export function createRuntime({
       if (!client) throw new Error('Bridge session unavailable');
       return client.stageConfig(config);
     },
-    applyBridgeConfig: async () => {
+    applyBridgeConfig: async ({ candidate, identity } = {}) => {
       const client = bridgeSessionRuntime?.ensureClient();
-      if (!client) throw new Error('Bridge session unavailable');
-      return client.applyConfig({});
+      if (!client) {
+        const error = new Error('Bridge session unavailable');
+        error.bridgeFailureClass = 'preflight-rejected';
+        throw error;
+      }
+      let stageReceipt;
+      try {
+        stageReceipt = await client.stageConfig(candidate, {
+          expectedSessionRevision: bridgeSessionRuntime?.getSessionRevision(),
+          ...identity
+        });
+      } catch (err) {
+        // The serial Apply request is not sent until this identity-bearing
+        // stage request has returned successfully.
+        err.bridgeFailureClass = 'preflight-rejected';
+        bridgeSessionRuntime?.recordSessionRevision(
+          err.bridgeSession?.sessionRevision
+        );
+        throw err;
+      }
+      bridgeSessionRuntime?.recordStageReceipt(stageReceipt);
+      let response;
+      try {
+        response = await client.applyConfig({
+          expectedSessionRevision: bridgeSessionRuntime?.getSessionRevision(),
+          ...identity
+        });
+      } catch (err) {
+        if (err.bridgeFailureClass === 'preflight-rejected') {
+          bridgeSessionRuntime?.recordSessionRevision(
+            err.bridgeSession?.sessionRevision
+          );
+        }
+        throw err;
+      }
+      const result = response?.result;
+      if (
+        result?.applied !== true &&
+        !(result?.applied === false && result?.reason === 'clean')
+      ) {
+        const error = new Error('Bridge Apply response omitted its transaction result.');
+        error.code = 'invalid_bridge_apply_response';
+        error.bridgeFailureClass = 'transmission-unknown';
+        error.bridgeSession = response?.session ?? null;
+        throw error;
+      }
+      if (response?.session) bridgeSessionRuntime?.applyAuthoritativeSession(response.session);
+      return {
+        ...result,
+        authoritativeConfig: response?.session?.liveConfig ?? null
+      };
     },
+    refreshBridgeSession: async () =>
+      bridgeSessionRuntime?.refreshSessionSnapshot({
+        warm: false,
+        emitConnectedConfig: false
+      }),
     rollbackBridgeConfig: async (reason) => {
       const client = bridgeSessionRuntime?.ensureClient();
       if (!client) return { rolledBack: false };
@@ -297,7 +388,8 @@ export function createRuntime({
     createClient: ({ baseUrl, eventUrl }) =>
       createBridgeSessionClient({
         baseUrl,
-        eventUrl
+        eventUrl,
+        controlToken: bridgeControlToken
       }),
     compileSchema(nextSchema) {
       validator = ajv.compile(nextSchema);
@@ -353,6 +445,7 @@ export function createRuntime({
 
   async function connect(existingPort) {
     try {
+      telemetryRuntime.reset();
       emit('status', { stage: 'handshake', level: 'info', message: 'Negotiating manifest…' });
       let candidate = existingPort ?? null;
       if (!candidate) {
@@ -378,6 +471,15 @@ export function createRuntime({
           });
           await bridgeSessionRuntime.openStructuredEvents();
           bridgeSessionActive = true;
+          contractQuality = schemaMigrationRequired()
+            ? 'migration-required'
+            : schemaSource === 'device'
+              ? 'verified'
+              : 'fallback-schema';
+          emit('contract-quality', {
+            quality: contractQuality,
+            applyAllowed: contractQuality === 'verified'
+          });
           emit('status', {
             stage: 'bridge-session',
             level: 'ok',
@@ -392,7 +494,7 @@ export function createRuntime({
           return;
         } catch (err) {
           bridgeSessionActive = false;
-          bridgeSessionRuntime.reset();
+          bridgeSessionRuntime.reset({ preserveLocalDraft: true });
           emit('status', {
             stage: 'bridge-session',
             level: 'warn',
@@ -402,7 +504,7 @@ export function createRuntime({
           });
         }
       }
-      remoteManifest = await performConnectionHandshake({
+      const handshake = await performConnectionHandshake({
         sendRpc,
         emit,
         localManifest,
@@ -410,14 +512,16 @@ export function createRuntime({
         migrations,
         argMethodCount: ARG_METHOD_NAMES.length
       });
+      remoteManifest = handshake.manifest;
       emit('manifest', remoteManifest);
-      await hydrate();
+      await hydrate({ handshakeQuality: handshake.quality });
       emit('connected', {
         manifest: remoteManifest,
         schema,
         config: configSession.mergeLocalSlotMeta(configSession.getLiveConfig())
       });
     } catch (err) {
+      telemetryRuntime.reset();
       emit('error', err);
       await transport?.close().catch(() => {});
       transport = null;
@@ -426,7 +530,7 @@ export function createRuntime({
     }
   }
 
-  async function hydrate() {
+  async function hydrate({ handshakeQuality = 'verified' } = {}) {
     const schemaSelection = await selectSchemaForHydration({
       sendRpc,
       schemaUrl,
@@ -434,8 +538,22 @@ export function createRuntime({
     });
     schema = schemaSelection.schema;
     schemaSource = schemaSelection.source;
+    contractQuality = useSimulator
+      ? 'simulator'
+      : schemaMigrationRequired()
+        ? 'migration-required'
+        : handshakeQuality !== 'verified'
+          ? handshakeQuality
+          : schemaSelection.quality;
+    if (remoteManifest) remoteManifest.contract_quality = contractQuality;
+    emit('contract-quality', { quality: contractQuality, applyAllowed: ['verified', 'simulator'].includes(contractQuality) });
     validator = ajv.compile(schema);
-    const configPayload = await sendRpc({ rpc: 'get_config' });
+    const supportsChunkedConfig = Boolean(
+      !useSimulator && remoteManifest?.capabilities?.chunked_reads?.config
+    );
+    const configPayload = await sendRpc({
+      rpc: supportsChunkedConfig ? 'get_config_chunked' : 'get_config'
+    });
     const config = configPayload?.config ?? configPayload;
     configSession.syncFromDevice(config);
     emit('schema', schema);
@@ -486,18 +604,21 @@ export function createRuntime({
     isDirty: configSession.isDirty,
     setLiveConfig: configSession.setLiveConfig,
     setStagedConfig: configSession.setStagedConfig,
+    reconcileDevicePatch: configSession.reconcileDevicePatch,
     clone,
     normalizeConfig,
     shallowEqual,
     getManifest: () => remoteManifest ?? localManifest ?? {},
-    broadcastConfig: configSession.broadcastConfig
+    broadcastConfig: configSession.broadcastConfig,
+    onConflict: (conflicts) => emit('config-conflict', { conflicts })
   });
 
   const applyPatch = (...args) => liveControlsRuntime.applyPatch(...args);
 
   async function disconnect() {
-    bridgeSessionRuntime.reset();
+    bridgeSessionRuntime.reset({ preserveLocalDraft: true });
     bridgeSessionActive = false;
+    telemetryRuntime.reset();
     if (!transport) {
       emit('disconnected');
       return;
@@ -523,8 +644,20 @@ export function createRuntime({
   }
 
   async function apply() {
+    if (!['verified', 'simulator'].includes(contractQuality)) {
+      throw new Error(`Apply is blocked until the device contract is verified (current: ${contractQuality}).`);
+    }
     if (bridgeSessionActive) {
+      if (!bridgeSessionRuntime.isHealthy()) {
+        throw new Error('Apply is blocked while the Bridge session event authority is stale.');
+      }
       await bridgeSessionRuntime.flushStageSync({ active: bridgeSessionActive });
+      bridgeSessionRuntime.suspendStageSync();
+      try {
+        return await configSession.apply();
+      } finally {
+        bridgeSessionRuntime.resumeStageSync({ active: bridgeSessionActive });
+      }
     }
     return configSession.apply();
   }
@@ -534,11 +667,18 @@ export function createRuntime({
     return configSession.rollback();
   }
 
+  async function resynchronize() {
+    return configSession.resynchronize();
+  }
+
   function getState() {
     return {
       ...configSession.getState(),
       transportMode: getTransportMode({ useSimulator, bridgeSessionActive, websocketUrl }),
+      contractQuality,
       bridgeSessionActive,
+      bridgeSessionHealth: bridgeSessionRuntime.getHealth(),
+      telemetryHealth: telemetryRuntime.getHealth(),
       bridgeApiBaseUrl: resolvedBridgeApiBaseUrl
     };
   }
@@ -549,6 +689,7 @@ export function createRuntime({
     stage,
     apply,
     rollback,
+    resynchronize,
     diff: configSession.diff,
     getState,
     on,
@@ -560,11 +701,13 @@ export function createRuntime({
     requestConfiguratorBoot,
     applyPatch,
     restoreLocalState: configSession.restoreLocalState,
-    replaceConfig: configSession.replaceConfig,
+    discardSavedWorkspace: stateSnapshotStore.clear,
+    hydrateAuthoritativeConfig: configSession.hydrateAuthoritativeConfig,
     setPotGuard,
     setLocalSlotMeta: configSession.setLocalSlotMeta,
     createThrottle,
     requestPort,
+    forgetRememberedPort: portPreferenceStore.clear,
     useSimulator(toggle) {
       useSimulator = toggle;
     }

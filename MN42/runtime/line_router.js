@@ -1,4 +1,4 @@
-import { handleNativePendingResponse } from './native_response_router.js';
+import { createChunkedReadAssembler, handleNativePendingResponse } from './native_response_router.js';
 
 function nativeTextErrorForPending(line, activePending) {
   if (activePending?.protocolMode !== 'native' || !activePending.nativeRequest) return null;
@@ -32,6 +32,7 @@ export function createRuntimeLineHandler({
   extractSlotIndex,
   onTelemetry
 } = {}) {
+  const chunkedReadAssembler = createChunkedReadAssembler();
   return function handleLine(line) {
     // Dispatch order matters: scene/macro replies can look like normal JSON payloads, so route
     // their handlers first before generic RPC/telemetry parsing.
@@ -52,8 +53,8 @@ export function createRuntimeLineHandler({
       emit('log', line);
       return;
     }
-    if (handleSceneLine(msg)) return;
-    if (handleMacroLine(msg)) return;
+    const sceneHandled = handleSceneLine(msg);
+    const macroHandled = handleMacroLine(msg);
     if (msg?.id !== undefined) {
       rpcKernel.handleRpcResponse(msg);
       return;
@@ -67,17 +68,19 @@ export function createRuntimeLineHandler({
         activePendingId,
         rpcKernel,
         isManifestPayload,
-        isConfigPayload
+        isConfigPayload,
+        chunkedReadAssembler
       })
     ) {
       return;
     }
-    if (msg.type === 'telemetry' || msg.slots || msg.envelopes || msg.lfos || msg.lfo_config) {
-      onTelemetry(msg);
-      return;
-    }
+    if (sceneHandled || macroHandled) return;
     if (msg.type === 'config-patch') {
       applyConfigPatch(msg);
+      return;
+    }
+    if (msg.type === 'telemetry' || msg.slots || msg.envelopes || msg.lfos || msg.lfo_config) {
+      onTelemetry(msg);
       return;
     }
     if (msg.type === 'slot_patch' && msg.slot && typeof msg.slot === 'object') {

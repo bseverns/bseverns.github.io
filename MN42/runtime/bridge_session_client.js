@@ -1,9 +1,48 @@
+const PREFLIGHT_REJECTION_CODES = new Set([
+  'schema_validation_failed',
+  'stale_session_revision',
+  'staged_apply_identity_mismatch',
+  'staged_digest_mismatch',
+  'device_not_ready',
+  'device_not_connected',
+  'device_schema_incompatible',
+  'apply_in_progress'
+]);
+
+function classifyBridgeFailure(code) {
+  if (PREFLIGHT_REJECTION_CODES.has(code)) return 'preflight-rejected';
+  if (typeof code === 'string' && code.startsWith('device_')) {
+    return 'device-rejected-before-commit';
+  }
+  return 'transmission-unknown';
+}
+
 function createBridgeError(payload, fallbackMessage) {
   const body = payload?.error ?? payload ?? {};
   const error = new Error(body.message ?? fallbackMessage ?? 'Bridge request failed');
   if (body.code !== undefined) error.code = body.code;
   if (body.details !== undefined) error.details = body.details;
+  // New Bridge versions own this classification. The code-based mapping is
+  // retained for compatibility with older runtimes.
+  error.bridgeFailureClass =
+    body.failureClass ?? classifyBridgeFailure(error.code);
+  error.bridgeSession = payload?.state?.deviceSession ?? null;
   return error;
+}
+
+function createInvalidApplyResponseError(session = null) {
+  const error = new Error('Bridge Apply response omitted its transaction result.');
+  error.code = 'invalid_bridge_apply_response';
+  error.bridgeFailureClass = 'transmission-unknown';
+  error.bridgeSession = session;
+  return error;
+}
+
+function isRecognizedApplyResult(result) {
+  return (
+    result?.applied === true ||
+    (result?.applied === false && result?.reason === 'clean')
+  );
 }
 
 function resolveUrl(url, base) {
@@ -18,6 +57,7 @@ function resolveUrl(url, base) {
 export function createBridgeSessionClient({
   baseUrl,
   eventUrl,
+  controlToken = null,
   fetchImpl = typeof fetch === 'function' ? fetch.bind(globalThis) : null,
   WebSocketImpl = typeof WebSocket === 'function' ? WebSocket : null
 } = {}) {
@@ -41,7 +81,13 @@ export function createBridgeSessionClient({
   async function requestJson(path, { method = 'GET', body } = {}) {
     const response = await fetchImpl(resolveUrl(path, base), {
       method,
-      headers: body === undefined ? undefined : { 'content-type': 'application/json' },
+      headers:
+        body === undefined && !controlToken
+          ? undefined
+          : {
+              ...(body === undefined ? {} : { 'content-type': 'application/json' }),
+              ...(controlToken ? { authorization: `Bearer ${controlToken}` } : {})
+            },
       body: body === undefined ? undefined : JSON.stringify(body)
     });
 
@@ -67,10 +113,21 @@ export function createBridgeSessionClient({
     return payload.session ?? null;
   }
 
-  async function stageConfig(config) {
+  async function stageConfig(config, {
+    expectedSessionRevision,
+    clientApplyId,
+    stagedRevision,
+    stagedDigest
+  } = {}) {
     const payload = await requestJson('/api/device/stage', {
       method: 'POST',
-      body: { config }
+      body: {
+        config,
+        expectedSessionRevision,
+        clientApplyId,
+        stagedRevision,
+        stagedDigest
+      }
     });
     return payload.result ?? null;
   }
@@ -80,7 +137,14 @@ export function createBridgeSessionClient({
       method: 'POST',
       body
     });
-    return payload.result ?? null;
+    const session = payload.state?.deviceSession ?? null;
+    if (!isRecognizedApplyResult(payload.result)) {
+      throw createInvalidApplyResponseError(session);
+    }
+    return {
+      result: payload.result,
+      session
+    };
   }
 
   async function rollbackConfig(reason = 'operator_request') {
@@ -115,7 +179,9 @@ export function createBridgeSessionClient({
 
     socketClosed = false;
     buffer = '';
-    socket = new WebSocketImpl(resolvedEventUrl);
+    const socketUrl = new URL(resolvedEventUrl);
+    if (controlToken) socketUrl.searchParams.set('token', controlToken);
+    socket = new WebSocketImpl(socketUrl.toString());
     socket.binaryType = 'arraybuffer';
 
     const flushBufferedEvent = () => {

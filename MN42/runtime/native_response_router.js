@@ -1,12 +1,84 @@
+function fnv1aUtf8(value) {
+  let hash = 2166136261;
+  for (const byte of new TextEncoder().encode(value)) {
+    hash ^= byte;
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
+export function createChunkedReadAssembler() {
+  let pending = null;
+
+  function fail(message) {
+    pending = null;
+    return { error: message };
+  }
+
+  return {
+    consume(msg, { id, expectedCommand } = {}) {
+      if (msg?.type !== 'read_chunk' || msg.command !== expectedCommand) return null;
+      const index = Number(msg.index);
+      const total = Number(msg.total);
+      const checksum = Number(msg.checksum);
+      if (
+        !Number.isInteger(index) ||
+        !Number.isInteger(total) ||
+        !Number.isSafeInteger(checksum) ||
+        index < 0 ||
+        total < 1 ||
+        total > 16384 ||
+        index >= total ||
+        typeof msg.data !== 'string'
+      ) {
+        return fail('Malformed chunked device read');
+      }
+      if (!pending || pending.id !== id) {
+        pending = { id, expectedCommand, total, checksum: checksum >>> 0, chunks: new Array(total), count: 0 };
+      }
+      if (
+        pending.expectedCommand !== expectedCommand ||
+        pending.total !== total ||
+        pending.checksum !== (checksum >>> 0)
+      ) {
+        return fail('Inconsistent chunked device read');
+      }
+      if (pending.chunks[index] !== undefined && pending.chunks[index] !== msg.data) {
+        return fail('Conflicting duplicate chunked device read');
+      }
+      if (pending.chunks[index] === undefined) {
+        pending.chunks[index] = msg.data;
+        pending.count += 1;
+      }
+      if (pending.count !== pending.total) return { pending: true };
+
+      const payload = pending.chunks.join('');
+      const expectedChecksum = pending.checksum;
+      pending = null;
+      if (fnv1aUtf8(payload) !== expectedChecksum) return { error: 'Chunked device read checksum mismatch' };
+      try {
+        return { result: JSON.parse(payload) };
+      } catch {
+        return { error: 'Chunked device read contained invalid JSON' };
+      }
+    }
+  };
+}
+
 export function handleNativePendingResponse({
   msg,
   activePending,
   activePendingId,
   rpcKernel,
   isManifestPayload,
-  isConfigPayload
+  isConfigPayload,
+  chunkedReadAssembler
 } = {}) {
   if (activePending?.protocolMode !== 'native' || !activePending.nativeRequest) return false;
+  const expectedSequence = activePending.nativeRequest.expectedSequence;
+  const isExpectedResponse = (command) =>
+    msg.command === command &&
+    (expectedSequence === undefined || Number(msg.seq) === Number(expectedSequence));
 
   if (msg.type === 'error') {
     rpcKernel.handleRpcResponse({
@@ -20,6 +92,40 @@ export function handleNativePendingResponse({
   }
 
   switch (activePending.nativeRequest.kind) {
+    case 'config_chunked':
+    case 'mod_matrix_chunked': {
+      const expectedCommand = activePending.nativeRequest.kind === 'config_chunked'
+        ? 'GET_CONFIG'
+        : 'GET_MOD_MATRIX';
+      const assembled = chunkedReadAssembler?.consume(msg, {
+        id: activePendingId,
+        expectedCommand
+      });
+      if (!assembled) break;
+      if (assembled.error) {
+        rpcKernel.handleRpcResponse({ id: activePendingId, error: { message: assembled.error } });
+      } else if (assembled.result) {
+        const valid = activePending.nativeRequest.kind === 'config_chunked'
+          ? isConfigPayload(assembled.result)
+          : (
+              assembled.result.command === 'GET_MOD_MATRIX' &&
+              Array.isArray(assembled.result.routes) &&
+              assembled.result.sources &&
+              typeof assembled.result.sources === 'object'
+            );
+        if (!valid) {
+          rpcKernel.handleRpcResponse({ id: activePendingId, error: { message: 'Chunked device read returned an invalid payload' } });
+        } else {
+          rpcKernel.handleRpcResponse({
+            id: activePendingId,
+            result: activePending.nativeRequest.kind === 'config_chunked'
+              ? { config: assembled.result }
+              : assembled.result
+          });
+        }
+      }
+      return true;
+    }
     case 'hello':
       if (msg.hello !== undefined) {
         rpcKernel.handleRpcResponse({
@@ -61,7 +167,8 @@ export function handleNativePendingResponse({
       if (
         Object.prototype.hasOwnProperty.call(msg, 'follow_external') &&
         Object.prototype.hasOwnProperty.call(msg, 'clock_out_enabled') &&
-        Object.prototype.hasOwnProperty.call(msg, 'tapped_bpm')
+        Object.prototype.hasOwnProperty.call(msg, 'tapped_bpm') &&
+        (activePending.nativeRequest.kind !== 'clock_get' || isExpectedResponse('GET_CLOCK'))
       ) {
         if (activePending.nativeRequest.kind === 'clock_set' && msg.status !== 'ok') {
           rpcKernel.handleRpcResponse({
@@ -97,7 +204,8 @@ export function handleNativePendingResponse({
     case 'jitter_set':
       if (
         Object.prototype.hasOwnProperty.call(msg, 'depth') &&
-        Object.prototype.hasOwnProperty.call(msg, 'smoothness')
+        Object.prototype.hasOwnProperty.call(msg, 'smoothness') &&
+        (activePending.nativeRequest.kind !== 'jitter_get' || isExpectedResponse('GET_JITTER'))
       ) {
         if (activePending.nativeRequest.kind === 'jitter_set' && msg.status !== 'ok') {
           rpcKernel.handleRpcResponse({
@@ -114,7 +222,8 @@ export function handleNativePendingResponse({
     case 'note_dynamics_set':
       if (
         Object.prototype.hasOwnProperty.call(msg, 'velocity_shift') &&
-        Object.prototype.hasOwnProperty.call(msg, 'change_probability')
+        Object.prototype.hasOwnProperty.call(msg, 'change_probability') &&
+        (activePending.nativeRequest.kind !== 'note_dynamics_get' || isExpectedResponse('GET_NOTE_DYNAMICS'))
       ) {
         if (activePending.nativeRequest.kind === 'note_dynamics_set' && msg.status !== 'ok') {
           rpcKernel.handleRpcResponse({
@@ -140,8 +249,22 @@ export function handleNativePendingResponse({
         return true;
       }
       break;
+    case 'macro_command':
+      if (Object.prototype.hasOwnProperty.call(msg, 'macro_saved') || Object.prototype.hasOwnProperty.call(msg, 'macro_recalled')) {
+        const ok = Boolean(msg.macro_saved ?? msg.macro_recalled);
+        rpcKernel.handleRpcResponse(ok ? { id: activePendingId, result: msg } : { id: activePendingId, error: { message: msg.error ?? 'Macro command failed' } });
+        return true;
+      }
+      break;
+    case 'scene_command':
+      if (Array.isArray(msg.scenes) || Object.prototype.hasOwnProperty.call(msg, 'scene_saved') || Object.prototype.hasOwnProperty.call(msg, 'scene_recalled')) {
+        const ok = Array.isArray(msg.scenes) || Boolean(msg.scene_saved ?? msg.scene_recalled);
+        rpcKernel.handleRpcResponse(ok ? { id: activePendingId, result: msg } : { id: activePendingId, error: { message: msg.scene_error ?? 'Scene command failed' } });
+        return true;
+      }
+      break;
     case 'usb_midi_get':
-      if (Object.prototype.hasOwnProperty.call(msg, 'usb_midi_out')) {
+      if (Object.prototype.hasOwnProperty.call(msg, 'usb_midi_out') && isExpectedResponse('GET_USB_MIDI')) {
         rpcKernel.handleRpcResponse({ id: activePendingId, result: msg });
         return true;
       }

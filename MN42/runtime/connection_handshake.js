@@ -3,13 +3,21 @@ function buildFallbackManifest(localManifest, argMethodCount) {
     device_name: localManifest?.device_name ?? 'MOARkNOBS-42',
     fw_version: 'unknown',
     git_sha: 'offline',
-    build_time: new Date().toISOString(),
+    // This is intentionally unknown. Browser time is not firmware build time.
+    build_time: null,
     schema_version: localManifest?.schema_version,
     slot_count: localManifest?.slot_count,
     pot_count: localManifest?.pot_count,
     envelope_count: localManifest?.envelope_count,
     arg_method_count: argMethodCount,
     led_count: localManifest?.led_count ?? 0,
+    power_profile: localManifest?.power_profile,
+    led_brightness_cap: localManifest?.led_brightness_cap,
+    rail_topology_verified: localManifest?.rail_topology_verified,
+    capabilities:
+      localManifest?.capabilities && typeof localManifest.capabilities === 'object'
+        ? { ...localManifest.capabilities }
+        : {},
     free_ram: 0,
     free_flash: 0
   };
@@ -23,25 +31,43 @@ export async function performConnectionHandshake({
   migrations = {},
   argMethodCount
 } = {}) {
+  let helloVerified = true;
   try {
     await sendRpc({ rpc: 'hello' });
   } catch (err) {
-    console.debug('hello RPC failed', err);
+    helloVerified = false;
+    emit('status', {
+      stage: 'handshake',
+      level: 'warn',
+      message: `HELLO verification failed: ${err.message || String(err)}`
+    });
   }
 
   let manifestPayload;
   try {
     manifestPayload = await sendRpc({ rpc: 'get_manifest' });
   } catch (err) {
-    console.debug('get_manifest RPC failed', err);
+    emit('status', {
+      stage: 'handshake',
+      level: 'warn',
+      message: `Manifest retrieval failed; using fail-closed fallback: ${err.message || String(err)}`
+    });
     manifestPayload = null;
   }
 
   const manifestData = manifestPayload?.manifest ?? manifestPayload;
-  const remoteManifest =
-    manifestData && typeof manifestData === 'object'
-      ? manifestData
-      : buildFallbackManifest(localManifest, argMethodCount);
+  const manifestVerified = Boolean(manifestData && typeof manifestData === 'object');
+  const remoteManifest = manifestVerified
+    ? manifestData
+    : buildFallbackManifest(localManifest, argMethodCount);
+
+  const quality = !manifestVerified
+    ? 'fallback-manifest'
+    : helloVerified
+      ? 'verified'
+      : 'incompatible';
+  remoteManifest.contract_quality = quality;
+  remoteManifest.manifest_source = manifestVerified ? 'device' : 'fallback';
 
   localSlotMetaManager.ensureCount(remoteManifest?.slot_count ?? localManifest?.slot_count ?? 0);
   emit('manifest', remoteManifest);
@@ -58,5 +84,5 @@ export async function performConnectionHandshake({
     });
   }
 
-  return remoteManifest;
+  return { manifest: remoteManifest, quality, helloVerified };
 }

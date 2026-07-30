@@ -52,6 +52,8 @@ export function createRpcKernel({
         return { kind: 'manifest', lines: ['GET_MANIFEST'] };
       case 'get_mod_matrix':
         return { kind: 'mod_matrix', lines: ['GET_MOD_MATRIX'] };
+      case 'get_mod_matrix_chunked':
+        return { kind: 'mod_matrix_chunked', lines: ['GET_MOD_MATRIX_CHUNKED'] };
       case 'get_arp':
         return { kind: 'arp_get', lines: ['GET_ARP'] };
       case 'get_profile':
@@ -64,17 +66,19 @@ export function createRpcKernel({
           ]
         };
       case 'get_clock':
-        return { kind: 'clock_get', lines: ['GET_CLOCK'] };
+        return { kind: 'clock_get', expectedSequence: message.id, lines: [`GET_CLOCK,SEQ,${message.id}`] };
       case 'get_jitter':
-        return { kind: 'jitter_get', lines: ['GET_JITTER'] };
+        return { kind: 'jitter_get', expectedSequence: message.id, lines: [`GET_JITTER,SEQ,${message.id}`] };
       case 'get_note_dynamics':
-        return { kind: 'note_dynamics_get', lines: ['GET_NOTE_DYNAMICS'] };
+        return { kind: 'note_dynamics_get', expectedSequence: message.id, lines: [`GET_NOTE_DYNAMICS,SEQ,${message.id}`] };
       case 'get_usb_midi':
-        return { kind: 'usb_midi_get', lines: ['GET_USB_MIDI'] };
+        return { kind: 'usb_midi_get', expectedSequence: message.id, lines: [`GET_USB_MIDI,SEQ,${message.id}`] };
       case 'midi_test':
         return { kind: 'midi_test', lines: ['MIDI_TEST'] };
       case 'get_config':
         return { kind: 'config', lines: ['GET_CONFIG'] };
+      case 'get_config_chunked':
+        return { kind: 'config_chunked', lines: ['GET_CONFIG_CHUNKED'] };
       case 'get_schema':
         return { kind: 'schema', lines: ['GET_SCHEMA'] };
       case 'enter_config_mode':
@@ -105,6 +109,10 @@ export function createRpcKernel({
           lines
         };
       }
+      case 'macro_command':
+        return { kind: 'macro_command', lines: [String(message.command ?? '')] };
+      case 'scene_command':
+        return { kind: 'scene_command', lines: [JSON.stringify(message.payload ?? {})] };
       case 'set_clock':
         return {
           kind: 'clock_set',
@@ -114,7 +122,12 @@ export function createRpcKernel({
             },${Number(message.tappedBpm ?? 120).toFixed(2)}`
           ]
         };
-      case 'set_arp':
+      case 'set_arp': {
+        const patternLength = Number(message.patternLength);
+        const patternLengthSuffix =
+          Number.isFinite(patternLength) && patternLength >= 2 && patternLength <= 16
+            ? `,${Math.round(patternLength)}`
+            : '';
         return {
           kind: 'arp_set',
           lines: [
@@ -122,9 +135,10 @@ export function createRpcKernel({
               Number(message.shape) || 0
             )},${Math.round(Number(message.swingPercent) || 0)},${Math.round(
               Number(message.gatePercent) || 50
-            )},${Math.round(Number(message.octaveRange) || 0)}`
+            )},${Math.round(Number(message.octaveRange) || 0)}${patternLengthSuffix}`
           ]
         };
+      }
       case 'set_jitter':
         return {
           kind: 'jitter_set',
@@ -247,6 +261,16 @@ export function createRpcKernel({
             await transport.writeLine(JSON.stringify(message));
           }
         } catch (err) {
+          if (entry.protocolMode === 'native' && entry.nativeRequest?.kind === 'ack') {
+            // A transport can fail after only part of a chunked SET_ALL frame
+            // reached firmware. Best-effort abort prevents that partial frame
+            // from occupying the assembler until its timeout.
+            try {
+              await transport.writeLine('ABORT_SET_ALL');
+            } catch {
+              // The firmware timeout remains the recovery path for a dead port.
+            }
+          }
           if (activeRpcId === message.id) {
             activeRpcId = null;
           }

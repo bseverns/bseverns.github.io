@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-test('slot editor preserves focused number input during live telemetry refresh', async ({ page }) => {
+test('slot editor preserves focused number input during live telemetry refresh', async ({
+  page
+}) => {
   await page.addInitScript(() => {
     window.localStorage?.clear?.();
     window.localStorage?.setItem?.('moarknobs:ui-mode', 'advanced');
@@ -26,11 +28,7 @@ test('slot editor preserves focused number input during live telemetry refresh',
   await expect
     .poll(() =>
       page.evaluate(() =>
-        Boolean(
-          document.activeElement?.matches(
-            '.slot-editor label input[type="number"]'
-          )
-        )
+        Boolean(document.activeElement?.matches('.slot-editor label input[type="number"]'))
       )
     )
     .toBe(true);
@@ -57,7 +55,7 @@ test('schema controls preserve focused numeric draft during config refresh', asy
     const current = window.__MN42_RUNTIME.getState().staged;
     const next = structuredClone(current);
     next.filter = { ...(next.filter ?? {}), freq: 321 };
-    window.__MN42_RUNTIME.replaceConfig(next);
+    window.__MN42_RUNTIME.hydrateAuthoritativeConfig(next);
   });
 
   await expect(freqInput).toHaveValue('2345');
@@ -65,9 +63,7 @@ test('schema controls preserve focused numeric draft during config refresh', asy
     .poll(() =>
       page.evaluate(() =>
         Boolean(
-          document.activeElement?.matches(
-            '[data-schema-target="filter"] input[type="number"]'
-          )
+          document.activeElement?.matches('[data-schema-target="filter"] input[type="number"]')
         )
       )
     )

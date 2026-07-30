@@ -3,12 +3,34 @@ export function createTelemetryRuntime({
   emit,
   notifyStatus,
   flushDelayMs = 50,
+  delayedAfterMs = 1000,
+  staleAfterMs = 3000,
+  now = () => Date.now(),
   setTimeoutFn = setTimeout,
   clearTimeoutFn = clearTimeout
 } = {}) {
   let queuedTelemetry = null;
   let telemetryTraceId = null;
   let telemetryTimer = null;
+  let freshnessTimer = null;
+  let receivedAt = null;
+  let freshness = 'stale';
+
+  function updateFreshness() {
+    const ageMs = receivedAt === null ? null : Math.max(0, now() - receivedAt);
+    const next = ageMs === null || ageMs >= staleAfterMs ? 'stale' : ageMs >= delayedAfterMs ? 'delayed' : 'live';
+    if (next !== freshness) {
+      freshness = next;
+      emit('telemetry-health', { freshness, receivedAt, ageMs });
+    }
+    if (freshnessTimer) clearTimeoutFn(freshnessTimer);
+    if (next !== 'stale') {
+      const untilNext = next === 'live' ? delayedAfterMs - ageMs : staleAfterMs - ageMs;
+      freshnessTimer = setTimeoutFn(updateFreshness, Math.max(1, untilNext));
+    } else {
+      freshnessTimer = null;
+    }
+  }
 
   function mergeTelemetryChunk(current, msg) {
     const next = { ...(current || {}), ...msg };
@@ -40,13 +62,15 @@ export function createTelemetryRuntime({
     if (!queuedTelemetry) return;
 
     const frame = clone(queuedTelemetry);
-    emit('telemetry', frame);
+    emit('telemetry', { ...frame, receivedAt });
     notifyStatus({ type: 'telemetry', ...frame });
     queuedTelemetry = null;
   }
 
   function queueTelemetryFrame(msg) {
     if (!msg || typeof msg !== 'object') return;
+    receivedAt = now();
+    updateFreshness();
 
     const traceId = msg.traceId || null;
 
@@ -65,8 +89,26 @@ export function createTelemetryRuntime({
     }
   }
 
+  function reset({ freshness: nextFreshness = 'stale' } = {}) {
+    if (telemetryTimer) clearTimeoutFn(telemetryTimer);
+    if (freshnessTimer) clearTimeoutFn(freshnessTimer);
+    telemetryTimer = null;
+    freshnessTimer = null;
+    queuedTelemetry = null;
+    telemetryTraceId = null;
+    receivedAt = null;
+    if (freshness !== nextFreshness) {
+      freshness = nextFreshness;
+      emit('telemetry-health', { freshness, receivedAt: null, ageMs: null });
+    } else {
+      freshness = nextFreshness;
+    }
+  }
+
   return {
     flushTelemetry,
-    queueTelemetryFrame
+    queueTelemetryFrame,
+    reset,
+    getHealth: () => ({ freshness, receivedAt, ageMs: receivedAt === null ? null : now() - receivedAt })
   };
 }
