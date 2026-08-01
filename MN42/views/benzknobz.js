@@ -139,6 +139,7 @@ const boot = () => {
   const slotDetailEfBaseline = document.getElementById('slot-detail-ef-baseline');
   const slotDetailArg = document.getElementById('slot-detail-arg');
   const slotDetailArgSources = document.getElementById('slot-detail-arg-sources');
+  const slotDetailLfo = document.getElementById('slot-detail-lfo');
   const slotDetailValue = document.getElementById('slot-detail-value');
   const deviceMonitor = document.getElementById('device-monitor');
   const powerSafetyPill = document.getElementById('power-safety-pill');
@@ -689,6 +690,7 @@ const boot = () => {
       slotDetailEfBaseline,
       slotDetailArg,
       slotDetailArgSources,
+      slotDetailLfo,
       slotDetailValue
     },
     glossary: GLOSSARY,
@@ -951,6 +953,15 @@ const boot = () => {
     runtime,
     manifest: localManifest
   });
+  if (connectBtn) {
+    connectBtn.disabled = false;
+    connectBtn.removeAttribute('aria-busy');
+  }
+  if (stageConnectBtn) {
+    stageConnectBtn.disabled = false;
+    stageConnectBtn.removeAttribute('aria-busy');
+  }
+  if (docRoot) docRoot.dataset.mn42Ready = 'true';
 
   function updatePowerSafetySummary(manifest) {
     powerSafetySummary.render(manifest);

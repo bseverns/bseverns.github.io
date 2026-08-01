@@ -24,7 +24,7 @@
             <span id="dirty-badge" role="status" hidden>Dirty · staged edits</span>
           </div>
           <div class="connect-actions compact-connect-actions" data-ui-modes="basic advanced">
-            <button id="connect" type="button">Connect</button>
+            <button id="connect" type="button" disabled aria-busy="true">Connect</button>
             <button id="check-compatibility" type="button" data-ui-modes="advanced">Check compatibility</button>
             <button id="config-mode" type="button" data-ui-modes="advanced">Config boot</button>
             <button id="apply" type="button" disabled>Apply</button>
@@ -183,7 +183,7 @@
         </div>
 
         <div class="performer-actions" aria-label="Stage-safe controls">
-          <button id="stage-connect" type="button">Connect</button>
+          <button id="stage-connect" type="button" disabled aria-busy="true">Connect</button>
           <label>
             <span>Load Profile</span>
             <select id="stage-profile-select">
@@ -274,6 +274,8 @@
                 data-ui-tier="advanced">Envelope</button>
               <button type="button" class="editor-tab" data-editor-tab="arg" aria-pressed="false"
                 data-ui-tier="advanced">ARG</button>
+              <button type="button" class="editor-tab" data-editor-tab="lfo" aria-pressed="false"
+                data-ui-tier="advanced">LFO</button>
             </div>
           </header>
           <div id="form">
@@ -751,6 +753,10 @@
           <div data-ui-tier="advanced">
             <dt>ARG Sources</dt>
             <dd id="slot-detail-arg-sources">—</dd>
+          </div>
+          <div data-ui-tier="advanced">
+            <dt>Fixed LFO Lanes</dt>
+            <dd id="slot-detail-lfo">—</dd>
           </div>
           <div>
             <dt>Last Value</dt>
