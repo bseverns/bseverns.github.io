@@ -86,12 +86,14 @@ A new MIDI Monitor panel sits beside the transport controls. Toggle it open, gra
 ## Accessibility & Controls
 
 - Every control carries a label and large hit target. Slot focus follows arrow keys; hold `Shift` for coarse/fine changes on numeric inputs just like the hardware.
+- Only the selected slot's browser-only **Take Control** toggle participates in sequential keyboard navigation; selecting another slot moves that single tab stop with it.
 - The connection pill announces changes through an ARIA live region, and telemetry painting is throttled to animation frames so assistive tech stays responsive.
 - Selecting a SysEx slot reveals a hex template field. Enter space-separated bytes plus `XX`/`MSB`/`LSB` placeholders—the UI normalises the case and the firmware swaps in live values on send.
 
 ## Runtime Contract
 
 - Transport handshake is `hello` → `get_manifest` → `get_schema` → `get_config`. On simulator transport those travel as JSON-RPC; on native WebSerial and raw bridge transport the runtime maps them to `HELLO`, `GET_MANIFEST`, `GET_SCHEMA`, and `GET_CONFIG` before trusting any config payload. Hardware that advertises `capabilities.chunked_reads.config` is queried with `GET_CONFIG_CHUNKED`; the App checksum-verifies and reassembles its `read_chunk` frames before accepting the config. `GET_CONFIG` remains the compatibility path. When a structured bridge session is available, the runtime hydrates from `/api/device/session` and `/ws/events` first, with raw `/ws` retained for compatibility and live-control RPCs.
+- Profile Arpeggiator assignments are explicit and optional. A profile stores zero-based `assigned_slots`; recalling it arms those slots for the hardware arp toggle but never starts note output. Live Arp start remains a direct, non-persisted override.
 - The transport-mode truth table for direct WebSerial, bridge session, bridge raw `/ws`, and simulator lives in [../docs/app/AppTransportTruthTable.md](../docs/app/AppTransportTruthTable.md).
 - Live runtime RPCs are separate from staged config writes: the configurator now uses `GET_NOTE_DYNAMICS` / `SET_NOTE_DYNAMICS`, `GET_JITTER` / `SET_JITTER`, `GET_CLOCK` / `SET_CLOCK`, and `GET_USB_MIDI` / `SET_USB_MIDI` for direct-control lanes.
 - For the bridge path, staged config writes versus live performance writes are documented in [../docs/bridge/BridgeWriteLanes.md](../docs/bridge/BridgeWriteLanes.md).
@@ -103,6 +105,7 @@ A new MIDI Monitor panel sits beside the transport controls. Toggle it open, gra
 - `runtime.applyPatch(path, value)` stages a field locally first, then routes a `{rpc:"set_param"}` call through the same RPC lane. The simulator applies it immediately; native firmware defers those fine-grained writes until the next full Apply because the production contract is config-oriented. If live preview fails, the intentional edit remains staged and the failure is reported.
 - Full Apply sends `set_config` with schema version, manifest metadata, an immutable staged candidate, and a SHA-256 checksum. Once any Apply bytes have been transmitted, a missing or malformed receipt enters an uncertain/resynchronizing state and reads device configuration back; it never claims a local rollback restored hardware. An unsent structured-Bridge draft survives disconnect/reconnect and is reconciled after the first authoritative session snapshot.
 - Browser-only slot metadata (`label`, pickup guard, and the MIDI badge) is stored separately in `localStorage`, merged back into the UI on read, and never included in `Apply` or schema diffing.
+- Device serialization includes every changed per-slot EF payload, including advanced-only fields and intentional resets back to default values; default-looking data is not discarded when it differs from verified device truth.
 - Schema mismatches put the device contract into `migration-required` and block Apply. The App currently supports export and inspection only; do not register or advertise migration adapters until their transform, validation, diff, and operator-confirmation flow is implemented.
 - Last-used USB IDs and the last staged snapshot are remembered in `localStorage`; on load the app nudges you to reconnect but never reopens without a user gesture (WebSerial rules).
 
