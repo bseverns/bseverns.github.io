@@ -5,13 +5,13 @@ test.describe('Stage mode', () => {
   test('renders without editor and lab panels', async ({ page }) => {
     await page.goto('/?mode=stage');
 
-    await expect(page.locator('#performer-panel [data-ui-mode-btn="stage"]')).toHaveAttribute(
+    await expect(page.locator('.global-mode-switch [data-ui-mode-btn="stage"]')).toHaveAttribute(
       'aria-pressed',
       'true'
     );
     await expect(page.locator('#performer-panel')).toBeVisible();
-    await expect(page.locator('#performer-panel [data-ui-mode-btn="basic"]')).toBeVisible();
-    await expect(page.locator('#performer-panel [data-ui-mode-btn="advanced"]')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Configure' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Lab' })).toBeVisible();
     await expect(page.locator('#performer-panel')).toContainText(
       'Performance-safe status and recovery. No staged editors or Apply controls here.'
     );
@@ -36,6 +36,8 @@ test.describe('Stage mode', () => {
     await expect(page.locator('#preset-picker')).toBeHidden();
     await expect(page.locator('#apply-save-profile')).toBeHidden();
     await expect(page.locator('#status')).toBeHidden();
+    await expect(page.locator('#stage-power-summary')).toContainText('Power status unavailable');
+    await expect(page.locator('#stage-power-summary .power-safety-warning')).toHaveCount(0);
   });
 
   test('shows simulator manifest power fields in the performer panel', async ({ page }) => {
@@ -52,11 +54,17 @@ test.describe('Stage mode', () => {
     await expect(page.locator('#stage-power-summary')).toContainText('POWER_CHOKED_V1');
     await expect(page.locator('#stage-power-summary')).toContainText('LED cap: 26/255');
     await expect(page.locator('#stage-power-summary')).toContainText('Rail: UNVERIFIED');
+    await expect(page.locator('#stage-power-summary .power-safety-warning')).toContainText(
+      'Power-limited hardware reported'
+    );
     await expect(page.locator('#stage-slots .stage-slot-cell')).toHaveCount(42);
     await expect(page.locator('#stage-envelopes .meter')).toHaveCount(6);
+    await expect(page.locator('#stage-slot-focus')).toContainText('Slot 1 · CC · Ch 1 · Value');
+    await page.locator('#stage-slots .stage-slot-cell').nth(16).click();
+    await expect(page.locator('#stage-slot-focus')).toContainText('Slot 17');
   });
 
-  test('shows release-boundary mismatch warning without dirtying config hydration', async ({
+  test('shows split-rail metadata without a power warning or dirtying config hydration', async ({
     page
   }) => {
     await page.addInitScript(({ schemaVersion }) => {
@@ -162,16 +170,16 @@ test.describe('Stage mode', () => {
     await expect(page.locator('#stage-dirty-state')).toHaveText('Clean');
     await expect(page.locator('#dirty-badge')).toBeHidden();
     await expect(page.locator('#stage-slots .stage-slot-cell')).toHaveCount(42);
-    await expect(page.locator('#stage-power-summary')).toContainText('Release boundary mismatch');
     await expect(page.locator('#stage-power-summary')).toContainText('SPLIT_RAIL_REWORK');
-    await expect(page.locator('#stage-power-summary')).toContainText('26/255');
+    await expect(page.locator('#stage-power-summary')).toContainText('255/255');
+    await expect(page.locator('#stage-power-summary .power-safety-warning')).toHaveCount(0);
 
-    await page.locator('#performer-panel [data-ui-mode-btn="advanced"]').click();
-    await expect(page.locator('#performer-panel')).toBeVisible();
-    await expect(page.locator('#stage-power-summary')).toContainText('Release boundary mismatch');
+    await page.getByRole('button', { name: 'Lab' }).click();
+    await expect(page.locator('#performer-panel')).toBeHidden();
+    await expect(page.locator('#stage-power-summary .power-safety-warning')).toHaveCount(0);
   });
 
-  test('switching from Stage to Advanced restores bench tools', async ({ page }) => {
+  test('switching from Stage to Lab restores bench tools', async ({ page }) => {
     await page.addInitScript(() => {
       window.__MN42_RUNTIME_OPTIONS = { useSimulator: true };
     });
@@ -179,9 +187,9 @@ test.describe('Stage mode', () => {
     await page.locator('#stage-connect').click();
     await expect(page.locator('#connection-pill')).toHaveText('Connected');
 
-    await page.locator('#performer-panel [data-ui-mode-btn="advanced"]').click();
+    await page.getByRole('button', { name: 'Lab' }).click();
 
-    await expect(page.locator('#performer-panel')).toBeVisible();
+    await expect(page.locator('#performer-panel')).toBeHidden();
     await expect(page.locator('#live-panel')).toBeVisible();
     await expect(page.locator('#editor-panel')).toBeVisible();
     await expect(page.locator('#filter-settings')).toBeVisible();
@@ -223,7 +231,7 @@ test.describe('Stage mode', () => {
     await expect(page.locator('#device-monitor')).toContainText('Primary');
   });
 
-  test('switching from Stage to Basic restores the calm editor surface', async ({ page }) => {
+  test('switching from Stage to Configure restores the calm editor surface', async ({ page }) => {
     await page.addInitScript(() => {
       window.__MN42_RUNTIME_OPTIONS = { useSimulator: true };
     });
@@ -231,9 +239,9 @@ test.describe('Stage mode', () => {
     await page.locator('#stage-connect').click();
     await expect(page.locator('#connection-pill')).toHaveText('Connected');
 
-    await page.locator('#performer-panel [data-ui-mode-btn="basic"]').click();
+    await page.getByRole('button', { name: 'Configure' }).click();
 
-    await expect(page.locator('#performer-panel')).toBeVisible();
+    await expect(page.locator('#performer-panel')).toBeHidden();
     await expect(page.locator('#stage-panel')).toBeVisible();
     await expect(page.locator('#editor-panel')).toBeVisible();
     await expect(page.locator('#connect-card')).toBeVisible();
