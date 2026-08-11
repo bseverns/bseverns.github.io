@@ -1,6 +1,7 @@
 import { describeSlotModulation, formatSlotModulationTitle } from '../slot_modulation_summary.js';
 
 const PROFILE_SLOT_LABELS = ['A', 'B', 'C', 'D'];
+const SLOT_ACTIVITY_DECAY_MS = 280;
 
 function slotTypeCssToken(type) {
   if (typeof type !== 'string' || !type.trim()) return 'off';
@@ -64,6 +65,7 @@ export function createPerformerPanelController({
     profileLoadBtn = null,
     sceneSelect = null,
     sceneRecallBtn = null,
+    draftBlockedNotice = null,
     panicHelpBtn = null,
     slotGrid = null,
     envelopeContainer = null
@@ -73,6 +75,24 @@ export function createPerformerPanelController({
   let envMeters = [];
   let renderedSlots = [];
   let latestTelemetry = null;
+  let previousSlotValues = [];
+  let slotActivityTimers = [];
+
+  function resetSlotActivity() {
+    slotActivityTimers.forEach((timer) => clearTimeout(timer));
+    slotActivityTimers = [];
+    previousSlotValues = [];
+    slotCells.forEach((cell) => cell.classList.remove('active'));
+  }
+
+  function pulseSlotActivity(cell, index) {
+    cell.classList.add('active');
+    clearTimeout(slotActivityTimers[index]);
+    slotActivityTimers[index] = setTimeout(() => {
+      cell.classList.remove('active');
+      slotActivityTimers[index] = null;
+    }, SLOT_ACTIVITY_DECAY_MS);
+  }
 
   function refreshSlotFocus() {
     if (!slotFocus) return;
@@ -153,6 +173,7 @@ export function createPerformerPanelController({
       return;
     }
 
+    resetSlotActivity();
     slotGrid.innerHTML = '';
     slotCells = source.map((slot, index) => {
       const cell = document.createElement('button');
@@ -205,10 +226,14 @@ export function createPerformerPanelController({
       const cell = slotCells[idx];
       if (!cell) return;
       const numeric = Number(value);
-      const active = Number.isFinite(numeric) && numeric > 0;
-      cell.classList.toggle('active', active);
+      const previous = previousSlotValues[idx];
+      const valid = Number.isFinite(numeric);
+      if (valid && Number.isFinite(previous) && numeric !== previous) {
+        pulseSlotActivity(cell, idx);
+      }
+      previousSlotValues[idx] = valid ? numeric : null;
       const valueEl = cell.querySelector('.stage-slot-value');
-      if (valueEl) valueEl.textContent = Number.isFinite(numeric) ? String(numeric) : '--';
+      if (valueEl) valueEl.textContent = valid ? String(numeric) : '--';
     });
 
     if (clockState) {
@@ -244,6 +269,7 @@ export function createPerformerPanelController({
       dirtyState.textContent = dirtyNow ? 'Dirty' : 'Clean';
       dirtyState.dataset.state = dirtyNow ? 'dirty' : 'clean';
     }
+    if (draftBlockedNotice) draftBlockedNotice.hidden = !dirtyNow;
     if (deviceName) deviceName.textContent = resolveDeviceName?.(manifest) ?? '-';
     if (fwVersion) fwVersion.textContent = resolveFirmwareVersion?.(manifest) ?? 'unknown';
     if (profileSummary) profileSummary.textContent = getProfileText();
@@ -257,11 +283,11 @@ export function createPerformerPanelController({
       profileSelect.value = String(getActiveProfileSlot());
     }
     if (profileLoadBtn) {
-      profileLoadBtn.disabled = Boolean(profileLoadDisabled);
+      profileLoadBtn.disabled = dirtyNow || Boolean(profileLoadDisabled);
       profileLoadBtn.textContent = `Recall Profile ${slotLabel(getActiveProfileSlot())} now`;
     }
     if (sceneRecallBtn) {
-      sceneRecallBtn.disabled = Boolean(sceneRecallDisabled);
+      sceneRecallBtn.disabled = dirtyNow || Boolean(sceneRecallDisabled);
       sceneRecallBtn.textContent = `Recall Scene ${Number(sceneSelect?.value ?? 0) + 1} now`;
     }
   }

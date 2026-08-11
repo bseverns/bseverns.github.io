@@ -1111,6 +1111,16 @@ main {
   min-height: 42px;
 }
 
+.stage-draft-blocked {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 206, 107, 0.55);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 206, 107, 0.08);
+  color: var(--color-warn);
+  font-weight: 700;
+}
+
 .performer-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
@@ -1158,6 +1168,7 @@ main {
   letter-spacing: normal;
   box-shadow: none;
   cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
 }
 
 .stage-slot-cell:hover,
@@ -1359,8 +1370,7 @@ main {
   grid-template-columns: minmax(0, 1fr) auto;
   grid-template-areas:
     'label label'
-    'state mods'
-    'toggle toggle';
+    'state mods';
   align-items: start;
   justify-items: start;
   gap: 5px;
@@ -1449,34 +1459,6 @@ main {
   font-size: 0.52rem;
   letter-spacing: 0.04em;
   white-space: nowrap;
-}
-
-.slot-button .takeover {
-  grid-area: toggle;
-  justify-self: center;
-  align-self: end;
-  min-width: 40px;
-  min-height: 20px;
-  padding: 3px 9px;
-  border-radius: var(--radius-pill);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(0, 0, 0, 0.18);
-  color: rgba(247, 249, 255, 0.6);
-  cursor: pointer;
-  text-transform: uppercase;
-  font-size: 0.52rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  white-space: nowrap;
-}
-
-.slot-button .takeover[aria-label='Pickup mode'] {
-  color: var(--color-hot);
-  border-color: rgba(255, 95, 150, 0.35);
-}
-
-.slot-button .takeover[aria-label='Immediate mode'] {
-  color: rgba(247, 249, 255, 0.72);
 }
 
 .slot-type-legend {
