@@ -8,7 +8,9 @@ export function createProfileSceneControls({
   sceneSlotCount = DEFAULT_SCENE_SLOT_COUNT,
   isInteractable = () => false,
   supportsScenes = () => false,
-  confirmReplaceStaged = () => true
+  confirmReplaceStaged = () => true,
+  onScenesChanged = () => {},
+  onSceneRecalled = () => {}
 } = {}) {
   const sceneSlotState = Array.from({ length: sceneSlotCount }, () => ({
     name: '',
@@ -34,9 +36,14 @@ export function createProfileSceneControls({
     const displayName = available
       ? name || `Scene ${slotIndex + 1}`
       : `Slot ${slotIndex + 1} empty`;
-    if (slotInfo.statusEl) slotInfo.statusEl.textContent = displayName;
     sceneSlotState[slotIndex] = { name: name ?? '', available: Boolean(available) };
+    if (slotInfo.statusEl) slotInfo.statusEl.textContent = displayName;
+    if (slotInfo.nameInput && document.activeElement !== slotInfo.nameInput) {
+      slotInfo.nameInput.value = available ? name ?? '' : '';
+    }
+    if (slotInfo.recallBtn) slotInfo.recallBtn.textContent = `Recall ${displayName} now`;
     updateControls();
+    onScenesChanged(sceneSlotState.map((entry) => ({ ...entry })));
   }
 
   // Recompute enabled/disabled state for all scene save/recall buttons.
@@ -201,10 +208,18 @@ export function createProfileSceneControls({
       });
     }
     if (payload.type === 'recalled' && typeof payload.slot === 'number') {
+      if (payload.raw?.scene_recalled === false) return;
+      const current = sceneSlotState[payload.slot] ?? { name: '', available: false };
+      const reportsAvailability = Object.prototype.hasOwnProperty.call(
+        payload.raw ?? payload,
+        'scene_available'
+      );
       updateSceneSlot(payload.slot, {
-        name: payload.name ?? '',
-        available: payload.available
+        name: payload.name || current.name,
+        available: reportsAvailability ? payload.available : current.available
       });
+      const state = sceneSlotState[payload.slot] ?? { name: '', available: false };
+      onSceneRecalled(payload.slot, { ...state });
     }
   }
 
@@ -213,6 +228,7 @@ export function createProfileSceneControls({
     bound = true;
     initializeSceneGrid();
     updateControls();
+    onScenesChanged(sceneSlotState.map((entry) => ({ ...entry })));
   }
 
   return {

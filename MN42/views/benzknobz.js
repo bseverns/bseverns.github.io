@@ -201,10 +201,12 @@ const boot = () => {
   const performerPanel = document.getElementById('performer-panel');
   const stageConnectBtn = document.getElementById('stage-connect');
   const stageConnectionState = document.getElementById('stage-connection-state');
+  const stageTelemetryState = document.getElementById('stage-telemetry-state');
   const stageDirtyState = document.getElementById('stage-dirty-state');
   const stageDeviceName = document.getElementById('stage-device-name');
   const stageFwVersion = document.getElementById('stage-fw-version');
   const stageProfileSummary = document.getElementById('stage-profile-summary');
+  const stageSceneSummary = document.getElementById('stage-scene-summary');
   const stageClockState = document.getElementById('stage-clock-state');
   const stageMidiOutput = document.getElementById('stage-midi-output');
   const stageSlotFocus = document.getElementById('stage-slot-focus');
@@ -217,6 +219,8 @@ const boot = () => {
   const stagePanicHelpBtn = document.getElementById('stage-panic-help');
   const stageSlotGrid = document.getElementById('stage-slots');
   const stageEnvelopeContainer = document.getElementById('stage-envelopes');
+  const stageEnvelopeCount = document.getElementById('stage-envelope-count');
+  const stageMotion = document.getElementById('stage-motion');
   const logEl = document.getElementById('log');
   const sessionLogCount = document.getElementById('session-log-count');
   const sessionLogExportBtn = document.getElementById('session-log-export');
@@ -231,6 +235,7 @@ const boot = () => {
   const panicHelpConfigBootBtn = document.getElementById('panic-help-config-boot');
   const profileSlotButtons = Array.from(document.querySelectorAll('[data-profile-slot]'));
   const profileSlotStatus = document.getElementById('profile-slot-status');
+  const profileNameInput = document.getElementById('profile-name');
   const profileSaveBtn = document.getElementById('profile-save');
   const profileLoadBtn = document.getElementById('profile-load');
   const profileResetBtn = document.getElementById('profile-reset');
@@ -459,6 +464,10 @@ const boot = () => {
     containers: [powerSafetyPill, stagePowerSummary],
     warningContainers: [globalPowerWarning]
   });
+  let profileNames = ['', '', '', ''];
+  let sceneStates = Array.from({ length: 6 }, () => ({ name: '', available: false }));
+  let deviceActiveProfileSlot = null;
+  let lastRecalledScene = null;
   const performerPanelController = createPerformerPanelController({
     runtime,
     localManifest,
@@ -468,13 +477,16 @@ const boot = () => {
     connect: () => connectBtn?.click(),
     getConnectionStage: () => connectionPill?.dataset.stage || 'disconnected',
     getConnectionText: () => connectionPill?.textContent || 'Disconnected',
-    getProfileText: () => profileSlotStatus?.textContent || 'Slot A - local target',
     getActiveProfileSlot: () => {
       const activeButton = profileSlotButtons.find(
         (button) => button.getAttribute('aria-pressed') === 'true'
       );
       return Number(activeButton?.dataset.profileSlot ?? 0);
     },
+    getDeviceActiveProfileSlot: () => deviceActiveProfileSlot,
+    getProfileName: (slot) => profileNames[Number(slot)] ?? '',
+    getSceneState: (slot) => sceneStates[Number(slot)] ?? null,
+    getLastRecalledScene: () => lastRecalledScene,
     setActiveProfileSlot: (slot) => {
       const selected = Number(slot);
       const button = profileSlotButtons.find(
@@ -498,10 +510,12 @@ const boot = () => {
       panel: performerPanel,
       connectBtn: stageConnectBtn,
       connectionState: stageConnectionState,
+      telemetryState: stageTelemetryState,
       dirtyState: stageDirtyState,
       deviceName: stageDeviceName,
       fwVersion: stageFwVersion,
       profileSummary: stageProfileSummary,
+      sceneSummary: stageSceneSummary,
       clockState: stageClockState,
       midiOutput: stageMidiOutput,
       slotFocus: stageSlotFocus,
@@ -512,7 +526,8 @@ const boot = () => {
       draftBlockedNotice: stageDraftBlockedNotice,
       panicHelpBtn: stagePanicHelpBtn,
       slotGrid: stageSlotGrid,
-      envelopeContainer: stageEnvelopeContainer
+      envelopeContainer: stageEnvelopeContainer,
+      envelopeCount: stageEnvelopeCount
     }
   });
   const transportToolbarController = createTransportToolbarController({
@@ -575,7 +590,10 @@ const boot = () => {
     hints: UI_MODE_HINTS,
     getSlotCount: () => slotState.slots.length,
     renderSlotEditor,
-    setPerformerVisible: (visible) => performerPanelController.setVisible(visible),
+    setPerformerVisible: (visible) => {
+      performerPanelController.setVisible(visible);
+      if (!visible && stageMotion?.open) stageMotion.open = false;
+    },
     onModeChanged: updateStagePanel,
     elements: {
       uiModeButtons,
@@ -718,9 +736,33 @@ const boot = () => {
     onImportedDraft: () => {
       if (docRoot) docRoot.dataset.importedDraft = 'true';
     },
+    onProfileNamesChanged: (names) => {
+      profileNames = Array.isArray(names) ? [...names] : profileNames;
+      updateStagePanel();
+    },
+    onScenesChanged: (scenes) => {
+      sceneStates = Array.isArray(scenes) ? scenes.map((scene) => ({ ...scene })) : sceneStates;
+      updateStagePanel();
+    },
+    onDeviceActiveProfileChanged: (slot) => {
+      const next = slot !== null && slot !== undefined && Number.isInteger(Number(slot))
+        ? Number(slot)
+        : null;
+      if (next !== deviceActiveProfileSlot) lastRecalledScene = null;
+      deviceActiveProfileSlot = next;
+      updateStagePanel();
+    },
+    onSceneRecalled: (slot, scene) => {
+      lastRecalledScene = {
+        slot: Number(slot),
+        name: typeof scene?.name === 'string' ? scene.name : ''
+      };
+      updateStagePanel();
+    },
     elements: {
       profileSlotButtons,
       profileSlotStatus,
+      profileNameInput,
       profileSaveBtn,
       profileLoadBtn,
       profileResetBtn,
@@ -863,6 +905,7 @@ const boot = () => {
   });
   runtime.on('telemetry-health', (health) => {
     deviceMonitorController.renderTelemetryHealth(health);
+    updateStagePanel();
   });
   runtime.on('config', ({ staged, config, dirty }) => {
     // `staged` is the single source of truth for editor controls; keep all derived UI panes in
@@ -1080,6 +1123,12 @@ const boot = () => {
     runtime,
     manifest: localManifest
   });
+  new ScopePanel({
+    container: document.getElementById('stage-motion-panel'),
+    runtime,
+    manifest: localManifest,
+    renderToggle: stageMotion
+  });
   if (connectBtn) {
     connectBtn.disabled = false;
     connectBtn.removeAttribute('aria-busy');
@@ -1135,10 +1184,18 @@ const boot = () => {
       sceneRecallDisabled: !recallButton || Boolean(recallButton.disabled)
     });
     if (headerProfileStatus) {
-      headerProfileStatus.textContent = (profileSlotStatus?.textContent || 'Profile A')
-        .replace(/^Slot\s+/i, 'Profile ')
-        .split('•')[0]
-        .trim();
+      const connected = connectionPill?.dataset.stage === 'live';
+      const active = deviceActiveProfileSlot;
+      if (connected && Number.isInteger(active)) {
+        const name = profileNames[active]?.trim?.() ?? '';
+        const fallback = `Profile ${performerPanelController.slotLabel(active)}`;
+        headerProfileStatus.textContent = name ? `${name} · ${fallback}` : fallback;
+      } else {
+        const target = Number(stageProfileSelect?.value ?? 0);
+        const name = profileNames[target]?.trim?.() ?? '';
+        const fallback = `Profile ${performerPanelController.slotLabel(target)}`;
+        headerProfileStatus.textContent = `${name ? `${name} · ${fallback}` : fallback} target`;
+      }
     }
   }
 

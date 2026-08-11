@@ -1,11 +1,70 @@
-import { describeSlotModulation, formatSlotModulationTitle } from '../slot_modulation_summary.js';
+import {
+  describeSlotModulation,
+  formatSlotModulationTitle,
+  renderSlotModulationBadges
+} from '../slot_modulation_summary.js';
+import { applyModulationIdentity } from '../modulation_identity.js';
 
 const PROFILE_SLOT_LABELS = ['A', 'B', 'C', 'D'];
 const SLOT_ACTIVITY_DECAY_MS = 280;
 
+export function formatStageClockState(clock, legacyFrame = {}) {
+  if (!clock || typeof clock !== 'object') return { text: 'Waiting', health: 'unknown' };
+  const source = String(clock.source ?? '').toLowerCase();
+  const followsExternal = clock.follow_external === true;
+  const externalMissing = followsExternal && clock.external_signal === false;
+  const sourceLabel = source === 'external' ? 'EXT' : source === 'internal' ? 'INT' : 'CLOCK';
+  const bpm = Number(
+    source === 'external'
+      ? clock.external_bpm ?? clock.bpm ?? legacyFrame.clock_bpm
+      : clock.tapped_bpm ?? clock.bpm ?? legacyFrame.clock_bpm
+  );
+  const bpmText = Number.isFinite(bpm) && bpm > 0 ? `${bpm.toFixed(1)} BPM` : null;
+  const runningText = typeof clock.running === 'boolean'
+    ? clock.running
+      ? 'Running'
+      : 'Stopped'
+    : null;
+
+  if (externalMissing) {
+    const fallbackLabel = source === 'internal' ? 'INT fallback' : 'CLOCK';
+    return {
+      text: [fallbackLabel, bpmText, 'Waiting for EXT'].filter(Boolean).join(' · '),
+      health: 'waiting-external'
+    };
+  }
+
+  return {
+    text: [sourceLabel, bpmText, runningText].filter(Boolean).join(' · ') || 'Waiting',
+    health: source === 'external' ? 'external' : source === 'internal' ? 'internal' : 'idle'
+  };
+}
+
+export function formatStageTelemetryHealth(health = {}, { connected = false } = {}) {
+  if (!connected) return { text: 'Telemetry offline', freshness: 'offline' };
+  const freshness = ['live', 'delayed', 'stale'].includes(health?.freshness)
+    ? health.freshness
+    : 'stale';
+  if (freshness === 'stale' && health?.receivedAt === null) {
+    return { text: 'Telemetry waiting', freshness: 'waiting' };
+  }
+  if (freshness === 'live') return { text: 'Telemetry live', freshness };
+  const ageMs = Number(health?.ageMs);
+  const ageText = Number.isFinite(ageMs) ? ` · ${(Math.max(0, ageMs) / 1000).toFixed(1)}s` : '';
+  return {
+    text: `Telemetry ${freshness}${ageText}`,
+    freshness
+  };
+}
+
 function slotTypeCssToken(type) {
   if (typeof type !== 'string' || !type.trim()) return 'off';
   return type.toLowerCase().replace(/[^a-z0-9]+/g, '');
+}
+
+function formatSignedDelta(value) {
+  const numeric = Math.round(Number(value) || 0);
+  return numeric >= 0 ? `+${numeric}` : String(numeric);
 }
 
 function initializeMeters(container, count, labelPrefix) {
@@ -15,17 +74,39 @@ function initializeMeters(container, count, labelPrefix) {
   for (let i = 0; i < count; i += 1) {
     const wrap = document.createElement('div');
     wrap.className = 'meter';
+    applyModulationIdentity(wrap, 'ef', i);
     const label = document.createElement('span');
-    label.textContent = `${labelPrefix} ${String(i + 1).padStart(2, '0')}`;
+    label.className = 'meter-label';
+    const name = document.createElement('strong');
+    name.textContent = `${labelPrefix} ${String(i + 1).padStart(2, '0')}`;
+    const state = document.createElement('small');
+    state.className = 'meter-state';
+    state.textContent = 'STATUS --';
+    const routes = document.createElement('button');
+    routes.type = 'button';
+    routes.className = 'meter-routes';
+    routes.textContent = 'No routes';
+    routes.disabled = true;
+    routes.setAttribute('aria-expanded', 'false');
+    const destinations = document.createElement('small');
+    destinations.className = 'meter-destinations';
+    destinations.hidden = true;
+    routes.addEventListener('click', () => {
+      const expanded = routes.getAttribute('aria-expanded') === 'true';
+      routes.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+      destinations.hidden = expanded;
+    });
+    label.append(name, state, routes, destinations);
     const progress = document.createElement('progress');
     progress.max = 127;
     progress.value = 0;
+    progress.setAttribute('aria-label', `${labelPrefix} ${i + 1} level`);
     const value = document.createElement('span');
     value.className = 'meter-value';
     value.textContent = '00';
     wrap.append(label, progress, value);
     container.appendChild(wrap);
-    meters.push({ wrap, progress, value });
+    meters.push({ wrap, progress, value, state, routes, destinations });
   }
   return meters;
 }
@@ -40,8 +121,11 @@ export function createPerformerPanelController({
   connect = () => {},
   getConnectionStage = () => 'disconnected',
   getConnectionText = () => 'Disconnected',
-  getProfileText = () => 'Slot A - local target',
   getActiveProfileSlot = () => 0,
+  getDeviceActiveProfileSlot = () => null,
+  getProfileName = () => '',
+  getSceneState = () => null,
+  getLastRecalledScene = () => null,
   setActiveProfileSlot = () => {},
   loadProfile = () => {},
   recallScene = () => {},
@@ -54,10 +138,12 @@ export function createPerformerPanelController({
     panel = null,
     connectBtn = null,
     connectionState = null,
+    telemetryState = null,
     dirtyState = null,
     deviceName = null,
     fwVersion = null,
     profileSummary = null,
+    sceneSummary = null,
     clockState = null,
     midiOutput = null,
     slotFocus = null,
@@ -68,7 +154,8 @@ export function createPerformerPanelController({
     draftBlockedNotice = null,
     panicHelpBtn = null,
     slotGrid = null,
-    envelopeContainer = null
+    envelopeContainer = null,
+    envelopeCount = null
   } = elements;
 
   let slotCells = [];
@@ -98,18 +185,74 @@ export function createPerformerPanelController({
     if (!slotFocus) return;
     const index = Math.max(0, Number(getSelectedSlot()) || 0);
     const slot = renderedSlots[index] ?? {};
-    const value = latestTelemetry?.slots?.[index];
-    const type = slotTypeAbbreviations[slot?.type] ?? slot?.type ?? 'OFF';
+    const value = latestTelemetry?.slotOutputs?.[index] ?? latestTelemetry?.slots?.[index];
+    const type = slotTypeAbbreviations[slot?.type] ?? slot?.type_name ?? slot?.type ?? 'OFF';
+    const data1 = Number(slot?.data1 ?? slot?.cc ?? slot?.note);
+    const destination = Number.isFinite(data1) && !['OFF', 'PB'].includes(String(type).toUpperCase())
+      ? `${type}${data1}`
+      : type;
     const channel = Number(slot?.midiChannel ?? slot?.channel);
     const channelText = Number.isFinite(channel) ? `Ch ${channel}` : 'No channel';
-    const valueText = Number.isFinite(Number(value)) ? `Value ${Number(value)}` : 'Value --';
+    const valueText = Number.isFinite(Number(value)) ? `OUT ${Number(value)}` : 'OUT --';
     const modulation = describeSlotModulation(slot);
+    const contribution = latestTelemetry?.slotContributions?.find(
+      (entry) => Number(entry?.index) === index
+    );
+    const sourceValues = modulation.flatMap((badge) => {
+      const efMatch = badge.match(/^E(\d+)$/);
+      if (efMatch) {
+        const sourceValue = latestTelemetry?.envelopes?.[Number(efMatch[1]) - 1];
+        return [
+          Number.isFinite(Number(sourceValue))
+            ? `${badge} ${Math.round(Number(sourceValue))}`
+            : badge
+        ];
+      }
+      const lfoMatch = badge.match(/^L(\d+)$/);
+      if (lfoMatch) {
+        const sourceValue = latestTelemetry?.lfos?.[Number(lfoMatch[1]) - 1];
+        return [
+          Number.isFinite(Number(sourceValue))
+            ? `${badge} ${Number(sourceValue).toFixed(2)}`
+            : badge
+        ];
+      }
+      return [badge === 'A' ? 'A enabled' : badge];
+    });
+    const slotName = typeof slot?.label === 'string' ? slot.label.trim() : '';
+    const activeMask = Number(contribution?.activeMask) || 0;
+    const sourceContext = (badge) => {
+      const match = sourceValues.find((entry) => entry.startsWith(`${badge} `));
+      return match ? ` (src ${match.slice(badge.length + 1)})` : '';
+    };
+    const efBadge = modulation.find((badge) => /^E\d+$/.test(badge)) || 'EF';
+    const contributionParts = contribution
+      ? [
+          `BASE ${Math.round(Number(contribution.baseline) || 0)}`,
+          ...(activeMask & 0x01
+            ? [
+                `${slot?.arg?.enabled ? 'ARG→EF' : efBadge} ${formatSignedDelta(contribution.ef)}${slot?.arg?.enabled ? '' : sourceContext(efBadge)}`
+              ]
+            : []),
+          ...(activeMask & 0x02
+            ? [`L1 ${formatSignedDelta(contribution?.lfos?.[0])}${sourceContext('L1')}`]
+            : []),
+          ...(activeMask & 0x04
+            ? [`L2 ${formatSignedDelta(contribution?.lfos?.[1])}${sourceContext('L2')}`]
+            : []),
+          valueText
+        ]
+      : null;
     slotFocus.textContent = [
-      `Slot ${index + 1}`,
-      type,
+      slotName ? `${slotName} · S${index + 1}` : `Slot ${index + 1}`,
+      destination,
       channelText,
-      valueText,
-      modulation.length ? modulation.join(' + ') : 'No modulation'
+      ...(contributionParts ?? [
+        valueText,
+        ...(sourceValues.length
+          ? sourceValues
+          : [modulation.length ? modulation.join(' + ') : 'No modulation'])
+      ])
     ].join(' · ');
   }
 
@@ -148,6 +291,63 @@ export function createPerformerPanelController({
 
   function rebuildMeters(count) {
     envMeters = initializeMeters(envelopeContainer, count, 'EF');
+    if (envelopeCount) {
+      envelopeCount.textContent = `${count} ${count === 1 ? 'follower' : 'followers'}`;
+    }
+    refreshEnvelopeRoutes();
+  }
+
+  function refreshEnvelopeRoutes() {
+    const state = runtime?.getState?.() ?? {};
+    const config = state.staged ?? state.live ?? {};
+    const efSlots = Array.isArray(config?.efSlots) ? config.efSlots : [];
+    const slots = Array.isArray(config?.slots) ? config.slots : [];
+    envMeters.forEach((entry, idx) => {
+      const routeEntry = efSlots.find(
+        (candidate, entryIndex) => Number(candidate?.index ?? entryIndex) === idx
+      );
+      const assignedIndices = Array.isArray(routeEntry?.slots)
+        ? Array.from(
+            new Set(
+              routeEntry.slots
+                .map(Number)
+                .filter(
+                  (slotIndex) =>
+                    Number.isInteger(slotIndex) && slotIndex >= 0 && slotIndex < slots.length
+                )
+            )
+          )
+        : slots.flatMap((slot, slotIndex) => {
+            const efIndex = Number(slot?.efIndex ?? slot?.ef_index ?? slot?.ef?.index);
+            return Number.isFinite(efIndex) && Math.round(efIndex) === idx ? [slotIndex] : [];
+          });
+      const destinations = assignedIndices
+        .sort((left, right) => left - right)
+        .map((slotIndex) => {
+          const slotLabel =
+            typeof slots[slotIndex]?.label === 'string' ? slots[slotIndex].label.trim() : '';
+          return slotLabel ? `${slotLabel} (S${slotIndex + 1})` : `S${slotIndex + 1}`;
+        });
+      const assigned = destinations.length;
+      entry.routes.textContent = assigned
+        ? `→ ${assigned} ${assigned === 1 ? 'slot' : 'slots'}`
+        : 'No routes';
+      entry.routes.disabled = !assigned;
+      entry.routes.setAttribute(
+        'aria-label',
+        assigned
+          ? `Show EF ${idx + 1} destinations`
+          : `EF ${idx + 1} has no route destinations`
+      );
+      entry.destinations.textContent = destinations.join(' · ');
+      if (!assigned) {
+        entry.destinations.hidden = true;
+        entry.routes.setAttribute('aria-expanded', 'false');
+      }
+      entry.wrap.title = assigned
+        ? `Envelope follower ${idx + 1} → ${destinations.join(', ')}`
+        : `Envelope follower ${idx + 1} has no configured routes`;
+    });
   }
 
   function renderSlots(slots) {
@@ -160,13 +360,23 @@ export function createPerformerPanelController({
         const state = cell.querySelector('.stage-slot-type');
         if (state) state.textContent = slotTypeAbbreviations[slot?.type] ?? slot?.type ?? '-';
         const modulation = cell.querySelector('.stage-slot-modulation');
+        const name = cell.querySelector('.stage-slot-name');
+        const slotName = typeof slot?.label === 'string' ? slot.label.trim() : '';
+        if (name) {
+          name.textContent = slotName;
+          name.hidden = !slotName;
+        }
+        cell.setAttribute(
+          'aria-label',
+          slotName ? `${slotName}, slot ${index + 1}` : `Slot ${index + 1}`
+        );
         const badges = describeSlotModulation(slot);
         if (modulation) {
-          modulation.textContent = badges.join(' ');
+          renderSlotModulationBadges(modulation, badges);
           modulation.title = formatSlotModulationTitle(badges);
           modulation.setAttribute('aria-hidden', 'true');
         }
-        cell.title = formatSlotModulationTitle(badges);
+        cell.title = [slotName, formatSlotModulationTitle(badges)].filter(Boolean).join(' · ');
         cell.dataset.slotType = slotTypeCssToken(slot?.type);
       });
       highlightSelectedSlot();
@@ -199,12 +409,22 @@ export function createPerformerPanelController({
       const modulation = document.createElement('span');
       modulation.className = 'stage-slot-modulation';
       const badges = describeSlotModulation(slot);
-      modulation.textContent = badges.join(' ');
+      renderSlotModulationBadges(modulation, badges);
       modulation.title = formatSlotModulationTitle(badges);
       modulation.setAttribute('aria-hidden', 'true');
-      cell.title = formatSlotModulationTitle(badges);
+      const name = document.createElement('span');
+      name.className = 'stage-slot-name';
+      name.textContent = typeof slot?.label === 'string' ? slot.label.trim() : '';
+      name.hidden = !name.textContent;
+      cell.setAttribute(
+        'aria-label',
+        name.textContent ? `${name.textContent}, slot ${index + 1}` : `Slot ${index + 1}`
+      );
+      cell.title = [name.textContent, formatSlotModulationTitle(badges)]
+        .filter(Boolean)
+        .join(' · ');
 
-      cell.append(label, type, value, modulation);
+      cell.append(label, type, value, modulation, name);
       slotGrid.appendChild(cell);
       return cell;
     });
@@ -212,17 +432,42 @@ export function createPerformerPanelController({
   }
 
   function paintTelemetry(frame) {
-    if (!Array.isArray(frame?.slots)) return;
-    latestTelemetry = frame;
+    if (!frame || typeof frame !== 'object') return;
+    latestTelemetry = {
+      ...(latestTelemetry ?? {}),
+      ...frame,
+      slots: Array.isArray(frame.slots) ? frame.slots : latestTelemetry?.slots,
+      slotOutputs: Array.isArray(frame.slotOutputs)
+        ? frame.slotOutputs
+        : latestTelemetry?.slotOutputs,
+      slotContributions: Array.isArray(frame.slotContributions)
+        ? frame.slotContributions
+        : latestTelemetry?.slotContributions,
+      envelopes: Array.isArray(frame.envelopes) ? frame.envelopes : latestTelemetry?.envelopes,
+      efStatus: Array.isArray(frame.efStatus) ? frame.efStatus : latestTelemetry?.efStatus,
+      lfos: Array.isArray(frame.lfos) ? frame.lfos : latestTelemetry?.lfos,
+      clock:
+        frame.clock && typeof frame.clock === 'object'
+          ? { ...(latestTelemetry?.clock ?? {}), ...frame.clock }
+          : latestTelemetry?.clock
+    };
 
-    frame.envelopes?.forEach((value, idx) => {
+    latestTelemetry.envelopes?.forEach((value, idx) => {
       const entry = envMeters[idx];
       if (!entry) return;
       entry.progress.value = value;
       entry.value.textContent = String(value).padStart(2, '0');
     });
+    latestTelemetry.efStatus?.forEach((active, idx) => {
+      const entry = envMeters[idx];
+      if (!entry) return;
+      const isActive = Boolean(Number(active));
+      entry.wrap.dataset.state = isActive ? 'active' : 'inactive';
+      entry.state.textContent = isActive ? 'ACTIVE' : 'IDLE';
+    });
 
-    frame.slots.forEach((value, idx) => {
+    const outputValues = Array.isArray(frame.slotOutputs) ? frame.slotOutputs : frame.slots;
+    outputValues?.forEach((value, idx) => {
       const cell = slotCells[idx];
       if (!cell) return;
       const numeric = Number(value);
@@ -237,11 +482,21 @@ export function createPerformerPanelController({
     });
 
     if (clockState) {
-      const running = frame?.clock?.running ?? frame?.clock_running;
-      const bpm = Number(frame?.clock?.bpm ?? frame?.clock_bpm);
-      clockState.textContent = running
-        ? `Running${Number.isFinite(bpm) ? ` · ${bpm} BPM` : ''}`
-        : 'Stopped';
+      const clock = latestTelemetry.clock;
+      const described = formatStageClockState(
+        clock
+          ? {
+              ...clock,
+              running:
+                typeof clock.running === 'boolean'
+                  ? clock.running
+                  : latestTelemetry.clock_running
+            }
+          : null,
+        latestTelemetry
+      );
+      clockState.textContent = described.text;
+      clockState.dataset.clockHealth = described.health;
     }
     if (midiOutput) {
       const enabled = frame?.usb_midi_enabled ?? frame?.midi_output_enabled;
@@ -262,6 +517,14 @@ export function createPerformerPanelController({
       connectionState.textContent = getConnectionText();
       connectionState.dataset.stage = getConnectionStage();
     }
+    const telemetry = formatStageTelemetryHealth(runtime?.getState?.().telemetryHealth, {
+      connected
+    });
+    if (telemetryState) {
+      telemetryState.textContent = telemetry.text;
+      telemetryState.dataset.freshness = telemetry.freshness;
+    }
+    if (panel) panel.dataset.telemetryFreshness = telemetry.freshness;
     if (connectBtn) {
       connectBtn.textContent = connected ? 'Reconnect' : 'Connect';
     }
@@ -272,7 +535,28 @@ export function createPerformerPanelController({
     if (draftBlockedNotice) draftBlockedNotice.hidden = !dirtyNow;
     if (deviceName) deviceName.textContent = resolveDeviceName?.(manifest) ?? '-';
     if (fwVersion) fwVersion.textContent = resolveFirmwareVersion?.(manifest) ?? 'unknown';
-    if (profileSummary) profileSummary.textContent = getProfileText();
+    if (profileSummary) {
+      const active = getDeviceActiveProfileSlot();
+      if (!connected || !Number.isInteger(Number(active))) {
+        profileSummary.textContent = 'Unavailable';
+      } else {
+        const index = Number(active);
+        const fallback = `Profile ${slotLabel(index)}`;
+        const name = getProfileName(index)?.trim?.() ?? '';
+        profileSummary.textContent = name ? `${name} · ${fallback}` : fallback;
+      }
+    }
+    if (sceneSummary) {
+      const recalled = getLastRecalledScene();
+      if (!recalled || !Number.isInteger(Number(recalled.slot))) {
+        sceneSummary.textContent = 'No browser recall';
+      } else {
+        const index = Number(recalled.slot);
+        const fallback = `Scene ${index + 1}`;
+        const name = recalled.name?.trim?.() ?? '';
+        sceneSummary.textContent = name ? `${name} · ${fallback}` : fallback;
+      }
+    }
     if (midiOutput) {
       if (!connected) midiOutput.textContent = 'Offline';
       else if (!['Enabled', 'Muted'].includes(midiOutput.textContent)) {
@@ -281,15 +565,36 @@ export function createPerformerPanelController({
     }
     if (profileSelect) {
       profileSelect.value = String(getActiveProfileSlot());
+      Array.from(profileSelect.options).forEach((option) => {
+        const index = Number(option.value);
+        const label = slotLabel(index);
+        const name = getProfileName(index)?.trim?.() ?? '';
+        option.textContent = name ? `${name} · Profile ${label}` : `Profile ${label}`;
+      });
     }
     if (profileLoadBtn) {
       profileLoadBtn.disabled = dirtyNow || Boolean(profileLoadDisabled);
-      profileLoadBtn.textContent = `Recall Profile ${slotLabel(getActiveProfileSlot())} now`;
+      const index = getActiveProfileSlot();
+      const fallback = `Profile ${slotLabel(index)}`;
+      const name = getProfileName(index)?.trim?.() ?? '';
+      profileLoadBtn.textContent = `Recall ${name ? `${name} (${fallback})` : fallback} now`;
     }
+    Array.from(sceneSelect?.options ?? []).forEach((option) => {
+      const index = Number(option.value);
+      const state = getSceneState(index);
+      option.textContent = state?.available && state?.name
+        ? `${state.name} · Scene ${index + 1}`
+        : `Scene ${index + 1}`;
+    });
     if (sceneRecallBtn) {
       sceneRecallBtn.disabled = dirtyNow || Boolean(sceneRecallDisabled);
-      sceneRecallBtn.textContent = `Recall Scene ${Number(sceneSelect?.value ?? 0) + 1} now`;
+      const index = Number(sceneSelect?.value ?? 0);
+      const state = getSceneState(index);
+      const fallback = `Scene ${index + 1}`;
+      const target = state?.available && state?.name ? `${state.name} (${fallback})` : fallback;
+      sceneRecallBtn.textContent = `Recall ${target} now`;
     }
+    refreshEnvelopeRoutes();
   }
 
   function slotLabel(index) {

@@ -374,6 +374,28 @@ body {
   border-color: rgba(45, 226, 230, 0.8);
 }
 
+.profile-name-field {
+  display: grid;
+  gap: 4px;
+  margin-top: 8px;
+  color: var(--color-muted);
+  font-size: 0.76rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.profile-name-field input {
+  min-width: 0;
+  width: 100%;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.profile-name-field small {
+  letter-spacing: normal;
+  text-transform: none;
+}
+
 .profile-slot-meta {
   margin: 0;
   font-size: 0.78rem;
@@ -1059,7 +1081,7 @@ main {
 
 .performer-summary-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -1086,9 +1108,55 @@ main {
   font-size: 0.95rem;
 }
 
+#stage-clock-state[data-clock-health='waiting-external'] {
+  color: var(--color-warn);
+}
+
+#stage-telemetry-state[data-freshness='waiting'],
+#stage-telemetry-state[data-freshness='delayed'] {
+  border-color: rgba(255, 206, 107, 0.55);
+  color: var(--color-warn);
+}
+
+#stage-telemetry-state[data-freshness='stale'] {
+  border-color: rgba(255, 95, 150, 0.62);
+  color: var(--color-hot);
+}
+
+#performer-panel[data-telemetry-freshness='delayed'] .stage-slot-value,
+#performer-panel[data-telemetry-freshness='delayed'] .stage-envelope-list progress,
+#performer-panel[data-telemetry-freshness='delayed'] #stage-clock-state {
+  opacity: 0.72;
+}
+
+#performer-panel[data-telemetry-freshness='stale'] .stage-slot-value,
+#performer-panel[data-telemetry-freshness='stale'] .stage-envelope-list progress,
+#performer-panel[data-telemetry-freshness='stale'] #stage-clock-state {
+  opacity: 0.48;
+}
+
 .stage-device-detail {
+  display: block;
+  margin-top: 7px;
   color: var(--color-muted);
   font-size: 0.72rem;
+}
+
+.stage-device-details {
+  margin-top: 2px;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+}
+
+.stage-device-details summary {
+  width: max-content;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stage-device-details .performer-power-row {
+  margin-top: 7px;
 }
 
 .performer-power-row {
@@ -1128,6 +1196,69 @@ main {
   align-items: start;
 }
 
+.stage-motion {
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-sm);
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.stage-motion > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+}
+
+.stage-motion > summary::-webkit-details-marker {
+  display: none;
+}
+
+.stage-motion > summary > span:first-child {
+  display: grid;
+  gap: 2px;
+}
+
+.stage-motion > summary strong {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stage-motion > summary small,
+.stage-motion-summary-state {
+  color: var(--color-muted);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stage-motion-summary-state::after {
+  content: ' · Open';
+  color: var(--color-accent);
+}
+
+.stage-motion[open] .stage-motion-summary-state::after {
+  content: ' · Close';
+}
+
+.stage-motion-panel {
+  margin-top: 12px;
+}
+
+.stage-motion-panel .scope-panel-header {
+  padding: 12px 14px;
+}
+
+.stage-motion-panel .scope-panel-header > p {
+  margin: 0;
+}
+
+.stage-motion-panel canvas {
+  height: 180px;
+}
+
 .performer-block {
   display: grid;
   gap: 12px;
@@ -1155,7 +1286,8 @@ main {
   grid-template-columns: auto 1fr;
   grid-template-areas:
     'label type'
-    'value mods';
+    'value mods'
+    'name name';
   gap: 3px 6px;
   width: 100%;
   min-height: 68px;
@@ -1263,10 +1395,24 @@ main {
 .stage-slot-modulation {
   grid-area: mods;
   justify-self: end;
+  display: inline-flex;
+  gap: 4px;
   color: var(--color-accent);
   font-family: var(--font-mono);
   font-size: 0.66rem;
   letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.stage-slot-name {
+  grid-area: name;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-size: 0.62rem;
+  letter-spacing: 0.01em;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -1281,10 +1427,72 @@ main {
 
 .stage-envelope-list .meter {
   display: grid;
-  grid-template-columns: 54px minmax(0, 1fr) 32px;
+  grid-template-columns: minmax(92px, auto) minmax(0, 1fr) 32px;
   gap: 10px;
   align-items: center;
   padding: 8px 0;
+}
+
+.stage-envelope-list .meter-label {
+  display: grid;
+  gap: 1px;
+  min-width: 0;
+}
+
+.stage-envelope-list .meter-label strong {
+  color: var(--modulation-color, var(--color-accent));
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+}
+
+.stage-envelope-list .meter-label small {
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stage-envelope-list .meter-routes {
+  width: max-content;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.stage-envelope-list .meter-routes:not(:disabled) {
+  color: var(--modulation-color, var(--color-accent));
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 2px;
+}
+
+.stage-envelope-list .meter-routes:not(:disabled):hover,
+.stage-envelope-list .meter-routes:not(:disabled):focus-visible {
+  text-decoration-color: currentColor;
+}
+
+.stage-envelope-list .meter-destinations {
+  max-width: 18ch;
+  color: var(--color-text);
+  line-height: 1.35;
+  text-transform: none;
+}
+
+.stage-envelope-list .meter[data-state='active'] .meter-state {
+  color: var(--modulation-color, var(--color-accent));
+}
+
+.stage-envelope-list .meter[data-state='inactive'] progress {
+  opacity: 0.42;
 }
 
 .stage-envelope-list progress {
@@ -1454,11 +1662,21 @@ main {
 .slot-modulation {
   grid-area: mods;
   justify-self: end;
+  display: inline-flex;
+  gap: 3px;
   color: var(--color-accent);
   font-family: var(--font-mono);
   font-size: 0.52rem;
   letter-spacing: 0.04em;
   white-space: nowrap;
+}
+
+.modulation-badge {
+  color: var(--modulation-color, var(--color-accent));
+}
+
+.ef-row-label[data-modulation-kind='ef'] {
+  color: var(--modulation-color, var(--color-accent));
 }
 
 .slot-type-legend {
@@ -1555,15 +1773,21 @@ main {
 }
 
 #envelopes progress::-webkit-progress-value {
-  background: var(--color-accent);
+  background: var(--modulation-color, var(--color-accent));
   border-radius: var(--radius-meter);
   transition: width 150ms ease-out, background-color 150ms ease-out;
 }
 
 .stage-envelope-list progress::-webkit-progress-value {
-  background: var(--color-accent);
+  background: var(--modulation-color, var(--color-accent));
   border-radius: var(--radius-meter);
   transition: width 150ms ease-out, background-color 150ms ease-out;
+}
+
+#envelopes progress::-moz-progress-bar,
+.stage-envelope-list progress::-moz-progress-bar {
+  background: var(--modulation-color, var(--color-accent));
+  border-radius: var(--radius-meter);
 }
 
 #slot-details {
@@ -3262,14 +3486,41 @@ label select:focus,
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   padding: 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .scope-panel-actions {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
+}
+
+.scope-view-controls {
+  display: inline-flex;
+  gap: 3px;
+  padding: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.scope-view-controls button {
+  min-height: 30px;
+  padding: 5px 9px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--color-muted);
+  font-size: 0.68rem;
+}
+
+.scope-view-controls button[aria-pressed='true'] {
+  border-color: rgba(45, 226, 230, 0.38);
+  background: rgba(45, 226, 230, 0.12);
+  color: var(--color-accent);
 }
 
 .scope-panel canvas {
@@ -3296,6 +3547,10 @@ label select:focus,
   min-width: 0;
 }
 
+.scope-ef-legend {
+  display: contents;
+}
+
 .scope-legend-item {
   min-width: 0;
   padding: 1px 0;
@@ -3305,6 +3560,32 @@ label select:focus,
   text-align: left;
   text-transform: uppercase;
   white-space: nowrap;
+}
+
+button.scope-legend-item {
+  min-height: 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--modulation-color, var(--color-accent));
+  cursor: pointer;
+}
+
+button.scope-legend-item:hover,
+button.scope-legend-item:focus-visible,
+button.scope-legend-item[aria-pressed='true'] {
+  border-color: var(--modulation-color, var(--color-accent));
+  background: rgba(255, 255, 255, 0.06);
+}
+
+button.scope-legend-item[data-state='inactive'] {
+  opacity: 0.48;
+}
+
+button.scope-legend-item[data-state='active']::before {
+  content: '●';
+  margin-right: 4px;
+  font-size: 0.55rem;
 }
 
 .scope-legend-item:not(:last-child)::after {
@@ -3322,16 +3603,12 @@ label select:focus,
   text-align: right;
 }
 
-.scope-legend-item.ef {
-  color: var(--color-accent);
-}
-
 .scope-legend-item.lfo-one {
-  color: rgb(255, 150, 190);
+  color: rgb(255, 95, 150);
 }
 
 .scope-legend-item.lfo-two {
-  color: rgba(255, 255, 255, 0.82);
+  color: rgb(232, 238, 255);
 }
 
 .scope-legend-item.clock[data-state='running'] {
@@ -3345,6 +3622,15 @@ label select:focus,
 }
 
 @media (max-width: 740px) {
+  .scope-panel-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .scope-panel-actions {
+    justify-content: flex-start;
+  }
+
   .scope-panel-footer {
     grid-template-columns: 1fr;
     align-items: start;

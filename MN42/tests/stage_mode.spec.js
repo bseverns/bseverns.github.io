@@ -16,6 +16,9 @@ test.describe('Stage mode', () => {
       'Performance-safe status and recovery. No staged editors or Apply controls here.'
     );
     await expect(page.locator('#stage-profile-summary')).toBeVisible();
+    await expect(page.locator('#stage-profile-summary')).toHaveText('Unavailable');
+    await expect(page.locator('#stage-scene-summary')).toHaveText('No browser recall');
+    await expect(page.locator('#stage-telemetry-state')).toHaveText('Telemetry offline');
     await expect(page.locator('#stage-profile-load')).toBeVisible();
     await expect(page.locator('#stage-scene-recall')).toBeVisible();
     await expect(page.locator('#stage-panic-help')).toBeVisible();
@@ -52,17 +55,77 @@ test.describe('Stage mode', () => {
     await expect(page.locator('#connection-pill')).toHaveText('Connected');
     await expect(page.locator('#stage-device-name')).toHaveText('MOARkNOBS-42');
     await expect(page.locator('#stage-fw-version')).toHaveText('sim-fw');
+    await expect(page.locator('#stage-profile-summary')).toHaveText('Profile A');
+    await expect(page.locator('#stage-telemetry-state')).toHaveText('Telemetry live');
+    await expect(page.locator('#performer-panel')).toHaveAttribute(
+      'data-telemetry-freshness',
+      'live'
+    );
     await expect(page.locator('#stage-power-summary')).toContainText('POWER_CHOKED_V1');
     await expect(page.locator('#stage-power-summary')).toContainText('LED cap: 26/255');
     await expect(page.locator('#stage-power-summary')).toContainText('Rail: UNVERIFIED');
     await expect(page.locator('#global-power-warning')).toContainText(
       'Power-limited hardware reported'
     );
+    await expect(page.locator('.stage-device-details')).not.toHaveAttribute('open', '');
+    await expect(page.locator('#stage-power-summary')).toBeHidden();
+    await page.locator('.stage-device-details > summary').click();
+    await expect(page.locator('#stage-power-summary')).toBeVisible();
     await expect(page.locator('#stage-slots .stage-slot-cell')).toHaveCount(42);
     await expect(page.locator('#stage-envelopes .meter')).toHaveCount(6);
-    await expect(page.locator('#stage-slot-focus')).toContainText('Slot 1 · CC · Ch 1 · Value');
+    await expect(page.locator('#stage-slot-focus')).toHaveText(
+      /Slot 1 · CC\d+ · Ch 1 · BASE \d+ · ARG→EF [+-]\d+ · OUT \d+/
+    );
+    await expect(page.locator('#stage-clock-state')).toHaveText(/^(EXT|INT) · \d+\.\d BPM · Running$/);
+    await expect(page.locator('#stage-envelopes .meter[data-state="active"]')).toHaveCount(3);
+    await expect(page.locator('#stage-envelopes .meter').first()).toContainText('ACTIVE');
+    await expect(page.locator('#stage-envelopes .meter').first()).toContainText('No routes');
     await page.locator('#stage-slots .stage-slot-cell').nth(16).click();
     await expect(page.locator('#stage-slot-focus')).toContainText('Slot 17');
+  });
+
+  test('Motion drawer is read-only, records while closed, and exposes per-source traces', async ({
+    page
+  }) => {
+    await page.addInitScript(() => {
+      window.__MN42_RUNTIME_OPTIONS = { useSimulator: true };
+    });
+    await page.goto('/?mode=stage');
+    await page.locator('#stage-connect').click();
+    await expect(page.locator('#connection-pill')).toHaveText('Connected');
+
+    const drawer = page.locator('#stage-motion');
+    const panel = page.locator('#stage-motion-panel');
+    await expect(drawer).toBeVisible();
+    await expect(drawer).not.toHaveAttribute('open', '');
+    await expect(panel).toBeHidden();
+    await expect(panel).toHaveAttribute('data-scope-rendering', 'false');
+    await expect(panel.locator('[data-ef-index]')).toHaveCount(6);
+
+    await drawer.locator(':scope > summary').click();
+    await expect(panel).toBeVisible();
+    await expect(panel).toHaveAttribute('data-scope-rendering', 'true');
+    await expect(panel.locator('[data-scope-role="status"]')).toHaveText(/Telemetry/i);
+    await expect(panel.locator('[data-scope-lfo-index="0"]')).not.toHaveText('--');
+    await expect(panel.locator('[data-scope-lfo-index="1"]')).not.toHaveText('--');
+    await expect(panel.locator('[data-state="active"]')).toHaveCount(3);
+    await expect(panel.locator('[data-scope-role="snapshot"]')).toHaveCount(0);
+    await expect(panel.locator('[data-scope-role="refresh"]')).toHaveCount(0);
+    await expect(panel.locator('[data-scope-role="fps"]')).toHaveCount(0);
+
+    await panel.getByRole('button', { name: 'All EFs' }).click();
+    await expect(panel.getByRole('button', { name: 'All EFs' })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    );
+    await drawer.locator(':scope > summary').click();
+    await expect(panel).toHaveAttribute('data-scope-rendering', 'false');
+
+    await drawer.locator(':scope > summary').click();
+    await expect(panel).toHaveAttribute('data-scope-rendering', 'true');
+    await page.getByRole('button', { name: 'Configure', exact: true }).click();
+    await expect(drawer).not.toHaveAttribute('open', '');
+    await expect(panel).toHaveAttribute('data-scope-rendering', 'false');
   });
 
   test('shows split-rail metadata without a power warning or dirtying config hydration', async ({
@@ -171,6 +234,10 @@ test.describe('Stage mode', () => {
     await expect(page.locator('#stage-dirty-state')).toHaveText('Clean');
     await expect(page.locator('#dirty-badge')).toBeHidden();
     await expect(page.locator('#stage-slots .stage-slot-cell')).toHaveCount(42);
+    await expect(page.locator('.stage-device-details')).not.toHaveAttribute('open', '');
+    await expect(page.locator('#stage-power-summary')).toBeHidden();
+    await page.locator('.stage-device-details > summary').click();
+    await expect(page.locator('#stage-power-summary')).toBeVisible();
     await expect(page.locator('#stage-power-summary')).toContainText('SPLIT_RAIL_REWORK');
     await expect(page.locator('#stage-power-summary')).toContainText('255/255');
     await expect(page.locator('#stage-power-summary .power-safety-warning')).toHaveCount(0);
