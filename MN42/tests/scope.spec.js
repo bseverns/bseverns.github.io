@@ -29,10 +29,22 @@ test('scope panel streams telemetry and emits snapshots', async ({ page }) => {
   await expect(page.locator('#scope-lfo-2')).not.toHaveText('--');
   await expect(page.locator('#scope-clock')).toHaveText(/Clock (external|internal)/);
   await expect(page.locator('#scope-ef-legend [data-ef-index]')).toHaveCount(6);
-  await expect(page.locator('#scope-ef-legend [data-state="active"]')).toHaveCount(3);
+  await expect
+    .poll(() => page.locator('#scope-ef-legend [data-state="active"]').count())
+    .toBeGreaterThan(0);
   await expect(page.locator('#scope-panel [data-scope-role="view-state"]')).toHaveText(
-    /VIEW: ACTIVE · 3\/6 EFs · 2 LFOs always visible/
+    /VIEW: ACTIVE · \d+\/6 EFs(?: \([^)]*\))? · 2 LFOs always visible/
   );
+  await expect(page.locator('#scope-panel [data-scope-window="5"]')).toHaveAttribute(
+    'aria-pressed',
+    'true'
+  );
+  await page.locator('#scope-panel [data-scope-window="2"]').click();
+  await expect(page.locator('#scope-panel [data-scope-window="2"]')).toHaveAttribute(
+    'aria-pressed',
+    'true'
+  );
+  await expect(page.locator('#scope-canvas')).toHaveAttribute('aria-label', /over 2 seconds/);
   await expect(page.locator('#scope-panel [data-scope-view="active"]')).toHaveAttribute(
     'aria-pressed',
     'true'
@@ -264,6 +276,194 @@ test('active EF view holds recent activity before showing its intentional empty 
   expect(states.expired.stageSummary).toBe('No active EFs · 2 LFOs still running');
   expect(states.expired.empty).toBe('true');
   expect(states.expired.ariaLabel).toContain('histories are still recording');
+});
+
+test('scope X zoom uses elapsed time rather than a fixed sample fraction', async ({ page }) => {
+  await page.goto('/views/scope_panel.js');
+
+  const windows = await page.evaluate(async () => {
+    const { ScopePanel } = await import('/views/scope_panel.js');
+    document.body.innerHTML = `
+      <section id="scope-panel" style="width: 420px">
+        <button data-scope-window="2" aria-pressed="false">2s</button>
+        <button data-scope-window="5" aria-pressed="true">5s</button>
+        <button data-scope-window="10" aria-pressed="false">10s</button>
+        <canvas data-scope-role="canvas" width="420" height="180"
+          style="width: 420px; height: 180px"></canvas>
+      </section>
+    `;
+    let clock = 1000;
+    const listeners = new Map();
+    const runtime = {
+      on(event, callback) {
+        listeners.set(event, callback);
+        return () => listeners.delete(event);
+      },
+      getState() {
+        return { manifest: { envelope_count: 1, lfo_count: 2 } };
+      }
+    };
+    const container = document.getElementById('scope-panel');
+    const panel = new ScopePanel({ container, runtime, nowFn: () => clock });
+    const pushTelemetry = listeners.get('telemetry');
+    pushTelemetry({ envelopes: [10], lfos: [0.1, 0.9] });
+    clock = 3000;
+    pushTelemetry({ envelopes: [40], lfos: [0.4, 0.6] });
+    clock = 5500;
+    pushTelemetry({ envelopes: [90], lfos: [0.9, 0.1] });
+
+    const timestampsForWindow = (seconds) => {
+      panel.setTimeWindow(seconds);
+      return panel.visibleSampleIndices().map((idx) => panel.timestampHistory[idx]);
+    };
+    const result = {
+      twoSeconds: timestampsForWindow(2),
+      fiveSeconds: timestampsForWindow(5),
+      tenSeconds: timestampsForWindow(10),
+      selected: Array.from(container.querySelectorAll('[data-scope-window]')).map((button) =>
+        button.getAttribute('aria-pressed')
+      ),
+      ariaLabel: container.querySelector('canvas').getAttribute('aria-label')
+    };
+    panel.destroy();
+    return result;
+  });
+
+  expect(windows.twoSeconds).toEqual([5500]);
+  expect(windows.fiveSeconds).toEqual([1000, 3000, 5500]);
+  expect(windows.tenSeconds).toEqual([1000, 3000, 5500]);
+  expect(windows.selected).toEqual(['false', 'false', 'true']);
+  expect(windows.ariaLabel).toContain('over 10 seconds');
+});
+
+test('simulator EF rehearsal signals move smoothly and derive musical activity state', async ({
+  page
+}) => {
+  await page.goto('/runtime/simulator_transport.js');
+
+  const samples = await page.evaluate(async () => {
+    const { createSimulator } = await import('/runtime/simulator_transport.js');
+    const simulator = createSimulator({
+      createManifest: () => ({ slot_count: 42, pot_count: 42, envelope_count: 6 }),
+      argMethodNames: ['PLUS'],
+      efFilterNames: ['Linear'],
+      cloneValue: structuredClone,
+      setNested: () => {},
+      telemetryFrameMs: 0
+    });
+    await simulator.open();
+    const frames = [];
+    for (let idx = 0; idx < 48; idx += 1) {
+      const frame = JSON.parse(await simulator.nextLine());
+      frames.push({ envelopes: frame.envelopes, efStatus: frame.efStatus });
+    }
+    await simulator.close();
+    return frames;
+  });
+
+  const values = samples.map((frame) => frame.envelopes[0]);
+  const deltas = values.slice(1).map((value, idx) => Math.abs(value - values[idx]));
+  expect(Math.max(...deltas)).toBeLessThan(24);
+  expect(Math.max(...deltas)).toBeGreaterThan(0);
+  expect(samples.every((frame) => frame.envelopes[1] <= 13 && frame.efStatus[1] === 0)).toBe(true);
+  expect(samples.some((frame) => frame.efStatus[2] === 1)).toBe(true);
+  expect(samples.some((frame) => frame.efStatus[2] === 0)).toBe(true);
+  expect(
+    samples.every((frame) => frame.efStatus[2] === (frame.envelopes[2] >= 42 ? 1 : 0))
+  ).toBe(true);
+});
+
+test('timestamp history preserves chronological order across ring wrap and resize', async ({
+  page
+}) => {
+  await page.goto('/views/scope_panel.js');
+
+  const history = await page.evaluate(async () => {
+    const { ScopePanel } = await import('/views/scope_panel.js');
+    document.body.innerHTML = `
+      <section id="scope-panel" style="width: 64px">
+        <canvas data-scope-role="canvas" width="64" height="100"
+          style="width: 64px; height: 100px"></canvas>
+      </section>
+    `;
+    let clock = 1000;
+    const listeners = new Map();
+    const runtime = {
+      on(event, callback) {
+        listeners.set(event, callback);
+        return () => listeners.delete(event);
+      },
+      getState() {
+        return { manifest: { envelope_count: 1, lfo_count: 2 } };
+      }
+    };
+    const panel = new ScopePanel({
+      container: document.getElementById('scope-panel'),
+      runtime,
+      nowFn: () => clock,
+      timeWindowSeconds: 10
+    });
+    const pushTelemetry = listeners.get('telemetry');
+    const orderedTimestamps = () => {
+      const count = Math.min(panel.samples, panel.historyLength);
+      return Array.from({ length: count }, (_, idx) => {
+        const bufferIndex =
+          (panel.cursor - count + idx + panel.historyLength) % panel.historyLength;
+        return panel.timestampHistory[bufferIndex];
+      });
+    };
+
+    for (let idx = 0; idx < 80; idx += 1) {
+      clock = 1000 + idx * 100;
+      pushTelemetry({ envelopes: [idx], lfos: [0.2, 0.8] });
+    }
+    const wrapped = {
+      length: panel.historyLength,
+      samples: panel.samples,
+      timestamps: orderedTimestamps()
+    };
+
+    panel.resizeHistoryBuffers(96);
+    const grown = {
+      length: panel.historyLength,
+      samples: panel.samples,
+      timestamps: orderedTimestamps()
+    };
+    for (let idx = 80; idx < 120; idx += 1) {
+      clock = 1000 + idx * 100;
+      pushTelemetry({ envelopes: [idx], lfos: [0.2, 0.8] });
+    }
+    const grownAndWrapped = {
+      samples: panel.samples,
+      timestamps: orderedTimestamps()
+    };
+    panel.resizeHistoryBuffers(64);
+    const shrunk = {
+      length: panel.historyLength,
+      samples: panel.samples,
+      timestamps: orderedTimestamps()
+    };
+    panel.destroy();
+    return { wrapped, grown, grownAndWrapped, shrunk };
+  });
+
+  expect(history.wrapped.length).toBe(64);
+  expect(history.wrapped.samples).toBe(64);
+  expect(history.wrapped.timestamps).toEqual(
+    Array.from({ length: 64 }, (_, idx) => 2600 + idx * 100)
+  );
+  expect(history.grown.length).toBe(96);
+  expect(history.grown.samples).toBe(64);
+  expect(history.grown.timestamps).toEqual(history.wrapped.timestamps);
+  expect(history.grownAndWrapped.samples).toBe(96);
+  expect(history.grownAndWrapped.timestamps).toEqual(
+    Array.from({ length: 96 }, (_, idx) => 3400 + idx * 100)
+  );
+  expect(history.shrunk.length).toBe(64);
+  expect(history.shrunk.samples).toBe(64);
+  expect(history.shrunk.timestamps).toEqual(
+    Array.from({ length: 64 }, (_, idx) => 6600 + idx * 100)
+  );
 });
 
 test('role-based scope records while closed and only renders when its drawer is open', async ({

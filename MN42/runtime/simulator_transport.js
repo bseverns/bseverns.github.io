@@ -282,14 +282,29 @@ export function createSimulator(simDeps = {}) {
 
   const telemetry = () => {
     const slots = nextSlotValues();
-    const envelopes = Array.from({ length: manifest.envelope_count }, () =>
-      Math.floor(Math.random() * 127)
-    );
+    // Rehearsal followers model three musically distinct states: broad active
+    // phrases, a quiet floor, and periodic threshold crossings. Activity is
+    // derived from the same generated level so Scope state explains the trace.
+    const envelopeSignals = Array.from({ length: manifest.envelope_count }, (_, efIndex) => {
+      const family = efIndex % 3;
+      const phase = efIndex * 0.83;
+      if (family === 1) {
+        const value = Math.round(7 + (Math.sin(index / 9 + phase) + 1) * 3);
+        return { value, active: false };
+      }
+      if (family === 2) {
+        const pulse = Math.max(0, Math.sin(index / (5.2 + efIndex * 0.2) + phase));
+        const value = Math.round(10 + Math.pow(pulse, 1.6) * 108);
+        return { value, active: value >= 42 };
+      }
+      const phrase = (Math.sin(index / (8 + efIndex * 0.35) + phase) + 1) / 2;
+      const ripple = (Math.sin(index / 3.5 + phase * 1.7) + 1) / 2;
+      const value = Math.round(10 + Math.pow(phrase, 1.35) * 100 + ripple * 8);
+      return { value, active: value >= 36 };
+    });
+    const envelopes = envelopeSignals.map((signal) => signal.value);
     const lfos = [((index % 40) / 39).toFixed(3), (((index + 20) % 40) / 39).toFixed(3)].map(Number);
-    const efStatus = Array.from(
-      { length: manifest.envelope_count },
-      (_, idx) => (idx % 2 === 0 ? 1 : 0)
-    );
+    const efStatus = envelopeSignals.map((signal) => (signal.active ? 1 : 0));
     const slotOutputs = [...slots];
     const slotContributions = [];
 
