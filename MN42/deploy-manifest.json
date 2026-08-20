@@ -1,8 +1,8 @@
 {
   "app_version": "0.1.0",
-  "source_sha": "0f3644a2a05c8031d9dc52bdd389de007dde0456",
-  "source_id": "0f3644a2a05c8031d9dc52bdd389de007dde0456",
+  "source_sha": "aae3cff02a116e720409bf8936cb8a510edb4ef2",
+  "source_id": "aae3cff02a116e720409bf8936cb8a510edb4ef2",
   "working_tree_dirty": false,
   "publishable": true,
-  "release_path": "releases/0f3644a2a05c8031d9dc52bdd389de007dde0456/"
+  "release_path": "releases/aae3cff02a116e720409bf8936cb8a510edb4ef2/"
 }
