@@ -27,7 +27,7 @@
               <summary aria-label="Connection details: expand firmware, schema, and memory information"><span class="pill" id="connection-pill" data-stage="disconnected" role="status">Disconnected</span></summary>
               <div class="connection-detail-card">
                 <div class="status-pill" id="header-status" aria-live="polite">fw – schema – memory</div>
-                <small id="app-source-identity">App source: 6dafb7166e2c59ecc62ea6cee275846d819d4f9f</small>
+                <small id="app-source-identity">App source: 8fc3d74361b986d50be53eae22af307f04ba6d24</small>
               </div>
             </details>
             <span class="active-profile-pill" id="header-profile-status">Profile A</span>
@@ -363,6 +363,15 @@
               <div class="schema-section-body" data-schema-target="slots"></div>
             </section>
           </div>
+          <section class="schema-section" id="midi-input-form" data-ui-tier="advanced">
+            <header>
+              <h3>MIDI Input Bindings</h3>
+              <p class="microcopy">Map DIN or USB CCs into slot values and performance parameters. Routes follow the active profile.</p>
+            </header>
+            <div class="schema-section-body" data-schema-target="midiInputBindings" data-schema-apply="staged"
+              data-empty-message="No MIDI input bindings in this profile."
+              aria-label="No MIDI input bindings in this profile."></div>
+          </section>
           <div class="ef-modulation-cluster" data-ui-tier="advanced">
             <fieldset id="ef-assignment-card">
               <legend>Envelope Assignments</legend>
