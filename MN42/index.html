@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <base href="./releases/7ad20fed70657e4ac608b69909cb7369f2a59c8e/" />
+  <base href="./releases/1c316f3a75bc2f4cb8a5740e36af22f8e92c0ab8/" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MOARkNOBS-42 Browser Configurator</title>
@@ -28,7 +28,7 @@
               <summary aria-label="Connection details: expand firmware, schema, and memory information"><span class="pill" id="connection-pill" data-stage="disconnected" role="status">Disconnected</span></summary>
               <div class="connection-detail-card">
                 <div class="status-pill" id="header-status" aria-live="polite">fw – schema – memory</div>
-                <small id="app-source-identity">App source: 7ad20fed70657e4ac608b69909cb7369f2a59c8e</small>
+                <small id="app-source-identity">App source: 1c316f3a75bc2f4cb8a5740e36af22f8e92c0ab8</small>
               </div>
             </details>
             <span class="active-profile-pill" id="header-profile-status">Profile A</span>
@@ -364,17 +364,6 @@
               <div class="schema-section-body" data-schema-target="slots"></div>
             </section>
           </div>
-          <section class="schema-section" id="midi-input-form" data-ui-tier="advanced"
-            data-device-config-root="midiInputBindings">
-            <header>
-              <h3>MIDI Input Bindings</h3>
-              <p class="microcopy">Create up to 16 profile-owned routes. Pick an incoming CC, choose its target,
-                then set its behavior and range. Changes stay staged until Apply.</p>
-            </header>
-            <div class="schema-section-body" data-schema-target="midiInputBindings" data-schema-apply="staged"
-              data-empty-message="No MIDI input bindings in this profile."
-              aria-label="No MIDI input bindings in this profile."></div>
-          </section>
           <div class="ef-modulation-cluster" data-ui-tier="advanced">
             <fieldset id="ef-assignment-card" data-device-config-root="efSlots">
               <legend>Envelope Assignments</legend>
@@ -408,7 +397,8 @@
             <header class="profile-performance-header">
               <div>
                 <h2 id="profile-performance-title">Profile Performance</h2>
-                <p class="microcopy">Edit profile-wide arpeggiator behavior, LFO generators, and route assignments. Per-slot roots and fixed LFO lanes stay in Selected Slot.</p>
+                <p class="microcopy">Edit profile-wide arpeggiator behavior, LFO routing, and the incoming MIDI
+                  authority granted to other machines. Per-slot controls stay in Selected Slot.</p>
               </div>
               <span class="lane-tag" data-runtime-lane="staged">Profile A–D</span>
             </header>
@@ -417,6 +407,8 @@
                 aria-pressed="true">Profile Arp</button>
               <button type="button" class="performance-tab" data-performance-tab="lfo"
                 aria-pressed="false">Profile LFO &amp; Routes</button>
+              <button type="button" class="performance-tab" data-performance-tab="incoming"
+                aria-pressed="false">Incoming MIDI</button>
             </div>
             <div id="profile-performance-panels"></div>
           </section>
@@ -825,6 +817,21 @@
               </p>
             </section>
           </div>
+        </div>
+
+        <div class="performance-panel" data-performance-panel="incoming" data-ui-tier="advanced">
+          <section class="schema-section incoming-midi-workspace" id="midi-input-form"
+            data-device-config-root="midiInputBindings">
+            <header>
+              <span class="zone-eyebrow">External control authority</span>
+              <h3>Incoming MIDI</h3>
+              <p class="microcopy">Create up to 16 profile-owned routes. Pick an incoming CC, choose its target,
+                then set its behavior and range. Changes stay staged until Apply.</p>
+            </header>
+            <div class="schema-section-body" data-schema-target="midiInputBindings"
+              data-schema-apply="staged" data-empty-message="No incoming MIDI routes in this profile."
+              aria-label="No incoming MIDI routes in this profile."></div>
+          </section>
         </div>
       </aside>
 
