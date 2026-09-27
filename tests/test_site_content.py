@@ -113,6 +113,59 @@ class SiteContentTests(unittest.TestCase):
     def test_bundle_uses_supported_ruby_line(self):
         self.assertIn('ruby "~> 3.3"', self.read("Gemfile"))
 
+    def test_studio_leads_with_sound_and_keeps_system_diagrams_in_atlas(self):
+        page = self.read("art.html")
+        self.assertLess(page.index('id="sound-flow"'), page.index('id="current-work"'))
+        self.assertNotIn("sound-flow-visual", page)
+        self.assertNotIn("Scene Systems", page)
+        self.assertNotIn("Open methods", page)
+        self.assertNotIn("Open privacy &amp; ethics", page)
+
+    def test_primary_navigation_leads_with_studio_without_press_kit(self):
+        navigation = self.read("_data/navigation.yml")
+        self.assertLess(navigation.index("- title: Studio"), navigation.index("- title: Atlas"))
+        self.assertNotIn("Press kit", navigation)
+
+    def test_bs_route_is_not_labeled_as_release_practice(self):
+        routes = self.read("_data/studio_routes.yml")
+        self.assertNotIn("- id: bs-sound", routes)
+
+    def test_studio_bs_encounter_uses_real_cover_art(self):
+        page = self.read("art.html")
+        for asset in (
+            "assets/images/bs/whole-pile-cover.png",
+            "assets/images/bs/waves.png",
+        ):
+            self.assertIn("/" + asset, page)
+            self.assertTrue((ROOT / asset).is_file(), asset)
+
+    def test_bs_catalog_lists_only_public_assets_that_exist(self):
+        catalog = json.loads(self.read("catalog/items/bs-noise-thread.json"))
+        self.assertEqual(
+            catalog["media"]["images"],
+            [
+                "/assets/images/bs/whole-pile-cover.png",
+                "/assets/images/bs/waves.png",
+            ],
+        )
+        self.assertEqual(catalog["media"]["audio"], ["/assets/audio/bs-archive-excerpt-2020.mp3"])
+
+    def test_studio_bs_encounter_has_a_local_audio_excerpt(self):
+        page = self.read("art.html")
+        self.assertIn('<audio controls preload="metadata">', page)
+        self.assertIn('/assets/audio/bs-archive-excerpt-2020.mp3', page)
+        self.assertTrue((ROOT / "assets/audio/bs-archive-excerpt-2020.mp3").is_file())
+
+    def test_mn42_project_includes_a_bench_bringup_still(self):
+        project = self.read("_projects/mn42.md")
+        self.assertIn("/img/studio/mn42_hero.jpg", project)
+        self.assertTrue((ROOT / "img/studio/mn42_hero.jpg").is_file())
+
+    def test_press_studio_portrait_is_present(self):
+        portrait = ROOT / "img/press/studio-portrait.jpg"
+        self.assertTrue(portrait.is_file())
+        self.assertIn("/img/press/studio-portrait.jpg", self.read("about.md"))
+
 
 if __name__ == "__main__":
     unittest.main()

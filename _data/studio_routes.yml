@@ -38,14 +38,6 @@
   image_alt: "Abstract signal image used as live-rig route marker"
   summary: "Audio, control, and video performance stack documented as a recoverable scene system."
 
-- id: bs-sound
-  title: "B_S."
-  eyebrow: "Sound / release practice"
-  url: https://bbss.bandcamp.com/
-  external: true
-  image: /img/front/banner.gif
-  image_alt: "Abstract signal image used as B_S. sound route marker"
-  summary: "Longform noise where pressure, grief, repetition, and ritual become audible form."
 
 - id: frzone
   title: "frZone"

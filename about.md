@@ -7,6 +7,8 @@ permalink: /about/
 
 # About
 
+![Portrait of Ben Severns](/img/press/studio-portrait.jpg)
+
 Ben Severns is a Minneapolis artist, educator, and systems-maker whose practice began in photography and darkroom process around 2002. From the beginning, the work was less interested in images as proof than in images as translation: memory passing through apparatus, framing, chemistry, distance, loss, and technical limitation.
 
 Over time those concerns moved through installation, moving image, glitch, sound, code, sensing, fabrication, teaching, and public infrastructure. The current projects in open instruments, consent-forward image systems, memory appliances, learning platforms, and machine manuals are not a separate identity from the earlier work. They are one later container for the same long-running questions about memory, threshold, control, authorship, participation, repair, and public form.

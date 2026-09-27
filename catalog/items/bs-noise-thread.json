@@ -54,11 +54,13 @@
     "external": "https://bbss.bandcamp.com/"
   },
   "media": {
-    "images": [],
+    "images": [
+      "/assets/images/bs/whole-pile-cover.png",
+      "/assets/images/bs/waves.png"
+    ],
     "video": [],
     "audio": [
-      "/assets/audio/bs_excerpt_better-days-ahead.mp3",
-      "/assets/audio/bs_excerpt_slow-down.mp3"
+      "/assets/audio/bs-archive-excerpt-2020.mp3"
     ]
   },
   "related_ids": [
