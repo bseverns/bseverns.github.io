@@ -285,6 +285,7 @@
   thumbnail: /3d/full3d/Fly2.jpg
   images:
     - /3d/full3d/Fly2.jpg
+    - /img/lineage/two-lefts/two-lefts-trace.png
   summary: Sensors, code, and room activity translated into trace; an early source for later participation systems.
 
 - id: everything-was-beautiful
@@ -329,3 +330,18 @@
   images:
     - /img/lineage/iykywhgi/iykywhgi_01.jpg
   summary: 2019 camera-and-sensor feedback system mapping image difference and floor input into MIDI and audiovisual instability.
+
+- id: after-another-empty-empire
+  title: After Another Empty Empire
+  branch: lineage
+  order: 80
+  medium: Moving image / video
+  status: archived
+  lineage_note: /lineage/after-another-empty-empire/
+  catalog_record: /catalog/items/after-another-empty-empire.json
+  thumbnail: /img/lineage/after-another-empty-empire/after-another-empty-empire_01.jpg
+  images:
+    - /img/lineage/after-another-empty-empire/after-another-empty-empire_01.jpg
+  video:
+    - /assets/video/after-another-empty-empire_excerpt-2021.mp4
+  summary: A 2021 moving-image work that accumulates, fractures, and reorders image material until sequence itself becomes pressure.

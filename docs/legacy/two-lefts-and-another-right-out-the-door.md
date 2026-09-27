@@ -5,9 +5,11 @@ seo_description: "Lineage note for Two lefts and another right out the door, an 
 permalink: /lineage/two-lefts-and-another-right-out-the-door/
 lineage_images:
   - src: /3d/full3d/Fly2.jpg
-    intended: /img/lineage/fly/fly_install_01.jpg
     caption: Room trace / installation context
     alt: Installation documentation image used as the visual reference for Two lefts and another right out the door.
+  - src: /img/lineage/two-lefts/two-lefts-trace.png
+    caption: Sensor-generated line field
+    alt: High-contrast white image with fine black lines generated from room activity.
 ---
 
 # Two lefts and another right out the door

@@ -166,6 +166,27 @@ class SiteContentTests(unittest.TestCase):
         self.assertTrue(portrait.is_file())
         self.assertIn("/img/press/studio-portrait.jpg", self.read("about.md"))
 
+    def test_two_lefts_has_a_public_sensor_trace(self):
+        asset = "img/lineage/two-lefts/two-lefts-trace.png"
+        self.assertTrue((ROOT / asset).is_file())
+        self.assertIn("/" + asset, self.read("docs/legacy/two-lefts-and-another-right-out-the-door.md"))
+        catalog = json.loads(self.read("catalog/items/two-lefts-and-another-right-out-the-door.json"))
+        self.assertEqual(
+            catalog["media"]["images"],
+            ["/3d/full3d/Fly2.jpg", "/" + asset],
+        )
+
+    def test_after_another_empty_empire_has_a_silent_video_excerpt(self):
+        page = self.read("docs/legacy/after-another-empty-empire.md")
+        video = "assets/video/after-another-empty-empire_excerpt-2021.mp4"
+        poster = "img/lineage/after-another-empty-empire/after-another-empty-empire_01.jpg"
+        self.assertIn("<video controls preload=\"metadata\"", page)
+        for asset in (video, poster):
+            self.assertTrue((ROOT / asset).is_file(), asset)
+            self.assertIn("/" + asset, page)
+        catalog = json.loads(self.read("catalog/items/after-another-empty-empire.json"))
+        self.assertEqual(catalog["media"]["video"], ["/" + video])
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,64 @@
+{
+  "id": "after-another-empty-empire",
+  "title": "After Another Empty Empire",
+  "slug": "after-another-empty-empire",
+  "year_start": 2021,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": [
+    "media",
+    "archive"
+  ],
+  "themes": [
+    "moving image",
+    "glitch",
+    "accumulation",
+    "pressure",
+    "sequence"
+  ],
+  "summary": "A moving-image work that accumulates, fractures, and reorders image material until sequence itself becomes pressure.",
+  "medium": [
+    "moving image",
+    "video"
+  ],
+  "materials": [
+    "processed image sequence",
+    "digital video"
+  ],
+  "stack": [
+    "video processing",
+    "editing"
+  ],
+  "core_concepts": [
+    "accumulation",
+    "fracture",
+    "sequence as pressure"
+  ],
+  "body_relation": "image sequence experienced over time",
+  "ethics": {
+    "pii": "none in the published excerpt",
+    "consent": "artist-confirmed public presentation clearance for the excerpt",
+    "retention": "public excerpt; full work retained in artist archive"
+  },
+  "provenance": "Artist-provided 2021 master; 30-second public visual excerpt selected from approximately 05:00.",
+  "docs": {
+    "notes": "/lineage/after-another-empty-empire/"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/after-another-empty-empire/after-another-empty-empire_01.jpg"
+    ],
+    "video": [
+      "/assets/video/after-another-empty-empire_excerpt-2021.mp4"
+    ],
+    "audio": []
+  },
+  "related_ids": [
+    "symbolizing-everything",
+    "two-lefts-and-another-right-out-the-door",
+    "bs-noise-thread"
+  ],
+  "quote": "Sequence itself becomes pressure.",
+  "sort_order": 80
+}
