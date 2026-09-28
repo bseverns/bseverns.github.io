@@ -80,6 +80,12 @@ class SiteContentTests(unittest.TestCase):
     def test_proxy_only_data_weird_is_not_a_studio_route(self):
         self.assertNotIn("id: data-weird", self.read("_data/studio_routes.yml"))
 
+    def test_featured_project_years_sort_as_numbers(self):
+        for path in (ROOT / "_projects").glob("*.md"):
+            front_matter = self.read(path.relative_to(ROOT)).split("---", 2)[1]
+            year = next(line for line in front_matter.splitlines() if line.startswith("year:"))
+            self.assertTrue(year.removeprefix("year:").strip().isdigit(), path)
+
     def test_data_weird_does_not_use_generative_fabrication_media(self):
         project = self.read("_projects/dataweird.md")
         self.assertNotIn("genF1", project)
