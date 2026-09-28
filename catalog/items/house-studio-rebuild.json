@@ -59,16 +59,13 @@
     "notes": "/docs/site-reset/machine-care-and-rebuild.md"
   },
   "media": {
-    "images": [
-      "/img/studio/house-studio_rebuild_hero.jpg"
-    ],
+    "images": [],
     "video": [],
     "audio": []
   },
   "related_ids": [
     "machine-docs",
     "classhub",
-    "moarknobs-42",
     "scar"
   ],
   "quote": "Care for a space not yet fully usable became part of the practice's structure.",

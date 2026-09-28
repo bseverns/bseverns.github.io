@@ -57,16 +57,13 @@
     "notes": "/docs/legacy/machine-docs.md"
   },
   "media": {
-    "images": [
-      "/img/studio/machine-care_hero.jpg"
-    ],
+    "images": [],
     "video": [],
     "audio": []
   },
   "related_ids": [
     "classhub",
     "house-studio-rebuild",
-    "moarknobs-42",
     "scar"
   ],
   "quote": "Maintenance is not what happens after the work; it is one of the work's forms.",

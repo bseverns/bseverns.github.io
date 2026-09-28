@@ -1,13 +1,8 @@
 ---
 title: "Data Weird"
-year: 2023
-media: "Workshop installation"
-context: "Collaborative prototype"
-hero: /img/portfolio/3d/genF2.jpg
-hero_alt: "genF1 PETG print from the Generative Fabrication series, ribboned isosurface with cellular cavities"
-summary: "An overnight data sculpture jam where live sensors drive projection-mapped acrylic towers and invite walk-up debugging."
+year: 2016–present
+media: "Data-driven work"
+context: "Artist-described ongoing project"
+summary: "An ongoing work using publicly available weather and GIS data from Chicago and Minneapolis. Documentation, media, and production details are being recovered."
 featured: true
-tools: "TouchDesigner for live visuals, Python data wrangling scripts, Arduino sensor array, LED sculpture fabrication"
-ethics: "Only used anonymized environmental data; workshop participants opted into interaction and were briefed on data use"
-lineage: "Carries forward the fabrication and sensing branch where unreal forms, environmental traces, and public participation are pushed through material constraint."
 ---

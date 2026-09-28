@@ -20,7 +20,7 @@
     "teaching",
     "care"
   ],
-  "summary": "An open instrument and teaching platform that makes control, feel, mapping, and technical claims legible through auditable documentation and bench-tested design.",
+  "summary": "A public hardware-test MIDI/OSC prototype with 42 configurable control slots, six envelope-follower inputs, and documented firmware, configurator, Bridge, and bench-validation paths.",
   "medium": [
     "instrument",
     "hardware",
@@ -38,7 +38,7 @@
   "stack": [
     "hardware",
     "firmware",
-    "bench testing",
+    "bench-validation receipts",
     "documentation"
   ],
   "core_concepts": [
@@ -63,16 +63,10 @@
     "images": [
       "/img/studio/mn42_hero.jpg"
     ],
-    "video": [
-      "/assets/video/mn42_demo.mp4"
-    ],
+    "video": [],
     "audio": []
   },
-  "related_ids": [
-    "i-was-young-once",
-    "scar",
-    "bs-noise-thread"
-  ],
+  "related_ids": [],
   "quote": "Feel becomes a claim you can test.",
   "sort_order": 100
 }

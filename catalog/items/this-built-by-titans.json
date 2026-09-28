@@ -15,6 +15,6 @@
   "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
   "docs": {"notes": "/lineage/this-built-by-titans/"},
   "media": {"images": ["/img/lineage/this-built-by-titans/this-built-by-titans_01.jpg"], "video": [], "audio": []},
-  "related_ids": ["we-know-this-body", "symbolizing-everything"],
+  "related_ids": ["we-know-this-body"],
   "sort_order": 140
 }

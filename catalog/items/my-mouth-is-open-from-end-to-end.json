@@ -15,6 +15,6 @@
   "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
   "docs": {"notes": "/lineage/my-mouth-is-open-from-end-to-end/"},
   "media": {"images": ["/img/lineage/my-mouth-is-open-from-end-to-end/my-mouth-is-open-from-end-to-end_01.jpg"], "video": [], "audio": []},
-  "related_ids": ["there-was-blood-on-my-hands", "scar"],
+  "related_ids": ["scar"],
   "sort_order": 110
 }

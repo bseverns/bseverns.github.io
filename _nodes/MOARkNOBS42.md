@@ -3,7 +3,7 @@ title: "MOARkNOBS-42"
 permalink: /atlas/n/moarknobs42/
 pillar: "Tools"
 status: "prototype platform"
-summary: "Teensy-based MIDI controller platform that treats mappings, latency, feedback, and validation as part of the instrument rather than invisible engineering residue."
+summary: "Teensy-based MIDI/OSC hardware-test platform with documented mappings, feedback paths, validation methods, and limited dated board-backed receipts."
 repo: "https://github.com/bseverns/MOARkNOBS-42"
 reading:
   title: "What this makes visible"
@@ -16,19 +16,20 @@ reading:
     promise about what can be changed, when it can be changed, and who can
     understand the change while the room is moving.
   evidence: >
-    The latency rig, mapping manifests, validation tools, and mode feedback
-    keep that promise inspectable. The work asks the controller to show its
-    behavior before it asks anyone to trust it.
+    Public source includes mapping and manifest contracts, validation tooling,
+    and dated board-backed receipts for boot/configuration, Bridge
+    apply/readback, and live-control round trips. Latency remains a documented
+    measurement method rather than a current public performance result.
   boundary: >
     The public claim stays with behavior, method, and legibility. It does not
     ask the prototype to pretend it is already a finished product.
-what_it_is: "MOARkNOBS-42 is a control-instrument research platform built around a deliberate 42-control grammar, visible mappings, mode feedback, and bench-tested documentation. It is public as a promising platform, not as a finished production controller."
-lets_people_do: "It lets performers and learners test how physical controls, mapping manifests, LED feedback, and measurable latency shape authorship in a live control system."
+what_it_is: "MOARkNOBS-42 is a hardware-test research platform with 42 configurable control slots, six envelope-follower inputs, documented mappings, and limited board-backed validation. It is public as a prototype, not as a finished production controller."
+lets_people_do: "It is designed for performers and learners to examine how physical controls, documented mappings, feedback paths, and measurement protocols shape authorship in a live control system."
 public_now:
   - title: "Project repo"
     url: "https://github.com/bseverns/MOARkNOBS-42"
     external: true
-    note: "Current firmware, hardware notes, validation tooling, and build direction."
+    note: "Current source, hardware notes, validation tooling, and dated receipts with stated limits."
   - title: "MN42 project page"
     url: "/projects/mn42/"
     note: "Public site context for the controller branch."
@@ -37,8 +38,8 @@ public_now:
     note: "Public-safe diagram of the measurement framing around the instrument."
   - title: "Latency characterization lab"
     url: "/research/mn42-latency-lab/"
-    note: "Method note for measuring feel instead of mythologizing it."
-evidence_status: "Status: prototype platform. Public source and method notes exist, but stronger public proof still needs a current validation capture, a manifest example, and a bench photo of the present hardware state."
+    note: "Public method note; it does not itself report a current latency result."
+evidence_status: "Status: hardware-test prototype. The public repository contains dated board-backed receipts and prototype-board documentation, but it does not establish fabrication readiness, full power/display validation, or a public performance capture."
 next_proof: "30-second MIDI validation capture showing stable CC output, visible mode LED changes, and either a MIDI monitor or latency log in frame."
 proof_objects:
   - title: "Latency rig diagram"
@@ -48,13 +49,17 @@ proof_objects:
   - title: "Latency characterization lab"
     status: "public"
     url: "/research/mn42-latency-lab/"
-    note: "Public method note for measuring latency and feel."
+    note: "Public method note; it does not itself report a current latency result."
+  - title: "Board-backed HIL receipts"
+    status: "public"
+    url: "https://github.com/bseverns/MOARkNOBS-42/tree/main/docs/bench"
+    note: "Dated boot/configuration, Bridge-session, and live-control receipts; each states its own limits."
   - title: "MIDI validation capture"
     status: "needed"
     note: "Current public proof still needs a short capture showing stable CC output and visible mode feedback."
 unresolved:
   - "The current public page should not imply enclosure maturity, operator-independence, or production readiness."
-  - "A public BOM, calibration path, and current hardware photo are still missing."
+  - "No public fabrication BOM or verified fabrication bundle is available; the portfolio also lacks a linked calibration path."
   - "Live-rig integration proof should stay modest until a concrete capture is linked."
 methods:
   - title: "Evidence Before Polish"

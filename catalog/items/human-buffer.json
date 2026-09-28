@@ -59,12 +59,8 @@
     "notes": "/docs/legacy/human-buffer.md"
   },
   "media": {
-    "images": [
-      "/img/studio/human-buffer_hero.jpg"
-    ],
-    "video": [
-      "/assets/video/human-buffer_demo.mp4"
-    ],
+    "images": [],
+    "video": [],
     "audio": []
   },
   "related_ids": [

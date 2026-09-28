@@ -59,15 +59,9 @@
     "notes": "/docs/legacy/memory-engine.md"
   },
   "media": {
-    "images": [
-      "/img/studio/memory-engine_hero.jpg"
-    ],
-    "video": [
-      "/assets/video/memory-engine_demo.mp4"
-    ],
-    "audio": [
-      "/assets/audio/room-tone_oral-fragment_01.mp3"
-    ]
+    "images": [],
+    "video": [],
+    "audio": []
   },
   "related_ids": [
     "a-madman-wrapped-in-the-clothes-of-a-deadman",

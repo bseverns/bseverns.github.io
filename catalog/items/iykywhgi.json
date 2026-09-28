@@ -1,0 +1,20 @@
+{
+  "id": "iykywhgi",
+  "title": "IYKYWHGI",
+  "slug": "iykywhgi",
+  "year_start": null,
+  "year_end": null,
+  "circa": true,
+  "status": "archived",
+  "collections": ["archive", "systems", "media"],
+  "themes": ["installation", "feedback", "image", "sound"],
+  "summary": "An archival installation record with a camera, display, and electronic control system.",
+  "medium": ["installation", "electronic system"],
+  "materials": [],
+  "ethics": {"pii": "none", "consent": "artist-cleared installation documentation", "retention": "public archive"},
+  "provenance": "Archive image titled IYKYWHGI.jpg; nearby 2018 Processing source and VCV Rack patch document compatible technical mechanisms, but their formal relationship to the titled work is not explicitly recorded.",
+  "docs": {"notes": "/lineage/iykywhgi/"},
+  "media": {"images": ["/img/lineage/iykywhgi/iykywhgi_01.jpg"], "video": [], "audio": []},
+  "related_ids": [],
+  "sort_order": 75
+}

@@ -52,13 +52,10 @@
   },
   "media": {
     "images": [
-      "/img/lineage/deadman/deadman_01.jpg",
-      "/img/lineage/deadman/deadman_02.jpg"
+      "/img/lineage/deadman/deadman_01.jpg"
     ],
     "video": [],
-    "audio": [
-      "/assets/audio/room-tone_oral-fragment_01.mp3"
-    ]
+    "audio": []
   },
   "related_ids": [
     "night-stalker-reruns-on-channel-4",

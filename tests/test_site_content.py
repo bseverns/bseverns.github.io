@@ -80,6 +80,17 @@ class SiteContentTests(unittest.TestCase):
     def test_proxy_only_data_weird_is_not_a_studio_route(self):
         self.assertNotIn("id: data-weird", self.read("_data/studio_routes.yml"))
 
+    def test_data_weird_does_not_use_generative_fabrication_media(self):
+        project = self.read("_projects/dataweird.md")
+        self.assertNotIn("genF1", project)
+        self.assertNotIn("genF2", project)
+
+    def test_glitch_geometry_stays_distinct_from_glitchlistener(self):
+        project = self.read("_projects/glitch-geometry.md")
+        self.assertNotIn("GlitchListener", project)
+        self.assertNotIn("https://github.com/bseverns/GlitchListener", project)
+        self.assertIn("year: 2017", project)
+
     def test_lofi_sampler_is_a_studio_route_with_real_hardware_image(self):
         routes = self.read("_data/studio_routes.yml")
         self.assertIn("- id: lofi-sampler", routes)
@@ -101,6 +112,13 @@ class SiteContentTests(unittest.TestCase):
         ):
             self.assertTrue((ROOT / image).is_file(), image)
             self.assertIn("/" + image, node)
+
+    def test_catalog_media_paths_exist(self):
+        for path in (ROOT / "catalog" / "items").glob("*.json"):
+            catalog = json.loads(path.read_text(encoding="utf-8"))
+            for assets in catalog.get("media", {}).values():
+                for asset in assets:
+                    self.assertTrue((ROOT / asset.lstrip("/")).is_file(), (catalog["id"], asset))
 
     def test_i_was_young_catalog_only_lists_public_media(self):
         catalog = json.loads(self.read("catalog/items/i-was-young-once.json"))
@@ -261,6 +279,14 @@ class SiteContentTests(unittest.TestCase):
         catalog = json.loads(self.read("catalog/items/after-another-empty-empire.json"))
         self.assertEqual(catalog["media"]["video"], ["/" + video])
 
+    def test_recovered_blood_and_iykywhgi_have_conservative_catalog_records(self):
+        for slug in ("there-was-blood-on-my-hands", "iykywhgi"):
+            catalog = json.loads(self.read(f"catalog/items/{slug}.json"))
+            self.assertIn(f"/catalog/items/{slug}.json", self.read("catalog/catalog.json"))
+            for assets in catalog["media"].values():
+                for asset in assets:
+                    self.assertTrue((ROOT / asset.lstrip("/")).is_file(), asset)
+
     def test_vanderlip_records_extend_the_archive_with_source_grounded_media(self):
         works = {
             "this-built-by-titans": "this-built-by-titans/this-built-by-titans_01.jpg",
@@ -279,6 +305,7 @@ class SiteContentTests(unittest.TestCase):
             self.assertIn(f"/catalog/items/{slug}.json", catalog_index)
         scar = json.loads(self.read("catalog/items/scar.json"))
         self.assertEqual(scar["year_start"], 2008)
+        self.assertEqual(scar["dimensions"], "24 × 8 × 5 in.")
         self.assertEqual(
             scar["media"]["images"],
             [

@@ -23,11 +23,9 @@ lineage_images:
 
 # There Was Blood on My Hands
 
-**2009 · Cast plastic and 8 × 10 inch solar prints**
+2009 · Cast plastic and solar prints
 
-The original statement describes cast-plastic RNA models and solar prints made from them. Plastic's ability to assume many shapes supplied the material analogy; failures retained in the casts became part of a conversation among biological systems, scientific representation, art, and technology.
-
-<p class="origin-callout">The object does not end at fabrication. It becomes a photographic source, then a translated image with different density, scale, and legibility.</p>
+Title, date, materials, dimensions, and print size are transcribed from an archived exhibition image list. The record lists four cast forms and 8 × 10 inch solar prints; the images below are associated exhibition documentation.
 
 {% include lineage-gallery.html %}
 
@@ -35,7 +33,7 @@ The original statement describes cast-plastic RNA models and solar prints made f
 <nav aria-label="Related links">
   <ul>
     <li><a href="/lineage/">Preserved work</a></li>
-    <li><a href="/3d/genfab.html">Generative Fabrication Techniques</a></li>
+    <li><a href="/catalog/items/there-was-blood-on-my-hands.json">Catalog record</a></li>
     <li><a href="/studio/">Studio</a></li>
   </ul>
 </nav>

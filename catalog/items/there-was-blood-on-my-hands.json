@@ -1,0 +1,21 @@
+{
+  "id": "there-was-blood-on-my-hands",
+  "title": "There Was Blood on My Hands",
+  "slug": "there-was-blood-on-my-hands",
+  "year_start": 2009,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": ["archive", "media"],
+  "themes": ["casting", "photography", "sculpture"],
+  "summary": "Cast-plastic forms and solar prints.",
+  "medium": ["sculpture", "photographic prints"],
+  "materials": ["cast plastic", "solar prints"],
+  "dimensions": "Cast forms A–D: 4 × 4 × 5 in. to 11 × 11 × 5 in.; prints: 8 × 10 in.",
+  "ethics": {"pii": "none", "consent": "artist-cleared exhibition documentation", "retention": "public archive"},
+  "provenance": "Title, year, materials, dimensions, and print size transcribed from an archived exhibition image list; associated exhibition documentation retained.",
+  "docs": {"notes": "/lineage/there-was-blood-on-my-hands/"},
+  "media": {"images": ["/img/lineage/there-was-blood/tbh_01.jpg", "/img/lineage/there-was-blood/tbh_02.jpg", "/img/lineage/there-was-blood/tbh_03.jpg", "/img/lineage/there-was-blood/tbh_04.jpg", "/img/lineage/there-was-blood/tbh_05.jpg"], "video": [], "audio": []},
+  "related_ids": [],
+  "sort_order": 125
+}

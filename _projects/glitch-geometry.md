@@ -1,15 +1,8 @@
 ---
 title: "Glitch Geometry"
-year: 2024
-media: "Speculative CAD experiments"
-context: "Exploring error as form"
-hero: /assets/images/cds/glitch-geometry-still.png
-hero_alt: "Parametric mesh rendered mid-glitch with neon facets folding into a twisting corridor"
-summary: "Procedural glitches that sculpt space into weird machines, documented with step-by-step Grasshopper breakdowns."
-links:
-  - {label: "Process notes", url: "https://github.com/bseverns/glitchProcessing#readme"}
+year: 2017
+media: "Generative work"
+context: "Artist-described project"
+summary: "A 2017 generative work. Public documentation and media are being recovered."
 featured: true
-tools: "Rhino + Grasshopper parametric modeling, custom Python noise operators, Unreal Engine real-time lighting"
-ethics: "Research only uses self-authored datasets; open walk-throughs include accessibility brief and photo consent opt-out"
-lineage: "Extends the glitch and fabrication line where moving-image instability becomes a buildable object instead of staying trapped on screen."
 ---

@@ -15,6 +15,6 @@
   "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
   "docs": {"notes": "/lineage/we-know-this-body/"},
   "media": {"images": ["/img/lineage/we-know-this-body/we-know-this-body_01.jpg"], "video": [], "audio": []},
-  "related_ids": ["moarknobs-42", "two-lefts-and-another-right-out-the-door"],
+  "related_ids": ["moarknobs-42"],
   "sort_order": 90
 }

@@ -14,12 +14,21 @@ lineage_images:
 
 # Scar
 
+## Object record
+
 2008 · Cast aluminum, wood · 24 × 8 × 5 in.
 
-A cast aluminum form held on a wood base.
+A cast aluminum and wood sculpture.
 
 {% include lineage-gallery.html %}
 
+## Artist testimony
+
+*Scar* followed spinal compression fractures. In my account of its making, I cut up a crashed bicycle and cast a body brace, transforming it within the work. Injury, bodily memory, damage, and the decision to continue riding were part of the making—not private backstory added afterward.
+
+## Retrospective reading
+
+Looking back, I recognize an early relation here to repair, maintenance, adaptation, and continuation—questions that later took form in machine care and rebuilding work. I would not have used that vocabulary in 2008; it is a present reading of the work rather than its original stated frame.
 
 <nav class="legacy-links" aria-label="Scar reference routes">
   <ul class="legacy-list">
@@ -33,7 +42,7 @@ A cast aluminum form held on a wood base.
     <li class="legacy-card">
       <a class="legacy-card-link" href="/catalog/items/scar.json">
         <h4>Catalog record</h4>
-        <p class="legacy-lede">Machine-readable record connecting injury, repair, survival, and related works.</p>
+        <p class="legacy-lede">Machine-readable facts, public media, provenance, and related records.</p>
         <span class="legacy-cta">Open the JSON record →</span>
       </a>
     </li>
