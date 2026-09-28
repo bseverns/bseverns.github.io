@@ -26,8 +26,11 @@ Recovered photographs establish a completed room-scale installation rather than 
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
-- [Preserved work](/lineage/)
-- [Scenes](/atlas/scenes/)
-- [Studio](/studio/)
+<nav aria-label="Related links">
+  <ul>
+    <li><a href="/lineage/">Preserved work</a></li>
+    <li><a href="/atlas/scenes/">Scenes</a></li>
+    <li><a href="/studio/">Studio</a></li>
+  </ul>
+</nav>

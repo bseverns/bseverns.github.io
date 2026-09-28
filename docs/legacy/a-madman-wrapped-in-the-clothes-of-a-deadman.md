@@ -20,7 +20,6 @@ That instability becomes important later. Questions of mistranslation, partial r
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
 <nav class="legacy-links" aria-label="Deadman reference routes">
   <ul class="legacy-list">

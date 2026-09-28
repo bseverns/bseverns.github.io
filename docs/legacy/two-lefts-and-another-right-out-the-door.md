@@ -22,7 +22,6 @@ What changes later is the surrounding ethics, documentation, and operational cla
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
 <nav class="legacy-links" aria-label="Two lefts reference routes">
   <ul class="legacy-list">

@@ -17,7 +17,10 @@ A compact, visibly cast aluminum form.
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
-- [Lineage](/lineage/)
-- [Catalog record](/catalog/items/remade.json)
+<nav aria-label="Related links">
+  <ul>
+    <li><a href="/lineage/">Lineage</a></li>
+    <li><a href="/catalog/items/remade.json">Catalog record</a></li>
+  </ul>
+</nav>

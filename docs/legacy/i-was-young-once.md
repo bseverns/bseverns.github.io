@@ -24,7 +24,6 @@ The recovered transcript documents the failed launch, lost onboard camera, and e
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
 <nav class="legacy-links" aria-label="I was young once reference routes">
   <ul class="legacy-list">

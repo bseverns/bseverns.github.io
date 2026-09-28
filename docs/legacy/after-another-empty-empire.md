@@ -19,8 +19,11 @@ A 2021 moving-image work that accumulates, fractures, and reorders image materia
 
 The excerpt is deliberately silent. It is a visual entry point, not a replacement for the full work.
 
-## Reference routes
 
-- [Lineage](/lineage/)
-- [Studio](/studio/)
-- [Catalog record](/catalog/items/after-another-empty-empire.json)
+<nav aria-label="Related links">
+  <ul>
+    <li><a href="/lineage/">Lineage</a></li>
+    <li><a href="/studio/">Studio</a></li>
+    <li><a href="/catalog/items/after-another-empty-empire.json">Catalog record</a></li>
+  </ul>
+</nav>

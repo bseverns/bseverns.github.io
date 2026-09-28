@@ -28,7 +28,6 @@ That matters now because it keeps the current systems work from being misread as
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
 <nav class="legacy-links" aria-label="Fly reference routes">
   <ul class="legacy-list">

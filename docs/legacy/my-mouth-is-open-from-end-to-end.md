@@ -17,7 +17,10 @@ A wall-mounted apparatus that holds two pale cast forms in a tensioned steel fra
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
-- [Lineage](/lineage/)
-- [Catalog record](/catalog/items/my-mouth-is-open-from-end-to-end.json)
+<nav aria-label="Related links">
+  <ul>
+    <li><a href="/lineage/">Lineage</a></li>
+    <li><a href="/catalog/items/my-mouth-is-open-from-end-to-end.json">Catalog record</a></li>
+  </ul>
+</nav>

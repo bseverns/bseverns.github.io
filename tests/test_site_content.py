@@ -156,15 +156,12 @@ class SiteContentTests(unittest.TestCase):
         self.assertIn('/assets/audio/bs-archive-excerpt-2020.mp3', page)
         self.assertTrue((ROOT / "assets/audio/bs-archive-excerpt-2020.mp3").is_file())
 
-    def test_homepage_bs_anchor_is_an_audio_and_art_encounter(self):
+    def test_homepage_gives_bs_its_own_bandcamp_encounter(self):
         page = self.read("index.html")
-        title_start = page.index("<h3>B_S. / live-rig</h3>")
-        anchor_start = page.rfind("<article", 0, title_start)
-        anchor_end = page.index("</article>", title_start)
-        anchor = page[anchor_start:anchor_end]
-        self.assertIn('/assets/images/bs/whole-pile-cover.png', anchor)
-        self.assertIn('/assets/audio/bs-archive-excerpt-2020.mp3', anchor)
-        self.assertIn('<audio controls preload="metadata">', anchor)
+        self.assertNotIn("B_S. / live-rig", page)
+        self.assertIn('class="bs-home-encounter"', page)
+        self.assertIn('https://bandcamp.com/EmbeddedPlayer/album=2619394710/', page)
+        self.assertIn('title="B_S. — i hope the sky still takes us"', page)
 
     def test_studio_places_video_and_sculpture_before_current_work(self):
         page = self.read("art.html")
@@ -183,6 +180,53 @@ class SiteContentTests(unittest.TestCase):
         self.assertNotIn("Where truth lives", page)
         self.assertNotIn("What now looks like infrastructure", page)
         self.assertIn("Follow a lineage", page)
+
+    def test_studio_does_not_explain_bs_before_the_player(self):
+        page = self.read("art.html")
+        bs_start = page.index('<h2 id="sound-flow-title">B_S.</h2>')
+        player = page.index('<audio controls preload="metadata">', bs_start)
+        self.assertNotIn("pressure", page[bs_start:player].lower())
+        self.assertNotIn("ritual", page[bs_start:player].lower())
+
+    def test_studio_intro_is_only_an_invitation(self):
+        page = self.read("art.html")
+        intro = page[page.index('<section class="page-intro">'):page.index('</section>', page.index('<section class="page-intro">'))]
+        self.assertIn("Start with a recording, a moving image, or an object.", intro)
+        self.assertNotIn('class="cta"', intro)
+
+    def test_audio_and_embedded_player_fill_narrow_containers(self):
+        css = self.read("css/site.css")
+        self.assertIn(".sound-flow-copy audio,", css)
+        self.assertIn(".bs-home-player iframe", css)
+        self.assertIn("width: 100%;", css)
+
+    def test_mobile_header_wraps_navigation_before_it_overflows(self):
+        css = self.read("css/site.css")
+        self.assertIn("@media (max-width: 640px)", css)
+        self.assertIn(".header-inner", css)
+        self.assertIn("flex-wrap: wrap;", css)
+        self.assertIn(".primary-nav ul", css)
+
+    def test_homepage_uses_choose_a_doorway_once(self):
+        self.assertEqual(self.read("index.html").count("Choose a doorway"), 1)
+
+    def test_legacy_records_do_not_repeat_reference_routes_as_a_section_title(self):
+        for page in (ROOT / "docs" / "legacy").glob("*.md"):
+            self.assertNotIn("## Reference routes", page.read_text(encoding="utf-8"), page)
+
+    def test_legacy_record_link_lists_are_labeled_navigation(self):
+        for name in (
+            "a-hundred-years-falling",
+            "after-another-empty-empire",
+            "everything-was-beautiful",
+            "iykywhgi",
+            "my-mouth-is-open-from-end-to-end",
+            "remade",
+            "there-was-blood-on-my-hands",
+            "we-know-this-body",
+        ):
+            page = self.read(f"docs/legacy/{name}.md")
+            self.assertIn('<nav aria-label="Related links">', page)
 
     def test_mn42_project_includes_a_bench_bringup_still(self):
         project = self.read("_projects/mn42.md")

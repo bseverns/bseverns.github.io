@@ -28,7 +28,6 @@ Those questions continue forward into later work on consent, participation, memo
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
 <nav class="legacy-links" aria-label="Night Stalker reference routes">
   <ul class="legacy-list">

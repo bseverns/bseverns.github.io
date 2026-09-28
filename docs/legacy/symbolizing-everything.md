@@ -24,7 +24,6 @@ Later tools and platforms take that same entanglement and push it toward legibil
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
 <nav class="legacy-links" aria-label="Symbolizing Everything reference routes">
   <ul class="legacy-list">

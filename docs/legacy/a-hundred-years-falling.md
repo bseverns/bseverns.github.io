@@ -17,7 +17,10 @@ A table-scale water system with its pump and cast material left visibly exposed.
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
-- [Lineage](/lineage/)
-- [Catalog record](/catalog/items/a-hundred-years-falling.json)
+<nav aria-label="Related links">
+  <ul>
+    <li><a href="/lineage/">Lineage</a></li>
+    <li><a href="/catalog/items/a-hundred-years-falling.json">Catalog record</a></li>
+  </ul>
+</nav>

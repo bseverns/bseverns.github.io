@@ -935,6 +935,25 @@ article.teaching li {
   display: block;
 }
 
+.sound-flow-copy audio,
+.bs-home-player iframe {
+  width: 100%;
+}
+
+.bs-home-encounter {
+  padding: clamp(28px, 7vw, 72px) 0;
+}
+
+.bs-home-encounter h2 {
+  margin: 0 0 1rem;
+}
+
+.bs-home-player iframe {
+  display: block;
+  height: 472px;
+  border: 0;
+}
+
 .studio-encounter {
   padding: clamp(28px, 7vw, 72px) 0;
 }
@@ -2250,6 +2269,22 @@ article.teaching li {
 
   .chapter-number {
     font-size: clamp(2.5rem, 18vw, 4.5rem);
+  }
+}
+
+@media (max-width: 640px) {
+  .header-inner {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+
+  .primary-nav {
+    width: 100%;
+  }
+
+  .primary-nav ul {
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
   }
 }
 

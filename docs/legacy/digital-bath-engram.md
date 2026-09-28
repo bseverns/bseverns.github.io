@@ -28,7 +28,6 @@ That line continues later in memory appliances, image systems, and public partic
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
 <nav class="legacy-links" aria-label="Digital Bath reference routes">
   <ul class="legacy-list">

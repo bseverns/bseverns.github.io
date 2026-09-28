@@ -17,7 +17,10 @@ A small optical and electronic apparatus held inside a wooden frame.
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
-- [Lineage](/lineage/)
-- [Catalog record](/catalog/items/we-know-this-body.json)
+<nav aria-label="Related links">
+  <ul>
+    <li><a href="/lineage/">Lineage</a></li>
+    <li><a href="/catalog/items/we-know-this-body.json">Catalog record</a></li>
+  </ul>
+</nav>

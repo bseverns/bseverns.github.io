@@ -19,8 +19,11 @@ The installation photograph keeps that mechanism visible: webcam and monitor abo
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
-- [Preserved work](/lineage/)
-- [Scenes](/atlas/scenes/)
-- [Studio](/studio/)
+<nav aria-label="Related links">
+  <ul>
+    <li><a href="/lineage/">Preserved work</a></li>
+    <li><a href="/atlas/scenes/">Scenes</a></li>
+    <li><a href="/studio/">Studio</a></li>
+  </ul>
+</nav>

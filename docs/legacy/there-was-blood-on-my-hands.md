@@ -31,8 +31,11 @@ The original statement describes cast-plastic RNA models and solar prints made f
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
-- [Preserved work](/lineage/)
-- [Generative Fabrication Techniques](/3d/genfab.html)
-- [Studio](/studio/)
+<nav aria-label="Related links">
+  <ul>
+    <li><a href="/lineage/">Preserved work</a></li>
+    <li><a href="/3d/genfab.html">Generative Fabrication Techniques</a></li>
+    <li><a href="/studio/">Studio</a></li>
+  </ul>
+</nav>

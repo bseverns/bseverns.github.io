@@ -19,7 +19,6 @@ What later becomes machine care, rebuild logic, startup ritual, and continuation
 
 {% include lineage-gallery.html %}
 
-## Reference routes
 
 <nav class="legacy-links" aria-label="Scar reference routes">
   <ul class="legacy-list">
