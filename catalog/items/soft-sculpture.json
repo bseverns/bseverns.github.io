@@ -1,0 +1,65 @@
+{
+  "id": "soft-sculpture",
+  "title": "Soft Sculpture",
+  "slug": "soft-sculpture",
+  "year_start": 2013,
+  "year_end": 2019,
+  "circa": false,
+  "status": "archived",
+  "collections": [
+    "archive",
+    "media",
+    "scenes"
+  ],
+  "themes": [
+    "collaboration",
+    "performance",
+    "soft sculpture",
+    "moving image",
+    "sound"
+  ],
+  "summary": "A collaborative project by Ben Severns and Nick Knutson using performance, moving image, sound, and soft sculptural forms.",
+  "medium": [
+    "performance",
+    "sculpture",
+    "moving image",
+    "sound"
+  ],
+  "materials": [
+    "soft sculptural forms",
+    "video",
+    "sound"
+  ],
+  "stack": [],
+  "core_concepts": [
+    "collaboration",
+    "body",
+    "staged image"
+  ],
+  "body_relation": "performer and sculptural form share the gallery space",
+  "ethics": {
+    "pii": "recognizable collaborator appears in published documentation",
+    "consent": "Ben Severns confirms public presentation clearance for all Soft Sculpture material",
+    "retention": "artist archive documentation with two selected silent visual excerpts"
+  },
+  "provenance": "Artist archive documentation from the jointly authored Soft Sculpture project, 2013–2019.",
+  "docs": {
+    "notes": "/lineage/soft-sculpture/"
+  },
+  "media": {
+    "images": [
+      "/img/lineage/soft-sculpture/soft-sculpture_01.jpg"
+    ],
+    "video": [
+      "/assets/video/soft-sculpture_i-know-everything-and-nothing_excerpt.mp4",
+      "/assets/video/soft-sculpture_shepherd_excerpt.mp4"
+    ],
+    "audio": []
+  },
+  "related_ids": [
+    "digital-bath-engram",
+    "a-hundred-years-falling"
+  ],
+  "quote": "A collaborative project using performance, moving image, sound, and soft sculptural forms.",
+  "sort_order": 130
+}

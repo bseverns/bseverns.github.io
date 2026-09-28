@@ -1,0 +1,20 @@
+{
+  "id": "this-built-by-titans",
+  "title": "This, Built By Titans",
+  "slug": "this-built-by-titans",
+  "year_start": 2010,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": ["archive"],
+  "themes": ["television", "signal", "sculpture"],
+  "summary": "A television, steel, and copper-tubing sculpture with a single green light held on its screen.",
+  "medium": ["sculpture"],
+  "materials": ["television", "steel", "copper tubing"],
+  "ethics": {"pii": "none", "consent": "artist-cleared object documentation", "retention": "public archive"},
+  "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
+  "docs": {"notes": "/lineage/this-built-by-titans/"},
+  "media": {"images": ["/img/lineage/this-built-by-titans/this-built-by-titans_01.jpg"], "video": [], "audio": []},
+  "related_ids": ["we-know-this-body", "symbolizing-everything"],
+  "sort_order": 140
+}

@@ -1,0 +1,20 @@
+{
+  "id": "the-falls",
+  "title": "The Falls",
+  "slug": "the-falls",
+  "year_start": 2010,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": ["archive"],
+  "themes": ["shelter", "structure", "outdoors"],
+  "summary": "A wood, stone, and rope structure assembled among trees.",
+  "medium": ["installation", "sculpture"],
+  "materials": ["wood", "stone", "rope"],
+  "ethics": {"pii": "none", "consent": "artist-cleared installation documentation", "retention": "public archive"},
+  "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
+  "docs": {"notes": "/lineage/the-falls/"},
+  "media": {"images": ["/img/lineage/the-falls/the-falls_01.jpg"], "video": [], "audio": []},
+  "related_ids": ["a-hundred-years-falling", "i-was-young-once"],
+  "sort_order": 150
+}

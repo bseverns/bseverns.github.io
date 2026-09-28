@@ -2,60 +2,51 @@
   "id": "scar",
   "title": "Scar",
   "slug": "scar",
-  "year_start": 2000,
+  "year_start": 2008,
   "year_end": null,
-  "circa": true,
+  "circa": false,
   "status": "archived",
   "collections": [
     "archive",
     "media"
   ],
   "themes": [
-    "injury",
-    "repair",
-    "embodiment",
-    "bike",
-    "risk",
-    "maintenance",
-    "continuation",
+    "casting",
+    "body",
     "sculpture"
   ],
-  "summary": "A work made after spinal compression fractures in which a crashed bike is cut up and a body brace is cast as a trophy, turning bodily damage, continuation, and daily return into sculptural form.",
+  "summary": "A cast aluminum and wood sculpture.",
   "medium": [
     "sculpture",
     "documentation photography"
   ],
   "materials": [
-    "bike parts",
-    "cast body brace",
+    "cast aluminum",
     "wood base"
   ],
   "stack": [
-    "found object",
     "cast",
     "display"
   ],
   "core_concepts": [
-    "injury as memory",
-    "repair culture",
-    "continuation",
-    "risk made material"
+    "casting",
+    "body",
+    "sculptural form"
   ],
-  "body_relation": "directly indexed to the artist's injured spine and daily riding practice",
+  "body_relation": "a cast form held on a wood base",
   "ethics": {
     "pii": "none",
-    "consent": "artist-authored autobiographical work",
-    "retention": "archive"
+    "consent": "artist-cleared object documentation",
+    "retention": "public archive"
   },
-  "provenance": "User-provided image and description",
+  "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
   "docs": {
     "notes": "/lineage/scar/"
   },
   "media": {
     "images": [
       "/img/lineage/scar/scar_hero.jpg",
-      "/img/lineage/scar/scar_detail_01.jpg",
-      "/img/lineage/scar/scar_detail_02.jpg"
+      "/img/lineage/scar/scar_vanderlip_01.jpg"
     ],
     "video": [],
     "audio": []
@@ -65,6 +56,6 @@
     "a-madman-wrapped-in-the-clothes-of-a-deadman",
     "machine-docs"
   ],
-  "quote": "Repair, continuation, and risk are part of the work's body.",
+  "quote": "A cast aluminum form held on a wood base.",
   "sort_order": 30
 }

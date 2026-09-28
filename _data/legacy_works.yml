@@ -397,3 +397,55 @@
   images:
     - /img/lineage/remade/remade_01.jpg
   summary: A 2008 compact, visibly cast aluminum form.
+
+- id: soft-sculpture
+  title: Soft Sculpture
+  branch: lineage
+  order: 130
+  medium: Performance / sculpture / moving image / sound
+  status: archived
+  lineage_note: /lineage/soft-sculpture/
+  catalog_record: /catalog/items/soft-sculpture.json
+  thumbnail: /img/lineage/soft-sculpture/soft-sculpture_01.jpg
+  images:
+    - /img/lineage/soft-sculpture/soft-sculpture_01.jpg
+  summary: A 2013–2019 collaboration by Ben Severns and Nick Knutson using performance, moving image, sound, and soft sculptural forms.
+
+- id: this-built-by-titans
+  title: This, Built By Titans
+  branch: lineage
+  order: 140
+  medium: Sculpture
+  status: archived
+  lineage_note: /lineage/this-built-by-titans/
+  catalog_record: /catalog/items/this-built-by-titans.json
+  thumbnail: /img/lineage/this-built-by-titans/this-built-by-titans_01.jpg
+  images:
+    - /img/lineage/this-built-by-titans/this-built-by-titans_01.jpg
+  summary: A 2010 television, steel, and copper-tubing sculpture with a single green light on its screen.
+
+- id: the-falls
+  title: The Falls
+  branch: lineage
+  order: 150
+  medium: Installation / sculpture
+  status: archived
+  lineage_note: /lineage/the-falls/
+  catalog_record: /catalog/items/the-falls.json
+  thumbnail: /img/lineage/the-falls/the-falls_01.jpg
+  images:
+    - /img/lineage/the-falls/the-falls_01.jpg
+  summary: A 2010 wood, stone, and rope structure assembled among trees.
+
+- id: never-hide
+  title: Never Hide
+  branch: lineage
+  order: 160
+  medium: Drawing / audio
+  status: archived
+  lineage_note: /lineage/never-hide/
+  catalog_record: /catalog/items/never-hide.json
+  thumbnail: /img/lineage/never-hide/never-hide_01.jpg
+  images:
+    - /img/lineage/never-hide/never-hide_01.jpg
+  summary: A 2009 pencil, charcoal, and ink drawing made alongside an audio recording.

@@ -1,7 +1,6 @@
 # Scar Image Drop
 
-Place the imported image set for *Scar* here.
+Published image set for *Scar*:
 
 - `scar_hero.jpg`
-- `scar_detail_01.jpg`
-- `scar_detail_02.jpg`
+- `scar_vanderlip_01.jpg`

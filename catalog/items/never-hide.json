@@ -1,0 +1,20 @@
+{
+  "id": "never-hide",
+  "title": "Never Hide",
+  "slug": "never-hide",
+  "year_start": 2009,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": ["archive"],
+  "themes": ["drawing", "mark-making", "layering"],
+  "summary": "A pencil, charcoal, and ink drawing made alongside an audio recording.",
+  "medium": ["drawing", "audio"],
+  "materials": ["pencil", "charcoal", "ink", "audio recording"],
+  "ethics": {"pii": "none", "consent": "artist-cleared drawing documentation", "retention": "public archive; audio remains in artist archive"},
+  "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
+  "docs": {"notes": "/lineage/never-hide/"},
+  "media": {"images": ["/img/lineage/never-hide/never-hide_01.jpg"], "video": [], "audio": []},
+  "related_ids": ["the-truth-is-i-hate-to-tell-you", "there-was-blood-on-my-hands"],
+  "sort_order": 160
+}

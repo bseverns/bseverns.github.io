@@ -1,21 +1,22 @@
 ---
 layout: default
 title: "Scar"
-seo_description: "Lineage note for Scar, an early work on injury, repair, and continuation in Ben Severns's practice."
+seo_description: "Scar, a 2008 cast-aluminum and wood sculpture by Ben Severns."
 permalink: /lineage/scar/
 lineage_images:
   - src: /img/lineage/scar/scar_hero.jpg
     caption: Scar
     alt: Rough silver-colored cast form resembling a torso, mounted above a wood block with detached fragments below.
+  - src: /img/lineage/scar/scar_vanderlip_01.jpg
+    caption: Object documentation
+    alt: Cast aluminum form with a rounded gray body and projecting fragments mounted on a small wood base.
 ---
 
 # Scar
 
-*Scar* is one of the clearest early roots of the later maintenance and repair ethics. A crashed bike is cut up. A cast body brace becomes trophy. Compression fractures, bodily memory, damage, and survival are not treated as private backstory but as material fact.
+2008 · Cast aluminum, wood · 24 × 8 × 5 in.
 
-What later becomes machine care, rebuild logic, startup ritual, and continuation culture has a bodily precedent here. The practice does not arrive at maintenance as administration. It arrives there through injury, adaptation, and still riding the same machine.
-
-<p class="origin-callout">Repair is not a softened afterthought in this practice. It begins as continuation under damage.</p>
+A cast aluminum form held on a wood base.
 
 {% include lineage-gallery.html %}
 

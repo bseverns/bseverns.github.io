@@ -154,6 +154,8 @@ class SiteContentTests(unittest.TestCase):
         page = self.read("art.html")
         self.assertIn('<audio controls preload="metadata">', page)
         self.assertIn('/assets/audio/bs-archive-excerpt-2020.mp3', page)
+        self.assertIn('https://bbss.bandcamp.com/album/virustapes', page)
+        self.assertIn('https://bbss.bandcamp.com/track/drone-surgery-gallery-performance', page)
         self.assertTrue((ROOT / "assets/audio/bs-archive-excerpt-2020.mp3").is_file())
 
     def test_homepage_gives_bs_its_own_bandcamp_encounter(self):
@@ -258,6 +260,54 @@ class SiteContentTests(unittest.TestCase):
             self.assertIn("/" + asset, page)
         catalog = json.loads(self.read("catalog/items/after-another-empty-empire.json"))
         self.assertEqual(catalog["media"]["video"], ["/" + video])
+
+    def test_vanderlip_records_extend_the_archive_with_source_grounded_media(self):
+        works = {
+            "this-built-by-titans": "this-built-by-titans/this-built-by-titans_01.jpg",
+            "the-falls": "the-falls/the-falls_01.jpg",
+            "never-hide": "never-hide/never-hide_01.jpg",
+        }
+        legacy = self.read("_data/legacy_works.yml")
+        catalog_index = self.read("catalog/catalog.json")
+        for slug, asset_suffix in works.items():
+            asset = "img/lineage/" + asset_suffix
+            self.assertTrue((ROOT / asset).is_file(), asset)
+            self.assertIn(f"- id: {slug}", legacy)
+            self.assertIn("/" + asset, self.read(f"docs/legacy/{slug}.md"))
+            catalog = json.loads(self.read(f"catalog/items/{slug}.json"))
+            self.assertEqual(catalog["media"]["images"], ["/" + asset])
+            self.assertIn(f"/catalog/items/{slug}.json", catalog_index)
+        scar = json.loads(self.read("catalog/items/scar.json"))
+        self.assertEqual(scar["year_start"], 2008)
+        self.assertEqual(
+            scar["media"]["images"],
+            [
+                "/img/lineage/scar/scar_hero.jpg",
+                "/img/lineage/scar/scar_vanderlip_01.jpg",
+            ],
+        )
+        self.assertIn("/img/lineage/scar/scar_vanderlip_01.jpg", self.read("docs/legacy/scar.md"))
+
+    def test_soft_sculpture_has_a_jointly_credited_public_record(self):
+        asset = "img/lineage/soft-sculpture/soft-sculpture_01.jpg"
+        page = self.read("docs/legacy/soft-sculpture.md")
+        self.assertTrue((ROOT / asset).is_file(), asset)
+        self.assertIn("/" + asset, page)
+        self.assertIn("Ben Severns and Nick Knutson", page)
+        self.assertIn("2013–2019", page)
+        catalog = json.loads(self.read("catalog/items/soft-sculpture.json"))
+        self.assertEqual(catalog["media"]["images"], ["/" + asset])
+        videos = [
+            "assets/video/soft-sculpture_i-know-everything-and-nothing_excerpt.mp4",
+            "assets/video/soft-sculpture_shepherd_excerpt.mp4",
+        ]
+        for video in videos:
+            self.assertTrue((ROOT / video).is_file(), video)
+            self.assertIn("/" + video, page)
+        self.assertEqual(catalog["media"]["video"], ["/" + video for video in videos])
+        self.assertIn("Nick Knutson", catalog["summary"])
+        self.assertIn("/catalog/items/soft-sculpture.json", self.read("catalog/catalog.json"))
+        self.assertIn("- id: soft-sculpture", self.read("_data/legacy_works.yml"))
 
     def test_recovered_2008_to_2010_objects_have_public_records(self):
         works = {
