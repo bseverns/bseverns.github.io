@@ -1,0 +1,20 @@
+{
+  "id": "remade",
+  "title": "Remade",
+  "slug": "remade",
+  "year_start": 2008,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": ["archive"],
+  "themes": ["casting", "repair", "material process"],
+  "summary": "A compact, visibly cast aluminum form.",
+  "medium": ["sculpture"],
+  "materials": ["aluminum"],
+  "ethics": {"pii": "none", "consent": "artist-cleared object documentation", "retention": "public archive"},
+  "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
+  "docs": {"notes": "/lineage/remade/"},
+  "media": {"images": ["/img/lineage/remade/remade_01.jpg"], "video": [], "audio": []},
+  "related_ids": ["scar", "there-was-blood-on-my-hands"],
+  "sort_order": 120
+}

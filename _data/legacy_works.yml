@@ -345,3 +345,55 @@
   video:
     - /assets/video/after-another-empty-empire_excerpt-2021.mp4
   summary: A 2021 moving-image work that accumulates, fractures, and reorders image material until sequence itself becomes pressure.
+
+- id: we-know-this-body
+  title: We Know This Body
+  branch: lineage
+  order: 90
+  medium: Object / sculpture
+  status: archived
+  lineage_note: /lineage/we-know-this-body/
+  catalog_record: /catalog/items/we-know-this-body.json
+  thumbnail: /img/lineage/we-know-this-body/we-know-this-body_01.jpg
+  images:
+    - /img/lineage/we-know-this-body/we-know-this-body_01.jpg
+  summary: A 2010 wood, steel, and laser-diode optical apparatus held inside a wooden frame.
+
+- id: a-hundred-years-falling
+  title: A Hundred Years, Falling
+  branch: lineage
+  order: 100
+  medium: Installation / sculpture
+  status: archived
+  lineage_note: /lineage/a-hundred-years-falling/
+  catalog_record: /catalog/items/a-hundred-years-falling.json
+  thumbnail: /img/lineage/a-hundred-years-falling/a-hundred-years-falling_01.jpg
+  images:
+    - /img/lineage/a-hundred-years-falling/a-hundred-years-falling_01.jpg
+  summary: A 2009 water system with its pump and cast material visibly exposed.
+
+- id: my-mouth-is-open-from-end-to-end
+  title: My Mouth is Open From End to End
+  branch: lineage
+  order: 110
+  medium: Sculpture
+  status: archived
+  lineage_note: /lineage/my-mouth-is-open-from-end-to-end/
+  catalog_record: /catalog/items/my-mouth-is-open-from-end-to-end.json
+  thumbnail: /img/lineage/my-mouth-is-open-from-end-to-end/my-mouth-is-open-from-end-to-end_01.jpg
+  images:
+    - /img/lineage/my-mouth-is-open-from-end-to-end/my-mouth-is-open-from-end-to-end_01.jpg
+  summary: A 2009 wall-mounted steel and polyurethane apparatus holding two cast forms.
+
+- id: remade
+  title: Remade
+  branch: lineage
+  order: 120
+  medium: Sculpture
+  status: archived
+  lineage_note: /lineage/remade/
+  catalog_record: /catalog/items/remade.json
+  thumbnail: /img/lineage/remade/remade_01.jpg
+  images:
+    - /img/lineage/remade/remade_01.jpg
+  summary: A 2008 compact, visibly cast aluminum form.

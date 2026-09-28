@@ -1,0 +1,20 @@
+{
+  "id": "a-hundred-years-falling",
+  "title": "A Hundred Years, Falling",
+  "slug": "a-hundred-years-falling",
+  "year_start": 2009,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": ["archive"],
+  "themes": ["water", "time", "material process"],
+  "summary": "A table-scale water system with its pump and cast material left visibly exposed.",
+  "medium": ["installation", "sculpture"],
+  "materials": ["wood", "salt", "water", "plexiglass", "wax", "cast iron"],
+  "ethics": {"pii": "none", "consent": "artist-cleared object documentation", "retention": "public archive"},
+  "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
+  "docs": {"notes": "/lineage/a-hundred-years-falling/"},
+  "media": {"images": ["/img/lineage/a-hundred-years-falling/a-hundred-years-falling_01.jpg"], "video": [], "audio": []},
+  "related_ids": ["there-was-blood-on-my-hands"],
+  "sort_order": 100
+}

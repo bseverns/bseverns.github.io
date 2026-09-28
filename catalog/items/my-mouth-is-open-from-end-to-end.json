@@ -1,0 +1,20 @@
+{
+  "id": "my-mouth-is-open-from-end-to-end",
+  "title": "My Mouth is Open From End to End",
+  "slug": "my-mouth-is-open-from-end-to-end",
+  "year_start": 2009,
+  "year_end": null,
+  "circa": false,
+  "status": "archived",
+  "collections": ["archive"],
+  "themes": ["body", "tension", "cast form"],
+  "summary": "A wall-mounted apparatus that holds two pale cast forms in a tensioned steel frame.",
+  "medium": ["sculpture"],
+  "materials": ["steel", "silver-cure polyurethane"],
+  "ethics": {"pii": "none", "consent": "artist-cleared object documentation", "retention": "public archive"},
+  "provenance": "Artist-provided documentation; title, year, materials, and dimensions confirmed in exhibition image list.",
+  "docs": {"notes": "/lineage/my-mouth-is-open-from-end-to-end/"},
+  "media": {"images": ["/img/lineage/my-mouth-is-open-from-end-to-end/my-mouth-is-open-from-end-to-end_01.jpg"], "video": [], "audio": []},
+  "related_ids": ["there-was-blood-on-my-hands", "scar"],
+  "sort_order": 110
+}

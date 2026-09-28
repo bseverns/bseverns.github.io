@@ -187,6 +187,22 @@ class SiteContentTests(unittest.TestCase):
         catalog = json.loads(self.read("catalog/items/after-another-empty-empire.json"))
         self.assertEqual(catalog["media"]["video"], ["/" + video])
 
+    def test_recovered_2008_to_2010_objects_have_public_records(self):
+        works = {
+            "we-know-this-body": "we-know-this-body/we-know-this-body_01.jpg",
+            "a-hundred-years-falling": "a-hundred-years-falling/a-hundred-years-falling_01.jpg",
+            "my-mouth-is-open-from-end-to-end": "my-mouth-is-open-from-end-to-end/my-mouth-is-open-from-end-to-end_01.jpg",
+            "remade": "remade/remade_01.jpg",
+        }
+        legacy = self.read("_data/legacy_works.yml")
+        for slug, asset_suffix in works.items():
+            asset = "img/lineage/" + asset_suffix
+            self.assertTrue((ROOT / asset).is_file(), asset)
+            self.assertIn(f"- id: {slug}", legacy)
+            self.assertIn("/" + asset, self.read(f"docs/legacy/{slug}.md"))
+            catalog = json.loads(self.read(f"catalog/items/{slug}.json"))
+            self.assertEqual(catalog["media"]["images"], ["/" + asset])
+
 
 if __name__ == "__main__":
     unittest.main()
