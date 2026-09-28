@@ -156,6 +156,34 @@ class SiteContentTests(unittest.TestCase):
         self.assertIn('/assets/audio/bs-archive-excerpt-2020.mp3', page)
         self.assertTrue((ROOT / "assets/audio/bs-archive-excerpt-2020.mp3").is_file())
 
+    def test_homepage_bs_anchor_is_an_audio_and_art_encounter(self):
+        page = self.read("index.html")
+        title_start = page.index("<h3>B_S. / live-rig</h3>")
+        anchor_start = page.rfind("<article", 0, title_start)
+        anchor_end = page.index("</article>", title_start)
+        anchor = page[anchor_start:anchor_end]
+        self.assertIn('/assets/images/bs/whole-pile-cover.png', anchor)
+        self.assertIn('/assets/audio/bs-archive-excerpt-2020.mp3', anchor)
+        self.assertIn('<audio controls preload="metadata">', anchor)
+
+    def test_studio_places_video_and_sculpture_before_current_work(self):
+        page = self.read("art.html")
+        current_work = page.index('id="current-work"')
+        for asset in (
+            '/assets/video/after-another-empty-empire_excerpt-2021.mp4',
+            '/img/lineage/a-hundred-years-falling/a-hundred-years-falling_01.jpg',
+        ):
+            self.assertIn(asset, page)
+            self.assertLess(page.index(asset), current_work)
+        self.assertIn("studio-encounter-video", page)
+        self.assertIn("studio-encounter-object", page)
+
+    def test_studio_defers_explanation_to_lineage_and_atlas(self):
+        page = self.read("art.html")
+        self.assertNotIn("Where truth lives", page)
+        self.assertNotIn("What now looks like infrastructure", page)
+        self.assertIn("Follow a lineage", page)
+
     def test_mn42_project_includes_a_bench_bringup_still(self):
         project = self.read("_projects/mn42.md")
         self.assertIn("/img/studio/mn42_hero.jpg", project)

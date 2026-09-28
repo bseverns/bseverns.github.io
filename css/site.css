@@ -935,6 +935,34 @@ article.teaching li {
   display: block;
 }
 
+.studio-encounter {
+  padding: clamp(28px, 7vw, 72px) 0;
+}
+
+.studio-encounter h2,
+.studio-encounter p {
+  margin: 0;
+}
+
+.studio-encounter h2 {
+  margin-bottom: 1rem;
+}
+
+.studio-encounter p {
+  margin-top: 0.75rem;
+  color: var(--muted);
+}
+
+.studio-encounter video,
+.studio-encounter img {
+  display: block;
+  width: 100%;
+  max-height: min(76vh, 760px);
+  object-fit: contain;
+  background: #000;
+  border: 1px solid var(--border);
+}
+
 
 
 .card h3 {
